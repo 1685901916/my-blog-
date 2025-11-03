@@ -1,0 +1,231 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { scanMangaCategories } from "@utils/manga-scanner";
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "@components/misc/ImageWrapper.astro";
+import { getCategoryUrl, getTagUrl } from "@utils/url-utils";
+import { siteConfig } from "../config";
+
+const categories = await scanMangaCategories();
+
+// 获取manga collection中的文章
+const mangaArticles = await getCollection("manga", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+// 转换为统一格式并计算字数
+const standaloneArticles = await Promise.all(mangaArticles.map(async entry => {
+    const { remarkPluginFrontmatter } = await entry.render();
+    return {
+        id: entry.slug,
+        title: entry.data.title,
+        description: entry.data.description,
+        image: entry.data.image,
+        tags: entry.data.tags,
+        category: entry.data.category,
+        published: entry.data.published,
+        slug: entry.slug,
+        words: remarkPluginFrontmatter.words || 0
+    };
+}));
+
+// 合并文件夹和独立文章到一个数组
+const allItems = [
+    ...categories.map(cat => ({ type: 'folder', data: cat })),
+    ...standaloneArticles.map(art => ({ type: 'article', data: art }))
+];
+---
+
+<MainGridLayout banner={undefined} title="漫画">
+    <!-- 双列布局 - 与主页一致 -->
+    <div class="transition grid grid-cols-1 md:grid-cols-2 rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent gap-2 md:gap-4 mb-4">
+        {allItems.map(item => (
+            item.type === 'folder' ? (
+                /* 文件夹卡片 - 与主页PostCard样式一致 */
+                <div class="card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative">
+                    <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", item.data.cover ? "w-full md:w-[calc(100%-28%-12px)]" : "w-full md:w-[calc(100%-52px-12px)]"]}>
+                        <a href={`/manga/${item.data.id}/`}
+                           class="transition group w-full block font-bold mb-3 text-3xl text-90
+                           hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+                           active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
+                           before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                           before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block">
+                            <Icon name="material-symbols:folder-open" class="inline text-[var(--primary)] text-2xl mr-2 -translate-y-0.5" />
+                            {item.data.title}
+                            <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" />
+                            <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded" />
+                        </a>
+
+                        <!-- 元数据 -->
+                        <div class="flex flex-wrap items-center gap-4 gap-x-4 gap-y-2 mb-4">
+                            <div class="flex items-center">
+                                <div class="meta-icon">
+                                    <Icon name="material-symbols:folder-open" class="text-xl" />
+                                </div>
+                                <span class="text-50 text-sm font-medium">文件夹</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="meta-icon">
+                                    <Icon name="material-symbols:article-outline-rounded" class="text-xl" />
+                                </div>
+                                <span class="text-50 text-sm font-medium">{item.data.articles.length} 篇</span>
+                            </div>
+                        </div>
+
+                        <!-- 描述 -->
+                        <div class="transition text-75 mb-3.5 pr-4 line-clamp-2">
+                            {item.data.description}
+                        </div>
+                    </div>
+
+                    <!-- 封面图片区域 (右侧) -->
+                    {item.data.cover && (
+                        <a href={`/manga/${item.data.id}/`} 
+                           aria-label={item.data.title}
+                           class="group max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0 md:w-[28%] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95">
+                            <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition"></div>
+                            <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
+                                <Icon name="material-symbols:chevron-right-rounded"
+                                      class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl" />
+                            </div>
+                            <ImageWrapper 
+                                src={item.data.cover} 
+                                alt={item.data.title}
+                                class="w-full h-full object-cover"
+                            />
+                        </a>
+                    )}
+
+                    <!-- 无封面时的进入按钮 -->
+                    {!item.data.cover && (
+                        <a href={`/manga/${item.data.id}/`} 
+                           aria-label={item.data.title} 
+                           class="!hidden md:!flex btn-regular w-[3.25rem] absolute right-3 top-3 bottom-3 rounded-xl bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95">
+                            <Icon name="material-symbols:chevron-right-rounded"
+                                  class="transition text-[var(--primary)] text-4xl mx-auto" />
+                        </a>
+                    )}
+                </div>
+                <!-- 分隔线 - 移动端显示 -->
+                <div class="transition border-t-[1px] border-dashed mx-6 border-black/10 dark:border-white/[0.15] last:border-t-0 md:hidden"></div>
+            ) : (
+                /* 独立文章卡片 - 与主页PostCard样式一致 */
+                <div class="card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative">
+                    <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", item.data.image ? "w-full md:w-[calc(100%-28%-12px)]" : "w-full md:w-[calc(100%-52px-12px)]"]}>
+                        <a href={`/posts/${item.data.slug}/`}
+                           class="transition group w-full block font-bold mb-3 text-3xl text-90
+                           hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+                           active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
+                           before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                           before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block">
+                            {item.data.title}
+                            <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" />
+                            <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded" />
+                        </a>
+
+                        <!-- 元数据 -->
+                        <div class="flex flex-wrap items-center gap-4 gap-x-4 gap-y-2 mb-4">
+                            <div class="flex items-center">
+                                <div class="meta-icon">
+                                    <Icon name="material-symbols:calendar-today-outline-rounded" class="text-xl" />
+                                </div>
+                                <span class="text-50 text-sm font-medium">{item.data.published.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-')}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="meta-icon">
+                                    <Icon name="material-symbols:book-2-outline-rounded" class="text-xl" />
+                                </div>
+                                <a href={getCategoryUrl(item.data.category || '')} 
+                                   aria-label={`View all posts in the ${item.data.category} category`}
+                                   class="link-lg transition text-50 text-sm font-medium hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
+                                    {item.data.category}
+                                </a>
+                            </div>
+                            {item.data.words && (
+                                <div class="flex items-center">
+                                    <div class="meta-icon">
+                                        <Icon name="material-symbols:article-outline-rounded" class="text-xl" />
+                                    </div>
+                                    <span class="text-50 text-sm font-medium">{item.data.words} 字</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <!-- 描述 -->
+                        <div class="transition text-75 mb-3.5 pr-4 line-clamp-2">
+                            {item.data.description}
+                        </div>
+
+                        <!-- 标签 -->
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            {item.data.tags && item.data.tags.length > 0 && item.data.tags.map(tag => (
+                                <a 
+                                    href={getTagUrl(tag)} 
+                                    class:list={[
+                                        siteConfig.tagStyle.useNewStyle 
+                                            ? "link-lg transition text-50 text-xs font-medium px-2 py-1 rounded-lg hover:text-[var(--primary)] dark:hover:text-[var(--primary)] active:text-[var(--primary)] dark:active:text-[var(--primary)] group/tag whitespace-nowrap"
+                                            : "btn-regular h-6 text-xs px-2 rounded-lg"
+                                    ]}
+                                    aria-label={`View all posts tagged with ${tag.trim()}`}
+                                >
+                                    <span class="transition-transform group-hover/tag:translate-x-0.5">
+                                        # {tag.trim()}
+                                    </span>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    <!-- 封面图片区域 (右侧) -->
+                    {item.data.image && (
+                        <a href={`/posts/${item.data.slug}/`} 
+                           aria-label={item.data.title}
+                           class="group max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0 md:w-[28%] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95">
+                            <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition"></div>
+                            <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
+                                <Icon name="material-symbols:chevron-right-rounded"
+                                      class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl" />
+                            </div>
+                            <ImageWrapper 
+                                src={item.data.image} 
+                                alt={item.data.title}
+                                class="w-full h-full object-cover"
+                            />
+                        </a>
+                    )}
+
+                    <!-- 无封面时的进入按钮 -->
+                    {!item.data.image && (
+                        <a href={`/posts/${item.data.slug}/`} 
+                           aria-label={item.data.title} 
+                           class="!hidden md:!flex btn-regular w-[3.25rem] absolute right-3 top-3 bottom-3 rounded-xl bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95">
+                            <Icon name="material-symbols:chevron-right-rounded"
+                                  class="transition text-[var(--primary)] text-4xl mx-auto" />
+                        </a>
+                    )}
+                </div>
+                <!-- 分隔线 - 移动端显示 -->
+                <div class="transition border-t-[1px] border-dashed mx-6 border-black/10 dark:border-white/[0.15] last:border-t-0 md:hidden"></div>
+            )
+        ))}
+
+        {/* 空状态 */}
+        {allItems.length === 0 && (
+            <div class="card-base px-8 py-12">
+                <p class="text-center text-neutral-500 dark:text-neutral-400">
+                    暂无漫画内容
+                </p>
+            </div>
+        )}
+    </div>
+</MainGridLayout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -1,0 +1,121 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainGridLayout from "../../../../layouts/MainGridLayout.astro";
+import { scanStandaloneManga } from "../../../../utils/manga-scanner";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { marked } from "marked";
+
+export const getStaticPaths = (async () => {
+	const articles = await scanStandaloneManga();
+	return articles.map((article) => ({
+		params: { id: article.id },
+		props: { article },
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	article: any;
+}
+
+const { article } = Astro.props;
+
+if (!article) {
+	return Astro.redirect("/404/");
+}
+
+// 读取文章内容
+const articlePath = path.join(
+	process.cwd(), 
+	"src/content/manga-categories",
+	`${article.id}.md`
+);
+
+let articleContent = "";
+if (fs.existsSync(articlePath)) {
+	const fileContent = fs.readFileSync(articlePath, "utf-8");
+	// 手动分离 front matter 和内容
+	const contentMatch = fileContent.match(/^---\s*\n[\s\S]*?\n---\s*\n([\s\S]*)$/);
+	const content = contentMatch ? contentMatch[1] : fileContent;
+	articleContent = marked(content) as string;
+}
+---
+
+<MainGridLayout title={article.title} description={article.description}>
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      
+      <!-- 面包屑导航 -->
+      <nav class="text-sm text-neutral-600 dark:text-neutral-400 mb-6 flex items-center gap-2">
+        <a href="/manga/" class="hover:text-[var(--primary)] transition">漫画</a>
+        <span>/</span>
+        <span class="text-neutral-900 dark:text-neutral-100">{article.title}</span>
+      </nav>
+
+      <!-- 文章头部 -->
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
+          {article.title}
+        </h1>
+        
+        {article.description && (
+          <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-4">
+            {article.description}
+          </p>
+        )}
+
+        <div class="flex flex-wrap gap-4 text-sm text-neutral-500 dark:text-neutral-500 mb-4">
+          <div class="flex items-center gap-2">
+            <span>📅</span>
+            <span>{article.published.toLocaleDateString('zh-CN')}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>📁</span>
+            <span>{article.category}</span>
+          </div>
+        </div>
+
+        {article.tags && article.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {article.tags.map((tag: string) => (
+              <span class="text-xs px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      {article.image && (
+        <div class="mb-8 rounded-lg overflow-hidden">
+          <img 
+            src={article.image} 
+            alt={article.title}
+            class="w-full h-auto"
+          />
+        </div>
+      )}
+
+      <!-- 文章内容 -->
+      <article class="prose prose-neutral dark:prose-invert max-w-none">
+        <div set:html={articleContent}></div>
+      </article>
+
+      <!-- 返回按钮 -->
+      <div class="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+        <a href="/manga/" 
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition">
+          ← 返回漫画列表
+        </a>
+      </div>
+    </div>
+  </div>
+</MainGridLayout>
+
+
+
+
+
+
+
+
