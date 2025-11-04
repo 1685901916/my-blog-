@@ -5,7 +5,7 @@
   <link href="https://mizuki.mysqil.com/" rel="alternate" type="text/html"/>
   <link href="https://mizuki.mysqil.com/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mizuki.mysqil.com/</id>
-  <updated>2025-11-03T05:04:56.151Z</updated>
+  <updated>2025-11-04T06:23:49.516Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Markdown Tutorial</title>
@@ -784,31 +784,6 @@ This is another regular paragraph.
     <category term="漫画"></category>
   </entry>
   <entry>
-    <title>钢之炼金术师</title>
-    <link href="https://mizuki.mysqil.com/posts/%E9%92%A2%E4%B9%8B%E7%82%BC%E9%87%91%E6%9C%AF%E5%B8%88/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E9%92%A2%E4%B9%8B%E7%82%BC%E9%87%91%E6%9C%AF%E5%B8%88/</id>
-    <published>2025-10-30T00:00:00.000Z</published>
-    <updated>2025-10-30T00:00:00.000Z</updated>
-    <summary>荒川弘创作的奇幻冒险漫画，兄弟二人寻找贤者之石的旅程</summary>
-    <content type="html"><![CDATA[<h1>钢之炼金术师</h1>
-<h2>简介</h2>
-<p>《钢之炼金术师》是荒川弘创作的奇幻冒险漫画，讲述了爱德华·爱力克和阿尔冯斯·爱力克兄弟为了恢复失去的身体，踏上寻找贤者之石的旅程。</p>
-<h2>主要角色</h2>
-<ul>
-<li><strong>爱德华·爱力克</strong> - 主角，天才炼金术师，拥有机械铠</li>
-<li><strong>阿尔冯斯·爱力克</strong> - 弟弟，灵魂附着在铠甲上</li>
-<li><strong>温莉·洛克贝尔</strong> - 机械铠工程师，爱德的青梅竹马</li>
-<li><strong>罗伊·马斯坦</strong> - 焰之炼金术师，军方上校</li>
-</ul>
-<h2>评价</h2>
-<p>作品以其完整的世界观、紧凑的剧情、深刻的主题和完美的结局而被誉为漫画史上的经典之作。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="漫画"></category>
-  </entry>
-  <entry>
     <title>进击的巨人</title>
     <link href="https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/" rel="alternate" type="text/html"/>
     <id>https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/</id>
@@ -827,6 +802,31 @@ This is another regular paragraph.
 </ul>
 <h2>评价</h2>
 <p>作品以其出人意料的剧情反转、深刻的人性探讨和宏大的世界观设定而广受好评，是近年来最具影响力的漫画作品之一。</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="漫画"></category>
+  </entry>
+  <entry>
+    <title>钢之炼金术师</title>
+    <link href="https://mizuki.mysqil.com/posts/%E9%92%A2%E4%B9%8B%E7%82%BC%E9%87%91%E6%9C%AF%E5%B8%88/" rel="alternate" type="text/html"/>
+    <id>https://mizuki.mysqil.com/posts/%E9%92%A2%E4%B9%8B%E7%82%BC%E9%87%91%E6%9C%AF%E5%B8%88/</id>
+    <published>2025-10-30T00:00:00.000Z</published>
+    <updated>2025-10-30T00:00:00.000Z</updated>
+    <summary>荒川弘创作的奇幻冒险漫画，兄弟二人寻找贤者之石的旅程</summary>
+    <content type="html"><![CDATA[<h1>钢之炼金术师</h1>
+<h2>简介</h2>
+<p>《钢之炼金术师》是荒川弘创作的奇幻冒险漫画，讲述了爱德华·爱力克和阿尔冯斯·爱力克兄弟为了恢复失去的身体，踏上寻找贤者之石的旅程。</p>
+<h2>主要角色</h2>
+<ul>
+<li><strong>爱德华·爱力克</strong> - 主角，天才炼金术师，拥有机械铠</li>
+<li><strong>阿尔冯斯·爱力克</strong> - 弟弟，灵魂附着在铠甲上</li>
+<li><strong>温莉·洛克贝尔</strong> - 机械铠工程师，爱德的青梅竹马</li>
+<li><strong>罗伊·马斯坦</strong> - 焰之炼金术师，军方上校</li>
+</ul>
+<h2>评价</h2>
+<p>作品以其完整的世界观、紧凑的剧情、深刻的主题和完美的结局而被誉为漫画史上的经典之作。</p>
 ]]></content>
     <author>
       <name>Ayano</name>
