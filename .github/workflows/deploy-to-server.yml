@@ -38,19 +38,32 @@ jobs:
         run: pnpm run build
       
       # 6. 部署到服务器
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        with:
+      - name: Deploy to Server via rsync
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USER }}
-          SOURCE: "dist/"
-          TARGET: ${{ secrets.SERVER_PATH }}
-          ARGS: "-avz --delete"
-          SCRIPT_BEFORE: |
-            whoami
-            ls -al
-          SCRIPT_AFTER: |
-            echo "部署完成！"
-            ls -al ${{ secrets.SERVER_PATH }}
+          REMOTE_PATH: ${{ secrets.SERVER_PATH }}
+        run: |
+          # 安装 rsync
+          sudo apt-get update && sudo apt-get install -y rsync
+          
+          # 设置 SSH 密钥
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          
+          # 添加服务器到 known_hosts
+          ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
+          
+          # 使用 rsync 同步文件
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            dist/ \
+            $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/
+          
+          # 验证部署
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            $REMOTE_USER@$REMOTE_HOST \
+            "ls -la $REMOTE_PATH && echo '部署完成！文件总数:' && find $REMOTE_PATH -type f | wc -l"
 
