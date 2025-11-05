@@ -56,13 +56,8 @@ jobs:
           # 添加服务器到 known_hosts
           ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
           
-          # 清理旧文件（保留宝塔配置）
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            $REMOTE_USER@$REMOTE_HOST \
-            "cd $REMOTE_PATH && find . -mindepth 1 ! -name '.user.ini' ! -name '.htaccess' -delete"
-          
-          # 使用 rsync 同步文件（排除宝塔保护文件）
-          rsync -avz \
+          # 使用 rsync 同步文件（自动删除服务器上多余的文件）
+          rsync -avz --delete \
             --exclude='.user.ini' \
             --exclude='.htaccess' \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
