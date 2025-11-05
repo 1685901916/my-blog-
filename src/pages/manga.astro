@@ -1,39 +1,41 @@
 ---
+import { getCollection } from "astro:content";
+import ImageWrapper from "@components/misc/ImageWrapper.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { scanMangaCategories } from "@utils/manga-scanner";
-import { getCollection } from "astro:content";
-import { Icon } from "astro-icon/components";
-import ImageWrapper from "@components/misc/ImageWrapper.astro";
 import { getCategoryUrl, getTagUrl } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
 import { siteConfig } from "../config";
 
 const categories = await scanMangaCategories();
 
 // 获取manga collection中的文章
 const mangaArticles = await getCollection("manga", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
+	return import.meta.env.PROD ? data.draft !== true : true;
 });
 
 // 转换为统一格式并计算字数
-const standaloneArticles = await Promise.all(mangaArticles.map(async entry => {
-    const { remarkPluginFrontmatter } = await entry.render();
-    return {
-        id: entry.slug,
-        title: entry.data.title,
-        description: entry.data.description,
-        image: entry.data.image,
-        tags: entry.data.tags,
-        category: entry.data.category,
-        published: entry.data.published,
-        slug: entry.slug,
-        words: remarkPluginFrontmatter.words || 0
-    };
-}));
+const standaloneArticles = await Promise.all(
+	mangaArticles.map(async (entry) => {
+		const { remarkPluginFrontmatter } = await entry.render();
+		return {
+			id: entry.slug,
+			title: entry.data.title,
+			description: entry.data.description,
+			image: entry.data.image,
+			tags: entry.data.tags,
+			category: entry.data.category,
+			published: entry.data.published,
+			slug: entry.slug,
+			words: remarkPluginFrontmatter.words || 0,
+		};
+	}),
+);
 
 // 合并文件夹和独立文章到一个数组
 const allItems = [
-    ...categories.map(cat => ({ type: 'folder', data: cat })),
-    ...standaloneArticles.map(art => ({ type: 'article', data: art }))
+	...categories.map((cat) => ({ type: "folder", data: cat })),
+	...standaloneArticles.map((art) => ({ type: "article", data: art })),
 ];
 ---
 

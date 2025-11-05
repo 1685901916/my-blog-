@@ -1,34 +1,36 @@
 ---
-import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getCollection } from "astro:content";
-import { Icon } from "astro-icon/components";
 import ImageWrapper from "@components/misc/ImageWrapper.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getCategoryUrl, getTagUrl } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
 import { siteConfig } from "../../config";
 
 // 获取带有"程序系"标签的作品集文章
 const portfolioArticles = await getCollection("portfolio", ({ data }) => {
-    const isProd = import.meta.env.PROD;
-    const isNotDraft = data.draft !== true;
-    const hasProgrammingTag = data.tags && data.tags.includes("程序系");
-    return isProd ? (isNotDraft && hasProgrammingTag) : hasProgrammingTag;
+	const isProd = import.meta.env.PROD;
+	const isNotDraft = data.draft !== true;
+	const hasProgrammingTag = data.tags && data.tags.includes("程序系");
+	return isProd ? isNotDraft && hasProgrammingTag : hasProgrammingTag;
 });
 
 // 转换为统一格式并计算字数
-const allArticles = await Promise.all(portfolioArticles.map(async entry => {
-    const { remarkPluginFrontmatter } = await entry.render();
-    return {
-        id: entry.slug,
-        title: entry.data.title,
-        description: entry.data.description,
-        image: entry.data.image,
-        tags: entry.data.tags,
-        category: entry.data.category,
-        published: entry.data.published,
-        slug: entry.slug,
-        words: remarkPluginFrontmatter.words || 0
-    };
-}));
+const allArticles = await Promise.all(
+	portfolioArticles.map(async (entry) => {
+		const { remarkPluginFrontmatter } = await entry.render();
+		return {
+			id: entry.slug,
+			title: entry.data.title,
+			description: entry.data.description,
+			image: entry.data.image,
+			tags: entry.data.tags,
+			category: entry.data.category,
+			published: entry.data.published,
+			slug: entry.slug,
+			words: remarkPluginFrontmatter.words || 0,
+		};
+	}),
+);
 ---
 
 <MainGridLayout banner={undefined} title="程序系">

@@ -1,9 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
-import type { MangaCategory } from "../../../utils/manga-scanner";
-import MainGridLayout from "../../../layouts/MainGridLayout.astro";
-import { scanMangaCategories } from "../../../utils/manga-scanner";
 import { Icon } from "astro-icon/components";
+import MainGridLayout from "../../../layouts/MainGridLayout.astro";
+import type { MangaCategory } from "../../../utils/manga-scanner";
+import { scanMangaCategories } from "../../../utils/manga-scanner";
 
 export const getStaticPaths = (async () => {
 	const categories = await scanMangaCategories();

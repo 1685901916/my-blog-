@@ -35,8 +35,8 @@ export type SiteConfig = {
 
 	// 主页内容显示开关配置
 	homepageContent: {
-		showBlogPosts: boolean;      // 是否在主页显示博客文章
-		showMangaPosts: boolean;     // 是否在主页显示漫画内容
+		showBlogPosts: boolean; // 是否在主页显示博客文章
+		showMangaPosts: boolean; // 是否在主页显示漫画内容
 		showPortfolioPosts: boolean; // 是否在主页显示作品集内容
 	};
 

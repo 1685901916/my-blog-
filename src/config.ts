@@ -48,8 +48,8 @@ export const siteConfig: SiteConfig = {
 	// 各专题页面（/manga/, /portfolio/ 等）不受影响
 	// ==========================================
 	homepageContent: {
-		showBlogPosts: true,      // ✅ 博客文章 - 设为 false 则主页不显示博客
-		showMangaPosts: true,     // ✅ 漫画内容 - 设为 true 则主页显示漫画
+		showBlogPosts: true, // ✅ 博客文章 - 设为 false 则主页不显示博客
+		showMangaPosts: true, // ✅ 漫画内容 - 设为 true 则主页显示漫画
 		showPortfolioPosts: true, // ✅ 作品集   - 设为 true 则主页显示作品集
 	},
 	// ==========================================
@@ -103,8 +103,8 @@ export const siteConfig: SiteConfig = {
 
 		waves: {
 			enable: true, // 是否启用水波纹效果(这个功能比较吃性能)
-			performanceMode: false, // 性能模式：减少动画复杂度(性能提升40%)
-			mobileDisable: false, // 移动端禁用
+			performanceMode: true, // 性能模式：减少动画复杂度(性能提升40%)
+			mobileDisable: true, // 移动端禁用
 		},
 
 		// PicFlow API支持(智能图片API)

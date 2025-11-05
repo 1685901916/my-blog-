@@ -1,10 +1,10 @@
 ---
-import type { GetStaticPaths } from "astro";
-import MainGridLayout from "../../../../layouts/MainGridLayout.astro";
-import { scanStandaloneManga } from "../../../../utils/manga-scanner";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import type { GetStaticPaths } from "astro";
 import { marked } from "marked";
+import MainGridLayout from "../../../../layouts/MainGridLayout.astro";
+import { scanStandaloneManga } from "../../../../utils/manga-scanner";
 
 export const getStaticPaths = (async () => {
 	const articles = await scanStandaloneManga();
@@ -26,16 +26,18 @@ if (!article) {
 
 // 读取文章内容
 const articlePath = path.join(
-	process.cwd(), 
+	process.cwd(),
 	"src/content/manga-categories",
-	`${article.id}.md`
+	`${article.id}.md`,
 );
 
 let articleContent = "";
 if (fs.existsSync(articlePath)) {
 	const fileContent = fs.readFileSync(articlePath, "utf-8");
 	// 手动分离 front matter 和内容
-	const contentMatch = fileContent.match(/^---\s*\n[\s\S]*?\n---\s*\n([\s\S]*)$/);
+	const contentMatch = fileContent.match(
+		/^---\s*\n[\s\S]*?\n---\s*\n([\s\S]*)$/,
+	);
 	const content = contentMatch ? contentMatch[1] : fileContent;
 	articleContent = marked(content) as string;
 }

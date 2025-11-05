@@ -21,7 +21,8 @@ const localAnimeList: AnimeItem[] = [
 		title: "轻音少女",
 		status: "completed",
 		rating: 9.4,
-		cover: "https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829221155.png",
+		cover:
+			"https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829221155.png",
 		description: "京阿尼经典校园日常番，讲述轻音部女孩们的青春故事",
 		episodes: "13 episodes",
 		year: "2009",

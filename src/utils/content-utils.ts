@@ -73,7 +73,10 @@ export async function getSortedPosts() {
 }
 export type PostForList = {
 	slug: string;
-	data: CollectionEntry<"posts">["data"] | CollectionEntry<"manga">["data"] | CollectionEntry<"portfolio">["data"];
+	data:
+		| CollectionEntry<"posts">["data"]
+		| CollectionEntry<"manga">["data"]
+		| CollectionEntry<"portfolio">["data"];
 };
 export async function getSortedPostsList(): Promise<PostForList[]> {
 	const sortedFullPosts = await getRawSortedPosts();

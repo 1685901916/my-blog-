@@ -22,7 +22,10 @@ export interface MangaCategory {
 }
 
 export async function scanMangaCategories(): Promise<MangaCategory[]> {
-	const categoriesDir = path.join(process.cwd(), "src/content/manga-categories");
+	const categoriesDir = path.join(
+		process.cwd(),
+		"src/content/manga-categories",
+	);
 	const categories: MangaCategory[] = [];
 
 	// 检查目录是否存在
@@ -53,7 +56,10 @@ export async function scanMangaCategories(): Promise<MangaCategory[]> {
 
 // 扫描独立的漫画文章（不在文件夹中）
 export async function scanStandaloneManga(): Promise<MangaArticle[]> {
-	const categoriesDir = path.join(process.cwd(), "src/content/manga-categories");
+	const categoriesDir = path.join(
+		process.cwd(),
+		"src/content/manga-categories",
+	);
 	const articles: MangaArticle[] = [];
 
 	// 检查目录是否存在
@@ -63,7 +69,7 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 
 	// 获取根目录下的所有markdown文件
 	const files = fs.readdirSync(categoriesDir, { withFileTypes: true });
-	
+
 	for (const file of files) {
 		// 只处理markdown文件
 		if (!file.isDirectory() && file.name.endsWith(".md")) {
@@ -131,9 +137,7 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 	}
 
 	// 按发布日期倒序排序
-	return articles.sort(
-		(a, b) => b.published.getTime() - a.published.getTime(),
-	);
+	return articles.sort((a, b) => b.published.getTime() - a.published.getTime());
 }
 
 async function processCategoryFolder(
@@ -251,8 +255,5 @@ function scanArticles(folderPath: string, categoryId: string): MangaArticle[] {
 	}
 
 	// 按发布日期倒序排序
-	return articles.sort(
-		(a, b) => b.published.getTime() - a.published.getTime(),
-	);
+	return articles.sort((a, b) => b.published.getTime() - a.published.getTime());
 }
-
