@@ -12,7 +12,16 @@ function joinUrl(...parts: string[]): string {
 	return joined.replace(/\/+/g, "/");
 }
 
-export function getPostUrlBySlug(slug: string): string {
+export function getPostUrlBySlug(slug: string, collection?: string): string {
+	// 根据 collection 类型生成不同的 URL
+	if (collection === 'manga') {
+		return url(`/manga/${slug}/`);
+	} else if (collection === 'manga-categories') {
+		// manga-categories 的 slug 格式是 "文件夹/文章名"
+		return url(`/manga/${slug}/`);
+	} else if (collection === 'portfolio') {
+		return url(`/portfolio/${slug}/`);
+	}
 	return url(`/posts/${slug}/`);
 }
 

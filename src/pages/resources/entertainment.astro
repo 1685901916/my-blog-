@@ -1,23 +1,75 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { scanEntertainmentCategories } from "@utils/entertainment-scanner";
 import { Icon } from "astro-icon/components";
+
+const categories = await scanEntertainmentCategories();
 ---
 
 <MainGridLayout banner={undefined} title="娱乐资源">
-    <div class="card-base px-8 py-6">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold mb-2 text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
-                <Icon name="material-symbols:sports-esports" class="text-4xl text-[var(--primary)]" />
-                娱乐资源
-            </h1>
-            <p class="text-neutral-600 dark:text-neutral-400">
-                精选的娱乐资源收藏
-            </p>
-        </div>
-        
-        <p class="text-center text-neutral-500 dark:text-neutral-400 py-12">
-            页面正在建设中...
-        </p>
+    <!-- 双列布局 -->
+    <div class="transition grid grid-cols-1 md:grid-cols-2 rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent gap-2 md:gap-4 mb-4">
+        {categories.map(category => (
+            /* 文件夹卡片 */
+            <div class="card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative">
+                <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", category.cover ? "w-full md:w-[calc(100%-28%-12px)]" : "w-full md:w-[calc(100%-52px-12px)]"]}>
+                    <a href={`/resources/entertainment/${category.id}/`}
+                       class="transition group w-full block font-bold mb-3 text-3xl text-90
+                       hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+                       active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
+                       before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                       before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block">
+                        <Icon name="material-symbols:folder-open" class="inline text-[var(--primary)] text-3xl mr-2.5 -translate-y-1" />
+                        {category.title}
+                        <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" />
+                        <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded" />
+                    </a>
+
+                    <!-- 元数据 -->
+                    <div class="flex flex-wrap items-center gap-4 gap-x-4 gap-y-2 mb-4">
+                        <div class="flex items-center">
+                            <div class="meta-icon">
+                                <Icon name="material-symbols:folder-open" class="text-2xl" />
+                            </div>
+                            <span class="text-50 text-base font-semibold">文件夹</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="meta-icon">
+                                <Icon name="material-symbols:article-outline-rounded" class="text-xl" />
+                            </div>
+                            <span class="text-50 text-sm font-medium">{category.articles.length} 篇</span>
+                        </div>
+                    </div>
+
+                    <!-- 描述 -->
+                    <div class="transition text-75 mb-3.5 pr-4 line-clamp-2">
+                        {category.description}
+                    </div>
+
+                    <!-- 进入按钮 -->
+                    <div class="flex md:hidden">
+                        <a href={`/resources/entertainment/${category.id}/`} 
+                           aria-label={`查看 ${category.title}`}
+                           class="transition text-sm text-[var(--primary)] hover:text-[var(--primary)] px-4 py-1.5 rounded-lg">
+                            查看详情
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 封面图（如果有） -->
+                {category.cover && (
+                    <a href={`/resources/entertainment/${category.id}/`}
+                       aria-label={category.title}
+                       class="flex items-center relative w-full md:w-[28%] overflow-hidden active:scale-95 md:rounded-lg">
+                        <img src={category.cover} 
+                             alt={`${category.title}封面`}
+                             class="transition w-full h-full object-cover md:group-hover:scale-105"
+                             loading="lazy"
+                             decoding="async" />
+                    </a>
+                )}
+            </div>
+        ))}
     </div>
 </MainGridLayout>
 

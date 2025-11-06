@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import yaml from "js-yaml";
 
-export interface MangaArticle {
+export interface EntertainmentArticle {
 	id: string;
 	title: string;
 	description: string;
@@ -14,25 +14,25 @@ export interface MangaArticle {
 	words: number;
 }
 
-export interface MangaCategory {
+export interface EntertainmentCategory {
 	id: string;
 	title: string;
 	description: string;
 	cover: string;
 	order: number;
-	articles: MangaArticle[];
+	articles: EntertainmentArticle[];
 }
 
-export async function scanMangaCategories(): Promise<MangaCategory[]> {
+export async function scanEntertainmentCategories(): Promise<EntertainmentCategory[]> {
 	const categoriesDir = path.join(
 		process.cwd(),
-		"src/content/manga-categories",
+		"src/content/entertainment-resources",
 	);
-	const categories: MangaCategory[] = [];
+	const categories: EntertainmentCategory[] = [];
 
 	// 检查目录是否存在
 	if (!fs.existsSync(categoriesDir)) {
-		console.warn("漫画分类目录不存在:", categoriesDir);
+		console.warn("娱乐资源分类目录不存在:", categoriesDir);
 		return [];
 	}
 
@@ -56,20 +56,18 @@ export async function scanMangaCategories(): Promise<MangaCategory[]> {
 	return categories.sort((a, b) => a.order - b.order);
 }
 
-// 扫描独立的漫画文章（不在文件夹中）
-export async function scanStandaloneManga(): Promise<MangaArticle[]> {
+async function scanStandaloneEntertainment(): Promise<EntertainmentArticle[]> {
 	const categoriesDir = path.join(
 		process.cwd(),
-		"src/content/manga-categories",
+		"src/content/entertainment-resources",
 	);
-	const articles: MangaArticle[] = [];
+	const articles: EntertainmentArticle[] = [];
 
 	// 检查目录是否存在
 	if (!fs.existsSync(categoriesDir)) {
 		return [];
 	}
 
-	// 获取根目录下的所有markdown文件
 	const files = fs.readdirSync(categoriesDir, { withFileTypes: true });
 
 	for (const file of files) {
@@ -93,7 +91,7 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 					continue;
 				}
 
-			const slug = `manga-standalone-${file.name.replace(".md", "")}`;
+			const slug = `entertainment-standalone-${file.name.replace(".md", "")}`;
 
 			// 计算正文字数（排除 front matter）
 			const content = fileContent.replace(/^---\s*\n[\s\S]*?\n---/, "").trim();
@@ -105,7 +103,7 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 				description: data.description || "",
 				image: data.image || "",
 				tags: data.tags || [],
-				category: data.category || "漫画",
+				category: data.category || "娱乐资源",
 				published: data.published ? new Date(data.published) : new Date(),
 				slug,
 				words,
@@ -123,12 +121,12 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 async function processCategoryFolder(
 	folderPath: string,
 	folderName: string,
-): Promise<MangaCategory | null> {
+): Promise<EntertainmentCategory | null> {
 	// 检查必要文件
 	const infoPath = path.join(folderPath, "info.json");
 
 	if (!fs.existsSync(infoPath)) {
-		console.warn(`漫画分类 ${folderName} 缺少 info.json 文件`);
+		console.warn(`娱乐资源分类 ${folderName} 缺少 info.json 文件`);
 		return null;
 	}
 
@@ -138,7 +136,7 @@ async function processCategoryFolder(
 		const infoContent = fs.readFileSync(infoPath, "utf-8");
 		info = JSON.parse(infoContent);
 	} catch (e) {
-		console.error(`漫画分类 ${folderName} 的 info.json 格式错误:`, e);
+		console.error(`娱乐资源分类 ${folderName} 的 info.json 格式错误:`, e);
 		return null;
 	}
 
@@ -162,8 +160,8 @@ async function processCategoryFolder(
 	};
 }
 
-function scanArticles(folderPath: string, categoryId: string): MangaArticle[] {
-	const articles: MangaArticle[] = [];
+function scanArticles(folderPath: string, categoryId: string): EntertainmentArticle[] {
+	const articles: EntertainmentArticle[] = [];
 	const files = fs.readdirSync(folderPath);
 
 	for (const file of files) {
@@ -202,7 +200,7 @@ function scanArticles(folderPath: string, categoryId: string): MangaArticle[] {
 				description: data.description || "",
 				image: data.image || "",
 				tags: data.tags || [],
-				category: data.category || "漫画",
+				category: data.category || "娱乐资源",
 				published: data.published ? new Date(data.published) : new Date(),
 				slug,
 				words,
@@ -215,3 +213,7 @@ function scanArticles(folderPath: string, categoryId: string): MangaArticle[] {
 	// 按发布日期倒序排序
 	return articles.sort((a, b) => b.published.getTime() - a.published.getTime());
 }
+
+
+
+

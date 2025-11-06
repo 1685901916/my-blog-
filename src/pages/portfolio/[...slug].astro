@@ -7,7 +7,6 @@ import PasswordProtection from "@components/PasswordProtection.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPosts } from "@utils/content-utils";
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import bcryptjs from "bcryptjs";
@@ -19,14 +18,15 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+
 export async function getStaticPaths() {
-	// 只获取 posts collection 的文章
+	// 只获取 portfolio collection 的文章
 	const { getCollection } = await import("astro:content");
-	const blogEntries = await getCollection("posts", ({ data }) => {
+	const portfolioEntries = await getCollection("portfolio", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	
-	return blogEntries.map((entry) => ({
+	return portfolioEntries.map((entry) => ({
 		params: { slug: entry.slug },
 		props: { entry },
 	}));
@@ -65,7 +65,7 @@ const lastModified = dayjs(entry.data.updated || entry.data.published)
 
 const jsonLd = {
 	"@context": "https://schema.org",
-	"@type": "BlogPosting",
+	"@type": "CreativeWork",
 	headline: entry.data.title,
 	description: entry.data.description || entry.data.title,
 	keywords: entry.data.tags,
@@ -78,7 +78,6 @@ const jsonLd = {
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
 };
 ---
 
@@ -186,7 +185,7 @@ const jsonLd = {
                         <ImageWrapper
                             id="post-cover"
                             src={entry.data.image}
-                            basePath={path.join("content/posts/", getDir(entry.id))}
+                            basePath={path.join("content/portfolio/", getDir(entry.id))}
                             class="mb-8 rounded-xl banner-container onload-animation"
                         />
                     </>
@@ -319,7 +318,7 @@ const jsonLd = {
     >
         <a
             href={entry.data.nextSlug
-                ? getPostUrlBySlug(entry.data.nextSlug)
+                ? getPostUrlBySlug(entry.data.nextSlug, 'portfolio')
                 : "#"}
             class:list={[
                 "w-full font-bold overflow-hidden active:scale-95",
@@ -343,7 +342,7 @@ const jsonLd = {
 
         <a
             href={entry.data.prevSlug
-                ? getPostUrlBySlug(entry.data.prevSlug)
+                ? getPostUrlBySlug(entry.data.prevSlug, 'portfolio')
                 : "#"}
             class:list={[
                 "w-full font-bold overflow-hidden active:scale-95",
@@ -366,3 +365,6 @@ const jsonLd = {
         </a>
     </div>
 </MainGridLayout>
+
+
+

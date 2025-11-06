@@ -1,7 +1,11 @@
 import { siteConfig } from "../config";
 
-export function formatDateToYYYYMMDD(date: Date): string {
-	return date.toISOString().substring(0, 10);
+export function formatDateToYYYYMMDD(date: Date | string | undefined): string {
+	if (!date) {
+		return new Date().toISOString().substring(0, 10);
+	}
+	const dateObj = typeof date === 'string' ? new Date(date) : date;
+	return dateObj.toISOString().substring(0, 10);
 }
 
 // 国际化日期格式化函数
