@@ -148,9 +148,9 @@ export const siteConfig: SiteConfig = {
 	},
 	toc: {
 		enable: true, // 启用目录功能
-		depth: 3, // 目录深度，1-6，1 表示只显示 h1 标题，2 表示显示 h1 和 h2 标题，依此类推
+		depth: 3, // 目录深度
 	},
-	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
+	generateOgImages: false, // 启用生成OpenGraph图片功能
 	favicon: [
 		// 使用自定义头像作为站点图标
 		{ src: "/favicon/avatar-32.png", sizes: "32x32" },
@@ -158,14 +158,13 @@ export const siteConfig: SiteConfig = {
 		{ src: "/favicon/avatar-180.png", sizes: "180x180" },
 		{ src: "/favicon/avatar-192.png", sizes: "192x192" },
 	],
-
 	// 字体配置
 	font: {
 		zenMaruGothic: {
-			enable: true, // 启用全局圆体适合日语和英语，对中文适配一般
+			enable: true, // 启用全局圆体适合日语和英语
 		},
 		hanalei: {
-			enable: false, // 启用 Hanalei 字体作为全局字体，适合中文去使用
+			enable: false, // 启用 Hanalei 字体作为全局字体
 		},
 	},
 	showLastModified: true, // 控制“上次编辑”卡片显示的开关
