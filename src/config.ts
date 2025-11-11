@@ -152,12 +152,11 @@ export const siteConfig: SiteConfig = {
 	},
 	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
 	favicon: [
-		// 留空以使用默认 favicon
-		// {
-		//   src: '/favicon/icon.png',    // 图标文件路径
-		//   theme: 'light',              // 可选，指定主题 'light' | 'dark'
-		//   sizes: '32x32',              // 可选，图标大小
-		// }
+		// 使用自定义头像作为站点图标
+		{ src: "/favicon/avatar-32.png", sizes: "32x32" },
+		{ src: "/favicon/avatar-128.png", sizes: "128x128" },
+		{ src: "/favicon/avatar-180.png", sizes: "180x180" },
+		{ src: "/favicon/avatar-192.png", sizes: "192x192" },
 	],
 
 	// 字体配置
