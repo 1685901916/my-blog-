@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Astro Check
-        run: pnpm astro check || echo "Astro check failed, but continuing (non-blocking)"
+        run: pnpm astro check || (echo "Astro check reported issues (non-blocking)" && true)
 
   build:
     runs-on: ubuntu-latest
