@@ -1,8 +1,9 @@
-name: Build and Check
+name: Build and Check (DISABLED)
 
 on:
-  push:
-    branches: [ main ] # Adjust branches as needed
+  # 已禁用：deploy-to-server.yml 已包含构建步骤
+  # push:
+  #   branches: [ main ] # Adjust branches as needed
   pull_request:
     branches: [ main ] # Adjust branches as needed
 
