@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG 图片测试 - 文乃的小站</title>
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="文乃的小站">
+    <meta property="og:title" content="文乃的小站 - 记录生活，分享美好">
+    <meta property="og:description" content="计算机专业大学生，B站Git源宝学员。老二次元，有千部以上阅番量。">
+    <meta property="og:image" content="https://ayano29.cn/og-image.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ayano29.cn">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="文乃的小站 - 记录生活，分享美好">
+    <meta name="twitter:description" content="计算机专业大学生，B站Git源宝学员。老二次元，有千部以上阅番量。">
+    <meta name="twitter:image" content="https://ayano29.cn/og-image.jpg">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #ff69b4;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #ff69b4;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        img {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        a {
+            color: #ff69b4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🖼️ Open Graph 图片测试页面</h1>
+        
+        <div class="test-section">
+            <h2>✅ 当前 OG 图片</h2>
+            <p class="info">这是搜索引擎和社交媒体会显示的图片：</p>
+            <img src="/og-image.jpg" alt="OG Image" onerror="this.style.border='3px solid red'; this.alt='❌ 图片加载失败'">
+            <p><code>https://ayano29.cn/og-image.jpg</code></p>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 测试工具</h2>
+            <p>使用以下工具验证 OG 图片配置：</p>
+            <ul>
+                <li><a href="https://developers.facebook.com/tools/debug/?q=https://ayano29.cn" target="_blank">Facebook 分享调试器</a></li>
+                <li><a href="https://cards-dev.twitter.com/validator" target="_blank">Twitter 卡片验证器</a></li>
+                <li><a href="https://www.linkedin.com/post-inspector/" target="_blank">LinkedIn 帖子检查器</a></li>
+                <li><a href="https://www.opengraph.xyz/url/https%3A%2F%2Fayano29.cn" target="_blank">Open Graph 检查器</a></li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>📝 Meta 标签信息</h2>
+            <ul>
+                <li><strong>网站名称：</strong> 文乃的小站</li>
+                <li><strong>标题：</strong> 文乃的小站 - 记录生活，分享美好</li>
+                <li><strong>描述：</strong> 计算机专业大学生，B站Git源宝学员</li>
+                <li><strong>图片：</strong> <code>/og-image.jpg</code></li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>⏰ 搜索引擎更新时间</h2>
+            <p class="info">注意：搜索引擎缓存更新需要时间</p>
+            <ul>
+                <li><strong>Google：</strong> 通常 3-7 天</li>
+                <li><strong>Bing：</strong> 通常 1-3 天</li>
+                <li><strong>加速方法：</strong> 在搜索引擎管理工具中提交重新索引请求</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 返回首页</h2>
+            <p><a href="/">← 返回文乃的小站首页</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // 检查图片是否加载成功
+        window.addEventListener('load', function() {
+            const img = document.querySelector('img');
+            if (img.complete && img.naturalHeight !== 0) {
+                console.log('✅ OG 图片加载成功！');
+            } else {
+                console.error('❌ OG 图片加载失败！');
+            }
+        });
+    </script>
+</body>
+</html>
+
