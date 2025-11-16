@@ -58,8 +58,8 @@ export const siteConfig: SiteConfig = {
 	navbarTitle: {
 		// 顶栏标题文本
 		text: "文乃的小站",
-		// 顶栏标题图标路径，使用自定义头像
-		icon: "assets/images/avatar.jpg",
+		// 顶栏标题图标路径，使用圆形头像（需要放在 public 目录）
+		icon: "/avatar-icon.png",
 	},
 
 	bangumi: {
