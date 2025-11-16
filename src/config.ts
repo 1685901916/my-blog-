@@ -101,11 +101,11 @@ export const siteConfig: SiteConfig = {
 			interval: 1.5, // 轮播间隔时间（秒）
 		},
 
-	waves: {
-		enable: true, // 是否启用水波纹效果(这个功能比较吃性能)
-		performanceMode: true, // 性能模式：减少动画复杂度(性能提升40%)
-		mobileDisable: false, // 移动端禁用
-	},
+		waves: {
+			enable: true, // 是否启用水波纹效果(这个功能比较吃性能)
+			performanceMode: true, // 性能模式：减少动画复杂度(性能提升40%)
+			mobileDisable: false, // 移动端禁用
+		},
 
 		// PicFlow API支持(智能图片API)
 		imageApi: {
@@ -369,7 +369,8 @@ export const commentConfig: CommentConfig = {
 
 export const announcementConfig: AnnouncementConfig = {
 	title: "公告", // 公告标题
-	content: "本站正在建设中，大部分文件多是ai生成主要是为了测试，不代表最终成果。", // 公告内容
+	content:
+		"本站正在建设中，大部分文件多是ai生成主要是为了测试，不代表最终成果。", // 公告内容
 	closable: true, // 允许用户关闭公告
 	link: {
 		enable: true, // 启用链接
