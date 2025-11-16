@@ -75,18 +75,47 @@ const allItems = [
                     )}
                 </div>
             ) : (
-                // 文章卡片
-                <a href={`/manga/${item.data.slug}/`} class="card-base flex items-center gap-4 rounded-[var(--radius-large)] overflow-hidden">
-                    {item.data.image && (
-                        <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
-                            <ImageWrapper src={item.data.image} alt={item.data.title} class="w-full h-full object-cover" />
+                // 独立文章卡片 - 与文件夹样式一致
+                <div class="card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative">
+                    <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", item.data.image ? "w-full md:w-[calc(100%-28%-12px)]" : "w-full md:w-[calc(100%-52px-12px)]"]}>
+                        <a href={`/manga/${item.data.slug}/`} class="transition group w-full block font-bold mb-3 text-3xl text-90 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] active:text-[var(--title-active)] dark:active:text-[var(--title-active)] before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)] before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block">
+                            {item.data.title}
+                            <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" />
+                            <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded" />
+                        </a>
+                        <div class="flex flex-wrap items-center gap-4 gap-x-4 gap-y-2 mb-4">
+                            <div class="flex items-center">
+                                <div class="meta-icon"><Icon name="material-symbols:article-outline-rounded" class="text-xl" /></div>
+                                <span class="text-50 text-sm font-medium">{item.data.published.toLocaleDateString('zh-CN')}</span>
+                            </div>
+                            {item.data.words > 0 && (
+                                <div class="flex items-center">
+                                    <div class="meta-icon"><Icon name="material-symbols:notes-rounded" class="text-xl" /></div>
+                                    <span class="text-50 text-sm font-medium">{item.data.words} 字</span>
+                                </div>
+                            )}
+                            {item.data.tags && item.data.tags.length > 0 && (
+                                <div class="flex flex-wrap gap-2">
+                                    {item.data.tags.slice(0, 2).map((tag: string) => (
+                                        <a href={getTagUrl(tag)} class="transition text-50 text-sm font-medium hover:text-[var(--primary)]">
+                                            #{tag}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    )}
-                    <div class="min-w-0">
-                        <h3 class="font-bold text-xl mb-2 line-clamp-1">{item.data.title}</h3>
-                        <p class="text-75 line-clamp-2">{item.data.description}</p>
+                        <div class="transition text-75 mb-3.5 pr-4 line-clamp-2">{item.data.description}</div>
                     </div>
-                </a>
+                    {item.data.image && (
+                        <a href={`/manga/${item.data.slug}/`} aria-label={item.data.title} class="group max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0 md:w-[28%] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95">
+                            <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition"></div>
+                            <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center">
+                                <Icon name="material-symbols:chevron-right-rounded" class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl" />
+                            </div>
+                            <ImageWrapper src={item.data.image} alt={item.data.title} class="w-full h-full object-cover" />
+                        </a>
+                    )}
+                </div>
             )
         ))}
 
