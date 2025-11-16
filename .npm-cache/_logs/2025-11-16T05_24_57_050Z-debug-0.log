@@ -1,0 +1,70 @@
+0 verbose cli D:\nodejs\node.exe D:\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.3
+2 info using node@v22.20.0
+3 silly config load:file:D:\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\cursor\project8  blog\Mizuki-master\.npmrc
+5 silly config load:file:C:\Users\Arthur\.npmrc
+6 silly config load:file:D:\nodejs\node_global\etc\npmrc
+7 verbose title npm exec only-allow pnpm
+8 verbose argv "exec" "--" "only-allow" "pnpm"
+9 verbose logfile logs-max:10 dir:D:\cursor\project8  blog\Mizuki-master\.npm-cache\_logs\2025-11-16T05_24_57_050Z-
+10 verbose logfile D:\cursor\project8  blog\Mizuki-master\.npm-cache\_logs\2025-11-16T05_24_57_050Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 http fetch GET 200 https://registry.npmmirror.com/only-allow 156ms (cache miss)
+14 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+15 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+16 silly idealTree buildDeps
+17 silly fetch manifest only-allow@1.2.1
+18 silly packumentCache full:https://registry.npmmirror.com/only-allow cache-miss
+19 http fetch GET 200 https://registry.npmmirror.com/only-allow 162ms (cache miss)
+20 silly packumentCache full:https://registry.npmmirror.com/only-allow set size:5459 disposed:false
+21 silly placeDep ROOT only-allow@1.2.1 OK for:  want: 1.2.1
+22 silly fetch manifest which-pm-runs@^1.1.0
+23 silly packumentCache full:https://registry.npmmirror.com/which-pm-runs cache-miss
+24 http fetch GET 200 https://registry.npmmirror.com/which-pm-runs 79ms (cache revalidated)
+25 silly packumentCache full:https://registry.npmmirror.com/which-pm-runs set size:4899 disposed:false
+26 silly placeDep ROOT which-pm-runs@1.1.0 OK for: only-allow@1.2.1 want: ^1.1.0
+27 silly reify moves {}
+28 silly audit bulk request { 'only-allow': [ '1.2.1' ], 'which-pm-runs': [ '1.1.0' ] }
+29 http cache which-pm-runs@https://registry.npmmirror.com/which-pm-runs/-/which-pm-runs-1.1.0.tgz 0ms (cache hit)
+30 http cache only-allow@https://registry.npmmirror.com/only-allow/-/only-allow-1.2.1.tgz 0ms (cache hit)
+31 silly tarball no local data for only-allow@https://registry.npmmirror.com/only-allow/-/only-allow-1.2.1.tgz. Extracting by manifest.
+32 http fetch POST 404 https://registry.npmmirror.com/-/npm/v1/security/advisories/bulk 30ms
+33 silly audit bulk request failed [object Object]
+34 http fetch POST 404 https://registry.npmmirror.com/-/npm/v1/security/audits/quick 254ms
+35 verbose audit error HttpErrorGeneral: 404 Not Found - POST https://registry.npmmirror.com/-/npm/v1/security/audits/quick - [NOT_IMPLEMENTED] /-/npm/v1/security/* not implemented yet
+35 verbose audit error     at D:\nodejs\node_modules\npm\node_modules\npm-registry-fetch\lib\check-response.js:103:15
+35 verbose audit error     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+35 verbose audit error     at async [getReport] (D:\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\audit-report.js:336:21)
+35 verbose audit error     at async AuditReport.run (D:\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\audit-report.js:106:19) {
+35 verbose audit error   headers: [Object: null prototype] {
+35 verbose audit error     server: [ 'Tengine' ],
+35 verbose audit error     date: [ 'Sun, 16 Nov 2025 05:36:16 GMT' ],
+35 verbose audit error     'content-type': [ 'application/json' ],
+35 verbose audit error     'transfer-encoding': [ 'chunked' ],
+35 verbose audit error     connection: [ 'keep-alive' ],
+35 verbose audit error     'strict-transport-security': [ 'max-age=5184000' ],
+35 verbose audit error     via: [ 'kunlun13.cn8934[,404666]' ],
+35 verbose audit error     'timing-allow-origin': [ '*' ],
+35 verbose audit error     eagleid: [ '2aec501417632713766313552e' ],
+35 verbose audit error     'x-fetch-attempts': [ '1' ]
+35 verbose audit error   },
+35 verbose audit error   statusCode: 404,
+35 verbose audit error   code: 'E404',
+35 verbose audit error   method: 'POST',
+35 verbose audit error   uri: 'https://registry.npmmirror.com/-/npm/v1/security/audits/quick',
+35 verbose audit error   body: {
+35 verbose audit error     error: '[NOT_IMPLEMENTED] /-/npm/v1/security/* not implemented yet'
+35 verbose audit error   },
+35 verbose audit error   pkgid: undefined
+35 verbose audit error }
+36 silly audit error [object Object]
+37 silly audit report null
+38 http fetch GET 200 https://cdn.npmmirror.com/packages/only-allow/1.2.1/only-allow-1.2.1.tgz 566ms (cache miss)
+39 verbose cwd D:\cursor\project8  blog\Mizuki-master
+40 verbose os Windows_NT 10.0.22631
+41 verbose node v22.20.0
+42 verbose npm  v10.9.3
+43 verbose exit 1
+44 verbose code 1

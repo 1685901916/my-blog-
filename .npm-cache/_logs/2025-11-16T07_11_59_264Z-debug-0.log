@@ -1,0 +1,1552 @@
+0 verbose cli D:\nodejs\node.exe D:\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.3
+2 info using node@v22.20.0
+3 silly config load:file:D:\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\cursor\project8  blog\Mizuki-master\.npmrc
+5 silly config load:file:C:\Users\Arthur\.npmrc
+6 silly config load:file:D:\nodejs\node_global\etc\npmrc
+7 verbose title npm install
+8 verbose argv "install" "--cache" ".npm-cache" "--legacy-peer-deps"
+9 verbose logfile logs-max:10 dir:D:\cursor\project8  blog\Mizuki-master\.npm-cache\_logs\2025-11-16T07_11_59_264Z-
+10 verbose logfile D:\cursor\project8  blog\Mizuki-master\.npm-cache\_logs\2025-11-16T07_11_59_264Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly idealTree buildDeps
+14 silly fetch manifest @astrojs/svelte@7.2.0
+15 silly packumentCache full:https://registry.npmmirror.com/@astrojs%2fsvelte cache-miss
+16 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+17 http fetch GET 200 https://registry.npmmirror.com/@astrojs%2fsvelte 530ms (cache revalidated)
+18 silly packumentCache full:https://registry.npmmirror.com/@astrojs%2fsvelte set size:375187 disposed:false
+19 silly fetch manifest astro@5.14.6
+20 silly packumentCache full:https://registry.npmmirror.com/astro cache-miss
+21 http fetch GET 200 https://registry.npmmirror.com/astro 144ms (cache revalidated)
+22 silly packumentCache full:https://registry.npmmirror.com/astro set size:8451160 disposed:false
+23 silly fetch manifest @biomejs/biome@2.2.6
+24 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fbiome cache-miss
+25 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fbiome 73ms (cache revalidated)
+26 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fbiome set size:291420 disposed:false
+27 silly placeDep ROOT @astrojs/svelte@7.2.0 REPLACE for: mizuki@6.1.0 want: 7.2.0
+28 silly placeDep ROOT @biomejs/biome@2.2.6 REPLACE for: mizuki@6.1.0 want: 2.2.6
+29 silly placeDep ROOT astro@5.14.6 REPLACE for: mizuki@6.1.0 want: 5.14.6
+30 silly fetch manifest @biomejs/cli-win32-x64@2.2.6
+31 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-win32-x64 cache-miss
+32 silly fetch manifest @biomejs/cli-win32-arm64@2.2.6
+33 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-win32-arm64 cache-miss
+34 silly fetch manifest @biomejs/cli-darwin-x64@2.2.6
+35 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-darwin-x64 cache-miss
+36 silly fetch manifest @biomejs/cli-darwin-arm64@2.2.6
+37 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-darwin-arm64 cache-miss
+38 silly fetch manifest @biomejs/cli-linux-x64@2.2.6
+39 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-x64 cache-miss
+40 silly fetch manifest @biomejs/cli-linux-arm64@2.2.6
+41 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64 cache-miss
+42 silly fetch manifest @biomejs/cli-linux-x64-musl@2.2.6
+43 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-x64-musl cache-miss
+44 silly fetch manifest @biomejs/cli-linux-arm64-musl@2.2.6
+45 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64-musl cache-miss
+46 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-win32-x64 104ms (cache revalidated)
+47 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-win32-x64 set size:193651 disposed:false
+48 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-darwin-arm64 153ms (cache revalidated)
+49 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-darwin-arm64 set size:195857 disposed:false
+50 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-win32-arm64 160ms (cache revalidated)
+51 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-win32-arm64 set size:195122 disposed:false
+52 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-linux-x64 183ms (cache revalidated)
+53 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-x64 set size:194994 disposed:false
+54 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64-musl 267ms (cache revalidated)
+55 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64-musl set size:153980 disposed:false
+56 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64 269ms (cache revalidated)
+57 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-arm64 set size:196484 disposed:false
+58 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-linux-x64-musl 278ms (cache revalidated)
+59 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-linux-x64-musl set size:152856 disposed:false
+60 http fetch GET 200 https://registry.npmmirror.com/@biomejs%2fcli-darwin-x64 280ms (cache revalidated)
+61 silly packumentCache full:https://registry.npmmirror.com/@biomejs%2fcli-darwin-x64 set size:194380 disposed:false
+62 silly placeDep ROOT @biomejs/cli-darwin-arm64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+63 silly placeDep ROOT @biomejs/cli-darwin-x64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+64 silly placeDep ROOT @biomejs/cli-linux-arm64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+65 silly placeDep ROOT @biomejs/cli-linux-arm64-musl@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+66 silly placeDep ROOT @biomejs/cli-linux-x64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+67 silly placeDep ROOT @biomejs/cli-linux-x64-musl@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+68 silly placeDep ROOT @biomejs/cli-win32-arm64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+69 silly placeDep ROOT @biomejs/cli-win32-x64@2.2.6 OK for: @biomejs/biome@2.2.6 want: 2.2.6
+70 silly reify mark retired [
+70 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\astro',
+70 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro',
+70 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro.cmd',
+70 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro.ps1'
+70 silly reify ]
+71 silly reify mark retired [
+71 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@astrojs\\svelte'
+71 silly reify ]
+72 silly reify mark retired [
+72 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-win32-x64'
+72 silly reify ]
+73 silly reify mark retired [
+73 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\biome',
+73 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome',
+73 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome.cmd',
+73 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome.ps1'
+73 silly reify ]
+74 silly reify moves {
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\astro': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.astro-w5jgDmKt',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.astro-YKJ5ZRjw',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro.cmd': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.astro.cmd-hNZhYAYy',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\astro.ps1': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.astro.ps1-aHKDjyGZ',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@astrojs\\svelte': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@astrojs\\.svelte-SC2oGr36',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-win32-x64': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\.cli-win32-x64-cFt0m7Cx',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\biome': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\.biome-f88s3Fvh',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.biome-qVockvwH',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome.cmd': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.biome.cmd-iC4WgWsC',
+74 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\biome.ps1': 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\.bin\\.biome.ps1-mOtFxSyj'
+74 silly reify }
+75 silly audit bulk request {
+75 silly audit   '@adobe/css-tools': [ '4.3.3' ],
+75 silly audit   '@alloc/quick-lru': [ '5.2.0' ],
+75 silly audit   '@antfu/install-pkg': [ '1.1.0' ],
+75 silly audit   '@antfu/utils': [ '8.1.1' ],
+75 silly audit   '@astrojs/check': [ '0.9.5' ],
+75 silly audit   '@astrojs/compiler': [ '2.13.0' ],
+75 silly audit   '@astrojs/internal-helpers': [ '0.7.4' ],
+75 silly audit   '@astrojs/language-server': [ '2.16.0' ],
+75 silly audit   '@astrojs/markdown-remark': [ '6.3.8' ],
+75 silly audit   '@astrojs/prism': [ '3.3.0' ],
+75 silly audit   '@astrojs/rss': [ '4.0.13' ],
+75 silly audit   '@astrojs/sitemap': [ '3.6.0' ],
+75 silly audit   '@astrojs/tailwind': [ '6.0.2' ],
+75 silly audit   '@astrojs/telemetry': [ '3.3.0' ],
+75 silly audit   '@astrojs/ts-plugin': [ '1.10.5' ],
+75 silly audit   '@astrojs/yaml2ts': [ '0.2.2' ],
+75 silly audit   '@babel/code-frame': [ '7.27.1' ],
+75 silly audit   '@babel/compat-data': [ '7.28.5' ],
+75 silly audit   '@babel/core': [ '7.28.5' ],
+75 silly audit   semver: [ '6.3.1', '7.7.3' ],
+75 silly audit   '@babel/generator': [ '7.28.5' ],
+75 silly audit   '@babel/helper-annotate-as-pure': [ '7.27.3' ],
+75 silly audit   '@babel/helper-compilation-targets': [ '7.27.2' ],
+75 silly audit   'lru-cache': [ '5.1.1', '10.4.3' ],
+75 silly audit   yallist: [ '3.1.1', '4.0.0' ],
+75 silly audit   '@babel/helper-create-class-features-plugin': [ '7.28.5' ],
+75 silly audit   '@babel/helper-create-regexp-features-plugin': [ '7.28.5' ],
+75 silly audit   '@babel/helper-define-polyfill-provider': [ '0.6.5' ],
+75 silly audit   '@babel/helper-globals': [ '7.28.0' ],
+75 silly audit   '@babel/helper-member-expression-to-functions': [ '7.28.5' ],
+75 silly audit   '@babel/helper-module-imports': [ '7.27.1' ],
+75 silly audit   '@babel/helper-module-transforms': [ '7.28.3' ],
+75 silly audit   '@babel/helper-optimise-call-expression': [ '7.27.1' ],
+75 silly audit   '@babel/helper-plugin-utils': [ '7.27.1' ],
+75 silly audit   '@babel/helper-remap-async-to-generator': [ '7.27.1' ],
+75 silly audit   '@babel/helper-replace-supers': [ '7.27.1' ],
+75 silly audit   '@babel/helper-skip-transparent-expression-wrappers': [ '7.27.1' ],
+75 silly audit   '@babel/helper-string-parser': [ '7.27.1' ],
+75 silly audit   '@babel/helper-validator-identifier': [ '7.28.5' ],
+75 silly audit   '@babel/helper-validator-option': [ '7.27.1' ],
+75 silly audit   '@babel/helper-wrap-function': [ '7.28.3' ],
+75 silly audit   '@babel/helpers': [ '7.28.4' ],
+75 silly audit   '@babel/parser': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-bugfix-firefox-class-in-computed-class-key': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-bugfix-safari-class-field-initializer-scope': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly': [ '7.28.3' ],
+75 silly audit   '@babel/plugin-proposal-class-properties': [ '7.12.1' ],
+75 silly audit   '@babel/plugin-proposal-private-property-in-object': [ '7.21.0-placeholder-for-preset-env.2' ],
+75 silly audit   '@babel/plugin-syntax-flow': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-syntax-import-assertions': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-syntax-import-attributes': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-syntax-import-meta': [ '7.10.4' ],
+75 silly audit   '@babel/plugin-syntax-jsx': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-syntax-unicode-sets-regex': [ '7.18.6' ],
+75 silly audit   '@babel/plugin-transform-arrow-functions': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-async-generator-functions': [ '7.28.0' ],
+75 silly audit   '@babel/plugin-transform-async-to-generator': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-block-scoped-functions': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-block-scoping': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-class-properties': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-class-static-block': [ '7.28.3' ],
+75 silly audit   '@babel/plugin-transform-classes': [ '7.28.4' ],
+75 silly audit   '@babel/plugin-transform-computed-properties': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-destructuring': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-dotall-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-duplicate-keys': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-duplicate-named-capturing-groups-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-dynamic-import': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-explicit-resource-management': [ '7.28.0' ],
+75 silly audit   '@babel/plugin-transform-exponentiation-operator': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-export-namespace-from': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-flow-strip-types': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-for-of': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-function-name': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-json-strings': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-literals': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-logical-assignment-operators': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-member-expression-literals': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-modules-amd': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-modules-commonjs': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-modules-systemjs': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-modules-umd': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-named-capturing-groups-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-new-target': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-nullish-coalescing-operator': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-numeric-separator': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-object-rest-spread': [ '7.28.4' ],
+75 silly audit   '@babel/plugin-transform-object-super': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-optional-catch-binding': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-optional-chaining': [ '7.28.5' ],
+75 silly audit   '@babel/plugin-transform-parameters': [ '7.27.7' ],
+75 silly audit   '@babel/plugin-transform-private-methods': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-private-property-in-object': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-property-literals': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-react-display-name': [ '7.28.0' ],
+75 silly audit   '@babel/plugin-transform-react-jsx': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-react-jsx-development': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-react-pure-annotations': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-regenerator': [ '7.28.4' ],
+75 silly audit   '@babel/plugin-transform-regexp-modifiers': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-reserved-words': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-shorthand-properties': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-spread': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-sticky-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-template-literals': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-typeof-symbol': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-unicode-escapes': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-unicode-property-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-unicode-regex': [ '7.27.1' ],
+75 silly audit   '@babel/plugin-transform-unicode-sets-regex': [ '7.27.1' ],
+75 silly audit   '@babel/preset-env': [ '7.28.5' ],
+75 silly audit   '@babel/preset-flow': [ '7.27.1' ],
+75 silly audit   '@babel/preset-modules': [ '0.1.6-no-external-plugins' ],
+75 silly audit   '@babel/preset-react': [ '7.28.5' ],
+75 silly audit   '@babel/runtime': [ '7.28.4' ],
+75 silly audit   '@babel/template': [ '7.27.2' ],
+75 silly audit   '@babel/traverse': [ '7.28.5' ],
+75 silly audit   '@babel/types': [ '7.28.5' ],
+75 silly audit   '@capsizecss/unpack': [ '3.0.1' ],
+75 silly audit   '@csstools/selector-resolve-nested': [ '3.1.0' ],
+75 silly audit   '@csstools/selector-specificity': [ '5.0.0' ],
+75 silly audit   '@ctrl/tinycolor': [ '4.2.0' ],
+75 silly audit   '@emmetio/abbreviation': [ '2.3.3' ],
+75 silly audit   '@emmetio/css-abbreviation': [ '2.1.8' ],
+75 silly audit   '@emmetio/css-parser': [ '0.4.0' ],
+75 silly audit   '@emmetio/html-matcher': [ '1.3.0' ],
+75 silly audit   '@emmetio/scanner': [ '1.0.4' ],
+75 silly audit   '@emmetio/stream-reader': [ '2.2.0' ],
+75 silly audit   '@emmetio/stream-reader-utils': [ '0.1.0' ],
+75 silly audit   '@emnapi/runtime': [ '1.7.1' ],
+75 silly audit   '@esbuild/aix-ppc64': [ '0.25.12' ],
+75 silly audit   '@esbuild/android-arm': [ '0.25.12' ],
+75 silly audit   '@esbuild/android-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/android-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/darwin-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/darwin-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/freebsd-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/freebsd-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-arm': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-ia32': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-loong64': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-mips64el': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-ppc64': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-riscv64': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-s390x': [ '0.25.12' ],
+75 silly audit   '@esbuild/linux-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/netbsd-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/netbsd-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/openbsd-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/openbsd-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/openharmony-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/sunos-x64': [ '0.25.12' ],
+75 silly audit   '@esbuild/win32-arm64': [ '0.25.12' ],
+75 silly audit   '@esbuild/win32-ia32': [ '0.25.12' ],
+75 silly audit   '@esbuild/win32-x64': [ '0.25.12' ],
+75 silly audit   '@expressive-code/core': [ '0.41.3' ],
+75 silly audit   '@expressive-code/plugin-collapsible-sections': [ '0.41.3' ],
+75 silly audit   '@expressive-code/plugin-frames': [ '0.41.3' ],
+75 silly audit   '@expressive-code/plugin-line-numbers': [ '0.41.3' ],
+75 silly audit   '@expressive-code/plugin-shiki': [ '0.41.3' ],
+75 silly audit   '@expressive-code/plugin-text-markers': [ '0.41.3' ],
+75 silly audit   '@fancyapps/ui': [ '6.1.5' ],
+75 silly audit   '@fontsource-variable/jetbrains-mono': [ '5.2.8' ],
+75 silly audit   '@fontsource/roboto': [ '5.2.8' ],
+75 silly audit   '@iconify-json/fa6-brands': [ '1.2.6' ],
+75 silly audit   '@iconify-json/fa6-regular': [ '1.2.4' ],
+75 silly audit   '@iconify-json/fa6-solid': [ '1.2.4' ],
+75 silly audit   '@iconify-json/material-symbols': [ '1.2.46' ],
+75 silly audit   '@iconify-json/mdi': [ '1.2.3' ],
+75 silly audit   '@iconify-json/simple-icons': [ '1.2.58' ],
+75 silly audit   '@iconify/svelte': [ '4.2.0' ],
+75 silly audit   '@iconify/tools': [ '4.1.4' ],
+75 silly audit   '@iconify/types': [ '2.0.0' ],
+75 silly audit   '@iconify/utils': [ '2.3.0' ],
+75 silly audit   confbox: [ '0.2.2', '0.1.8' ],
+75 silly audit   'local-pkg': [ '1.1.2', '0.5.1' ],
+75 silly audit   pathe: [ '2.0.3', '1.1.2' ],
+75 silly audit   'pkg-types': [ '2.3.0', '1.3.1' ],
+75 silly audit   '@img/colour': [ '1.0.0' ],
+75 silly audit   '@img/sharp-darwin-arm64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-darwin-x64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-libvips-darwin-arm64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-darwin-x64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-arm': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-arm64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-ppc64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-riscv64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-s390x': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linux-x64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linuxmusl-arm64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-libvips-linuxmusl-x64': [ '1.2.4' ],
+75 silly audit   '@img/sharp-linux-arm': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linux-arm64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linux-ppc64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linux-riscv64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linux-s390x': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linux-x64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linuxmusl-arm64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-linuxmusl-x64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-wasm32': [ '0.34.5' ],
+75 silly audit   '@img/sharp-win32-arm64': [ '0.34.5' ],
+75 silly audit   '@img/sharp-win32-ia32': [ '0.34.5' ],
+75 silly audit   '@img/sharp-win32-x64': [ '0.34.5' ],
+75 silly audit   '@isaacs/cliui': [ '8.0.2' ],
+75 silly audit   'emoji-regex': [ '9.2.2', '8.0.0', '10.6.0' ],
+75 silly audit   'string-width': [ '5.1.2', '4.2.3', '7.2.0' ],
+75 silly audit   'wrap-ansi': [ '8.1.0', '7.0.0', '9.0.2' ],
+75 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+75 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+75 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+75 silly audit   '@jridgewell/source-map': [ '0.3.11' ],
+75 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+75 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+75 silly audit   '@nodelib/fs.scandir': [ '2.1.5' ],
+75 silly audit   '@nodelib/fs.stat': [ '2.0.5' ],
+75 silly audit   '@nodelib/fs.walk': [ '1.2.8' ],
+75 silly audit   '@oslojs/encoding': [ '1.1.0' ],
+75 silly audit   '@pagefind/darwin-arm64': [ '1.4.0' ],
+75 silly audit   '@pagefind/darwin-x64': [ '1.4.0' ],
+75 silly audit   '@pagefind/freebsd-x64': [ '1.4.0' ],
+75 silly audit   '@pagefind/linux-arm64': [ '1.4.0' ],
+75 silly audit   '@pagefind/linux-x64': [ '1.4.0' ],
+75 silly audit   '@pagefind/windows-x64': [ '1.4.0' ],
+75 silly audit   '@pkgjs/parseargs': [ '0.11.0' ],
+75 silly audit   '@rollup/plugin-alias': [ '3.1.9' ],
+75 silly audit   '@rollup/plugin-babel': [ '5.3.1' ],
+75 silly audit   '@rollup/pluginutils': [ '3.1.0', '5.3.0', '4.2.1' ],
+75 silly audit   '@types/estree': [ '0.0.39', '1.0.8' ],
+75 silly audit   'estree-walker': [ '1.0.1', '2.0.2', '0.6.1', '3.0.3' ],
+75 silly audit   picomatch: [ '2.3.1', '4.0.3' ],
+75 silly audit   '@rollup/plugin-commonjs': [ '17.1.0' ],
+75 silly audit   'brace-expansion': [ '1.1.12', '2.0.2' ],
+75 silly audit   glob: [ '7.2.3', '10.4.5' ],
+75 silly audit   'is-reference': [ '1.2.1', '3.0.3' ],
+75 silly audit   'magic-string': [ '0.25.9', '0.30.21' ],
+75 silly audit   minimatch: [ '3.1.2', '5.1.6', '9.0.5' ],
+75 silly audit   '@rollup/plugin-json': [ '4.1.0' ],
+75 silly audit   '@rollup/plugin-node-resolve': [ '11.2.1' ],
+75 silly audit   '@rollup/plugin-yaml': [ '4.1.2' ],
+75 silly audit   '@rollup/rollup-android-arm-eabi': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-android-arm64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-darwin-arm64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-darwin-x64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-freebsd-arm64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-freebsd-x64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-arm-gnueabihf': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-arm-musleabihf': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-arm64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-arm64-musl': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-loong64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-ppc64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-riscv64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-riscv64-musl': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-s390x-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-x64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-linux-x64-musl': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-openharmony-arm64': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-win32-arm64-msvc': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-win32-ia32-msvc': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-win32-x64-gnu': [ '4.53.2' ],
+75 silly audit   '@rollup/rollup-win32-x64-msvc': [ '4.53.2' ],
+75 silly audit   '@shikijs/core': [ '3.15.0' ],
+75 silly audit   '@shikijs/engine-javascript': [ '3.15.0' ],
+75 silly audit   '@shikijs/engine-oniguruma': [ '3.15.0' ],
+75 silly audit   '@shikijs/langs': [ '3.15.0' ],
+75 silly audit   '@shikijs/themes': [ '3.15.0' ],
+75 silly audit   '@shikijs/types': [ '3.15.0' ],
+75 silly audit   '@shikijs/vscode-textmate': [ '10.0.2' ],
+75 silly audit   '@shuding/opentype.js': [ '1.4.0-beta.0' ],
+75 silly audit   '@surma/rollup-plugin-off-main-thread': [ '2.2.3' ],
+75 silly audit   '@sveltejs/acorn-typescript': [ '1.0.6' ],
+75 silly audit   '@sveltejs/vite-plugin-svelte': [ '5.1.1' ],
+75 silly audit   '@sveltejs/vite-plugin-svelte-inspector': [ '4.0.1' ],
+75 silly audit   '@swc/helpers': [ '0.5.17' ],
+75 silly audit   '@swup/a11y-plugin': [ '5.0.0' ],
+75 silly audit   '@swup/astro': [ '1.7.0' ],
+75 silly audit   '@swup/body-class-plugin': [ '3.3.0' ],
+75 silly audit   '@swup/browserslist-config': [ '1.0.1' ],
+75 silly audit   '@swup/debug-plugin': [ '4.1.0' ],
+75 silly audit   '@swup/fade-theme': [ '2.0.2' ],
+75 silly audit   '@swup/forms-plugin': [ '3.6.0' ],
+75 silly audit   '@swup/fragment-plugin': [ '1.1.2' ],
+75 silly audit   '@swup/head-plugin': [ '2.3.1' ],
+75 silly audit   '@swup/overlay-theme': [ '2.0.2' ],
+75 silly audit   '@swup/parallel-plugin': [ '0.4.0' ],
+75 silly audit   '@swup/plugin': [ '3.0.1', '4.0.0' ],
+75 silly audit   prettier: [ '2.8.8', '3.6.2' ],
+75 silly audit   '@swup/preload-plugin': [ '3.2.11' ],
+75 silly audit   '@swup/prettier-config': [ '1.1.0' ],
+75 silly audit   '@swup/progress-plugin': [ '3.2.0' ],
+75 silly audit   '@swup/route-name-plugin': [ '4.1.0' ],
+75 silly audit   '@swup/scripts-plugin': [ '2.1.0' ],
+75 silly audit   '@swup/scroll-plugin': [ '3.3.2' ],
+75 silly audit   '@swup/slide-theme': [ '2.0.2' ],
+75 silly audit   '@swup/theme': [ '2.1.0' ],
+75 silly audit   '@tailwindcss/typography': [ '0.5.19' ],
+75 silly audit   '@trysound/sax': [ '0.2.0' ],
+75 silly audit   '@types/debug': [ '4.1.12' ],
+75 silly audit   '@types/fontkit': [ '2.0.8' ],
+75 silly audit   '@types/hast': [ '3.0.4', '2.3.10' ],
+75 silly audit   '@types/js-yaml': [ '4.0.9' ],
+75 silly audit   '@types/katex': [ '0.16.7' ],
+75 silly audit   '@types/linkify-it': [ '5.0.0' ],
+75 silly audit   '@types/markdown-it': [ '14.1.2' ],
+75 silly audit   '@types/mdast': [ '4.0.4' ],
+75 silly audit   '@types/mdurl': [ '2.0.0' ],
+75 silly audit   '@types/ms': [ '2.1.0' ],
+75 silly audit   '@types/nlcst': [ '2.0.3' ],
+75 silly audit   '@types/node': [ '24.10.1', '17.0.45' ],
+75 silly audit   '@types/parse-json': [ '4.0.2' ],
+75 silly audit   '@types/resolve': [ '1.17.1' ],
+75 silly audit   '@types/sanitize-html': [ '2.16.0' ],
+75 silly audit   '@types/sax': [ '1.2.7' ],
+75 silly audit   '@types/tar': [ '6.1.13' ],
+75 silly audit   '@types/unist': [ '3.0.3', '2.0.11' ],
+75 silly audit   '@types/yauzl': [ '2.10.3' ],
+75 silly audit   '@ungap/structured-clone': [ '1.3.0' ],
+75 silly audit   '@volar/kit': [ '2.4.23' ],
+75 silly audit   '@volar/language-core': [ '2.4.23' ],
+75 silly audit   '@volar/language-server': [ '2.4.23' ],
+75 silly audit   '@volar/language-service': [ '2.4.23' ],
+75 silly audit   '@volar/source-map': [ '2.4.23' ],
+75 silly audit   '@volar/typescript': [ '2.4.23' ],
+75 silly audit   '@vscode/emmet-helper': [ '2.11.0' ],
+75 silly audit   '@vscode/l10n': [ '0.0.18' ],
+75 silly audit   acorn: [ '8.15.0' ],
+75 silly audit   ajv: [ '8.17.1' ],
+75 silly audit   'ajv-draft-04': [ '1.0.0' ],
+75 silly audit   'ansi-align': [ '3.0.1' ],
+75 silly audit   'ansi-regex': [ '5.0.1', '6.2.2', '2.1.1' ],
+75 silly audit   'strip-ansi': [ '6.0.1', '3.0.1', '7.1.2' ],
+75 silly audit   'ansi-styles': [ '6.2.3', '4.3.0', '2.2.1' ],
+75 silly audit   'any-promise': [ '1.3.0' ],
+75 silly audit   anymatch: [ '3.1.3' ],
+75 silly audit   arg: [ '5.0.2' ],
+75 silly audit   argparse: [ '2.0.1' ],
+75 silly audit   'aria-query': [ '5.3.2' ],
+75 silly audit   'array-buffer-byte-length': [ '1.0.2' ],
+75 silly audit   'array-iterate': [ '2.0.1' ],
+75 silly audit   'arraybuffer.prototype.slice': [ '1.0.4' ],
+75 silly audit   'astro-expressive-code': [ '0.41.3' ],
+75 silly audit   'astro-icon': [ '1.1.5' ],
+75 silly audit   async: [ '3.2.6' ],
+75 silly audit   'async-function': [ '1.0.0' ],
+75 silly audit   asynckit: [ '0.4.0' ],
+75 silly audit   asyncro: [ '3.0.0' ],
+75 silly audit   autoprefixer: [ '10.4.22' ],
+75 silly audit   'available-typed-arrays': [ '1.0.7' ],
+75 silly audit   axios: [ '1.13.2' ],
+75 silly audit   'axobject-query': [ '4.1.0' ],
+75 silly audit   'babel-plugin-macros': [ '3.1.0' ],
+75 silly audit   'babel-plugin-polyfill-corejs2': [ '0.4.14' ],
+75 silly audit   'babel-plugin-polyfill-corejs3': [ '0.13.0' ],
+75 silly audit   'babel-plugin-polyfill-regenerator': [ '0.6.5' ],
+75 silly audit   'babel-plugin-transform-async-to-promises': [ '0.8.18' ],
+75 silly audit   'babel-plugin-transform-replace-expressions': [ '0.2.0' ],
+75 silly audit   bail: [ '2.0.2' ],
+75 silly audit   'balanced-match': [ '1.0.2' ],
+75 silly audit   'base-64': [ '1.0.0' ],
+75 silly audit   'base64-js': [ '1.5.1', '0.0.8' ],
+75 silly audit   'baseline-browser-mapping': [ '2.8.28' ],
+75 silly audit   'bcp-47-match': [ '2.0.3' ],
+75 silly audit   bcryptjs: [ '3.0.3' ],
+75 silly audit   'binary-extensions': [ '2.3.0' ],
+75 silly audit   boolbase: [ '1.0.0' ],
+75 silly audit   boxen: [ '8.0.1' ],
+75 silly audit   braces: [ '3.0.3' ],
+75 silly audit   brotli: [ '1.3.3' ],
+75 silly audit   'brotli-size': [ '4.0.0' ],
+75 silly audit   browserslist: [ '4.28.0' ],
+75 silly audit   'buffer-crc32': [ '0.2.13' ],
+75 silly audit   'buffer-from': [ '1.1.2' ],
+75 silly audit   'builtin-modules': [ '3.3.0' ],
+75 silly audit   'call-bind': [ '1.0.8' ],
+75 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+75 silly audit   'call-bound': [ '1.0.4' ],
+75 silly audit   callsites: [ '3.1.0' ],
+75 silly audit   camelcase: [ '8.0.0', '6.3.0' ],
+75 silly audit   'camelcase-css': [ '2.0.1' ],
+75 silly audit   camelize: [ '1.0.1' ],
+75 silly audit   'caniuse-api': [ '3.0.0' ],
+75 silly audit   'caniuse-lite': [ '1.0.30001755' ],
+75 silly audit   ccount: [ '2.0.1' ],
+75 silly audit   chalk: [ '5.6.2', '1.1.3', '4.1.2' ],
+75 silly audit   'character-entities': [ '2.0.2' ],
+75 silly audit   'character-entities-html4': [ '2.1.0' ],
+75 silly audit   'character-entities-legacy': [ '3.0.0' ],
+75 silly audit   'character-reference-invalid': [ '2.0.1' ],
+75 silly audit   cheerio: [ '1.0.0' ],
+75 silly audit   'cheerio-select': [ '2.1.0' ],
+75 silly audit   htmlparser2: [ '9.1.0', '8.0.2' ],
+75 silly audit   chokidar: [ '4.0.3', '3.6.0' ],
+75 silly audit   chownr: [ '2.0.0' ],
+75 silly audit   'ci-info': [ '4.3.1' ],
+75 silly audit   'cli-boxes': [ '3.0.0' ],
+75 silly audit   cliui: [ '8.0.1' ],
+75 silly audit   clone: [ '2.1.2' ],
+75 silly audit   clsx: [ '2.1.1' ],
+75 silly audit   'color-convert': [ '2.0.1' ],
+75 silly audit   'color-name': [ '1.1.4' ],
+75 silly audit   colord: [ '2.9.3' ],
+75 silly audit   'combined-stream': [ '1.0.8' ],
+75 silly audit   'comma-separated-tokens': [ '2.0.3' ],
+75 silly audit   commander: [ '8.3.0', '7.2.0', '4.1.1', '2.20.3' ],
+75 silly audit   'common-ancestor-path': [ '1.0.1' ],
+75 silly audit   commondir: [ '1.0.1' ],
+75 silly audit   'concat-map': [ '0.0.1' ],
+75 silly audit   'concat-with-sourcemaps': [ '1.1.0' ],
+75 silly audit   'source-map': [ '0.6.1', '0.7.6' ],
+75 silly audit   'convert-source-map': [ '2.0.0' ],
+75 silly audit   cookie: [ '1.0.2' ],
+75 silly audit   'cookie-es': [ '1.2.2' ],
+75 silly audit   'core-js-compat': [ '3.46.0' ],
+75 silly audit   cosmiconfig: [ '7.1.0' ],
+75 silly audit   yaml: [ '1.10.2', '2.8.1', '2.7.1' ],
+75 silly audit   'cross-spawn': [ '7.0.6' ],
+75 silly audit   crossws: [ '0.3.5' ],
+75 silly audit   'crypto-js': [ '4.2.0' ],
+75 silly audit   'css-background-parser': [ '0.1.0' ],
+75 silly audit   'css-box-shadow': [ '1.0.0-3' ],
+75 silly audit   'css-color-keywords': [ '1.0.0' ],
+75 silly audit   'css-declaration-sorter': [ '6.4.1' ],
+75 silly audit   'css-gradient-parser': [ '0.0.17' ],
+75 silly audit   'css-select': [ '5.2.2', '4.3.0' ],
+75 silly audit   'css-selector-parser': [ '3.1.3' ],
+75 silly audit   'css-to-react-native': [ '3.2.0' ],
+75 silly audit   'css-tree': [ '2.3.1', '2.2.1', '1.1.3', '3.1.0' ],
+75 silly audit   'css-what': [ '6.2.2' ],
+75 silly audit   cssesc: [ '3.0.0' ],
+75 silly audit   cssnano: [ '5.1.15' ],
+75 silly audit   'cssnano-preset-default': [ '5.2.14' ],
+75 silly audit   'cssnano-utils': [ '3.1.0' ],
+75 silly audit   lilconfig: [ '2.1.0', '3.1.3' ],
+75 silly audit   csso: [ '5.0.5', '4.2.0' ],
+75 silly audit   'mdn-data': [ '2.0.28', '2.0.30', '2.0.14', '2.12.2' ],
+75 silly audit   'data-view-buffer': [ '1.0.2' ],
+75 silly audit   'data-view-byte-length': [ '1.0.2' ],
+75 silly audit   'data-view-byte-offset': [ '1.0.1' ],
+75 silly audit   dayjs: [ '1.11.19' ],
+75 silly audit   debug: [ '4.4.3' ],
+75 silly audit   'decode-named-character-reference': [ '1.2.0' ],
+75 silly audit   'dedent-js': [ '1.0.1' ],
+75 silly audit   deepmerge: [ '4.3.1' ],
+75 silly audit   'define-data-property': [ '1.1.4' ],
+75 silly audit   'define-lazy-prop': [ '2.0.0' ],
+75 silly audit   'define-properties': [ '1.2.1' ],
+75 silly audit   defu: [ '6.1.4' ],
+75 silly audit   'delayed-stream': [ '1.0.0' ],
+75 silly audit   'delegate-it': [ '6.3.0' ],
+75 silly audit   dequal: [ '2.0.3' ],
+75 silly audit   destr: [ '2.0.5' ],
+75 silly audit   'detect-libc': [ '2.1.2' ],
+75 silly audit   'deterministic-object-hash': [ '2.0.2' ],
+75 silly audit   devalue: [ '5.5.0' ],
+75 silly audit   devlop: [ '1.1.0' ],
+75 silly audit   dfa: [ '1.2.0' ],
+75 silly audit   didyoumean: [ '1.2.2' ],
+75 silly audit   diff: [ '5.2.0' ],
+75 silly audit   direction: [ '2.0.1' ],
+75 silly audit   dlv: [ '1.1.3' ],
+75 silly audit   'dom-serializer': [ '2.0.0', '1.4.1' ],
+75 silly audit   domelementtype: [ '2.3.0' ],
+75 silly audit   domhandler: [ '5.0.3', '4.3.1' ],
+75 silly audit   domutils: [ '3.2.2', '2.8.0' ],
+75 silly audit   dset: [ '3.1.4' ],
+75 silly audit   'dunder-proto': [ '1.0.1' ],
+75 silly audit   duplexer: [ '0.1.1', '0.1.2' ],
+75 silly audit   eastasianwidth: [ '0.2.0' ],
+75 silly audit   ejs: [ '3.1.10' ],
+75 silly audit   'electron-to-chromium': [ '1.5.254' ],
+75 silly audit   emmet: [ '2.4.11' ],
+75 silly audit   'emoji-regex-xs': [ '2.0.1' ],
+75 silly audit   'encoding-sniffer': [ '0.2.1' ],
+75 silly audit   'end-of-stream': [ '1.4.5' ],
+75 silly audit   entities: [ '4.5.0', '6.0.1', '2.2.0' ],
+75 silly audit   'error-ex': [ '1.3.4' ],
+75 silly audit   'es-abstract': [ '1.24.0' ],
+75 silly audit   'es-define-property': [ '1.0.1' ],
+75 silly audit   'es-errors': [ '1.3.0' ],
+75 silly audit   'es-module-lexer': [ '1.7.0' ],
+75 silly audit   'es-object-atoms': [ '1.1.1' ],
+75 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+75 silly audit   'es-to-primitive': [ '1.3.0' ],
+75 silly audit   esbuild: [ '0.25.12' ],
+75 silly audit   escalade: [ '3.2.0' ],
+75 silly audit   'escape-html': [ '1.0.3' ],
+75 silly audit   'escape-string-regexp': [ '5.0.0', '1.0.5', '4.0.0' ],
+75 silly audit   'esm-env': [ '1.2.2' ],
+75 silly audit   esrap: [ '2.1.2' ],
+75 silly audit   esutils: [ '2.0.3' ],
+75 silly audit   eventemitter3: [ '5.0.1', '4.0.7' ],
+75 silly audit   'expressive-code': [ '0.41.3' ],
+75 silly audit   exsolve: [ '1.0.8' ],
+75 silly audit   extend: [ '3.0.2' ],
+75 silly audit   'extract-zip': [ '2.0.1' ],
+75 silly audit   'fast-deep-equal': [ '3.1.3' ],
+75 silly audit   'fast-glob': [ '3.3.3' ],
+75 silly audit   'fast-uri': [ '3.1.0' ],
+75 silly audit   'fast-xml-parser': [ '5.3.2' ],
+75 silly audit   fastq: [ '1.19.1' ],
+75 silly audit   'fd-slicer': [ '1.1.0' ],
+75 silly audit   fdir: [ '6.5.0' ],
+75 silly audit   fflate: [ '0.7.4' ],
+75 silly audit   figures: [ '1.7.0' ],
+75 silly audit   filelist: [ '1.0.4' ],
+75 silly audit   filesize: [ '6.4.0' ],
+75 silly audit   'fill-range': [ '7.1.1' ],
+75 silly audit   'find-cache-dir': [ '3.3.2' ],
+75 silly audit   'find-up': [ '4.1.0' ],
+75 silly audit   flattie: [ '1.1.1' ],
+75 silly audit   'focus-options-polyfill': [ '1.6.0' ],
+75 silly audit   'follow-redirects': [ '1.15.11' ],
+75 silly audit   fontace: [ '0.3.1' ],
+75 silly audit   fontkit: [ '2.0.4' ],
+75 silly audit   'for-each': [ '0.3.5' ],
+75 silly audit   'foreground-child': [ '3.3.1' ],
+75 silly audit   'form-data': [ '4.0.4' ],
+75 silly audit   'fraction.js': [ '5.3.4' ],
+75 silly audit   'fs-extra': [ '10.1.0' ],
+75 silly audit   'fs-minipass': [ '2.1.0' ],
+75 silly audit   minipass: [ '3.3.6', '7.1.2', '4.2.8', '5.0.0' ],
+75 silly audit   'fs.realpath': [ '1.0.0' ],
+75 silly audit   fsevents: [ '2.3.3' ],
+75 silly audit   'function-bind': [ '1.1.2' ],
+75 silly audit   'function.prototype.name': [ '1.1.8' ],
+75 silly audit   'functions-have-names': [ '1.2.3' ],
+75 silly audit   'generator-function': [ '2.0.1' ],
+75 silly audit   'generic-names': [ '4.0.0' ],
+75 silly audit   gensync: [ '1.0.0-beta.2' ],
+75 silly audit   'get-caller-file': [ '2.0.5' ],
+75 silly audit   'get-east-asian-width': [ '1.4.0' ],
+75 silly audit   'get-intrinsic': [ '1.3.0' ],
+75 silly audit   'get-proto': [ '1.0.1' ],
+75 silly audit   'get-stream': [ '5.2.0' ],
+75 silly audit   'get-symbol-description': [ '1.1.0' ],
+75 silly audit   'github-slugger': [ '2.0.0' ],
+75 silly audit   'glob-parent': [ '5.1.2', '6.0.2' ],
+75 silly audit   globals: [ '15.15.0' ],
+75 silly audit   globalthis: [ '1.0.4' ],
+75 silly audit   globalyzer: [ '0.1.0' ],
+75 silly audit   globrex: [ '0.1.2' ],
+75 silly audit   gopd: [ '1.2.0' ],
+75 silly audit   'graceful-fs': [ '4.2.11' ],
+75 silly audit   'gzip-size': [ '6.0.0', '3.0.0' ],
+75 silly audit   h3: [ '1.15.4' ],
+75 silly audit   'has-ansi': [ '2.0.0' ],
+75 silly audit   'has-bigints': [ '1.1.0' ],
+75 silly audit   'has-flag': [ '4.0.0' ],
+75 silly audit   'has-property-descriptors': [ '1.0.2' ],
+75 silly audit   'has-proto': [ '1.2.0' ],
+75 silly audit   'has-symbols': [ '1.1.0' ],
+75 silly audit   'has-tostringtag': [ '1.0.2' ],
+75 silly audit   hasown: [ '2.0.2' ],
+75 silly audit   'hast-util-from-dom': [ '5.0.1' ],
+75 silly audit   'hast-util-from-html': [ '2.0.3' ],
+75 silly audit   'hast-util-from-html-isomorphic': [ '2.0.0' ],
+75 silly audit   'hast-util-from-parse5': [ '8.0.3' ],
+75 silly audit   'hast-util-has-property': [ '3.0.0' ],
+75 silly audit   'hast-util-heading-rank': [ '3.0.0' ],
+75 silly audit   'hast-util-is-element': [ '3.0.0' ],
+75 silly audit   'hast-util-parse-selector': [ '4.0.0', '3.1.1' ],
+75 silly audit   'hast-util-raw': [ '9.1.0' ],
+75 silly audit   'hast-util-select': [ '6.0.4' ],
+75 silly audit   'hast-util-to-html': [ '9.0.5' ],
+75 silly audit   'hast-util-to-parse5': [ '8.0.0' ],
+75 silly audit   'property-information': [ '6.5.0', '7.1.0' ],
+75 silly audit   'hast-util-to-string': [ '3.0.1' ],
+75 silly audit   'hast-util-to-text': [ '4.0.2' ],
+75 silly audit   'hast-util-whitespace': [ '3.0.0' ],
+75 silly audit   hastscript: [ '9.0.1', '7.2.0' ],
+75 silly audit   he: [ '1.2.0' ],
+75 silly audit   'hex-rgb': [ '4.3.0' ],
+75 silly audit   'html-escaper': [ '3.0.3' ],
+75 silly audit   'html-void-elements': [ '3.0.0' ],
+75 silly audit   'http-cache-semantics': [ '4.2.0' ],
+75 silly audit   'iconv-lite': [ '0.6.3' ],
+75 silly audit   'icss-replace-symbols': [ '1.1.0' ],
+75 silly audit   'icss-utils': [ '5.1.0' ],
+75 silly audit   'import-cwd': [ '3.0.0' ],
+75 silly audit   'import-fresh': [ '3.3.1' ],
+75 silly audit   'import-from': [ '3.0.0' ],
+75 silly audit   'resolve-from': [ '5.0.0', '4.0.0' ],
+75 silly audit   'import-meta-resolve': [ '4.2.0' ],
+75 silly audit   inflight: [ '1.0.6' ],
+75 silly audit   inherits: [ '2.0.4' ],
+75 silly audit   'internal-slot': [ '1.1.0' ],
+75 silly audit   interpret: [ '1.4.0' ],
+75 silly audit   'iron-webcrypto': [ '1.2.1' ],
+75 silly audit   'is-alphabetical': [ '2.0.1' ],
+75 silly audit   'is-alphanumerical': [ '2.0.1' ],
+75 silly audit   'is-array-buffer': [ '3.0.5' ],
+75 silly audit   'is-arrayish': [ '0.2.1' ],
+75 silly audit   'is-async-function': [ '2.1.1' ],
+75 silly audit   'is-bigint': [ '1.1.0' ],
+75 silly audit   'is-binary-path': [ '2.1.0' ],
+75 silly audit   'is-boolean-object': [ '1.2.2' ],
+75 silly audit   'is-callable': [ '1.2.7' ],
+75 silly audit   'is-core-module': [ '2.16.1' ],
+75 silly audit   'is-data-view': [ '1.0.2' ],
+75 silly audit   'is-date-object': [ '1.1.0' ],
+75 silly audit   'is-decimal': [ '2.0.1' ],
+75 silly audit   'is-docker': [ '3.0.0', '2.2.1' ],
+75 silly audit   'is-extglob': [ '2.1.1' ],
+75 silly audit   'is-finalizationregistry': [ '1.1.1' ],
+75 silly audit   'is-fullwidth-code-point': [ '3.0.0' ],
+75 silly audit   'is-generator-function': [ '1.1.2' ],
+75 silly audit   'is-glob': [ '4.0.3' ],
+75 silly audit   'is-hexadecimal': [ '2.0.1' ],
+75 silly audit   'is-inside-container': [ '1.0.0' ],
+75 silly audit   'is-map': [ '2.0.3' ],
+75 silly audit   'is-module': [ '1.0.0' ],
+75 silly audit   'is-negative-zero': [ '2.0.3' ],
+75 silly audit   'is-number': [ '7.0.0' ],
+75 silly audit   'is-number-object': [ '1.1.1' ],
+75 silly audit   'is-plain-obj': [ '4.1.0' ],
+75 silly audit   'is-plain-object': [ '5.0.0' ],
+75 silly audit   'is-regex': [ '1.2.1' ],
+75 silly audit   'is-set': [ '2.0.3' ],
+75 silly audit   'is-shared-array-buffer': [ '1.0.4' ],
+75 silly audit   'is-string': [ '1.1.1' ],
+75 silly audit   'is-symbol': [ '1.1.1' ],
+75 silly audit   'is-typed-array': [ '1.1.15' ],
+75 silly audit   'is-weakmap': [ '2.0.2' ],
+75 silly audit   'is-weakref': [ '1.1.1' ],
+75 silly audit   'is-weakset': [ '2.0.4' ],
+75 silly audit   'is-wsl': [ '3.1.0', '2.2.0' ],
+75 silly audit   isarray: [ '2.0.5' ],
+75 silly audit   isexe: [ '2.0.0' ],
+75 silly audit   jackspeak: [ '3.4.3' ],
+75 silly audit   jake: [ '10.9.4' ],
+75 silly audit   'jest-worker': [ '26.6.2' ],
+75 silly audit   jiti: [ '1.21.7' ],
+75 silly audit   'js-tokens': [ '4.0.0' ],
+75 silly audit   'js-yaml': [ '4.1.1' ],
+75 silly audit   jsesc: [ '3.1.0' ],
+75 silly audit   'json-parse-even-better-errors': [ '2.3.1' ],
+75 silly audit   'json-schema-traverse': [ '1.0.0' ],
+75 silly audit   json5: [ '2.2.3' ],
+75 silly audit   'jsonc-parser': [ '2.3.1', '3.3.1' ],
+75 silly audit   jsonfile: [ '6.2.0' ],
+75 silly audit   katex: [ '0.16.25' ],
+75 silly audit   kleur: [ '4.1.5', '3.0.3' ],
+75 silly audit   kolorist: [ '1.8.0' ],
+75 silly audit   linebreak: [ '1.1.0' ],
+75 silly audit   'lines-and-columns': [ '1.2.4' ],
+75 silly audit   'linkify-it': [ '5.0.0' ],
+75 silly audit   'loader-utils': [ '3.3.1' ],
+75 silly audit   'locate-character': [ '3.0.0' ],
+75 silly audit   'locate-path': [ '5.0.0' ],
+75 silly audit   lodash: [ '4.17.21' ],
+75 silly audit   'lodash.camelcase': [ '4.3.0' ],
+75 silly audit   'lodash.debounce': [ '4.0.8' ],
+75 silly audit   'lodash.memoize': [ '4.1.2' ],
+75 silly audit   'lodash.merge': [ '4.6.2' ],
+75 silly audit   'lodash.uniq': [ '4.5.0' ],
+75 silly audit   'longest-streak': [ '3.1.0' ],
+75 silly audit   magicast: [ '0.3.5' ],
+75 silly audit   'make-dir': [ '3.1.0' ],
+75 silly audit   'markdown-it': [ '14.1.0' ],
+75 silly audit   'markdown-table': [ '3.0.4' ],
+75 silly audit   marked: [ '16.4.2' ],
+75 silly audit   'math-intrinsics': [ '1.1.0' ],
+75 silly audit   maxmin: [ '2.1.0' ],
+75 silly audit   'pretty-bytes': [ '3.0.1', '5.6.0' ],
+75 silly audit   'supports-color': [ '2.0.0', '7.2.0' ],
+75 silly audit   'mdast-util-definitions': [ '6.0.0' ],
+75 silly audit   'mdast-util-directive': [ '3.1.0' ],
+75 silly audit   'mdast-util-find-and-replace': [ '3.0.2' ],
+75 silly audit   'mdast-util-from-markdown': [ '2.0.2' ],
+75 silly audit   'mdast-util-gfm': [ '3.1.0' ],
+75 silly audit   'mdast-util-gfm-autolink-literal': [ '2.0.1' ],
+75 silly audit   'mdast-util-gfm-footnote': [ '2.1.0' ],
+75 silly audit   'mdast-util-gfm-strikethrough': [ '2.0.0' ],
+75 silly audit   'mdast-util-gfm-table': [ '2.0.0' ],
+75 silly audit   'mdast-util-gfm-task-list-item': [ '2.0.0' ],
+75 silly audit   'mdast-util-math': [ '3.0.0' ],
+75 silly audit   'mdast-util-phrasing': [ '4.1.0' ],
+75 silly audit   'mdast-util-to-hast': [ '13.2.0' ],
+75 silly audit   'mdast-util-to-markdown': [ '2.1.2' ],
+75 silly audit   'mdast-util-to-string': [ '4.0.0' ],
+75 silly audit   mdurl: [ '2.0.0' ],
+75 silly audit   'merge-stream': [ '2.0.0' ],
+75 silly audit   merge2: [ '1.4.1' ],
+75 silly audit   microbundle: [ '0.15.1' ],
+75 silly audit   rollup: [ '2.79.2', '4.53.2' ],
+75 silly audit   typescript: [ '4.9.5', '5.9.3' ],
+75 silly audit   micromark: [ '4.0.2' ],
+75 silly audit   'micromark-core-commonmark': [ '2.0.3' ],
+75 silly audit   'micromark-extension-directive': [ '3.0.2' ],
+75 silly audit   'micromark-extension-gfm': [ '3.0.0' ],
+75 silly audit   'micromark-extension-gfm-autolink-literal': [ '2.1.0' ],
+75 silly audit   'micromark-extension-gfm-footnote': [ '2.1.0' ],
+75 silly audit   'micromark-extension-gfm-strikethrough': [ '2.1.0' ],
+75 silly audit   'micromark-extension-gfm-table': [ '2.1.1' ],
+75 silly audit   'micromark-extension-gfm-tagfilter': [ '2.0.0' ],
+75 silly audit   'micromark-extension-gfm-task-list-item': [ '2.1.0' ],
+75 silly audit   'micromark-extension-math': [ '3.1.0' ],
+75 silly audit   'micromark-factory-destination': [ '2.0.1' ],
+75 silly audit   'micromark-factory-label': [ '2.0.1' ],
+75 silly audit   'micromark-factory-space': [ '2.0.1' ],
+75 silly audit   'micromark-factory-title': [ '2.0.1' ],
+75 silly audit   'micromark-factory-whitespace': [ '2.0.1' ],
+75 silly audit   'micromark-util-character': [ '2.1.1' ],
+75 silly audit   'micromark-util-chunked': [ '2.0.1' ],
+75 silly audit   'micromark-util-classify-character': [ '2.0.1' ],
+75 silly audit   'micromark-util-combine-extensions': [ '2.0.1' ],
+75 silly audit   'micromark-util-decode-numeric-character-reference': [ '2.0.2' ],
+75 silly audit   'micromark-util-decode-string': [ '2.0.1' ],
+75 silly audit   'micromark-util-encode': [ '2.0.1' ],
+75 silly audit   'micromark-util-html-tag-name': [ '2.0.1' ],
+75 silly audit   'micromark-util-normalize-identifier': [ '2.0.1' ],
+75 silly audit   'micromark-util-resolve-all': [ '2.0.1' ],
+75 silly audit   'micromark-util-sanitize-uri': [ '2.0.1' ],
+75 silly audit   'micromark-util-subtokenize': [ '2.1.0' ],
+75 silly audit   'micromark-util-symbol': [ '2.0.1' ],
+75 silly audit   'micromark-util-types': [ '2.0.2' ],
+75 silly audit   micromatch: [ '4.0.8' ],
+75 silly audit   'mime-db': [ '1.52.0' ],
+75 silly audit   'mime-types': [ '2.1.35' ],
+75 silly audit   minizlib: [ '2.1.2' ],
+75 silly audit   mkdirp: [ '1.0.4' ],
+75 silly audit   mlly: [ '1.8.0' ],
+75 silly audit   morphdom: [ '2.7.7' ],
+75 silly audit   mri: [ '1.2.0' ],
+75 silly audit   mrmime: [ '2.0.1' ],
+75 silly audit   ms: [ '2.1.3' ],
+75 silly audit   'muggle-string': [ '0.4.1' ],
+75 silly audit   mz: [ '2.7.0' ],
+75 silly audit   nanoid: [ '3.3.11' ],
+75 silly audit   neotraverse: [ '0.6.18' ],
+75 silly audit   'nlcst-to-string': [ '4.0.0' ],
+75 silly audit   'node-fetch-native': [ '1.6.7' ],
+75 silly audit   'node-html-parser': [ '7.0.1' ],
+75 silly audit   'node-mock-http': [ '1.0.3' ],
+75 silly audit   'node-releases': [ '2.0.27' ],
+75 silly audit   'normalize-path': [ '3.0.0' ],
+75 silly audit   'normalize-range': [ '0.1.2' ],
+75 silly audit   'normalize-url': [ '6.1.0' ],
+75 silly audit   'nth-check': [ '2.1.1' ],
+75 silly audit   'number-is-nan': [ '1.0.1' ],
+75 silly audit   'object-assign': [ '4.1.1' ],
+75 silly audit   'object-hash': [ '3.0.0' ],
+75 silly audit   'object-inspect': [ '1.13.4' ],
+75 silly audit   'object-keys': [ '1.1.1' ],
+75 silly audit   'object.assign': [ '4.1.7' ],
+75 silly audit   ofetch: [ '1.5.1' ],
+75 silly audit   ohash: [ '2.0.11' ],
+75 silly audit   once: [ '1.4.0' ],
+75 silly audit   'oniguruma-parser': [ '0.12.1' ],
+75 silly audit   'oniguruma-to-es': [ '4.3.3' ],
+75 silly audit   open: [ '8.4.2' ],
+75 silly audit   'opencollective-postinstall': [ '2.0.3' ],
+75 silly audit   overlayscrollbars: [ '2.12.0' ],
+75 silly audit   'own-keys': [ '1.0.1' ],
+75 silly audit   'p-finally': [ '1.0.0' ],
+75 silly audit   'p-limit': [ '6.2.0', '2.3.0' ],
+75 silly audit   'p-locate': [ '4.1.0' ],
+75 silly audit   'p-queue': [ '8.1.1', '6.6.2' ],
+75 silly audit   'p-timeout': [ '6.1.4', '3.2.0' ],
+75 silly audit   'p-try': [ '2.2.0' ],
+75 silly audit   'package-json-from-dist': [ '1.0.1' ],
+75 silly audit   'package-manager-detector': [ '1.5.0' ],
+75 silly audit   pagefind: [ '1.4.0' ],
+75 silly audit   pako: [ '0.2.9' ],
+75 silly audit   'parent-module': [ '1.0.1' ],
+75 silly audit   'parse-css-color': [ '0.2.1' ],
+75 silly audit   'parse-entities': [ '4.0.2' ],
+75 silly audit   'parse-json': [ '5.2.0' ],
+75 silly audit   'parse-latin': [ '7.0.0' ],
+75 silly audit   'parse-srcset': [ '1.0.2' ],
+75 silly audit   parse5: [ '7.3.0' ],
+75 silly audit   'parse5-htmlparser2-tree-adapter': [ '7.1.0' ],
+75 silly audit   'parse5-parser-stream': [ '7.1.2' ],
+75 silly audit   'path-browserify': [ '1.0.1' ],
+75 silly audit   'path-exists': [ '4.0.0' ],
+75 silly audit   'path-is-absolute': [ '1.0.1' ],
+75 silly audit   'path-key': [ '3.1.1' ],
+75 silly audit   'path-parse': [ '1.0.7' ],
+75 silly audit   'path-scurry': [ '1.11.1' ],
+75 silly audit   'path-to-regexp': [ '6.3.0' ],
+75 silly audit   'path-type': [ '4.0.0' ],
+75 silly audit   pend: [ '1.2.0' ],
+75 silly audit   photoswipe: [ '5.4.4' ],
+75 silly audit   picocolors: [ '1.1.1' ],
+75 silly audit   pify: [ '2.3.0', '5.0.0' ],
+75 silly audit   pirates: [ '4.0.7' ],
+75 silly audit   'pkg-dir': [ '4.2.0' ],
+75 silly audit   'possible-typed-array-names': [ '1.1.0' ],
+75 silly audit   postcss: [ '8.5.6' ],
+75 silly audit   'postcss-calc': [ '8.2.4' ],
+75 silly audit   'postcss-colormin': [ '5.3.1' ],
+75 silly audit   'postcss-convert-values': [ '5.1.3' ],
+75 silly audit   'postcss-discard-comments': [ '5.1.2' ],
+75 silly audit   'postcss-discard-duplicates': [ '5.1.0' ],
+75 silly audit   'postcss-discard-empty': [ '5.1.1' ],
+75 silly audit   'postcss-discard-overridden': [ '5.1.0' ],
+75 silly audit   'postcss-import': [ '16.1.1', '15.1.0' ],
+75 silly audit   'postcss-js': [ '4.1.0' ],
+75 silly audit   'postcss-load-config': [ '4.0.2', '3.1.4' ],
+75 silly audit   'postcss-merge-longhand': [ '5.1.7' ],
+75 silly audit   'postcss-merge-rules': [ '5.1.4' ],
+75 silly audit   'postcss-minify-font-values': [ '5.1.0' ],
+75 silly audit   'postcss-minify-gradients': [ '5.1.1' ],
+75 silly audit   'postcss-minify-params': [ '5.1.4' ],
+75 silly audit   'postcss-minify-selectors': [ '5.2.1' ],
+75 silly audit   'postcss-modules': [ '4.3.1' ],
+75 silly audit   'postcss-modules-extract-imports': [ '3.1.0' ],
+75 silly audit   'postcss-modules-local-by-default': [ '4.2.0' ],
+75 silly audit   'postcss-selector-parser': [ '7.1.0', '6.1.2', '6.0.10' ],
+75 silly audit   'postcss-modules-scope': [ '3.2.1' ],
+75 silly audit   'postcss-modules-values': [ '4.0.0' ],
+75 silly audit   'postcss-nested': [ '6.2.0' ],
+75 silly audit   'postcss-nesting': [ '13.0.2' ],
+75 silly audit   'postcss-normalize-charset': [ '5.1.0' ],
+75 silly audit   'postcss-normalize-display-values': [ '5.1.0' ],
+75 silly audit   'postcss-normalize-positions': [ '5.1.1' ],
+75 silly audit   'postcss-normalize-repeat-style': [ '5.1.1' ],
+75 silly audit   'postcss-normalize-string': [ '5.1.0' ],
+75 silly audit   'postcss-normalize-timing-functions': [ '5.1.0' ],
+75 silly audit   'postcss-normalize-unicode': [ '5.1.1' ],
+75 silly audit   'postcss-normalize-url': [ '5.1.0' ],
+75 silly audit   'postcss-normalize-whitespace': [ '5.1.1' ],
+75 silly audit   'postcss-ordered-values': [ '5.1.3' ],
+75 silly audit   'postcss-reduce-initial': [ '5.1.2' ],
+75 silly audit   'postcss-reduce-transforms': [ '5.1.0' ],
+75 silly audit   'postcss-svgo': [ '5.1.0' ],
+75 silly audit   svgo: [ '2.8.0', '3.3.2' ],
+75 silly audit   'postcss-unique-selectors': [ '5.1.1' ],
+75 silly audit   'postcss-value-parser': [ '4.2.0' ],
+75 silly audit   prismjs: [ '1.30.0' ],
+75 silly audit   'promise.series': [ '0.2.0' ],
+75 silly audit   prompts: [ '2.4.2' ],
+75 silly audit   'proxy-from-env': [ '1.1.0' ],
+75 silly audit   pump: [ '3.0.3' ],
+75 silly audit   'punycode.js': [ '2.3.1' ],
+75 silly audit   quansync: [ '0.2.11' ],
+75 silly audit   'queue-microtask': [ '1.2.3' ],
+75 silly audit   radix3: [ '1.1.2' ],
+75 silly audit   randombytes: [ '2.1.0' ],
+75 silly audit   'read-cache': [ '1.0.0' ],
+75 silly audit   readdirp: [ '4.1.2', '3.6.0' ],
+75 silly audit   'reading-time': [ '1.5.0' ],
+75 silly audit   rechoir: [ '0.6.2' ],
+75 silly audit   'reflect.getprototypeof': [ '1.0.10' ],
+75 silly audit   regenerate: [ '1.4.2' ],
+75 silly audit   'regenerate-unicode-properties': [ '10.2.2' ],
+75 silly audit   regex: [ '6.0.1' ],
+75 silly audit   'regex-recursion': [ '6.0.2' ],
+75 silly audit   'regex-utilities': [ '2.3.0' ],
+75 silly audit   'regexp.prototype.flags': [ '1.5.4' ],
+75 silly audit   'regexpu-core': [ '6.4.0' ],
+75 silly audit   regjsgen: [ '0.8.0' ],
+75 silly audit   regjsparser: [ '0.13.0' ],
+75 silly audit   rehype: [ '13.0.2' ],
+75 silly audit   'rehype-autolink-headings': [ '7.1.0' ],
+75 silly audit   'rehype-components': [ '0.3.0' ],
+75 silly audit   'rehype-expressive-code': [ '0.41.3' ],
+75 silly audit   'rehype-katex': [ '7.0.1' ],
+75 silly audit   'rehype-parse': [ '9.0.1' ],
+75 silly audit   'rehype-raw': [ '7.0.0' ],
+75 silly audit   'rehype-slug': [ '6.0.0' ],
+75 silly audit   'rehype-stringify': [ '10.0.1' ],
+75 silly audit   'remark-directive': [ '3.0.1' ],
+75 silly audit   'remark-directive-rehype': [ '0.4.2' ],
+75 silly audit   'remark-gfm': [ '4.0.1' ],
+75 silly audit   'remark-github-admonitions-to-directives': [ '1.0.5' ],
+75 silly audit   'remark-math': [ '6.0.0' ],
+75 silly audit   'remark-parse': [ '11.0.0' ],
+75 silly audit   'remark-rehype': [ '11.1.2' ],
+75 silly audit   'remark-sectionize': [ '2.1.0' ],
+75 silly audit   'unist-util-find-after': [ '4.0.1', '5.0.0' ],
+75 silly audit   'unist-util-is': [ '5.2.1', '6.0.1' ],
+75 silly audit   'unist-util-visit': [ '4.1.2', '5.0.0' ],
+75 silly audit   'unist-util-visit-parents': [ '5.1.3', '6.0.2' ],
+75 silly audit   'remark-smartypants': [ '3.0.2' ],
+75 silly audit   'remark-stringify': [ '11.0.0' ],
+75 silly audit   'request-light': [ '0.7.0', '0.5.8' ],
+75 silly audit   'require-directory': [ '2.1.1' ],
+75 silly audit   'require-from-string': [ '2.0.2' ],
+75 silly audit   resolve: [ '1.22.11' ],
+75 silly audit   restructure: [ '3.0.2' ],
+75 silly audit   retext: [ '9.0.0' ],
+75 silly audit   'retext-latin': [ '4.0.0' ],
+75 silly audit   'retext-smartypants': [ '6.2.0' ],
+75 silly audit   'retext-stringify': [ '4.0.0' ],
+75 silly audit   reusify: [ '1.1.0' ],
+75 silly audit   'rollup-plugin-bundle-size': [ '1.0.3' ],
+75 silly audit   'rollup-plugin-postcss': [ '4.0.2' ],
+75 silly audit   'rollup-plugin-terser': [ '7.0.2' ],
+75 silly audit   'rollup-plugin-typescript2': [ '0.32.1' ],
+75 silly audit   'rollup-plugin-visualizer': [ '5.14.0' ],
+75 silly audit   'rollup-pluginutils': [ '2.8.2' ],
+75 silly audit   'run-parallel': [ '1.2.0' ],
+75 silly audit   sade: [ '1.8.1' ],
+75 silly audit   'safe-array-concat': [ '1.1.3' ],
+75 silly audit   'safe-buffer': [ '5.2.1' ],
+75 silly audit   'safe-identifier': [ '0.4.2' ],
+75 silly audit   'safe-push-apply': [ '1.0.0' ],
+75 silly audit   'safe-regex-test': [ '1.1.0' ],
+75 silly audit   'safer-buffer': [ '2.1.2' ],
+75 silly audit   'sanitize-html': [ '2.17.0' ],
+75 silly audit   satori: [ '0.18.3' ],
+75 silly audit   sax: [ '1.4.3' ],
+75 silly audit   scrl: [ '2.0.0' ],
+75 silly audit   scule: [ '1.3.0' ],
+75 silly audit   'serialize-javascript': [ '4.0.0' ],
+75 silly audit   'set-function-length': [ '1.2.2' ],
+75 silly audit   'set-function-name': [ '2.0.2' ],
+75 silly audit   'set-proto': [ '1.0.0' ],
+75 silly audit   sharp: [ '0.34.5' ],
+75 silly audit   'shebang-command': [ '2.0.0' ],
+75 silly audit   'shebang-regex': [ '3.0.0' ],
+75 silly audit   shelljs: [ '0.8.5' ],
+75 silly audit   'shelljs-live': [ '0.0.5' ],
+75 silly audit   shiki: [ '3.15.0' ],
+75 silly audit   'side-channel': [ '1.1.0' ],
+75 silly audit   'side-channel-list': [ '1.0.0' ],
+75 silly audit   'side-channel-map': [ '1.0.1' ],
+75 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+75 silly audit   'signal-exit': [ '4.1.0' ],
+75 silly audit   sisteransi: [ '1.0.5' ],
+75 silly audit   sitemap: [ '8.0.2' ],
+75 silly audit   slash: [ '3.0.0' ],
+75 silly audit   'smol-toml': [ '1.5.2' ],
+75 silly audit   'source-map-js': [ '1.2.1' ],
+75 silly audit   'source-map-support': [ '0.5.21' ],
+75 silly audit   'sourcemap-codec': [ '1.4.8' ],
+75 silly audit   'space-separated-tokens': [ '2.0.2' ],
+75 silly audit   stable: [ '0.1.8' ],
+75 silly audit   'stop-iteration-iterator': [ '1.1.0' ],
+75 silly audit   'stream-replace-string': [ '2.0.0' ],
+75 silly audit   'string-hash': [ '1.1.3' ],
+75 silly audit   'string.prototype.codepointat': [ '0.2.1' ],
+75 silly audit   'string.prototype.matchall': [ '4.0.12' ],
+75 silly audit   'string.prototype.trim': [ '1.2.10' ],
+75 silly audit   'string.prototype.trimend': [ '1.0.9' ],
+75 silly audit   'string.prototype.trimstart': [ '1.0.8' ],
+75 silly audit   'stringify-entities': [ '4.0.4' ],
+75 silly audit   strnum: [ '2.1.1' ],
+75 silly audit   'style-inject': [ '0.3.0' ],
+75 silly audit   stylehacks: [ '5.1.1' ],
+75 silly audit   stylus: [ '0.64.0' ],
+75 silly audit   sucrase: [ '3.35.0' ],
+75 silly audit   'supports-preserve-symlinks-flag': [ '1.0.0' ],
+75 silly audit   svelte: [ '5.43.7' ],
+75 silly audit   svelte2tsx: [ '0.7.45' ],
+75 silly audit   swup: [ '4.8.2' ],
+75 silly audit   'swup-morph-plugin': [ '1.3.0' ],
+75 silly audit   tailwindcss: [ '3.4.18' ],
+75 silly audit   tar: [ '6.2.1' ],
+75 silly audit   terser: [ '5.44.1' ],
+75 silly audit   thenify: [ '3.3.1' ],
+75 silly audit   'thenify-all': [ '1.6.0' ],
+75 silly audit   'tiny-glob': [ '0.2.9' ],
+75 silly audit   'tiny-inflate': [ '1.0.3' ],
+75 silly audit   tinyexec: [ '1.0.2' ],
+75 silly audit   tinyglobby: [ '0.2.15' ],
+75 silly audit   'to-regex-range': [ '5.0.1' ],
+75 silly audit   tosource: [ '2.0.0-alpha.3' ],
+75 silly audit   'trim-lines': [ '3.0.1' ],
+75 silly audit   trough: [ '2.2.0' ],
+75 silly audit   'ts-interface-checker': [ '0.1.13' ],
+75 silly audit   tsconfck: [ '3.1.6' ],
+75 silly audit   tslib: [ '2.8.1' ],
+75 silly audit   'type-fest': [ '4.41.0' ],
+75 silly audit   'typed-array-buffer': [ '1.0.3' ],
+75 silly audit   'typed-array-byte-length': [ '1.0.3' ],
+75 silly audit   'typed-array-byte-offset': [ '1.0.4' ],
+75 silly audit   'typed-array-length': [ '1.0.7' ],
+75 silly audit   'typed-query-selector': [ '2.12.0' ],
+75 silly audit   'typesafe-path': [ '0.2.2' ],
+75 silly audit   'typescript-auto-import-cache': [ '0.3.6' ],
+75 silly audit   'uc.micro': [ '2.1.0' ],
+75 silly audit   ufo: [ '1.6.1' ],
+75 silly audit   ultrahtml: [ '1.6.0' ],
+75 silly audit   'unbox-primitive': [ '1.1.0' ],
+75 silly audit   uncrypto: [ '0.1.3' ],
+75 silly audit   undici: [ '6.22.0' ],
+75 silly audit   'undici-types': [ '7.16.0' ],
+75 silly audit   'unicode-canonical-property-names-ecmascript': [ '2.0.1' ],
+75 silly audit   'unicode-match-property-ecmascript': [ '2.0.0' ],
+75 silly audit   'unicode-match-property-value-ecmascript': [ '2.2.1' ],
+75 silly audit   'unicode-properties': [ '1.4.1' ],
+75 silly audit   'unicode-property-aliases-ecmascript': [ '2.2.0' ],
+75 silly audit   'unicode-trie': [ '2.0.0' ],
+75 silly audit   unified: [ '11.0.5' ],
+75 silly audit   unifont: [ '0.6.0' ],
+75 silly audit   'unist-util-map': [ '3.1.3' ],
+75 silly audit   'unist-util-modify-children': [ '4.0.0' ],
+75 silly audit   'unist-util-position': [ '5.0.0' ],
+75 silly audit   'unist-util-remove-position': [ '5.0.0' ],
+75 silly audit   'unist-util-stringify-position': [ '4.0.0' ],
+75 silly audit   'unist-util-visit-children': [ '3.0.0' ],
+75 silly audit   universalify: [ '2.0.1' ],
+75 silly audit   unstorage: [ '1.17.2' ],
+75 silly audit   'update-browserslist-db': [ '1.1.4' ],
+75 silly audit   'util-deprecate': [ '1.0.2' ],
+75 silly audit   vfile: [ '6.0.3' ],
+75 silly audit   'vfile-location': [ '5.0.3' ],
+75 silly audit   'vfile-message': [ '4.0.3' ],
+75 silly audit   vite: [ '6.4.1' ],
+75 silly audit   vitefu: [ '1.1.1' ],
+75 silly audit   'volar-service-css': [ '0.0.66' ],
+75 silly audit   'volar-service-emmet': [ '0.0.66' ],
+75 silly audit   'volar-service-html': [ '0.0.66' ],
+75 silly audit   'volar-service-prettier': [ '0.0.66' ],
+75 silly audit   'volar-service-typescript': [ '0.0.66' ],
+75 silly audit   'volar-service-typescript-twoslash-queries': [ '0.0.66' ],
+75 silly audit   'volar-service-yaml': [ '0.0.66' ],
+75 silly audit   'vscode-css-languageservice': [ '6.3.8' ],
+75 silly audit   'vscode-html-languageservice': [ '5.6.0' ],
+75 silly audit   'vscode-json-languageservice': [ '4.1.8' ],
+75 silly audit   'vscode-jsonrpc': [ '8.2.0' ],
+75 silly audit   'vscode-languageserver': [ '9.0.1' ],
+75 silly audit   'vscode-languageserver-protocol': [ '3.17.5' ],
+75 silly audit   'vscode-languageserver-textdocument': [ '1.0.12' ],
+75 silly audit   'vscode-languageserver-types': [ '3.17.5' ],
+75 silly audit   'vscode-nls': [ '5.2.0' ],
+75 silly audit   'vscode-uri': [ '3.1.0' ],
+75 silly audit   'web-namespaces': [ '2.0.1' ],
+75 silly audit   'whatwg-encoding': [ '3.1.1' ],
+75 silly audit   'whatwg-mimetype': [ '4.0.0' ],
+75 silly audit   which: [ '2.0.2' ],
+75 silly audit   'which-boxed-primitive': [ '1.1.1' ],
+75 silly audit   'which-builtin-type': [ '1.2.1' ],
+75 silly audit   'which-collection': [ '1.0.2' ],
+75 silly audit   'which-pm-runs': [ '1.1.0' ],
+75 silly audit   'which-typed-array': [ '1.1.19' ],
+75 silly audit   'widest-line': [ '5.0.0' ],
+75 silly audit   wrappy: [ '1.0.2' ],
+75 silly audit   'xxhash-wasm': [ '1.1.0' ],
+75 silly audit   y18n: [ '5.0.8' ],
+75 silly audit   'yaml-language-server': [ '1.19.2' ],
+75 silly audit   yargs: [ '17.7.2' ],
+75 silly audit   'yargs-parser': [ '21.1.1' ],
+75 silly audit   yauzl: [ '2.10.0' ],
+75 silly audit   'yocto-queue': [ '1.2.2' ],
+75 silly audit   'yocto-spinner': [ '0.2.3' ],
+75 silly audit   yoctocolors: [ '2.1.2' ],
+75 silly audit   'yoga-layout': [ '3.2.1' ],
+75 silly audit   zimmerframe: [ '1.1.4' ],
+75 silly audit   zod: [ '3.25.76' ],
+75 silly audit   'zod-to-json-schema': [ '3.24.6' ],
+75 silly audit   'zod-to-ts': [ '1.2.0' ],
+75 silly audit   zwitch: [ '2.0.4' ],
+75 silly audit   '@astrojs/svelte': [ '7.2.0' ],
+75 silly audit   '@biomejs/biome': [ '2.2.6' ],
+75 silly audit   astro: [ '5.14.6' ],
+75 silly audit   '@biomejs/cli-darwin-arm64': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-darwin-x64': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-linux-arm64': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-linux-arm64-musl': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-linux-x64': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-linux-x64-musl': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-win32-arm64': [ '2.2.6' ],
+75 silly audit   '@biomejs/cli-win32-x64': [ '2.2.6' ]
+75 silly audit }
+76 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-win32-arm64
+77 silly reify mark deleted [
+77 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-win32-arm64'
+77 silly reify ]
+78 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-linux-x64-musl
+79 silly reify mark deleted [
+79 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-linux-x64-musl'
+79 silly reify ]
+80 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-linux-x64
+81 silly reify mark deleted [
+81 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-linux-x64'
+81 silly reify ]
+82 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-linux-arm64-musl
+83 silly reify mark deleted [
+83 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-linux-arm64-musl'
+83 silly reify ]
+84 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-linux-arm64
+85 silly reify mark deleted [
+85 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-linux-arm64'
+85 silly reify ]
+86 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-darwin-x64
+87 silly reify mark deleted [
+87 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-darwin-x64'
+87 silly reify ]
+88 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@biomejs\cli-darwin-arm64
+89 silly reify mark deleted [
+89 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@biomejs\\cli-darwin-arm64'
+89 silly reify ]
+90 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\fsevents
+91 silly reify mark deleted [ 'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\fsevents' ]
+92 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-win32-ia32-msvc
+93 silly reify mark deleted [
+93 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-win32-ia32-msvc'
+93 silly reify ]
+94 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-win32-arm64-msvc
+95 silly reify mark deleted [
+95 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-win32-arm64-msvc'
+95 silly reify ]
+96 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-openharmony-arm64
+97 silly reify mark deleted [
+97 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-openharmony-arm64'
+97 silly reify ]
+98 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-x64-musl
+99 silly reify mark deleted [
+99 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-x64-musl'
+99 silly reify ]
+100 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-x64-gnu
+101 silly reify mark deleted [
+101 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-x64-gnu'
+101 silly reify ]
+102 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-s390x-gnu
+103 silly reify mark deleted [
+103 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-s390x-gnu'
+103 silly reify ]
+104 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-riscv64-musl
+105 silly reify mark deleted [
+105 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-riscv64-musl'
+105 silly reify ]
+106 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-riscv64-gnu
+107 silly reify mark deleted [
+107 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-riscv64-gnu'
+107 silly reify ]
+108 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-ppc64-gnu
+109 silly reify mark deleted [
+109 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-ppc64-gnu'
+109 silly reify ]
+110 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-loong64-gnu
+111 silly reify mark deleted [
+111 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-loong64-gnu'
+111 silly reify ]
+112 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-arm64-musl
+113 silly reify mark deleted [
+113 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-arm64-musl'
+113 silly reify ]
+114 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-arm64-gnu
+115 silly reify mark deleted [
+115 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-arm64-gnu'
+115 silly reify ]
+116 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-arm-musleabihf
+117 silly reify mark deleted [
+117 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-arm-musleabihf'
+117 silly reify ]
+118 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-linux-arm-gnueabihf
+119 silly reify mark deleted [
+119 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-linux-arm-gnueabihf'
+119 silly reify ]
+120 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-freebsd-x64
+121 silly reify mark deleted [
+121 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-freebsd-x64'
+121 silly reify ]
+122 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-freebsd-arm64
+123 silly reify mark deleted [
+123 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-freebsd-arm64'
+123 silly reify ]
+124 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-darwin-x64
+125 silly reify mark deleted [
+125 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-darwin-x64'
+125 silly reify ]
+126 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-darwin-arm64
+127 silly reify mark deleted [
+127 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-darwin-arm64'
+127 silly reify ]
+128 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-android-arm64
+129 silly reify mark deleted [
+129 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-android-arm64'
+129 silly reify ]
+130 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@rollup\rollup-android-arm-eabi
+131 silly reify mark deleted [
+131 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@rollup\\rollup-android-arm-eabi'
+131 silly reify ]
+132 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@pagefind\linux-x64
+133 silly reify mark deleted [
+133 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@pagefind\\linux-x64'
+133 silly reify ]
+134 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@pagefind\linux-arm64
+135 silly reify mark deleted [
+135 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@pagefind\\linux-arm64'
+135 silly reify ]
+136 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@pagefind\freebsd-x64
+137 silly reify mark deleted [
+137 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@pagefind\\freebsd-x64'
+137 silly reify ]
+138 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@pagefind\darwin-x64
+139 silly reify mark deleted [
+139 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@pagefind\\darwin-x64'
+139 silly reify ]
+140 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@pagefind\darwin-arm64
+141 silly reify mark deleted [
+141 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@pagefind\\darwin-arm64'
+141 silly reify ]
+142 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-win32-ia32
+143 silly reify mark deleted [
+143 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-win32-ia32'
+143 silly reify ]
+144 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-win32-arm64
+145 silly reify mark deleted [
+145 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-win32-arm64'
+145 silly reify ]
+146 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-wasm32
+147 silly reify mark deleted [
+147 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-wasm32'
+147 silly reify ]
+148 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@emnapi\runtime
+149 silly reify mark deleted [
+149 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@emnapi\\runtime'
+149 silly reify ]
+150 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linuxmusl-x64
+151 silly reify mark deleted [
+151 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linuxmusl-x64'
+151 silly reify ]
+152 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linuxmusl-arm64
+153 silly reify mark deleted [
+153 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linuxmusl-arm64'
+153 silly reify ]
+154 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-x64
+155 silly reify mark deleted [
+155 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-x64'
+155 silly reify ]
+156 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-s390x
+157 silly reify mark deleted [
+157 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-s390x'
+157 silly reify ]
+158 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-riscv64
+159 silly reify mark deleted [
+159 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-riscv64'
+159 silly reify ]
+160 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-ppc64
+161 silly reify mark deleted [
+161 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-ppc64'
+161 silly reify ]
+162 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-arm64
+163 silly reify mark deleted [
+163 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-arm64'
+163 silly reify ]
+164 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-linux-arm
+165 silly reify mark deleted [
+165 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-linux-arm'
+165 silly reify ]
+166 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linuxmusl-x64
+167 silly reify mark deleted [
+167 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linuxmusl-x64'
+167 silly reify ]
+168 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linuxmusl-arm64
+169 silly reify mark deleted [
+169 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linuxmusl-arm64'
+169 silly reify ]
+170 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-x64
+171 silly reify mark deleted [
+171 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-x64'
+171 silly reify ]
+172 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-s390x
+173 silly reify mark deleted [
+173 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-s390x'
+173 silly reify ]
+174 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-riscv64
+175 silly reify mark deleted [
+175 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-riscv64'
+175 silly reify ]
+176 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-ppc64
+177 silly reify mark deleted [
+177 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-ppc64'
+177 silly reify ]
+178 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-arm64
+179 silly reify mark deleted [
+179 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-arm64'
+179 silly reify ]
+180 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-linux-arm
+181 silly reify mark deleted [
+181 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-linux-arm'
+181 silly reify ]
+182 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-darwin-x64
+183 silly reify mark deleted [
+183 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-darwin-x64'
+183 silly reify ]
+184 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-libvips-darwin-arm64
+185 silly reify mark deleted [
+185 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-libvips-darwin-arm64'
+185 silly reify ]
+186 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-darwin-x64
+187 silly reify mark deleted [
+187 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-darwin-x64'
+187 silly reify ]
+188 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@img\sharp-darwin-arm64
+189 silly reify mark deleted [
+189 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@img\\sharp-darwin-arm64'
+189 silly reify ]
+190 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\win32-ia32
+191 silly reify mark deleted [
+191 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\win32-ia32'
+191 silly reify ]
+192 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\win32-arm64
+193 silly reify mark deleted [
+193 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\win32-arm64'
+193 silly reify ]
+194 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\sunos-x64
+195 silly reify mark deleted [
+195 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\sunos-x64'
+195 silly reify ]
+196 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\openharmony-arm64
+197 silly reify mark deleted [
+197 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\openharmony-arm64'
+197 silly reify ]
+198 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\openbsd-x64
+199 silly reify mark deleted [
+199 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\openbsd-x64'
+199 silly reify ]
+200 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\openbsd-arm64
+201 silly reify mark deleted [
+201 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\openbsd-arm64'
+201 silly reify ]
+202 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\netbsd-x64
+203 silly reify mark deleted [
+203 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\netbsd-x64'
+203 silly reify ]
+204 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\netbsd-arm64
+205 silly reify mark deleted [
+205 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\netbsd-arm64'
+205 silly reify ]
+206 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-x64
+207 silly reify mark deleted [
+207 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-x64'
+207 silly reify ]
+208 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-s390x
+209 silly reify mark deleted [
+209 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-s390x'
+209 silly reify ]
+210 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-riscv64
+211 silly reify mark deleted [
+211 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-riscv64'
+211 silly reify ]
+212 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-ppc64
+213 silly reify mark deleted [
+213 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-ppc64'
+213 silly reify ]
+214 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-mips64el
+215 silly reify mark deleted [
+215 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-mips64el'
+215 silly reify ]
+216 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-loong64
+217 silly reify mark deleted [
+217 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-loong64'
+217 silly reify ]
+218 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-ia32
+219 silly reify mark deleted [
+219 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-ia32'
+219 silly reify ]
+220 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-arm64
+221 silly reify mark deleted [
+221 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-arm64'
+221 silly reify ]
+222 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\linux-arm
+223 silly reify mark deleted [
+223 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\linux-arm'
+223 silly reify ]
+224 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\freebsd-x64
+225 silly reify mark deleted [
+225 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\freebsd-x64'
+225 silly reify ]
+226 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\freebsd-arm64
+227 silly reify mark deleted [
+227 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\freebsd-arm64'
+227 silly reify ]
+228 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\darwin-x64
+229 silly reify mark deleted [
+229 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\darwin-x64'
+229 silly reify ]
+230 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\darwin-arm64
+231 silly reify mark deleted [
+231 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\darwin-arm64'
+231 silly reify ]
+232 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\android-x64
+233 silly reify mark deleted [
+233 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\android-x64'
+233 silly reify ]
+234 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\android-arm64
+235 silly reify mark deleted [
+235 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\android-arm64'
+235 silly reify ]
+236 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\android-arm
+237 silly reify mark deleted [
+237 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\android-arm'
+237 silly reify ]
+238 verbose reify failed optional dependency D:\cursor\project8  blog\Mizuki-master\node_modules\@esbuild\aix-ppc64
+239 silly reify mark deleted [
+239 silly reify   'D:\\cursor\\project8  blog\\Mizuki-master\\node_modules\\@esbuild\\aix-ppc64'
+239 silly reify ]
+240 http cache @emnapi/runtime@https://registry.npmmirror.com/@emnapi/runtime/-/runtime-1.7.1.tgz 0ms (cache hit)
+241 http cache @biomejs/biome@https://registry.npmmirror.com/@biomejs/biome/-/biome-2.2.6.tgz 0ms (cache hit)
+242 http cache @astrojs/svelte@https://registry.npmmirror.com/@astrojs/svelte/-/svelte-7.2.0.tgz 0ms (cache hit)
+243 silly tarball no local data for @biomejs/biome@https://registry.npmmirror.com/@biomejs/biome/-/biome-2.2.6.tgz. Extracting by manifest.
+244 http cache astro@https://registry.npmmirror.com/astro/-/astro-5.14.6.tgz 0ms (cache hit)
+245 http cache @biomejs/cli-win32-x64@https://registry.npmmirror.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.2.6.tgz 0ms (cache hit)
+246 silly tarball no local data for @astrojs/svelte@https://registry.npmmirror.com/@astrojs/svelte/-/svelte-7.2.0.tgz. Extracting by manifest.
+247 silly tarball no local data for astro@https://registry.npmmirror.com/astro/-/astro-5.14.6.tgz. Extracting by manifest.
+248 silly tarball no local data for @biomejs/cli-win32-x64@https://registry.npmmirror.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.2.6.tgz. Extracting by manifest.
+249 http fetch POST 404 https://registry.npmmirror.com/-/npm/v1/security/advisories/bulk 42ms
+250 silly audit bulk request failed [object Object]
+251 http fetch POST 404 https://registry.npmmirror.com/-/npm/v1/security/audits/quick 35ms
+252 verbose audit error HttpErrorGeneral: 404 Not Found - POST https://registry.npmmirror.com/-/npm/v1/security/audits/quick - [NOT_IMPLEMENTED] /-/npm/v1/security/* not implemented yet
+252 verbose audit error     at D:\nodejs\node_modules\npm\node_modules\npm-registry-fetch\lib\check-response.js:103:15
+252 verbose audit error     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+252 verbose audit error     at async [getReport] (D:\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\audit-report.js:336:21)
+252 verbose audit error     at async AuditReport.run (D:\nodejs\node_modules\npm\node_modules\@npmcli\arborist\lib\audit-report.js:106:19) {
+252 verbose audit error   headers: [Object: null prototype] {
+252 verbose audit error     server: [ 'Tengine' ],
+252 verbose audit error     date: [ 'Sun, 16 Nov 2025 07:13:56 GMT' ],
+252 verbose audit error     'content-type': [ 'application/json' ],
+252 verbose audit error     'transfer-encoding': [ 'chunked' ],
+252 verbose audit error     connection: [ 'keep-alive' ],
+252 verbose audit error     'strict-transport-security': [ 'max-age=5184000' ],
+252 verbose audit error     via: [ 'kunlun2.cn8360[,404666]' ],
+252 verbose audit error     'timing-allow-origin': [ '*' ],
+252 verbose audit error     eagleid: [ 'ab2ba99617632772368771053e' ],
+252 verbose audit error     'x-fetch-attempts': [ '1' ]
+252 verbose audit error   },
+252 verbose audit error   statusCode: 404,
+252 verbose audit error   code: 'E404',
+252 verbose audit error   method: 'POST',
+252 verbose audit error   uri: 'https://registry.npmmirror.com/-/npm/v1/security/audits/quick',
+252 verbose audit error   body: {
+252 verbose audit error     error: '[NOT_IMPLEMENTED] /-/npm/v1/security/* not implemented yet'
+252 verbose audit error   },
+252 verbose audit error   pkgid: undefined
+252 verbose audit error }
+253 silly audit error [object Object]
+254 silly audit report null
+255 http fetch GET 200 https://cdn.npmmirror.com/packages/%40biomejs/biome/2.2.6/biome-2.2.6.tgz 524ms (cache miss)
+256 http fetch GET 200 https://cdn.npmmirror.com/packages/%40astrojs/svelte/7.2.0/svelte-7.2.0.tgz 1576ms (cache miss)
+257 http fetch GET 200 https://cdn.npmmirror.com/packages/astro/5.14.6/astro-5.14.6.tgz 2356ms (cache miss)
+258 http fetch GET 200 https://cdn.npmmirror.com/packages/%40biomejs/cli-win32-x64/2.2.6/cli-win32-x64-2.2.6.tgz 2474ms (cache miss)
+259 verbose stack Error: command failed
+259 verbose stack     at promiseSpawn (D:\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:22:22)
+259 verbose stack     at spawnWithShell (D:\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:124:10)
+259 verbose stack     at promiseSpawn (D:\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:12:12)
+259 verbose stack     at runScriptPkg (D:\nodejs\node_modules\npm\node_modules\@npmcli\run-script\lib\run-script-pkg.js:79:13)
+259 verbose stack     at runScript (D:\nodejs\node_modules\npm\node_modules\@npmcli\run-script\lib\run-script.js:12:10)
+259 verbose stack     at async Install.exec (D:\nodejs\node_modules\npm\lib\commands\install.js:163:9)
+259 verbose stack     at async Npm.exec (D:\nodejs\node_modules\npm\lib\npm.js:207:9)
+259 verbose stack     at async module.exports (D:\nodejs\node_modules\npm\lib\cli\entry.js:74:5)
+260 verbose pkgid mizuki@6.1.0
+261 error code 1
+262 error path D:\cursor\project8  blog\Mizuki-master
+263 error command failed
+264 error command C:\WINDOWS\system32\cmd.exe /d /s /c npx only-allow pnpm
+265 verbose cwd D:\cursor\project8  blog\Mizuki-master
+266 verbose os Windows_NT 10.0.22631
+267 verbose node v22.20.0
+268 verbose npm  v10.9.3
+269 verbose exit 1
+270 verbose code 1
+271 error A complete log of this run can be found in: D:\cursor\project8  blog\Mizuki-master\.npm-cache\_logs\2025-11-16T07_11_59_264Z-debug-0.log
