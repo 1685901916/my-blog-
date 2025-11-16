@@ -218,7 +218,7 @@ export const navBarConfig: NavBarConfig = {
 					icon: "material-symbols:sports-esports",
 				},
 				{
-					name: "实用资源",
+					name: "实用工具",
 					url: "/resources/utility/",
 					icon: "material-symbols:construction",
 				},
@@ -313,7 +313,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.jpg", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "Ayano",
-	bio: "计算机专业大学生，B站Git源宝学员。老二次元，有千部以上阅番量。相信站长的品味，目前在学习AI相关。本站有很多实用资源～",
+	bio: "计算机专业大学生，B站Git源宝学员。老二次元，有千部以上阅番量。相信站长的品味，目前在学习AI相关。本站有很多实用工具～",
 	typewriter: {
 		enable: false, // 启用个人简介打字机效果
 		speed: 80, // 打字速度（毫秒）
