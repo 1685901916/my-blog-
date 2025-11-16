@@ -9,12 +9,12 @@ const { page } = Astro.props;
 let delay = 0;
 const interval = 50;
 ---
-<div 
+<div
   id="post-list-container"
-  class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent gap-2 md:gap-4 mb-4 list-mode md:list-mode"
+  class="transition-all duration-500 ease-in-out flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent gap-2 md:gap-4 mb-4 list-mode md:list-mode"
   data-default-layout={siteConfig.postListLayout.defaultMode}
 >
-    {page.data.map((entry: CollectionEntry<"posts"> | CollectionEntry<"manga"> | CollectionEntry<"portfolio">) => (
+    {page.data.map((entry: CollectionEntry<"posts">) => (
         <PostCard
                 entry={entry}
                 title={entry.data.title}
@@ -22,7 +22,7 @@ const interval = 50;
                 category={entry.data.category}
                 published={entry.data.published}
                 updated={entry.data.updated}
-                url={getPostUrlBySlug(entry.slug, entry.collection)}
+                url={getPostUrlBySlug(entry.slug)}
                 image={entry.data.image}
                 description={entry.data.description}
                 draft={entry.data.draft}
@@ -40,9 +40,9 @@ const interval = 50;
     setTimeout(() => {
       const postListContainer = document.getElementById("post-list-container");
       if (!postListContainer) {
-        console.warn("post-list-container not found, retrying...");
-        // 如果找不到容器，延迟重试
-        setTimeout(initLayout, 100);
+        // 如果找不到容器，说明当前页面不是文章列表页面
+        console.debug("post-list-container not found, skipping layout initialization (not a post list page)");
+        // setTimeout(initLayout, 100);
         return;
       }
 
@@ -51,7 +51,7 @@ const interval = 50;
       const defaultLayout = postListContainer.getAttribute("data-default-layout") || "list";
       const currentLayout = savedLayout || defaultLayout;
 
-      console.log("Initializing layout:", { savedLayout, defaultLayout, currentLayout });
+      console.debug("Initializing layout:", { savedLayout, defaultLayout, currentLayout });
 
       // 移动端由CSS处理，桌面端才需要JavaScript初始化
       const isDesktop = window.innerWidth >= 769;
@@ -71,9 +71,12 @@ const interval = 50;
     const postListContainer = document.getElementById("post-list-container");
     if (!postListContainer) return;
 
+    // 添加切换动画类
+    postListContainer.classList.add("layout-switching");
+
     // 移除现有布局类
     postListContainer.classList.remove("list-mode", "grid-mode");
-    
+
     // 添加新布局类
     if (layout === "grid") {
       postListContainer.classList.add("grid-mode");
@@ -86,9 +89,14 @@ const interval = 50;
       postListContainer.classList.add("flex", "flex-col");
       postListContainer.classList.remove("grid", "grid-cols-1", "md:grid-cols-2", "gap-6");
     }
-    
+
     // 添加初始化完成标记，用于移除闪烁保护
     postListContainer.classList.add("js-initialized");
+
+    // 移除切换动画类
+    setTimeout(() => {
+      postListContainer.classList.remove("layout-switching");
+    }, 500);
   }
 
   // 监听布局变化事件
@@ -128,23 +136,23 @@ const interval = 50;
         // 页面内容替换后重新初始化布局
         swup.hooks.on("content:replace", () => {
           setTimeout(() => {
-            console.log("Swup content:replace - reinitializing layout");
+            console.debug("Swup content:replace - reinitializing layout");
             initLayout();
           }, 100);
         });
-        
+
         // 页面视图切换后重新初始化布局
         swup.hooks.on("page:view", () => {
           setTimeout(() => {
-            console.log("Swup page:view - reinitializing layout");
+            console.debug("Swup page:view - reinitializing layout");
             initLayout();
           }, 100);
         });
-        
+
         // 动画进入结束后重新初始化布局
         swup.hooks.on("animation:in:end", () => {
           setTimeout(() => {
-            console.log("Swup animation:in:end - reinitializing layout");
+            console.debug("Swup animation:in:end - reinitializing layout");
             initLayout();
           }, 50);
         });
@@ -168,28 +176,28 @@ const interval = 50;
           // 降级处理：监听普通页面切换事件
           window.addEventListener("popstate", () => {
             setTimeout(() => {
-              console.log("Popstate - reinitializing layout");
+              console.debug("Popstate - reinitializing layout");
               initLayout();
             }, 100);
           });
-          
+
           // 监听路由变化（适用于Astro的客户端导航）
           if (window.location) {
             const originalPushState = history.pushState;
             const originalReplaceState = history.replaceState;
-            
+
             history.pushState = function(...args) {
               originalPushState.apply(this, args);
               setTimeout(() => {
-                console.log("PushState - reinitializing layout");
+                console.debug("PushState - reinitializing layout");
                 initLayout();
               }, 100);
             };
-            
+
             history.replaceState = function(...args) {
               originalReplaceState.apply(this, args);
               setTimeout(() => {
-                console.log("ReplaceState - reinitializing layout");
+                console.debug("ReplaceState - reinitializing layout");
                 initLayout();
               }, 100);
             };
