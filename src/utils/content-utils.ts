@@ -25,12 +25,15 @@ async function getRawSortedPosts() {
 			allMangaPosts = await getCollection("manga", ({ data }) => {
 				return import.meta.env.PROD ? data.draft !== true : true;
 			});
-			
+
 			// 获取文件夹文章
-			allMangaCategoriesPosts = await getCollection("manga-categories", ({ data }) => {
-				return import.meta.env.PROD ? data.draft !== true : true;
-			});
-		} catch (e) {
+			allMangaCategoriesPosts = await getCollection(
+				"manga-categories",
+				({ data }) => {
+					return import.meta.env.PROD ? data.draft !== true : true;
+				},
+			);
+		} catch (_e) {
 			// 如果manga collection不存在，忽略错误
 			console.log("Manga collection not found or empty");
 		}
@@ -42,14 +45,19 @@ async function getRawSortedPosts() {
 			allPortfolioPosts = await getCollection("portfolio", ({ data }) => {
 				return import.meta.env.PROD ? data.draft !== true : true;
 			});
-		} catch (e) {
+		} catch (_e) {
 			// 如果portfolio collection不存在，忽略错误
 			console.log("Portfolio collection not found or empty");
 		}
 	}
 
 	// 合并博客文章、漫画文章（独立+文件夹）和作品集文章
-	const allPosts = [...allBlogPosts, ...allMangaPosts, ...allMangaCategoriesPosts, ...allPortfolioPosts];
+	const allPosts = [
+		...allBlogPosts,
+		...allMangaPosts,
+		...allMangaCategoriesPosts,
+		...allPortfolioPosts,
+	];
 
 	const sorted = allPosts.sort((a, b) => {
 		// 首先按置顶状态排序，置顶文章在前
@@ -80,6 +88,7 @@ export async function getSortedPosts() {
 }
 export type PostForList = {
 	slug: string;
+	collection: string;
 	data:
 		| CollectionEntry<"posts">["data"]
 		| CollectionEntry<"manga">["data"]
@@ -92,6 +101,7 @@ export async function getSortedPostsList(): Promise<PostForList[]> {
 	// delete post.body
 	const sortedPostsList = sortedFullPosts.map((post) => ({
 		slug: post.slug,
+		collection: post.collection,
 		data: post.data,
 	}));
 
