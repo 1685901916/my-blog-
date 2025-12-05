@@ -1,67 +1,67 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from "svelte";
+import { createEventDispatcher, onMount } from "svelte";
 
-	const STORAGE_KEY = "ob-drawer-width";
-	const MIN_WIDTH = 220;
-	const MAX_WIDTH = 420;
+const STORAGE_KEY = "ob-drawer-width";
+const MIN_WIDTH = 220;
+const MAX_WIDTH = 420;
 
-	export let title = "头像 / 目录区域";
-	export let subtitle = "拖拽调宽 · 左滑呼出";
-	export let avatarUrl: string | undefined = undefined;
-	export let open = true;
+export let title = "头像 / 目录区域";
+export let subtitle = "拖拽调宽 · 左滑呼出";
+export let avatarUrl: string | undefined = undefined;
+export let open = true;
 
-	const dispatch = createEventDispatcher<{ openChange: boolean }>();
+const dispatch = createEventDispatcher<{ openChange: boolean }>();
 
-	let width = 300;
-	let startX = 0;
-	let startWidth = width;
-	let dragging = false;
-	const STEP = 12;
+let width = 300;
+let startX = 0;
+let startWidth = width;
+let dragging = false;
+const STEP = 12;
 
-	onMount(() => {
-		const saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) {
-			const parsed = Number(saved);
-			if (!Number.isNaN(parsed)) width = parsed;
-		}
-	});
+onMount(() => {
+	const saved = localStorage.getItem(STORAGE_KEY);
+	if (saved) {
+		const parsed = Number(saved);
+		if (!Number.isNaN(parsed)) width = parsed;
+	}
+});
 
-	const beginDrag = (ev: MouseEvent) => {
-		dragging = true;
-		startX = ev.clientX;
-		startWidth = width;
-		window.addEventListener("mousemove", handleMove);
-		window.addEventListener("mouseup", endDrag);
-	};
+const beginDrag = (ev: MouseEvent) => {
+	dragging = true;
+	startX = ev.clientX;
+	startWidth = width;
+	window.addEventListener("mousemove", handleMove);
+	window.addEventListener("mouseup", endDrag);
+};
 
-	const handleMove = (ev: MouseEvent) => {
-		if (!dragging) return;
-		const delta = ev.clientX - startX;
-		const next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + delta));
-		width = next;
-	};
+const handleMove = (ev: MouseEvent) => {
+	if (!dragging) return;
+	const delta = ev.clientX - startX;
+	const next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + delta));
+	width = next;
+};
 
-	const endDrag = () => {
-		if (!dragging) return;
-		dragging = false;
+const endDrag = () => {
+	if (!dragging) return;
+	dragging = false;
+	localStorage.setItem(STORAGE_KEY, String(width));
+	window.removeEventListener("mousemove", handleMove);
+	window.removeEventListener("mouseup", endDrag);
+};
+
+const closeDrawer = () => dispatch("openChange", false);
+const openDrawer = () => dispatch("openChange", true);
+
+const handleKeyResize = (ev: KeyboardEvent) => {
+	if (ev.key === "ArrowLeft") {
+		width = Math.max(MIN_WIDTH, width - STEP);
 		localStorage.setItem(STORAGE_KEY, String(width));
-		window.removeEventListener("mousemove", handleMove);
-		window.removeEventListener("mouseup", endDrag);
-	};
-
-	const closeDrawer = () => dispatch("openChange", false);
-	const openDrawer = () => dispatch("openChange", true);
-
-	const handleKeyResize = (ev: KeyboardEvent) => {
-		if (ev.key === "ArrowLeft") {
-			width = Math.max(MIN_WIDTH, width - STEP);
-			localStorage.setItem(STORAGE_KEY, String(width));
-		}
-		if (ev.key === "ArrowRight") {
-			width = Math.min(MAX_WIDTH, width + STEP);
-			localStorage.setItem(STORAGE_KEY, String(width));
-		}
-	};
+	}
+	if (ev.key === "ArrowRight") {
+		width = Math.min(MAX_WIDTH, width + STEP);
+		localStorage.setItem(STORAGE_KEY, String(width));
+	}
+};
 </script>
 
 <aside

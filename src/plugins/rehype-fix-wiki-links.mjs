@@ -7,7 +7,11 @@ import { visit } from "unist-util-visit";
 export function rehypeFixWikiLinks() {
 	return (tree) => {
 		visit(tree, "element", (node) => {
-			if (node.tagName === "a" && node.properties && node.properties.dataWikiLink) {
+			if (
+				node.tagName === "a" &&
+				node.properties &&
+				node.properties.dataWikiLink
+			) {
 				const slug = node.properties.dataWikiLink;
 				// Force the href to have /posts/ prefix
 				node.properties.href = `/posts/${slug}/`;

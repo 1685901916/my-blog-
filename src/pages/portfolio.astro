@@ -4,7 +4,10 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import PostPage from "../components/PostPage.astro";
 
 // 获取portfolio collection中的文章
-const portfolioArticles = await getCollection("portfolio", ({ data }) => data.draft !== true);
+const portfolioArticles = await getCollection(
+	"portfolio",
+	({ data }) => data.draft !== true,
+);
 
 // 构造与主页相同的 page 对象结构
 const page = {

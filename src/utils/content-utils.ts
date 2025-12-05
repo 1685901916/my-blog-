@@ -29,13 +29,19 @@ async function getRawSortedPosts() {
 
 	// 根据配置获取博客内容
 	if (siteConfig.homepageContent.showBlogPosts) {
-		allBlogPosts = await getCollection("posts", ({ data }) => data.draft !== true);
+		allBlogPosts = await getCollection(
+			"posts",
+			({ data }) => data.draft !== true,
+		);
 	}
 
 	// 根据配置获取漫画内容
 	if (siteConfig.homepageContent.showMangaPosts) {
 		try {
-			allMangaPosts = await getCollection("manga", ({ data }) => data.draft !== true);
+			allMangaPosts = await getCollection(
+				"manga",
+				({ data }) => data.draft !== true,
+			);
 		} catch (_e) {
 			// Manga collection might not exist
 		}
@@ -55,7 +61,10 @@ async function getRawSortedPosts() {
 
 	// 根据配置获取作品集内容
 	if (siteConfig.homepageContent.showPortfolioPosts) {
-		allPortfolioPosts = await getCollection("portfolio", ({ data }) => data.draft !== true);
+		allPortfolioPosts = await getCollection(
+			"portfolio",
+			({ data }) => data.draft !== true,
+		);
 	}
 
 	// 根据配置获取娱乐资源内容

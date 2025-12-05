@@ -1,12 +1,12 @@
 <script lang="ts">
-	export type BacklinkItem = {
-		slug: string;
-		title: string;
-		excerpt?: string;
-		tags?: string[];
-	};
+export type BacklinkItem = {
+	slug: string;
+	title: string;
+	excerpt?: string;
+	tags?: string[];
+};
 
-	export let items: BacklinkItem[] = [];
+export let items: BacklinkItem[] = [];
 </script>
 
 <section class="card-base p-4 space-y-2">

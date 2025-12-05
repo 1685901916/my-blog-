@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	import { derived, writable } from "svelte/store";
+import { createEventDispatcher } from "svelte";
+import { derived, writable } from "svelte/store";
 
-	export let tags: string[] = [];
-	export let selectedTags: string[] = [];
-	export let query = "";
+export let tags: string[] = [];
+export let selectedTags: string[] = [];
+export let query = "";
 
-	const dispatch = createEventDispatcher<{
-		toggleTag: string;
-		queryChange: string;
-	}>();
+const dispatch = createEventDispatcher<{
+	toggleTag: string;
+	queryChange: string;
+}>();
 
-	const uniqueTags = derived(
-		writable(tags),
-		($tags) => Array.from(new Set($tags)).sort((a, b) => a.localeCompare(b)),
-	);
+const uniqueTags = derived(writable(tags), ($tags) =>
+	Array.from(new Set($tags)).sort((a, b) => a.localeCompare(b)),
+);
 </script>
 
 <div class="card-base p-4 flex flex-col gap-3">

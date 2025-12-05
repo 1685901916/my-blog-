@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import path from "node:path";
 import Comment from "@components/comment/index.astro";
 import License from "@components/misc/License.astro";
@@ -12,12 +13,14 @@ import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
-import { getCollection } from "astro:content";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
 export async function getStaticPaths() {
-	const mangaEntries = await getCollection("manga", ({ data }) => data.draft !== true);
-	
+	const mangaEntries = await getCollection(
+		"manga",
+		({ data }) => data.draft !== true,
+	);
+
 	return mangaEntries.map((entry) => ({
 		params: { slug: entry.slug },
 		props: { entry },

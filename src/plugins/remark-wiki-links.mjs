@@ -34,7 +34,8 @@ export function remarkWikiLinks() {
 
 				// Parse link text (support "display text|actual-link" format)
 				const parts = linkText.split("|");
-				const displayText = parts.length > 1 ? parts[0].trim() : linkText.trim();
+				const displayText =
+					parts.length > 1 ? parts[0].trim() : linkText.trim();
 				const linkTarget = parts.length > 1 ? parts[1].trim() : linkText.trim();
 
 				// Normalize link target - just lowercase and trim

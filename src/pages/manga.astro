@@ -11,7 +11,10 @@ import { sidebarLayoutConfig, siteConfig } from "../config";
 const categories = await scanMangaCategories();
 
 // 获取manga collection中的文章
-const mangaArticles = await getCollection("manga", ({ data }) => data.draft !== true);
+const mangaArticles = await getCollection(
+	"manga",
+	({ data }) => data.draft !== true,
+);
 
 // 转换为统一格式并计算字数
 const standaloneArticles = await Promise.all(

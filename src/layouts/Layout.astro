@@ -1141,23 +1141,16 @@ const setup = () => {
 		// Control mobile banner visibility based on page with improved staging animation
 		const bannerWrapper = document.getElementById('banner-wrapper')
 		const mainContentWrapper = document.querySelector('.absolute.w-full.z-30')
-		
+
 		if (bannerWrapper && mainContentWrapper) {
 			if (isHomePage) {
-				// 首页：延迟移除隐藏类，让banner和内容优雅地出现
-				setTimeout(() => {
-					bannerWrapper.classList.remove('mobile-hide-banner')
-				}, 100)
-				setTimeout(() => {
-					mainContentWrapper.classList.remove('mobile-main-no-banner')
-				}, 150)
+				// 首页：立即执行，让 CSS 过渡接管（300ms 统一动画）
+				bannerWrapper.classList.remove('mobile-hide-banner')
+				mainContentWrapper.classList.remove('mobile-main-no-banner')
 			} else {
-				// 非首页：分阶段隐藏，先隐藏banner，再移动内容
+				// 非首页：立即执行，让 CSS 过渡接管（300ms 统一动画）
 				bannerWrapper.classList.add('mobile-hide-banner')
-				// 延迟移动内容，让banner先完全消失
-				setTimeout(() => {
-					mainContentWrapper.classList.add('mobile-main-no-banner')
-				}, 100)
+				mainContentWrapper.classList.add('mobile-main-no-banner')
 			}
 		}
 
@@ -1239,7 +1232,7 @@ const setup = () => {
             if (toc) {
                 toc.classList.remove('toc-not-ready')
             }
-        }, 200)
+        }, 300)
 	});
 }
 if (window?.swup?.hooks) {

@@ -1,14 +1,14 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { Icon } from "astro-icon/components";
-import MainGridLayout from "../../../layouts/MainGridLayout.astro";
-import { getTagUrl } from "../../../utils/url-utils";
+import PostMetadata from "../../../components/PostMeta.astro";
 import { siteConfig } from "../../../config";
 import I18nKey from "../../../i18n/i18nKey";
 import { i18n } from "../../../i18n/translation";
+import MainGridLayout from "../../../layouts/MainGridLayout.astro";
 import type { MangaCategory } from "../../../utils/manga-scanner";
 import { scanMangaCategories } from "../../../utils/manga-scanner";
-import PostMetadata from "../../../components/PostMeta.astro";
+import { getTagUrl } from "../../../utils/url-utils";
 
 export const getStaticPaths = (async () => {
 	const categories = await scanMangaCategories();

@@ -93,23 +93,25 @@ export async function scanStandaloneManga(): Promise<MangaArticle[]> {
 					continue;
 				}
 
-			const slug = `manga-standalone-${file.name.replace(".md", "")}`;
+				const slug = `manga-standalone-${file.name.replace(".md", "")}`;
 
-			// 计算正文字数（排除 front matter）
-			const content = fileContent.replace(/^---\s*\n[\s\S]*?\n---/, "").trim();
-			const words = content.length;
+				// 计算正文字数（排除 front matter）
+				const content = fileContent
+					.replace(/^---\s*\n[\s\S]*?\n---/, "")
+					.trim();
+				const words = content.length;
 
-			articles.push({
-				id: file.name.replace(".md", ""),
-				title: data.title || file.name.replace(".md", ""),
-				description: data.description || "",
-				image: data.image || "",
-				tags: data.tags || [],
-				category: data.category || "漫画",
-				published: data.published ? new Date(data.published) : new Date(),
-				slug,
-				words,
-			});
+				articles.push({
+					id: file.name.replace(".md", ""),
+					title: data.title || file.name.replace(".md", ""),
+					description: data.description || "",
+					image: data.image || "",
+					tags: data.tags || [],
+					category: data.category || "漫画",
+					published: data.published ? new Date(data.published) : new Date(),
+					slug,
+					words,
+				});
 			} catch (e) {
 				console.error(`解析独立文章 ${file.name} 失败:`, e);
 			}

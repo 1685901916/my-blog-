@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ObNote } from "@/types/ob";
+import type { ObNote } from "@/types/ob";
 
-	export let notes: ObNote[] = [];
-	export let currentSlug: string | undefined = undefined;
+export let notes: ObNote[] = [];
+export let currentSlug: string | undefined = undefined;
 </script>
 
 <div class="p-4 space-y-4 min-w-[260px] overflow-x-auto">

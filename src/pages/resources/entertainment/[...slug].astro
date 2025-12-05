@@ -22,8 +22,11 @@ import { formatDateToYYYYMMDD } from "../../../utils/date-utils";
 export async function getStaticPaths() {
 	// 只获取 entertainment-resources collection 的文章
 	const { getCollection } = await import("astro:content");
-	const entertainmentEntries = await getCollection("entertainment-resources", ({ data }) => data.draft !== true);
-	
+	const entertainmentEntries = await getCollection(
+		"entertainment-resources",
+		({ data }) => data.draft !== true,
+	);
+
 	return entertainmentEntries.map((entry) => ({
 		params: { slug: entry.slug },
 		props: { entry },

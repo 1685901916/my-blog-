@@ -5,7 +5,10 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { sidebarLayoutConfig, siteConfig } from "../../config";
 
 // 获取所有分类为"实用工具"的文章
-const allPosts = await getCollection("posts", ({ data }) => data.draft !== true);
+const allPosts = await getCollection(
+	"posts",
+	({ data }) => data.draft !== true,
+);
 
 const utilityPosts = allPosts
 	.filter((post) => post.data.category === "实用工具")

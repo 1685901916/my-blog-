@@ -55,11 +55,11 @@
   
   /* 优化侧边栏动画 */
   #dynamic-sidebar {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
-  
+
   .widget-container {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
   
   /* 防止页面加载时的闪烁 */
@@ -110,11 +110,11 @@
   
   /* 简化侧边栏动画 */
   #dynamic-sidebar {
-    transition: all 0.15s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
-  
+
   .widget-container {
-    transition: all 0.15s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
 }
 

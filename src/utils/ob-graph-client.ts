@@ -1,4 +1,10 @@
-import type { GraphData, GraphEdge, GraphNode, NodeType, ObNote } from "@/types/ob";
+import type {
+	GraphData,
+	GraphEdge,
+	GraphNode,
+	NodeType,
+	ObNote,
+} from "@/types/ob";
 
 type FilterOptions = {
 	tags?: string[];
@@ -7,12 +13,17 @@ type FilterOptions = {
 	query?: string;
 };
 
-export const filterGraph = (graph: GraphData, options: FilterOptions): GraphData => {
+export const filterGraph = (
+	graph: GraphData,
+	options: FilterOptions,
+): GraphData => {
 	const { tags = [], props = {}, types, query } = options;
 
 	const matchProps = (node: GraphNode) => {
 		if (!props || Object.keys(props).length === 0) return true;
-		return Object.entries(props).every(([key, value]) => node.props?.[key] === value);
+		return Object.entries(props).every(
+			([key, value]) => node.props?.[key] === value,
+		);
 	};
 
 	const allowTag = (node: GraphNode) => {
@@ -37,7 +48,13 @@ export const filterGraph = (graph: GraphData, options: FilterOptions): GraphData
 
 	const allowedIds = new Set(
 		graph.nodes
-			.filter((node) => matchProps(node) && allowTag(node) && allowType(node) && allowQuery(node))
+			.filter(
+				(node) =>
+					matchProps(node) &&
+					allowTag(node) &&
+					allowType(node) &&
+					allowQuery(node),
+			)
 			.map((node) => node.id),
 	);
 

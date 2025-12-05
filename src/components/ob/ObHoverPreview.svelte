@@ -1,159 +1,161 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
+import { onDestroy, onMount } from "svelte";
 
-	export type Meta = {
-		title: string;
-		excerpt?: string;
-		tags?: string[];
-		props?: Record<string, string>;
-		slug?: string;
+export type Meta = {
+	title: string;
+	excerpt?: string;
+	tags?: string[];
+	props?: Record<string, string>;
+	slug?: string;
+};
+
+export let metaMap: Record<string, Meta> = {};
+export let rootSelector = "article";
+
+let hover: {
+	x: number;
+	y: number;
+	slug: string;
+	meta: Meta;
+} | null = null;
+
+let anchors: HTMLAnchorElement[] = [];
+let previewWidth = 400;
+let previewHeight = 300;
+let isResizing = false;
+let resizeStartX = 0;
+let resizeStartY = 0;
+let startWidth = 0;
+let startHeight = 0;
+
+onMount(() => {
+	const root = document.querySelector(rootSelector);
+	if (!root) return;
+	anchors = Array.from(root.querySelectorAll<HTMLAnchorElement>("a[href]"));
+
+	const handleEnter = (ev: MouseEvent) => {
+		const target = ev.currentTarget as HTMLAnchorElement;
+		const originalHref = target.getAttribute("href") ?? "";
+
+		console.log("=== 悬停链接调试 ===");
+		console.log("1. 原始 href:", originalHref);
+
+		let slug = originalHref.replace(/^\//, "").replace(/\/$/, "").split("#")[0];
+
+		console.log("2. 移除前后斜杠和锚点后:", slug);
+
+		// Remove /posts/ prefix if exists
+		slug = slug.replace(/^posts\//, "");
+
+		console.log("3. 移除 /posts/ 前缀后:", slug);
+		console.log("4. metaMap 中的所有键:", Object.keys(metaMap));
+
+		const meta = metaMap[slug];
+		console.log("5. 查找到的 meta:", meta);
+
+		if (!meta) {
+			console.log("❌ 未找到匹配的文章元数据");
+			return;
+		}
+
+		console.log("6. 设置 hover 状态:", { slug, title: meta.title });
+
+		// 获取链接元素的位置
+		const rect = target.getBoundingClientRect();
+
+		// 默认显示在链接下方，左对齐
+		let x = rect.left;
+		let y = rect.bottom + 8; // 链接下方 8px
+
+		// 检查右侧空间是否足够
+		const rightSpace = window.innerWidth - rect.left;
+		if (rightSpace < previewWidth + 40) {
+			// 右侧空间不足，尝试右对齐到链接右边
+			x = rect.right - previewWidth;
+			// 如果还是超出左边界，就贴着右边界显示
+			if (x < 20) {
+				x = window.innerWidth - previewWidth - 20;
+			}
+		}
+
+		// 检查下方空间是否足够
+		const bottomSpace = window.innerHeight - rect.bottom;
+		if (bottomSpace < previewHeight + 40) {
+			// 下方空间不足，显示在链接上方
+			y = rect.top - previewHeight - 8;
+		}
+
+		// 最终确保不会超出屏幕边界
+		x = Math.max(20, Math.min(x, window.innerWidth - previewWidth - 20));
+		y = Math.max(20, Math.min(y, window.innerHeight - previewHeight - 20));
+
+		console.log("7. 最终位置:", {
+			x,
+			y,
+			linkLeft: rect.left,
+			linkRight: rect.right,
+			windowWidth: window.innerWidth,
+			previewWidth,
+		});
+
+		hover = { x, y, slug, meta };
 	};
 
-	export let metaMap: Record<string, Meta> = {};
-	export let rootSelector = "article";
+	const handleMove = () => {
+		// 预览窗口不再跟随鼠标移动
+		return;
+	};
 
-	let hover:
-		| {
-				x: number;
-				y: number;
-				slug: string;
-				meta: Meta;
-		  }
-		| null = null;
+	const handleLeave = () => {
+		if (!isResizing) {
+			hover = null;
+		}
+	};
 
-	let anchors: HTMLAnchorElement[] = [];
-	let previewWidth = 400;
-	let previewHeight = 300;
-	let isResizing = false;
-	let resizeStartX = 0;
-	let resizeStartY = 0;
-	let startWidth = 0;
-	let startHeight = 0;
-
-	onMount(() => {
-		const root = document.querySelector(rootSelector);
-		if (!root) return;
-		anchors = Array.from(root.querySelectorAll<HTMLAnchorElement>("a[href]"));
-
-		const handleEnter = (ev: MouseEvent) => {
-			const target = ev.currentTarget as HTMLAnchorElement;
-			const originalHref = target.getAttribute("href") ?? "";
-
-			console.log("=== 悬停链接调试 ===");
-			console.log("1. 原始 href:", originalHref);
-
-			let slug = originalHref
-				.replace(/^\//, "")
-				.replace(/\/$/, "")
-				.split("#")[0];
-
-			console.log("2. 移除前后斜杠和锚点后:", slug);
-
-			// Remove /posts/ prefix if exists
-			slug = slug.replace(/^posts\//, "");
-
-			console.log("3. 移除 /posts/ 前缀后:", slug);
-			console.log("4. metaMap 中的所有键:", Object.keys(metaMap));
-
-			const meta = metaMap[slug];
-			console.log("5. 查找到的 meta:", meta);
-
-			if (!meta) {
-				console.log("❌ 未找到匹配的文章元数据");
-				return;
-			}
-
-			console.log("6. 设置 hover 状态:", { slug, title: meta.title });
-
-			// 获取链接元素的位置
-			const rect = target.getBoundingClientRect();
-
-			// 默认显示在链接下方，左对齐
-			let x = rect.left;
-			let y = rect.bottom + 8; // 链接下方 8px
-
-			// 检查右侧空间是否足够
-			const rightSpace = window.innerWidth - rect.left;
-			if (rightSpace < previewWidth + 40) {
-				// 右侧空间不足，尝试右对齐到链接右边
-				x = rect.right - previewWidth;
-				// 如果还是超出左边界，就贴着右边界显示
-				if (x < 20) {
-					x = window.innerWidth - previewWidth - 20;
-				}
-			}
-
-			// 检查下方空间是否足够
-			const bottomSpace = window.innerHeight - rect.bottom;
-			if (bottomSpace < previewHeight + 40) {
-				// 下方空间不足，显示在链接上方
-				y = rect.top - previewHeight - 8;
-			}
-
-			// 最终确保不会超出屏幕边界
-			x = Math.max(20, Math.min(x, window.innerWidth - previewWidth - 20));
-			y = Math.max(20, Math.min(y, window.innerHeight - previewHeight - 20));
-
-			console.log("7. 最终位置:", { x, y, linkLeft: rect.left, linkRight: rect.right, windowWidth: window.innerWidth, previewWidth });
-
-			hover = { x, y, slug, meta };
-		};
-
-		const handleMove = () => {
-			// 预览窗口不再跟随鼠标移动
-			return;
-		};
-
-		const handleLeave = () => {
-			if (!isResizing) {
-				hover = null;
-			}
-		};
-
-		anchors.forEach((a) => {
-			a.addEventListener("mouseenter", handleEnter);
-			a.addEventListener("mousemove", handleMove);
-			a.addEventListener("mouseleave", handleLeave);
-		});
-
-		onDestroy(() => {
-			anchors.forEach((a) => {
-				a.removeEventListener("mouseenter", handleEnter);
-				a.removeEventListener("mousemove", handleMove);
-				a.removeEventListener("mouseleave", handleLeave);
-			});
-		});
+	anchors.forEach((a) => {
+		a.addEventListener("mouseenter", handleEnter);
+		a.addEventListener("mousemove", handleMove);
+		a.addEventListener("mouseleave", handleLeave);
 	});
 
-	function startResize(e: MouseEvent) {
-		isResizing = true;
-		resizeStartX = e.clientX;
-		resizeStartY = e.clientY;
-		startWidth = previewWidth;
-		startHeight = previewHeight;
-		e.preventDefault();
+	onDestroy(() => {
+		anchors.forEach((a) => {
+			a.removeEventListener("mouseenter", handleEnter);
+			a.removeEventListener("mousemove", handleMove);
+			a.removeEventListener("mouseleave", handleLeave);
+		});
+	});
+});
 
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!isResizing) return;
-			const deltaX = e.clientX - resizeStartX;
-			const deltaY = e.clientY - resizeStartY;
-			previewWidth = Math.max(300, Math.min(800, startWidth + deltaX));
-			previewHeight = Math.max(200, Math.min(600, startHeight + deltaY));
-		};
+function startResize(e: MouseEvent) {
+	isResizing = true;
+	resizeStartX = e.clientX;
+	resizeStartY = e.clientY;
+	startWidth = previewWidth;
+	startHeight = previewHeight;
+	e.preventDefault();
 
-		const handleMouseUp = () => {
-			isResizing = false;
-			document.removeEventListener("mousemove", handleMouseMove);
-			document.removeEventListener("mouseup", handleMouseUp);
-		};
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!isResizing) return;
+		const deltaX = e.clientX - resizeStartX;
+		const deltaY = e.clientY - resizeStartY;
+		previewWidth = Math.max(300, Math.min(800, startWidth + deltaX));
+		previewHeight = Math.max(200, Math.min(600, startHeight + deltaY));
+	};
 
-		document.addEventListener("mousemove", handleMouseMove);
-		document.addEventListener("mouseup", handleMouseUp);
-	}
+	const handleMouseUp = () => {
+		isResizing = false;
+		document.removeEventListener("mousemove", handleMouseMove);
+		document.removeEventListener("mouseup", handleMouseUp);
+	};
 
-	function closePreview() {
-		hover = null;
-	}
+	document.addEventListener("mousemove", handleMouseMove);
+	document.addEventListener("mouseup", handleMouseUp);
+}
+
+function closePreview() {
+	hover = null;
+}
 </script>
 
 {#if hover}

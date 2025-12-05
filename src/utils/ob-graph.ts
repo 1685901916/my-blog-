@@ -2,7 +2,11 @@ import { getCollection } from "astro:content";
 import type { GraphData, GraphEdge, GraphNode, ObNote } from "@/types/ob";
 
 // Re-export client-side functions
-export { filterGraph, buildNoteMetaMap, findBacklinks } from "./ob-graph-client";
+export {
+	buildNoteMetaMap,
+	filterGraph,
+	findBacklinks,
+} from "./ob-graph-client";
 
 const collections = [
 	"posts",
@@ -15,10 +19,7 @@ const collections = [
 const linkToken = /\[\[([^\]]+)\]\]/g;
 
 const normalizeId = (value: string) =>
-	value
-		.trim()
-		.toLowerCase()
-		.replace(/\s+/g, "-");
+	value.trim().toLowerCase().replace(/\s+/g, "-");
 
 const extractLinksFromBody = (body: string): string[] => {
 	const found: string[] = [];
@@ -35,7 +36,10 @@ type GenericEntry = {
 	render?: () => Promise<any>;
 };
 
-export async function buildGraphData(): Promise<{ graph: GraphData; notes: ObNote[] }> {
+export async function buildGraphData(): Promise<{
+	graph: GraphData;
+	notes: ObNote[];
+}> {
 	const notes: ObNote[] = [];
 	const aliasMap = new Map<string, string>();
 
@@ -44,9 +48,8 @@ export async function buildGraphData(): Promise<{ graph: GraphData; notes: ObNot
 	const tagSet = new Set<string>();
 
 	for (const name of collections) {
-		const entries = (await getCollection(
-			name as any,
-			({ data }) => (import.meta.env.PROD ? data.draft !== true : true),
+		const entries = (await getCollection(name as any, ({ data }) =>
+			import.meta.env.PROD ? data.draft !== true : true,
 		)) as unknown as GenericEntry[];
 
 		for (const entry of entries) {
@@ -56,12 +59,18 @@ export async function buildGraphData(): Promise<{ graph: GraphData; notes: ObNot
 			const note: ObNote = {
 				slug,
 				title: (entry as any).data?.title,
-				excerpt: (entry as any).data?.excerpt || (entry as any).data?.description || "",
+				excerpt:
+					(entry as any).data?.excerpt ||
+					(entry as any).data?.description ||
+					"",
 				tags: (entry as any).data?.tags ?? [],
 				props: (entry as any).data?.props ?? {},
 				links: (entry as any).data?.links ?? [],
 				aliases: (entry as any).data?.aliases ?? [],
-				showOnHome: (entry as any).data?.showOnHome ?? (entry as any).data?.showOnHomepage ?? true,
+				showOnHome:
+					(entry as any).data?.showOnHome ??
+					(entry as any).data?.showOnHomepage ??
+					true,
 			};
 
 			notes.push(note);

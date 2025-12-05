@@ -23,7 +23,9 @@ export interface EntertainmentCategory {
 	articles: EntertainmentArticle[];
 }
 
-export async function scanEntertainmentCategories(): Promise<EntertainmentCategory[]> {
+export async function scanEntertainmentCategories(): Promise<
+	EntertainmentCategory[]
+> {
 	const categoriesDir = path.join(
 		process.cwd(),
 		"src/content/entertainment-resources",
@@ -91,23 +93,25 @@ async function scanStandaloneEntertainment(): Promise<EntertainmentArticle[]> {
 					continue;
 				}
 
-			const slug = `entertainment-standalone-${file.name.replace(".md", "")}`;
+				const slug = `entertainment-standalone-${file.name.replace(".md", "")}`;
 
-			// 计算正文字数（排除 front matter）
-			const content = fileContent.replace(/^---\s*\n[\s\S]*?\n---/, "").trim();
-			const words = content.length;
+				// 计算正文字数（排除 front matter）
+				const content = fileContent
+					.replace(/^---\s*\n[\s\S]*?\n---/, "")
+					.trim();
+				const words = content.length;
 
-			articles.push({
-				id: file.name.replace(".md", ""),
-				title: data.title || file.name.replace(".md", ""),
-				description: data.description || "",
-				image: data.image || "",
-				tags: data.tags || [],
-				category: data.category || "娱乐资源",
-				published: data.published ? new Date(data.published) : new Date(),
-				slug,
-				words,
-			});
+				articles.push({
+					id: file.name.replace(".md", ""),
+					title: data.title || file.name.replace(".md", ""),
+					description: data.description || "",
+					image: data.image || "",
+					tags: data.tags || [],
+					category: data.category || "娱乐资源",
+					published: data.published ? new Date(data.published) : new Date(),
+					slug,
+					words,
+				});
 			} catch (e) {
 				console.error(`解析独立文章 ${file.name} 失败:`, e);
 			}
@@ -160,7 +164,10 @@ async function processCategoryFolder(
 	};
 }
 
-function scanArticles(folderPath: string, categoryId: string): EntertainmentArticle[] {
+function scanArticles(
+	folderPath: string,
+	categoryId: string,
+): EntertainmentArticle[] {
 	const articles: EntertainmentArticle[] = [];
 	const files = fs.readdirSync(folderPath);
 
@@ -213,7 +220,3 @@ function scanArticles(folderPath: string, categoryId: string): EntertainmentArti
 	// 按发布日期倒序排序
 	return articles.sort((a, b) => b.published.getTime() - a.published.getTime());
 }
-
-
-
-

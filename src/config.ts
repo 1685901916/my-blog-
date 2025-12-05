@@ -96,7 +96,6 @@ export const siteConfig: SiteConfig = {
 		showModeSwitchOnMobile: "desktop",
 	},
 
-
 	banner: {
 		enable: true, // 是否启动Banner壁纸模式
 

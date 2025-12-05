@@ -1,1 +1,5 @@
-{"title":"Sample Category","description":"Placeholder story under the sample category.","order":1}
+{
+	"title": "Sample Category",
+	"description": "Placeholder story under the sample category.",
+	"order": 1
+}

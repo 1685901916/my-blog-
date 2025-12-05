@@ -64,9 +64,8 @@ export class AnimationManager {
 		this.isAnimating = true;
 		document.documentElement.classList.add("is-leaving");
 
-		// 移动端优化：减少动画延迟，避免闪烁
-		const isMobile = window.innerWidth <= 768;
-		const delay = isMobile ? 10 : 30;
+		// 统一延迟为 0，让 CSS 过渡接管
+		const delay = 0;
 
 		// 添加离开动画类到主要元素
 		const mainElements = document.querySelectorAll(".transition-leaving");
@@ -114,7 +113,7 @@ export class AnimationManager {
 
 			setTimeout(() => {
 				htmlElement.style.transition =
-					"opacity 320ms cubic-bezier(0.4, 0, 0.2, 1), transform 320ms cubic-bezier(0.4, 0, 0.2, 1)";
+					"opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)";
 				htmlElement.style.opacity = "1";
 				htmlElement.style.transform = "translateY(0)";
 			}, delay);

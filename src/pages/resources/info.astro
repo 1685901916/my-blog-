@@ -4,7 +4,10 @@ import PostCard from "@components/PostCard.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { sidebarLayoutConfig, siteConfig } from "../../config";
 
-const allPosts = await getCollection("posts", ({ data }) => data.draft !== true);
+const allPosts = await getCollection(
+	"posts",
+	({ data }) => data.draft !== true,
+);
 
 const infoPosts = allPosts
 	.filter((post) => post.data.category === "实用信息")

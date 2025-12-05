@@ -1,98 +1,118 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { forceCenter, forceLink, forceManyBody, forceSimulation } from "d3-force";
-	import type { GraphData, GraphNode } from "@/types/ob";
+import {
+	forceCenter,
+	forceLink,
+	forceManyBody,
+	forceSimulation,
+} from "d3-force";
+import { onMount } from "svelte";
+import type { GraphData, GraphNode } from "@/types/ob";
 
-	export let data: GraphData;
-	export let noteMeta: Record<
-		string,
-		{
-			title: string;
-			excerpt?: string;
-			tags?: string[];
-			props?: Record<string, string>;
-			slug?: string;
-		}
-	> = {};
-	export let currentSlug: string | undefined = undefined;
-
-	type PositionNode = GraphNode & { x: number; y: number; vx?: number; vy?: number };
-
-	let nodes: PositionNode[] = [];
-	let hoverId: string | null = null;
-	let transform = { x: 0, y: 0, scale: 1 };
-	let panState = { dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
-
-	onMount(() => {
-		runSimulation(data);
-	});
-
-	$: runSimulation(data);
-
-	function runSimulation(graph: GraphData) {
-		if (!graph || graph.nodes.length === 0) {
-			nodes = [];
-			return;
-		}
-		const n: PositionNode[] = graph.nodes.map((node) => ({
-			...node,
-			x: (Math.random() - 0.5) * 200,
-			y: (Math.random() - 0.5) * 200,
-		}));
-		const links = graph.edges.map((edge) => ({ ...edge }));
-
-		const sim = forceSimulation(n)
-			.force(
-				"link",
-				forceLink(links)
-					.id((d: any) => d.id)
-					.distance((d) => (d.kind === "tag" ? 60 : 90))
-					.strength(0.4),
-			)
-			.force("charge", forceManyBody().strength(-180))
-			.force("center", forceCenter(0, 0));
-
-		for (let i = 0; i < 200; i++) sim.tick();
-		sim.stop();
-		nodes = [...n];
+export let data: GraphData;
+export let noteMeta: Record<
+	string,
+	{
+		title: string;
+		excerpt?: string;
+		tags?: string[];
+		props?: Record<string, string>;
+		slug?: string;
 	}
+> = {};
+export let currentSlug: string | undefined = undefined;
 
-	const handleWheel = (ev: WheelEvent) => {
-		const delta = ev.deltaY > 0 ? -0.1 : 0.1;
-		const nextScale = Math.min(2.2, Math.max(0.5, transform.scale + delta));
-		transform = { ...transform, scale: nextScale };
+type PositionNode = GraphNode & {
+	x: number;
+	y: number;
+	vx?: number;
+	vy?: number;
+};
+
+let nodes: PositionNode[] = [];
+let hoverId: string | null = null;
+let transform = { x: 0, y: 0, scale: 1 };
+let panState = {
+	dragging: false,
+	startX: 0,
+	startY: 0,
+	originX: 0,
+	originY: 0,
+};
+
+onMount(() => {
+	runSimulation(data);
+});
+
+$: runSimulation(data);
+
+function runSimulation(graph: GraphData) {
+	if (!graph || graph.nodes.length === 0) {
+		nodes = [];
+		return;
+	}
+	const n: PositionNode[] = graph.nodes.map((node) => ({
+		...node,
+		x: (Math.random() - 0.5) * 200,
+		y: (Math.random() - 0.5) * 200,
+	}));
+	const links = graph.edges.map((edge) => ({ ...edge }));
+
+	const sim = forceSimulation(n)
+		.force(
+			"link",
+			forceLink(links)
+				.id((d: any) => d.id)
+				.distance((d) => (d.kind === "tag" ? 60 : 90))
+				.strength(0.4),
+		)
+		.force("charge", forceManyBody().strength(-180))
+		.force("center", forceCenter(0, 0));
+
+	for (let i = 0; i < 200; i++) sim.tick();
+	sim.stop();
+	nodes = [...n];
+}
+
+const handleWheel = (ev: WheelEvent) => {
+	const delta = ev.deltaY > 0 ? -0.1 : 0.1;
+	const nextScale = Math.min(2.2, Math.max(0.5, transform.scale + delta));
+	transform = { ...transform, scale: nextScale };
+};
+
+const beginPan = (ev: MouseEvent) => {
+	panState = {
+		dragging: true,
+		startX: ev.clientX,
+		startY: ev.clientY,
+		originX: transform.x,
+		originY: transform.y,
 	};
+	window.addEventListener("mousemove", movePan);
+	window.addEventListener("mouseup", endPan);
+};
 
-	const beginPan = (ev: MouseEvent) => {
-		panState = {
-			dragging: true,
-			startX: ev.clientX,
-			startY: ev.clientY,
-			originX: transform.x,
-			originY: transform.y,
-		};
-		window.addEventListener("mousemove", movePan);
-		window.addEventListener("mouseup", endPan);
+const movePan = (ev: MouseEvent) => {
+	if (!panState.dragging) return;
+	const dx = ev.clientX - panState.startX;
+	const dy = ev.clientY - panState.startY;
+	transform = {
+		...transform,
+		x: panState.originX + dx,
+		y: panState.originY + dy,
 	};
+};
 
-	const movePan = (ev: MouseEvent) => {
-		if (!panState.dragging) return;
-		const dx = ev.clientX - panState.startX;
-		const dy = ev.clientY - panState.startY;
-		transform = { ...transform, x: panState.originX + dx, y: panState.originY + dy };
-	};
+const endPan = () => {
+	panState.dragging = false;
+	window.removeEventListener("mousemove", movePan);
+	window.removeEventListener("mouseup", endPan);
+};
 
-	const endPan = () => {
-		panState.dragging = false;
-		window.removeEventListener("mousemove", movePan);
-		window.removeEventListener("mouseup", endPan);
-	};
+const handleNodeActivate = (slug?: string) => {
+	if (slug) window.location.href = `/${slug}`;
+};
 
-	const handleNodeActivate = (slug?: string) => {
-		if (slug) window.location.href = `/${slug}`;
-	};
-
-	$: hovered = hoverId ? noteMeta[hoverId] : undefined;
+$: hovered = hoverId ? noteMeta[hoverId] : undefined;
 </script>
 
 <div class="card-base p-4 space-y-3">

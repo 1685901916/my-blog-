@@ -60,12 +60,12 @@ let currentSong = {
 };
 
 type Song = {
-    id: number;
-    title: string;
-    artist: string;
-    cover: string;
-    url: string;
-    duration: number;
+	id: number;
+	title: string;
+	artist: string;
+	cover: string;
+	url: string;
+	duration: number;
 };
 
 let playlist: Song[] = [];
