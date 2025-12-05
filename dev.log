@@ -1,0 +1,33 @@
+
+> mizuki@7.1.0 dev
+> astro dev --host --port 4321
+
+22:08:39 [types] Generated 3ms
+22:08:52 [content] Syncing content
+22:08:52 [WARN] [glob-loader] No files found matching "**/*.md,!**/_*/**/*.md,!**/_*.md" in directory "src\content\manga"
+22:08:52 [WARN] [glob-loader] No files found matching "**/*.md,!**/_*/**/*.md,!**/_*.md" in directory "src\content\manga-categories"
+22:08:52 [content] Synced content
+
+ astro  v5.14.6 ready in 18999 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  http://169.254.125.97:4321/
+           http://169.254.163.218:4321/
+           http://192.168.56.1:4321/
+           http://192.168.160.1:4321/
+           http://192.168.37.1:4321/
+           http://192.168.1.172:4321/
+
+22:08:52 watching for file changes...
+The collection "manga" does not exist or is empty. Please check your content config file for errors.
+The collection "manga-categories" does not exist or is empty. Please check your content config file for errors.
+娱乐资源分类 娓告垙璧勬簮 缺少 info.json 文件
+娱乐资源分类 婕敾璧勬簮 缺少 info.json 文件
+娱乐资源分类 灏忚璧勬簮 缺少 info.json 文件
+娱乐资源分类 鍔ㄦ极璧勬簮 缺少 info.json 文件
+22:09:05 [200] /posts/ai-coding-agents-guide/ 4063ms
+22:09:05 [200] /resources/entertainment/ 300ms
+22:09:09 [200] / 104ms
+22:09:24 [200] /portfolio/programming/blog-system/ 50ms
+22:11:19 [200] /portfolio/programming/ 62ms
+22:23:43 [200] /portfolio/programming/ 36ms

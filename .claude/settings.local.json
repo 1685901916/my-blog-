@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(echo:*)",
+      "Bash(npm run build:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(timeout 8 bash:*)",
+      "Bash(ipconfig:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c taskkill /PID 4860 /F)",
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "Bash(wc:*)",
+      "Bash(if [ -d .git ])",
+      "Bash(then echo \"Git repository exists\")",
+      "Bash(else echo \"Not a git repository\")",
+      "Bash(fi)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

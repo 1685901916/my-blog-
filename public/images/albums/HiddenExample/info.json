@@ -1,0 +1,15 @@
+{
+  "hidden": true,
+  "title": "Hidden Example",
+  "description": "Hidden album placeholder (hidden=true), kept for build checks.",
+  "date": "2025-08-28",
+  "location": "Test",
+  "tags": [
+    "hidden",
+    "placeholder"
+  ],
+  "layout": "grid",
+  "columns": 3,
+  "mode": "external",
+  "cover": "/images/albums/AcgExample/cover.jpg"
+}

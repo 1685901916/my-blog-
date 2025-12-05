@@ -1,0 +1,194 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "@components/PostCard.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getPostUrlBySlug } from "@utils/url-utils";
+import type { GetStaticPaths } from "astro";
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "../../../../config";
+
+export const getStaticPaths = (async () => {
+	const entertainmentEntries = await getCollection(
+		"entertainment-resources",
+		({ data }) => data.draft !== true,
+	);
+
+	// 按分类分组
+	const categoriesMap = new Map<string, any[]>();
+	for (const entry of entertainmentEntries) {
+		const categoryId = entry.slug.split("/")[0];
+		if (!categoriesMap.has(categoryId)) {
+			categoriesMap.set(categoryId, []);
+		}
+		categoriesMap.get(categoryId)?.push(entry);
+	}
+
+	// 生成路径
+	return Array.from(categoriesMap.entries()).map(([categoryId, entries]) => ({
+		params: { category: categoryId },
+		props: {
+			categoryId,
+			categoryTitle: categoryId,
+			entries: entries.sort(
+				(a, b) => b.data.published.getTime() - a.data.published.getTime(),
+			),
+		},
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	categoryId: string;
+	categoryTitle: string;
+	entries: any[];
+}
+
+const { categoryId, categoryTitle, entries } = Astro.props;
+
+if (!entries || entries.length === 0) {
+	return Astro.redirect("/404/");
+}
+
+// 根据配置设置初始布局模式
+const defaultLayout = siteConfig.postListLayout.defaultMode || "list";
+const initialLayoutClass =
+	defaultLayout === "grid"
+		? "grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 grid-mode"
+		: "flex flex-col gap-2 md:gap-4 list-mode";
+
+let delay = 0;
+const interval = 50;
+---
+
+<MainGridLayout banner={undefined} title={categoryTitle}>
+	<!-- 返回按钮 -->
+	<div class="mb-4">
+		<a
+			href="/resources/entertainment/"
+			class="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-[var(--primary)] transition-colors"
+		>
+			<Icon name="material-symbols:arrow-back" class="w-5 h-5" />
+			返回娱乐资源列表
+		</a>
+	</div>
+
+	<!-- 文章列表 -->
+	<div
+		id="post-list-container"
+		class={`transition-all duration-500 ease-in-out rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent mb-4 ${initialLayoutClass}`}
+		data-default-layout={defaultLayout}
+	>
+		{entries.map((entry) => (
+			<PostCard
+				entry={entry}
+				title={entry.data.title}
+				tags={entry.data.tags}
+				category={entry.data.category}
+				published={entry.data.published}
+				updated={entry.data.updated}
+				url={getPostUrlBySlug(entry.slug, "entertainment-resources")}
+				image={entry.data.image}
+				description={entry.data.description}
+				draft={entry.data.draft}
+				pinned={entry.data.pinned}
+				class:list="onload-animation"
+				style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+			></PostCard>
+		))}
+	</div>
+</MainGridLayout>
+
+<script>
+	function updatePostListLayout(layout: string) {
+		const postListContainer = document.getElementById("post-list-container");
+		if (!postListContainer) return;
+
+		// 添加切换动画类
+		postListContainer.classList.add("layout-switching");
+
+		// 移除现有布局类
+		postListContainer.classList.remove("list-mode", "grid-mode");
+
+		// 添加新布局类
+		if (layout === "grid") {
+			postListContainer.classList.add("grid-mode");
+			// 网格模式：双列布局
+			postListContainer.classList.add("grid", "grid-cols-1", "md:grid-cols-2");
+			postListContainer.classList.remove("flex", "flex-col");
+
+			// 在 grid 模式下隐藏右侧边栏
+			const rightSidebar = document.querySelector('.right-sidebar-container');
+			if (rightSidebar) {
+				(rightSidebar as HTMLElement).classList.add('hidden-in-grid-mode');
+			}
+
+			// 调整主网格布局以使用更多空间
+			const mainGrid = document.getElementById('main-grid');
+			if (mainGrid) {
+				mainGrid.setAttribute('data-layout-mode', 'grid');
+			}
+		} else {
+			postListContainer.classList.add("list-mode");
+			// 列表模式：单列布局
+			postListContainer.classList.add("flex", "flex-col");
+			postListContainer.classList.remove("grid", "grid-cols-1", "md:grid-cols-2");
+
+			// 在 list 模式下显示右侧边栏
+			const rightSidebar = document.querySelector('.right-sidebar-container');
+			if (rightSidebar) {
+				(rightSidebar as HTMLElement).classList.remove('hidden-in-grid-mode');
+			}
+
+			// 恢复主网格布局
+			const mainGrid = document.getElementById('main-grid');
+			if (mainGrid) {
+				mainGrid.setAttribute('data-layout-mode', 'list');
+			}
+		}
+
+		// 添加初始化完成标记
+		postListContainer.classList.add("js-initialized");
+
+		// 移除切换动画类
+		setTimeout(() => {
+			postListContainer.classList.remove("layout-switching");
+		}, 500);
+	}
+
+	// 页面加载时初始化布局
+	function initLayout() {
+		setTimeout(() => {
+			const postListContainer = document.getElementById("post-list-container");
+			if (!postListContainer) return;
+
+			// 从localStorage读取用户偏好
+			const savedLayout = localStorage.getItem("postListLayout");
+			const defaultLayout = postListContainer.getAttribute("data-default-layout") || "list";
+			const currentLayout = savedLayout || defaultLayout;
+
+			// 移动端由CSS处理，桌面端才需要JavaScript初始化
+			const isDesktop = window.innerWidth >= 769;
+			if (isDesktop) {
+				updatePostListLayout(currentLayout);
+			} else {
+				// 移动端：只添加初始化标记
+				postListContainer.classList.add("js-initialized");
+			}
+		}, 50);
+	}
+
+	// 监听布局变化事件
+	window.addEventListener("layoutChange", (event: any) => {
+		const postListContainer = document.getElementById("post-list-container");
+		if (!postListContainer) return;
+
+		// 直接应用用户选择的布局
+		updatePostListLayout(event.detail.layout);
+	});
+
+	// 初始化
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initLayout);
+	} else {
+		initLayout();
+	}
+</script>

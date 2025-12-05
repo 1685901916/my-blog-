@@ -1,0 +1,112 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "@components/PostCard.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { sidebarLayoutConfig, siteConfig } from "../../config";
+
+const allPosts = await getCollection("posts", ({ data }) => data.draft !== true);
+
+const infoPosts = allPosts
+	.filter((post) => post.data.category === "实用信息")
+	.sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+
+const isBothSidebars = sidebarLayoutConfig.position === "both";
+const defaultLayout = siteConfig.postListLayout.defaultMode || "list";
+const initialLayoutClass =
+	defaultLayout === "grid"
+		? "grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 grid-mode"
+		: "flex flex-col gap-2 md:gap-4 list-mode";
+
+let delay = 0;
+const interval = 50;
+---
+
+<MainGridLayout banner={undefined} title="实用信息">
+	<div
+		id="post-list-container"
+		class={`transition-all duration-500 ease-in-out rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent mb-4 ${initialLayoutClass}`}
+		data-default-layout={defaultLayout}
+		data-both-sidebars={isBothSidebars}
+	>
+		{infoPosts.map((entry) => (
+			<PostCard
+				entry={entry}
+				title={entry.data.title}
+				tags={entry.data.tags}
+				category={entry.data.category}
+				published={entry.data.published}
+				updated={entry.data.updated}
+				url={`/posts/${entry.slug}/`}
+				image={entry.data.image}
+				description={entry.data.description}
+				draft={entry.data.draft}
+				pinned={entry.data.pinned}
+				class:list="onload-animation"
+				style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+			/>
+		))}
+
+		{infoPosts.length === 0 && (
+			<div class="card-base px-8 py-12 text-center text-neutral-600 dark:text-neutral-300">
+				暂时没有“实用信息”文章，稍后再来看看~
+			</div>
+		)}
+	</div>
+</MainGridLayout>
+
+<script>
+	function updateLayout(layout) {
+		const container = document.getElementById("post-list-container");
+		if (!container) return;
+
+		container.classList.add("layout-switching");
+		container.classList.remove("list-mode", "grid-mode");
+
+		if (layout === "grid") {
+			container.classList.add("grid-mode");
+			container.classList.add("grid", "grid-cols-1", "md:grid-cols-2");
+			container.classList.remove("flex", "flex-col");
+
+			document.querySelector(".right-sidebar-container")?.classList.add("hidden-in-grid-mode");
+			document.getElementById("main-grid")?.setAttribute("data-layout-mode", "grid");
+		} else {
+			container.classList.add("list-mode");
+			container.classList.add("flex", "flex-col");
+			container.classList.remove("grid", "grid-cols-1", "md:grid-cols-2");
+
+			document.querySelector(".right-sidebar-container")?.classList.remove("hidden-in-grid-mode");
+			document.getElementById("main-grid")?.setAttribute("data-layout-mode", "list");
+		}
+
+		setTimeout(() => container.classList.remove("layout-switching"), 500);
+	}
+
+	function initLayout() {
+		setTimeout(() => {
+			const container = document.getElementById("post-list-container");
+			if (!container) return;
+			const saved = localStorage.getItem("postListLayout");
+			const defaultLayout = container.getAttribute("data-default-layout") || "list";
+			const current = saved || defaultLayout;
+
+			if (window.innerWidth >= 769) {
+				updateLayout(current);
+			} else {
+				container.classList.add("js-initialized");
+			}
+		}, 50);
+	}
+
+	window.addEventListener("layoutChange", (event) => {
+		const mode = event.detail?.layout;
+		if (mode === "grid" || mode === "list") {
+			updateLayout(mode);
+		}
+	});
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initLayout);
+	} else {
+		initLayout();
+	}
+</script>

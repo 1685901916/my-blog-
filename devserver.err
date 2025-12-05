@@ -1,0 +1,40 @@
+
+> mizuki@7.1.0 dev
+> astro dev --host 0.0.0.0 --port 4323 --strictPort
+
+[2m09:17:30[22m [34m[types][39m Generated [2m6ms[22m
+[2m09:18:07[22m [34m[content][39m Syncing content
+[2m09:18:07[22m [34m[content][39m Synced content
+
+[42m[1m astro [22m[49m [32mv5.15.8[39m [2mready in[22m 47946 [2mms[22m
+
+[2m┃[22m Local    [36mhttp://localhost:4323/[39m
+[2m┃[22m Network  [36mhttp://172.18.0.1:4323/[39m
+           [36mhttp://169.254.125.97:4323/[39m
+           [36mhttp://169.254.163.218:4323/[39m
+           [36mhttp://192.168.56.1:4323/[39m
+           [36mhttp://192.168.160.1:4323/[39m
+           [36mhttp://192.168.37.1:4323/[39m
+           [36mhttp://192.168.110.76:4323/[39m
+
+[2m09:18:07[22m [32mwatching for file changes...[39m
+[2m09:19:28[22m [34m[200][39m / [2m8002ms[22m
+[2m09:19:35[22m [34m[200][39m [34mHEAD[39m / [2m78ms[22m
+[2m09:20:15[22m [34m[200][39m [34mHEAD[39m /resources/entertainment/ [2m103ms[22m
+[2m09:21:21[22m [34m[200][39m /portfolio/normal/ [2m84ms[22m
+[2m09:21:26[22m [34m[200][39m / [2m72ms[22m
+[2m09:21:30[22m [34m[200][39m /resources/entertainment/ [2m69ms[22m
+[2m09:21:37[22m [34m[200][39m /resources/entertainment/ [2m76ms[22m
+[2m09:21:43[22m [34m[200][39m /resources/entertainment/漫画资源/ [2m224ms[22m
+[2m09:21:45[22m [34m[200][39m / [2m83ms[22m
+[2m09:21:48[22m [34m[200][39m /2/ [2m80ms[22m
+[2m09:22:25[22m [34m[200][39m / [2m87ms[22m
+[2m09:22:30[22m [34m[200][39m /resources/entertainment/ [2m97ms[22m
+[2m09:22:57[22m [34m[200][39m /resources/entertainment/漫画资源/ [2m74ms[22m
+[2m09:23:00[22m [34m[200][39m / [2m71ms[22m
+[2m09:23:06[22m [34m[200][39m /resources/utility/ [2m76ms[22m
+[2m09:25:08[22m [34m[200][39m /about/ [2m79ms[22m
+[2m09:29:17[22m [34m[watch][39m src/config.ts
+[2m09:29:17[22m [34m[watch][39m src/config.ts
+[2m09:29:20[22m [34m[200][39m /about/ [2m1079ms[22m
+[2m09:29:48[22m [34m[watch][39m src/pages/resources/info.astro

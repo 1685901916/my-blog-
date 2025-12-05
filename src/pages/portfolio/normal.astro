@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import PostPage from "../../components/PostPage.astro";
+
+// 获取带有"正常系"标签的作品集文章
+const portfolioArticles = await getCollection("portfolio", ({ data }) => {
+	const isProd = import.meta.env.PROD;
+	const isNotDraft = data.draft !== true;
+	const hasNormalTag = data.tags && data.tags.includes("正常系");
+	return isProd ? isNotDraft && hasNormalTag : hasNormalTag;
+});
+
+// 构造与主页相同的 page 对象结构
+const page = {
+	data: portfolioArticles,
+	url: {
+		current: "/portfolio/normal",
+		prev: undefined,
+		next: undefined,
+	},
+	start: 0,
+	end: portfolioArticles.length - 1,
+	size: portfolioArticles.length,
+	total: portfolioArticles.length,
+	currentPage: 1,
+	lastPage: 1,
+};
+---
+
+<MainGridLayout banner={undefined} title="正常系">
+    <PostPage page={page}></PostPage>
+</MainGridLayout>

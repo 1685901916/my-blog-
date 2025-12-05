@@ -1,0 +1,326 @@
+
+> mizuki@7.1.0 dev
+> astro dev --host --port 4322
+
+[2m20:12:22[22m [34m[types][39m Generated [2m3ms[22m
+[2m20:12:41[22m [34m[content][39m Syncing content
+[2m20:12:42[22m [34m[content][39m Synced content
+[2m20:12:42[22m [34m[vite][39m Forced re-optimization of dependencies
+
+[42m[1m astro [22m[49m [32mv5.15.8[39m [2mready in[22m 24156 [2mms[22m
+
+[2m┃[22m Local    [36mhttp://localhost:4322/[39m
+[2m┃[22m Network  [36mhttp://169.254.125.97:4322/[39m
+           [36mhttp://169.254.163.218:4322/[39m
+           [36mhttp://192.168.56.1:4322/[39m
+           [36mhttp://192.168.84.126:4322/[39m
+           [36mhttp://192.168.160.1:4322/[39m
+           [36mhttp://192.168.37.1:4322/[39m
+
+[2m20:12:42[22m [32mwatching for file changes...[39m
+[2m20:13:55[22m [34m[200][39m /2/ [2m4991ms[22m
+[2m20:13:57[22m [34m[vite][39m [32m✨ new dependencies optimized: [33m@swup/astro/serialise, @swup/astro/idle, @swup/astro/client/Swup, @swup/astro/client/SwupA11yPlugin, @swup/astro/client/SwupHeadPlugin, @swup/astro/client/SwupScriptsPlugin[32m[39m
+[2m20:13:57[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[2m20:14:12[22m [34m[200][39m /2/ [2m132ms[22m
+[2m20:14:18[22m [34m[200][39m / [2m43ms[22m
+[2m20:16:44[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:18:28[22m [34m[200][39m / [2m614ms[22m
+[2m20:18:28[22m [34m[200][39m / [2m60ms[22m
+[2m20:22:32[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:22:46[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:22:55[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:23:03[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:23:25[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:24:04[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:27:49[22m [34m[200][39m / [2m543ms[22m
+[2m20:27:49[22m [34m[200][39m / [2m52ms[22m
+[2m20:29:52[22m [34m[200][39m / [2m39ms[22m
+[2m20:29:56[22m [34m[200][39m / [2m38ms[22m
+[2m20:32:36[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:33:09[22m [34m[200][39m / [2m604ms[22m
+[2m20:33:10[22m [34m[200][39m / [2m31ms[22m
+[2m20:35:05[22m [34m[200][39m / [2m35ms[22m
+[2m20:35:18[22m [34m[200][39m /resources/entertainment/ [2m72ms[22m
+[2m20:35:19[22m [34m[200][39m /resources/utility/ [2m41ms[22m
+[2m20:36:28[22m [34m[200][39m / [2m57ms[22m
+[2m20:39:19[22m [34m[watch][39m src/layouts/MainGridLayout.astro
+[2m20:39:21[22m [34m[200][39m / [2m760ms[22m
+[2m20:40:21[22m [34m[200][39m / [2m41ms[22m
+[2m20:40:29[22m [34m[200][39m /posts/wiki-link-test-a/ [2m37ms[22m
+[2m20:40:32[22m [34m[200][39m /posts/wiki-link-test-b/ [2m31ms[22m
+[2m20:41:52[22m [34m[200][39m /about/ [2m36ms[22m
+[2m20:43:13[22m [34m[200][39m /posts/wiki-link-test-a/ [2m34ms[22m
+[2m20:43:33[22m [34m[200][39m /posts/keion-girls/ [2m33ms[22m
+[2m20:43:36[22m [34m[200][39m /posts/wiki-link-test-a/ [2m27ms[22m
+[2m20:43:39[22m [34m[200][39m /posts/wiki-link-test-b/ [2m33ms[22m
+[2m20:43:44[22m [34m[200][39m / [2m33ms[22m
+[2m20:43:45[22m [34m[200][39m /2/ [2m32ms[22m
+[2m20:43:47[22m [34m[200][39m /2/ [2m31ms[22m
+[2m20:43:50[22m [34m[200][39m /2/ [2m29ms[22m
+[2m20:44:41[22m [34m[200][39m /portfolio/programming/bilinote/ [2m32ms[22m
+[2m20:45:43[22m [34m[200][39m /portfolio/programming/bilinote/ [2m35ms[22m
+[2m20:46:43[22m [34m[200][39m / [2m41ms[22m
+[2m20:49:53[22m [34m[watch][39m /src/components/MobileTOC.svelte, /node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css
+[2m20:49:55[22m [34m[200][39m / [2m855ms[22m
+[2m20:50:51[22m [34m[200][39m / [2m39ms[22m
+[2m20:50:57[22m [34m[200][39m /archive/ [2m37ms[22m
+[2m20:51:00[22m [34m[200][39m / [2m36ms[22m
+[2m20:51:04[22m [34m[200][39m /portfolio/programming/bilinote/ [2m32ms[22m
+[2m20:51:07[22m [34m[200][39m /archive/ [2m27ms[22m
+[2m20:51:27[22m [34m[200][39m /manga/sample-category/sample-story/ [2m44ms[22m
+[2m20:51:39[22m [34m[200][39m /manga/demo-manga/ [2m35ms[22m
+[2m20:51:44[22m [34m[200][39m /manga/sample-category/sample-story/ [2m37ms[22m
+[2m20:51:46[22m [34m[200][39m / [2m32ms[22m
+[2m20:51:48[22m [34m[200][39m /posts/wiki-link-test-a/ [2m36ms[22m
+[2m20:51:51[22m [34m[200][39m /posts/wiki-link-test-a/ [2m32ms[22m
+[2m20:51:59[22m [34m[200][39m /posts/wiki-link-test-a/ [2m30ms[22m
+[2m20:53:45[22m [34m[200][39m /posts/wiki-link-test-a/ [2m35ms[22m
+[2m20:54:12[22m [34m[200][39m /posts/wiki-link-test-b/ [2m38ms[22m
+[2m20:54:15[22m [34m[200][39m /posts/wiki-link-test-a/ [2m35ms[22m
+[2m20:54:16[22m [34m[200][39m / [2m32ms[22m
+[2m20:54:33[22m [34m[watch][39m /src/components/MobileTOC.svelte, /node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css
+[2m20:54:35[22m [34m[200][39m / [2m553ms[22m
+[2m20:54:46[22m [34m[200][39m /posts/wiki-link-test-a/ [2m29ms[22m
+[2m20:54:49[22m [34m[200][39m / [2m29ms[22m
+[2m20:54:55[22m [34m[200][39m /2/ [2m31ms[22m
+[2m20:54:56[22m [34m[watch][39m /src/components/MobileTOC.svelte, /node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css
+[2m20:54:58[22m [34m[200][39m /2/ [2m795ms[22m
+[2m20:54:58[22m [34m[200][39m / [2m562ms[22m
+[2m20:55:03[22m [34m[200][39m / [2m33ms[22m
+[2m20:55:07[22m [34m[200][39m /2/ [2m33ms[22m
+[2m20:55:25[22m [34m[watch][39m /src/components/MobileTOC.svelte?svelte&type=style&lang.css
+[2m20:55:26[22m [34m[200][39m / [2m620ms[22m
+[2m20:55:26[22m [34m[200][39m / [2m621ms[22m
+[2m20:56:45[22m [34m[watch][39m /src/styles/panel-animations.css
+[2m20:56:45[22m [34m[200][39m / [2m107ms[22m
+[2m20:56:45[22m [34m[200][39m / [2m108ms[22m
+[2m20:56:56[22m [34m[watch][39m /src/styles/panel-animations.css
+[2m20:56:56[22m [34m[200][39m / [2m72ms[22m
+[2m20:56:56[22m [34m[200][39m / [2m42ms[22m
+[2m20:57:56[22m [34m[200][39m /2/ [2m33ms[22m
+[2m20:57:58[22m [34m[200][39m /portfolio/programming/blog-system/ [2m44ms[22m
+[2m20:58:07[22m [34m[200][39m /2/ [2m49ms[22m
+[2m20:58:10[22m [34m[200][39m /2/ [2m40ms[22m
+[2m20:58:12[22m [34m[200][39m / [2m35ms[22m
+[2m20:58:14[22m [34m[200][39m /posts/wiki-link-test-a/ [2m31ms[22m
+[2m20:59:48[22m [34m[200][39m /posts/wiki-link-test-a/ [2m33ms[22m
+[2m20:59:50[22m [34m[200][39m /2/ [2m36ms[22m
+[2m20:59:50[22m [34m[200][39m / [2m32ms[22m
+[2m20:59:55[22m [34m[200][39m / [2m29ms[22m
+[2m21:00:29[22m [34m[watch][39m /src/components/MobileTOC.svelte, /node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css, /src/components/MobileTOC.svelte?svelte&type=style&lang.css
+[2m21:00:31[22m [34m[200][39m / [2m945ms[22m
+[2m21:00:31[22m [34m[200][39m / [2m946ms[22m
+[2m21:00:54[22m [34m[200][39m / [2m65ms[22m
+[2m21:00:58[22m [34m[200][39m / [2m46ms[22m
+[2m21:01:01[22m [34m[200][39m / [2m52ms[22m
+[2m21:01:08[22m [34m[200][39m /posts/wiki-link-test-a/ [2m42ms[22m
+[2m21:01:13[22m [34m[200][39m /posts/wiki-link-test-a/ [2m35ms[22m
+[2m21:01:31[22m [34m[200][39m /posts/wiki-link-test-a/ [2m33ms[22m
+[2m21:01:34[22m [34m[200][39m /posts/wiki-link-test-a/ [2m27ms[22m
+[2m21:01:35[22m [34m[200][39m /posts/wiki-link-test-a/ [2m25ms[22m
+[2m21:01:38[22m [34m[200][39m /posts/wiki-link-test-a/ [2m28ms[22m
+[2m21:03:08[22m [34m[200][39m /manga/demo-manga/ [2m34ms[22m
+[2m21:03:11[22m [34m[200][39m / [2m35ms[22m
+[2m21:03:15[22m [34m[200][39m /posts/wiki-link-test-a/ [2m34ms[22m
+[2m21:03:43[22m [34m[watch][39m /src/components/MobileTOC.svelte, /node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css, /src/components/MobileTOC.svelte?svelte&type=style&lang.css
+[2m21:03:44[22m [34m[200][39m /posts/wiki-link-test-a/ [2m548ms[22m
+[2m21:03:44[22m [34m[200][39m /posts/wiki-link-test-a/ [2m549ms[22m
+[2m21:04:02[22m [34m[200][39m /posts/wiki-link-test-a/ [2m29ms[22m
+[2m21:04:07[22m [34m[200][39m /posts/wiki-link-test-a/ [2m27ms[22m
+[2m21:04:15[22m [34m[watch][39m /src/styles/panel-animations.css
+[2m21:04:15[22m [34m[200][39m /posts/wiki-link-test-a/ [2m62ms[22m
+[2m21:04:16[22m [34m[200][39m /posts/wiki-link-test-a/ [2m31ms[22m
+[2m21:04:23[22m [34m[200][39m / [2m30ms[22m
+[2m21:04:33[22m [34m[200][39m /posts/wiki-link-test-a/ [2m33ms[22m
+[2m21:06:55[22m [34m[200][39m /posts/wiki-link-test-b/ [2m30ms[22m
+[2m21:06:57[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m28ms[22m
+[2m21:07:23[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m37ms[22m
+[2m21:10:54[22m [34m[watch][39m src/config.ts
+[2m21:10:54[22m [34m[watch][39m src/config.ts
+[2m21:10:56[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m689ms[22m
+[2m21:11:13[22m [34m[watch][39m src/components/Navbar.astro
+[2m21:11:13[22m [34m[watch][39m src/components/Navbar.astro
+[2m21:11:14[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m531ms[22m
+[2m21:12:45[22m [34m[200][39m /posts/wiki-link-test-b/ [2m48ms[22m
+[2m21:12:48[22m [34m[200][39m /posts/wiki-link-test-a/ [2m46ms[22m
+[2m21:12:51[22m [34m[200][39m / [2m38ms[22m
+[2m21:13:04[22m [34m[200][39m / [2m43ms[22m
+[2m21:13:06[22m [34m[200][39m /posts/wiki-link-test-a/ [2m37ms[22m
+[2m21:13:08[22m [34m[200][39m /posts/wiki-link-test-b/ [2m34ms[22m
+[2m21:13:28[22m [34m[200][39m /posts/wiki-link-test-a/ [2m49ms[22m
+[2m21:13:30[22m [34m[200][39m / [2m33ms[22m
+[2m21:13:33[22m [34m[200][39m /posts/wiki-link-test-b/ [2m42ms[22m
+[2m21:13:35[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m41ms[22m
+[2m21:13:48[22m [34m[200][39m /2/ [2m72ms[22m
+[2m21:14:01[22m [34m[200][39m /diary/ [2m62ms[22m
+相册 ExternalExample 已设置为隐藏，跳过显示
+相册 HiddenExample 已设置为隐藏，跳过显示
+[2m21:14:02[22m [34m[200][39m /albums/ [2m67ms[22m
+[2m21:14:05[22m [34m[200][39m /anime/ [2m42ms[22m
+[2m21:14:06[22m [34m[200][39m /about/ [2m40ms[22m
+[2m21:14:10[22m [34m[200][39m /projects/ [2m45ms[22m
+[2m21:14:11[22m [34m[200][39m /skills/ [2m48ms[22m
+[2m21:14:12[22m [34m[200][39m /timeline/ [2m43ms[22m
+[2m21:15:24[22m [34m[200][39m /posts/wiki-link-test-a/ [2m41ms[22m
+[2m21:15:28[22m [34m[watch][39m src/components/PostPage.astro
+[2m21:15:29[22m [34m[200][39m / [2m564ms[22m
+[2m21:15:29[22m [34m[200][39m / [2m565ms[22m
+[2m21:16:06[22m [34m[200][39m /portfolio/programming/ [2m60ms[22m
+[2m21:16:10[22m [34m[200][39m /portfolio/programming/bilinote/ [2m43ms[22m
+[2m21:16:28[22m [34m[200][39m /portfolio/programming/blog-system/ [2m48ms[22m
+[2m21:16:32[22m [34m[200][39m / [2m43ms[22m
+[2m21:16:36[22m [34m[200][39m /about/ [2m41ms[22m
+[2m21:17:17[22m [34m[200][39m / [2m32ms[22m
+[2m21:17:20[22m [34m[200][39m /posts/wiki-link-test-a/ [2m29ms[22m
+[2m21:17:23[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m32ms[22m
+[2m21:17:23[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m26ms[22m
+[2m21:17:27[22m [34m[200][39m / [2m26ms[22m
+[2m21:17:28[22m [34m[200][39m /2/ [2m26ms[22m
+[2m21:18:18[22m [34m[200][39m /resources/entertainment/ [2m50ms[22m
+[33m[1m21:18:22[22m [WARN] [router][39m A `getStaticPaths()` route pattern was matched, but no matching static path was found for requested path `/resources/entertainment/娓告垙璧勬簮/`.
+
+Possible dynamic routes being matched: src/pages/resources/entertainment/[category]/index.astro, src/pages/resources/entertainment/[...slug].astro, src/pages/[...page].astro.
+[2m21:18:22[22m [33m[404][39m /resources/entertainment/娓告垙璧勬簮/ [2m38ms[22m
+[2m21:18:32[22m [34m[200][39m /resources/utility/ [2m46ms[22m
+[2m21:18:36[22m [34m[200][39m /manga/ [2m38ms[22m
+[2m21:18:40[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m44ms[22m
+[2m21:18:52[22m [34m[200][39m /archive/ [2m51ms[22m
+[2m21:18:54[22m [34m[200][39m / [2m44ms[22m
+[2m21:19:03[22m [34m[200][39m /portfolio/programming/bilinote/ [2m50ms[22m
+[2m21:19:06[22m [34m[watch][39m /src/styles/transition.css, /src/styles/main.css
+[2m21:19:08[22m [34m[200][39m /2/ [2m1896ms[22m
+[2m21:19:08[22m [34m[200][39m /portfolio/programming/bilinote/ [2m1884ms[22m
+[2m21:19:10[22m [34m[200][39m /archive/ [2m46ms[22m
+[2m21:19:13[22m [34m[200][39m / [2m47ms[22m
+[2m21:19:16[22m [34m[200][39m /portfolio/programming/xiaoe-downloader/ [2m42ms[22m
+[2m21:19:28[22m [34m[200][39m /manga/sample-category/sample-story/ [2m47ms[22m
+[2m21:19:33[22m [34m[200][39m /manga/demo-manga/ [2m40ms[22m
+[2m21:19:38[22m [34m[200][39m /resources/entertainment/ [2m48ms[22m
+[2m21:19:39[22m [34m[200][39m /anime/ [2m39ms[22m
+[2m21:19:40[22m [34m[200][39m /manga/ [2m46ms[22m
+[2m21:19:42[22m [34m[200][39m /novel/ [2m36ms[22m
+[2m21:19:43[22m [34m[200][39m /games/ [2m48ms[22m
+[2m21:20:07[22m [34m[200][39m /2/ [2m35ms[22m
+[2m21:20:13[22m [34m[200][39m / [2m38ms[22m
+[2m21:20:16[22m [34m[200][39m /2/ [2m27ms[22m
+[2m21:20:25[22m [34m[200][39m /posts/keion-girls/ [2m29ms[22m
+[2m21:20:29[22m [34m[200][39m /portfolio/programming/xiaoe-downloader/ [2m25ms[22m
+[2m21:21:43[22m [34m[watch][39m /src/styles/transition.css, /src/styles/main.css
+[2m21:21:45[22m [34m[200][39m /games/ [2m962ms[22m
+[2m21:23:39[22m [34m[200][39m /portfolio/programming/xiaoe-downloader/ [2m33ms[22m
+[2m21:23:43[22m [34m[200][39m /archive/ [2m26ms[22m
+[2m21:23:46[22m [34m[200][39m /posts/wiki-link-test-a/ [2m26ms[22m
+[2m21:23:49[22m [34m[200][39m /posts/wiki-link-test-b/ [2m32ms[22m
+[2m21:23:49[22m [34m[200][39m /posts/wiki-link-test-a/ [2m41ms[22m
+[2m21:23:55[22m [34m[200][39m / [2m26ms[22m
+[2m21:23:59[22m [34m[200][39m /2/ [2m26ms[22m
+[2m21:24:33[22m [34m[200][39m /posts/wiki-link-test-a/ [2m27ms[22m
+[2m21:24:41[22m [34m[200][39m /posts/wiki-link-test-a/ [2m30ms[22m
+[2m21:38:03[22m [34m[200][39m /posts/wiki-link-test-b/ [2m36ms[22m
+[2m21:38:09[22m [34m[200][39m / [2m31ms[22m
+[2m21:38:10[22m [34m[200][39m /posts/wiki-link-test-a/ [2m28ms[22m
+[2m21:38:18[22m [34m[200][39m / [2m30ms[22m
+[2m21:38:24[22m [34m[200][39m /posts/wiki-link-test-a/ [2m27ms[22m
+[2m21:38:26[22m [34m[200][39m /posts/wiki-link-test-b/ [2m26ms[22m
+[2m21:38:30[22m [34m[200][39m /posts/wiki-link-test-b/ [2m26ms[22m
+[2m21:38:31[22m [34m[200][39m /posts/wiki-link-test-a/ [2m25ms[22m
+[2m21:38:33[22m [34m[200][39m / [2m28ms[22m
+[2m21:38:34[22m [34m[200][39m /2/ [2m26ms[22m
+[2m21:38:36[22m [34m[200][39m /2/ [2m26ms[22m
+[2m21:38:57[22m [34m[200][39m /archive/ [2m37ms[22m
+[2m21:38:59[22m [34m[200][39m /resources/entertainment/ [2m45ms[22m
+[2m21:39:19[22m [34m[200][39m / [2m38ms[22m
+[2m21:39:55[22m [34m[200][39m /2/ [2m47ms[22m
+[2m21:40:05[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m48ms[22m
+[2m21:47:10[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m62ms[22m
+[2m21:47:26[22m [34m[watch][39m src/content/manga-categories/sample-category/sample-story.md
+[2m21:47:26[22m [34m[watch][39m src/content/manga-categories/sample-category/sample-story.md
+[2m21:47:27[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m637ms[22m
+[2m21:47:27[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m295ms[22m
+[2m21:47:40[22m [34m[watch][39m src/content/manga/demo-manga.md
+[2m21:47:40[22m [34m[watch][39m src/content/manga/demo-manga.md
+[2m21:47:41[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m618ms[22m
+[2m21:47:41[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m301ms[22m
+[2m21:49:38[22m [34m[watch][39m src/content/entertainment-resources/小说资源/测试小说.md
+[2m21:49:38[22m [34m[watch][39m src/content/entertainment-resources/小说资源/测试小说.md
+[2m21:49:39[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m579ms[22m
+[2m21:49:39[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m310ms[22m
+[31m[1m21:50:16[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 动漫资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\cursor\project8  blog\test\D:\cursor\project8  blog\test\src\content\entertainment-resources\动漫资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:50:16[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 小说资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\cursor\project8  blog\test\D:\cursor\project8  blog\test\src\content\entertainment-resources\小说资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:50:16[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 漫画资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at getEntryDataAndImages (file:///D:/cursor/project8%20%20blog/test/node_modules/astro/dist/content/utils.js:161:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:50:16[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 游戏资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at D:\cursor\project8  blog\test\D:\cursor\project8  blog\test\src\content\entertainment-resources\游戏资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m21:50:16[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m28ms[22m
+[2m21:54:29[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:54:29[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:54:31[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m657ms[22m
+[2m21:55:13[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:55:13[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:55:15[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m618ms[22m
+[2m21:56:17[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:56:17[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:56:19[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m479ms[22m
+[2m21:57:03[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:57:03[22m [34m[watch][39m src/pages/posts/[...slug].astro
+[2m21:57:04[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m502ms[22m
+[2m21:59:21[22m [34m[200][39m /resources/utility/ [2m42ms[22m
+[2m21:59:23[22m [34m[200][39m /resources/entertainment/ [2m45ms[22m
+[2m21:59:26[22m [34m[200][39m /posts/ai-coding-agents-guide/ [2m32ms[22m
+[2m21:59:28[22m [34m[200][39m / [2m51ms[22m
+[2m21:59:55[22m [34m[200][39m /portfolio/programming/ [2m47ms[22m
+[2m21:59:59[22m [34m[200][39m /portfolio/normal/ [2m36ms[22m
+[2m22:00:01[22m [34m[200][39m /manga/ [2m35ms[22m
+[2m22:00:02[22m [34m[200][39m /anime/ [2m43ms[22m
+[2m22:00:03[22m [34m[200][39m /novel/ [2m42ms[22m
+[2m22:00:04[22m [34m[200][39m /games/ [2m39ms[22m
+[33m[1m22:00:10[22m [WARN] [router][39m A `getStaticPaths()` route pattern was matched, but no matching static path was found for requested path `/resources/entertainment/动漫资源/`.
+
+Possible dynamic routes being matched: src/pages/resources/entertainment/[category]/index.astro, src/pages/resources/entertainment/[...slug].astro, src/pages/[...page].astro.
+[2m22:00:10[22m [33m[404][39m /resources/entertainment/动漫资源/ [2m33ms[22m
+[33m[1m22:01:15[22m [WARN] [router][39m A `getStaticPaths()` route pattern was matched, but no matching static path was found for requested path `/2/`.
+
+Possible dynamic routes being matched: src/pages/[...page].astro.
+[2m22:01:15[22m [33m[404][39m /2/ [2m29ms[22m
+The collection "manga" does not exist or is empty. Please check your content config file for errors.
+The collection "manga-categories" does not exist or is empty. Please check your content config file for errors.
+The collection "entertainment-resources" does not exist or is empty. Please check your content config file for errors.
+[2m22:05:45[22m [34m[200][39m /resources/entertainment/ [2m134ms[22m
