@@ -23,7 +23,6 @@ class PanelManager {
 			panel.classList.remove("float-panel-closed");
 			panel.style.opacity = "0";
 			panel.style.transform = "scale(0.95) translateY(-10px)";
-			panel.style.pointerEvents = "none";
 
 			// 移除强制重排，直接使用 requestAnimationFrame
 			panel.style.transition = `all ${this.duration}ms ease-out`;
@@ -31,7 +30,6 @@ class PanelManager {
 			requestAnimationFrame(() => {
 				panel.style.opacity = "1";
 				panel.style.transform = "scale(1) translateY(0)";
-				panel.style.pointerEvents = "auto";
 
 				setTimeout(() => {
 					panel.style.transition = "";
@@ -47,7 +45,6 @@ class PanelManager {
 	private animateOut(panel: HTMLElement): Promise<void> {
 		return new Promise((resolve) => {
 			panel.style.transition = `all ${this.duration}ms ease-out`;
-			panel.style.pointerEvents = "none";
 			panel.style.opacity = "0";
 			panel.style.transform = "scale(0.95) translateY(-10px)";
 
@@ -56,7 +53,6 @@ class PanelManager {
 				panel.style.transition = "";
 				panel.style.opacity = "";
 				panel.style.transform = "";
-				panel.style.pointerEvents = "";
 				resolve();
 			}, this.duration);
 		});

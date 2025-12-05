@@ -51,6 +51,7 @@
 
 #nav-menu-panel {
     transform-origin: top right;
+    z-index: 60;  /* 提高 z-index 确保在 navbar 之上 */
 }
 
 #nav-menu-panel.float-panel-closed {

@@ -86,7 +86,8 @@ const processedLinks = Astro.props.links.map(
 
 <style>
     .mobile-submenu {
-        @apply max-h-0 overflow-hidden transition-all duration-300 ease-in-out;
+        @apply max-h-0 overflow-hidden;
+        transition: max-height 150ms ease-out;
     }
 
     .mobile-dropdown[data-expanded="true"] .mobile-submenu {
@@ -95,6 +96,13 @@ const processedLinks = Astro.props.links.map(
 
     .mobile-dropdown[data-expanded="true"] .mobile-dropdown-arrow {
         @apply rotate-180;
+    }
+
+    /* 确保子菜单链接始终可点击 */
+    .mobile-submenu a {
+        pointer-events: auto !important;
+        position: relative;
+        z-index: 10;
     }
 </style>
 
@@ -116,7 +124,11 @@ const processedLinks = Astro.props.links.map(
 
             // 创建新的事件处理器
             const clickHandler = function(e: Event) {
-                e.preventDefault();
+                // 只在点击按钮本身时才 preventDefault
+                if (e.target === trigger || trigger.contains(e.target as Node)) {
+                    e.preventDefault();
+                }
+
                 const isExpanded = dropdown.getAttribute('data-expanded') === 'true';
 
                 // 关闭其他打开的下拉菜单
