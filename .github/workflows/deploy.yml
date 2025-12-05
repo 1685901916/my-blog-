@@ -54,20 +54,182 @@ jobs:
           folder: dist # Astro默认构建输出目录
           clean: true # 清理目标分支中的旧文件
 
-      - name: Deploy to Server
+      - name: Deploy to Server (Diagnostic Mode)
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
+          command_timeout: 30m
           script: |
-            cd /www/blog-source
+            set -e
+            set -u
+            set -o pipefail
+
+            log_info() { echo "ℹ️  [INFO] $(date '+%Y-%m-%d %H:%M:%S') - $1"; }
+            log_success() { echo "✅ [SUCCESS] $(date '+%Y-%m-%d %H:%M:%S') - $1"; }
+            log_error() { echo "❌ [ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $1" >&2; }
+            log_section() { echo ""; echo "=========================================="; echo "  $1"; echo "=========================================="; }
+
+            log_section "步骤 1/7: 环境检查"
+            log_info "检查操作系统信息..."; uname -a
+            log_info "检查磁盘空间..."; df -h /www
+            log_info "检查内存使用..."; free -h
+
+            log_info "检查 Node.js 版本..."
+            if command -v node &> /dev/null; then
+              NODE_VERSION=$(node --version)
+              log_success "Node.js 版本: $NODE_VERSION"
+              NODE_MAJOR=$(echo $NODE_VERSION | cut -d'.' -f1 | sed 's/v//')
+              if [ "$NODE_MAJOR" -lt 20 ]; then
+                log_error "Node.js 版本过低，需要 >= 20.x，当前: $NODE_VERSION"
+                exit 1
+              fi
+            else
+              log_error "Node.js 未安装"; exit 1
+            fi
+
+            log_info "检查 pnpm 版本..."
+            if command -v pnpm &> /dev/null; then
+              PNPM_VERSION=$(pnpm --version)
+              log_success "pnpm 版本: $PNPM_VERSION"
+              if [ "$PNPM_VERSION" != "10.22.0" ]; then
+                log_error "pnpm 版本不匹配，需要 10.22.0，当前: $PNPM_VERSION"
+                log_info "尝试安装正确版本的 pnpm..."
+                npm install -g pnpm@10.22.0
+                PNPM_VERSION=$(pnpm --version)
+                log_success "pnpm 已更新到: $PNPM_VERSION"
+              fi
+            else
+              log_error "pnpm 未安装"
+              log_info "正在安装 pnpm 10.22.0..."
+              npm install -g pnpm@10.22.0
+              log_success "pnpm 安装完成"
+            fi
+
+            log_info "检查 Git 版本..."
+            if command -v git &> /dev/null; then
+              GIT_VERSION=$(git --version)
+              log_success "Git 版本: $GIT_VERSION"
+            else
+              log_error "Git 未安装"; exit 1
+            fi
+
+            log_section "步骤 2/7: 进入项目目录"
+            PROJECT_DIR="/www/blog-source"
+            if [ ! -d "$PROJECT_DIR" ]; then
+              log_error "项目目录不存在: $PROJECT_DIR"; exit 1
+            fi
+            log_info "切换到项目目录: $PROJECT_DIR"
+            cd "$PROJECT_DIR"
+            log_success "当前目录: $(pwd)"
+
+            log_section "步骤 3/7: Git 状态检查和更新"
+            log_info "检查 Git 仓库状态..."; git status
+            log_info "检查当前分支..."
+            CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            log_info "当前分支: $CURRENT_BRANCH"
+
+            if [ "$CURRENT_BRANCH" = "HEAD" ]; then
+              log_error "Git 处于 detached HEAD 状态"
+              log_info "尝试切换到 main 分支..."
+              git checkout main
+              CURRENT_BRANCH="main"
+            fi
+
+            log_info "检查是否有未提交的更改..."
+            if ! git diff-index --quiet HEAD --; then
+              log_error "检测到未提交的更改，将被暂存"
+              git status --short
+              log_info "暂存当前更改..."
+              git stash push -m "Auto-stash before deployment at $(date)"
+              log_success "更改已暂存"
+            fi
+
+            log_info "获取远程更新..."; git fetch origin
+            log_info "拉取最新代码..."
+            BEFORE_COMMIT=$(git rev-parse HEAD)
+            log_info "更新前 commit: $BEFORE_COMMIT"
             git pull origin main
+            AFTER_COMMIT=$(git rev-parse HEAD)
+            log_info "更新后 commit: $AFTER_COMMIT"
+
+            if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ]; then
+              log_info "代码已是最新，无需更新"
+            else
+              log_success "代码已更新: $BEFORE_COMMIT -> $AFTER_COMMIT"
+              log_info "查看更新内容..."
+              git log --oneline $BEFORE_COMMIT..$AFTER_COMMIT
+            fi
+
+            log_section "步骤 4/7: 安装依赖"
+            log_info "检查 pnpm-lock.yaml..."
+            if [ ! -f "pnpm-lock.yaml" ]; then
+              log_error "pnpm-lock.yaml 不存在"; exit 1
+            fi
+            log_info "安装依赖（使用 frozen-lockfile）..."
             pnpm install --frozen-lockfile
+            log_success "依赖安装完成"
+
+            log_section "步骤 5/7: 构建项目"
+            log_info "清理旧的构建产物..."; rm -rf dist
+            log_info "开始构建..."; log_info "构建命令: pnpm run build"
+            export NODE_ENV=production
             pnpm run build
-            rm -rf /www/wwwroot/ayano29.cn/*
-            cp -r dist/* /www/wwwroot/ayano29.cn/
-            chmod -R 755 /www/wwwroot/ayano29.cn/
-            chown -R www:www /www/wwwroot/ayano29.cn/
-            echo "✅ 部署完成于 $(date)"
+            log_success "构建完成"
+
+            log_info "检查构建产物..."
+            if [ ! -d "dist" ]; then
+              log_error "构建产物目录不存在: dist"; exit 1
+            fi
+            DIST_SIZE=$(du -sh dist | cut -f1)
+            log_info "构建产物大小: $DIST_SIZE"
+            log_info "构建产物内容:"; ls -lh dist/ | head -20
+
+            log_section "步骤 6/7: 部署到 Web 目录"
+            WEB_DIR="/www/wwwroot/ayano29.cn"
+            log_info "检查 Web 目录..."
+            if [ ! -d "$WEB_DIR" ]; then
+              log_error "Web 目录不存在: $WEB_DIR"
+              log_info "尝试创建目录..."
+              mkdir -p "$WEB_DIR"
+              log_success "目录已创建"
+            fi
+
+            log_info "备份当前 Web 目录..."
+            BACKUP_DIR="/www/backups/ayano29.cn-$(date +%Y%m%d-%H%M%S)"
+            if [ "$(ls -A $WEB_DIR)" ]; then
+              mkdir -p /www/backups
+              cp -r "$WEB_DIR" "$BACKUP_DIR"
+              log_success "备份已创建: $BACKUP_DIR"
+            else
+              log_info "Web 目录为空，跳过备份"
+            fi
+
+            log_info "清理 Web 目录..."; rm -rf "$WEB_DIR"/*
+            log_info "复制构建产物到 Web 目录..."; cp -r dist/* "$WEB_DIR"/
+            log_success "文件复制完成"
+            log_info "设置文件权限..."; chmod -R 755 "$WEB_DIR"
+            log_info "设置文件所有者..."; chown -R www:www "$WEB_DIR"
+            log_success "权限设置完成"
+
+            log_section "步骤 7/7: 验证部署"
+            log_info "检查 Web 目录内容..."; ls -lh "$WEB_DIR" | head -20
+            log_info "检查关键文件..."
+            CRITICAL_FILES=("index.html" "404.html" "_astro" "pagefind")
+            for file in "${CRITICAL_FILES[@]}"; do
+              if [ -e "$WEB_DIR/$file" ]; then
+                log_success "✓ $file 存在"
+              else
+                log_error "✗ $file 不存在"
+              fi
+            done
+            log_info "检查文件修改时间..."; stat "$WEB_DIR/index.html" | grep Modify
+
+            log_section "部署完成"
+            log_success "🎉 部署成功完成于 $(date '+%Y-%m-%d %H:%M:%S')"
+            log_info "项目目录: $PROJECT_DIR"
+            log_info "Web 目录: $WEB_DIR"
+            log_info "备份目录: $BACKUP_DIR"
+            log_info "Git commit: $AFTER_COMMIT"
