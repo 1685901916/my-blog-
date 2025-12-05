@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
-import { type NavBarLink, LinkPreset } from "../../types/config";
 import { LinkPresets } from "../../constants/link-presets";
+import { LinkPreset, type NavBarLink } from "../../types/config";
 import { url } from "../../utils/url-utils";
 
 interface Props {
@@ -103,27 +103,47 @@ const processedLinks = Astro.props.links.map(
 
 <script>
     // 移动端点击再展开子菜单，默认收起避免占空间
-    document.querySelectorAll("[data-mobile-dropdown]").forEach((dropdown) => {
-        const toggle = dropdown.querySelector("[data-mobile-toggle]");
-        const submenu = dropdown.querySelector("[data-mobile-submenu]");
-        if (!toggle || !submenu) return;
+    function initMobileDropdowns() {
+        document.querySelectorAll("[data-mobile-dropdown]").forEach((dropdown) => {
+            const toggle = dropdown.querySelector("[data-mobile-toggle]");
+            const submenu = dropdown.querySelector("[data-mobile-submenu]") as HTMLElement;
+            if (!toggle || !submenu) return;
 
-        // 初始化为收起状态
-        dropdown.dataset.expanded = "false";
-        submenu.style.maxHeight = "0px";
-        submenu.style.overflow = "hidden";
+            // 初始化为收起状态
+            (dropdown as HTMLElement).dataset.expanded = "false";
+            submenu.style.maxHeight = "0px";
+            submenu.style.overflow = "hidden";
 
-        toggle.addEventListener("click", () => {
-            const isExpanded = dropdown.dataset.expanded === "true";
-            const next = !isExpanded;
-            dropdown.dataset.expanded = next ? "true" : "false";
-            if (next) {
-                submenu.style.maxHeight = `${submenu.scrollHeight}px`;
-                submenu.style.overflow = "visible";
-            } else {
-                submenu.style.maxHeight = "0px";
-                submenu.style.overflow = "hidden";
+            // 移除旧的事件监听器（如果存在）
+            const oldHandler = (dropdown as any)._toggleHandler;
+            if (oldHandler) {
+                toggle.removeEventListener("click", oldHandler);
             }
+
+            // 创建新的事件处理器
+            const newHandler = () => {
+                const dropdownEl = dropdown as HTMLElement;
+                const isExpanded = dropdownEl.dataset.expanded === "true";
+                const next = !isExpanded;
+                dropdownEl.dataset.expanded = next ? "true" : "false";
+                if (next) {
+                    submenu.style.maxHeight = `${submenu.scrollHeight}px`;
+                    submenu.style.overflow = "visible";
+                } else {
+                    submenu.style.maxHeight = "0px";
+                    submenu.style.overflow = "hidden";
+                }
+            };
+
+            // 保存处理器引用以便后续移除
+            (dropdown as any)._toggleHandler = newHandler;
+            toggle.addEventListener("click", newHandler);
         });
-    });
+    }
+
+    // 页面加载时初始化
+    initMobileDropdowns();
+
+    // Swup 页面切换后重新初始化
+    document.addEventListener('swup:contentReplaced', initMobileDropdowns);
 </script>

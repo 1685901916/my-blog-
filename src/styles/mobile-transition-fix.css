@@ -47,6 +47,24 @@
     transform: translateY(-0.4rem) translateX(-0.2rem);
     opacity: 0;
   }
+
+  /* 防止页面切换时的白屏闪烁 */
+  html.is-animating {
+    background-color: var(--card-bg);
+  }
+
+  /* 添加过渡背景层 */
+  html.is-animating::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--card-bg);
+    z-index: 1;
+    pointer-events: none;
+  }
   
   /* 优化侧边栏动画 */
   #dynamic-sidebar {

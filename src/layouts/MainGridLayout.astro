@@ -671,7 +671,7 @@ const transparentClass = shouldEnableTransparency
 </div>
 
 <!-- Main content (all breakpoints) -->
-<div class={`absolute w-full z-30 pointer-events-none ${mobileNonHomeBannerClass ? 'mobile-main-no-banner' : ''} ${siteConfig.wallpaperMode.defaultMode === 'none' ? 'no-banner-layout' : ''} ${transparentClass}`} style={`top: ${finalMainPanelTop}`}>
+<div class={`absolute w-full z-30 ${mobileNonHomeBannerClass ? 'mobile-main-no-banner' : ''} ${siteConfig.wallpaperMode.defaultMode === 'none' ? 'no-banner-layout' : ''} ${transparentClass}`} style={`top: ${finalMainPanelTop}`}>
     <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
         <div id="main-grid" class={`transition duration-700 w-full left-0 right-0 grid ${gridCols} auto-rows-auto mx-auto gap-4 px-2 md:px-4 ${!mobileShowSidebar ? 'mobile-no-sidebar' : ''} ${isBothSidebarMode ? 'mobile-both-sidebar' : ''}`} data-layout-mode={defaultPostListLayout}>
             {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
