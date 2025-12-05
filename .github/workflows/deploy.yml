@@ -130,8 +130,16 @@ jobs:
 
             echo ""
             echo "6. 设置权限..."
+            # 解锁 .user.ini 文件（宝塔面板保护机制）
+            if [ -f "$WEB_DIR/.user.ini" ]; then
+              chattr -i "$WEB_DIR/.user.ini" 2>/dev/null || true
+            fi
             chmod -R 755 "$WEB_DIR"
             chown -R www:www "$WEB_DIR"
+            # 重新锁定 .user.ini 文件
+            if [ -f "$WEB_DIR/.user.ini" ]; then
+              chattr +i "$WEB_DIR/.user.ini" 2>/dev/null || true
+            fi
 
             echo ""
             echo "7. 清理临时文件..."
