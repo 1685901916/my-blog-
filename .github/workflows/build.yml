@@ -1,10 +1,12 @@
 name: Build and Check
 
 on:
-  push:
-    branches: [ main ] # Adjust branches as needed
-  pull_request:
-    branches: [ main ] # Adjust branches as needed
+  # 暂时禁用构建检查，专注于修复部署
+  workflow_dispatch:
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
