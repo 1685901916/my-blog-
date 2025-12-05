@@ -95,8 +95,8 @@ jobs:
             echo "=========================================="
 
             TEMP_DIR="/tmp/blog-deploy-${{ github.sha }}"
-            WEB_DIR="/www/wwwroot/ayano29.cn"
-            BACKUP_DIR="/www/backups/ayano29.cn-$(date +%Y%m%d-%H%M%S)"
+            WEB_DIR="/www/wwwroot/blog"
+            BACKUP_DIR="/www/backups/blog-$(date +%Y%m%d-%H%M%S)"
 
             echo "1. 检查临时目录..."
             if [ ! -d "$TEMP_DIR" ]; then
