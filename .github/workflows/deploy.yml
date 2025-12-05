@@ -77,6 +77,8 @@ jobs:
           target: "/tmp/blog-deploy-${{ github.sha }}"
           strip_components: 1
           rm: false
+          debug: true
+          overwrite: true
 
       - name: Deploy files and set permissions
         uses: appleboy/ssh-action@master
