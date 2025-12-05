@@ -1,858 +1,245 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>文乃的小站</title><description>记录生活，分享美好</description><link>https://mizuki.mysqil.com/</link><language>zh_CN</language><item><title>Markdown Tutorial</title><link>https://mizuki.mysqil.com/posts/markdown-tutorial/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/markdown-tutorial/</guid><description>A simple example of a Markdown blog post.</description><pubDate>Mon, 20 Jan 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Markdown Tutorial&lt;/h1&gt;
-&lt;p&gt;A markdown example shows how to write a markdown file. This document integrates core syntax and extensions (GMF).&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>文乃的小站</title><description>记录生活，分享美好</description><link>http://localhost:4322/</link><language>zh_CN</language><item><title>双链测试文章A</title><link>http://localhost:4322/posts/wiki-link-test-a/</link><guid isPermaLink="true">http://localhost:4322/posts/wiki-link-test-a/</guid><description>这是用来测试双链功能的第一篇文章</description><pubDate>Fri, 28 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;双链测试文章A&lt;/h1&gt;
+&lt;p&gt;这是第一篇测试文章，用于演示双链（Wiki Links）功能。&lt;/p&gt;
+&lt;h2&gt;什么是双链？&lt;/h2&gt;
+&lt;p&gt;双链是一种类似 Obsidian 的笔记连接方式，可以让文章之间互相引用。&lt;/p&gt;
+&lt;h2&gt;示例&lt;/h2&gt;
+&lt;p&gt;我们可以引用另一篇文章：[[wiki-link-test-b]]&lt;/p&gt;
+&lt;p&gt;也可以使用自定义显示文本：[[点击查看文章B|wiki-link-test-b]]&lt;/p&gt;
+&lt;p&gt;测试普通链接对比：&lt;a href=&quot;/posts/wiki-link-test-b/&quot;&gt;普通链接到B&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;更多引用&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#block-elements&quot;&gt;Block Elements&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#paragraphs-and-line-breaks&quot;&gt;Paragraphs and Line Breaks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#headers&quot;&gt;Headers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#blockquotes&quot;&gt;Blockquotes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#lists&quot;&gt;Lists&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#code-blocks&quot;&gt;Code Blocks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#horizontal-rules&quot;&gt;Horizontal Rules&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#table&quot;&gt;Table&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;查看 [[ai-coding-agents-guide]] 了解 AI 编程工具&lt;/li&gt;
+&lt;li&gt;了解 [[keion-girls]] 轻音少女的故事&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#span-elements&quot;&gt;Span Elements&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#links&quot;&gt;Links&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#emphasis&quot;&gt;Emphasis&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#code&quot;&gt;Code&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#images&quot;&gt;Images&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#strikethrough&quot;&gt;Strikethrough&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#miscellaneous&quot;&gt;Miscellaneous&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#automatic-links&quot;&gt;Automatic Links&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#backslash-escapes&quot;&gt;Backslash Escapes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#inline-html&quot;&gt;Inline HTML&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Block Elements&lt;/h2&gt;
-&lt;h3&gt;Paragraphs and Line Breaks&lt;/h3&gt;
-&lt;h4&gt;Paragraphs&lt;/h4&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;One or more blank lines. (A blank line is a line containing nothing but &lt;strong&gt;spaces&lt;/strong&gt; or &lt;strong&gt;tabs&lt;/strong&gt; is considered blank.)&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This will be
-inline.
-
-This is second paragraph.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This will be
-inline.&lt;/p&gt;
-&lt;p&gt;This is second paragraph.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h4&gt;Line Breaks&lt;/h4&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;br /&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;End a line with &lt;strong&gt;two or more spaces&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This will be not
-inline.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This will be not&lt;br /&gt;
-inline.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Headers&lt;/h3&gt;
-&lt;p&gt;Markdown supports two styles of headers, Setext and atx.&lt;/p&gt;
-&lt;h4&gt;Setext&lt;/h4&gt;
-&lt;p&gt;HTML Tags: &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&quot;Underlined&quot; using &lt;strong&gt;equal signs (=)&lt;/strong&gt; as &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; and &lt;strong&gt;dashes (-)&lt;/strong&gt; as &lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt; in any number.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This is an H1
-=============
-This is an H2
--------------
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h1&gt;This is an H1&lt;/h1&gt;
-&lt;h2&gt;This is an H2&lt;/h2&gt;
-&lt;hr /&gt;
-&lt;h4&gt;atx&lt;/h4&gt;
-&lt;p&gt;HTML Tags: &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h3&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h4&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h5&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Uses 1-6 &lt;strong&gt;hash characters (#)&lt;/strong&gt; at the start of the line, corresponding to &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; - &lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# This is an H1
-## This is an H2
-###### This is an H6
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h1&gt;This is an H1&lt;/h1&gt;
-&lt;h2&gt;This is an H2&lt;/h2&gt;
-&lt;h6&gt;This is an H6&lt;/h6&gt;
-&lt;hr /&gt;
-&lt;p&gt;Optionally, you may &quot;close&quot; atx-style headers. The closing hashes &lt;strong&gt;don&apos;t need to match&lt;/strong&gt; the number of hashes used to open the header.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# This is an H1 #
-## This is an H2 ##
-### This is an H3 ######
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h1&gt;This is an H1&lt;/h1&gt;
-&lt;h2&gt;This is an H2&lt;/h2&gt;
-&lt;h3&gt;This is an H3&lt;/h3&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Blockquotes&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;blockquote&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Markdown uses email-style &lt;strong&gt;&amp;gt;&lt;/strong&gt; characters for blockquoting. It looks best if you hard wrap the text and put a &amp;gt; before every line.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-&amp;gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-&amp;gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-&amp;gt;
-&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-&amp;gt; id sem consectetuer libero luctus adipiscing.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/p&gt;
-&lt;p&gt;Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr /&gt;
-&lt;p&gt;Markdown allows you to be lazy and only put the &amp;gt; before the first line of a hard-wrapped paragraph.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr /&gt;
-&lt;p&gt;Blockquotes can be nested (i.e. a blockquote-in-a-blockquote) by adding additional levels of &amp;gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; This is the first level of quoting.
-&amp;gt;
-&amp;gt; &amp;gt; This is nested blockquote.
-&amp;gt;
-&amp;gt; Back to the first level.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is the first level of quoting.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is nested blockquote.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Back to the first level.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr /&gt;
-&lt;p&gt;Blockquotes can contain other Markdown elements, including headers, lists, and code blocks.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; ## This is a header.
-&amp;gt;
-&amp;gt; 1.   This is the first list item.
-&amp;gt; 2.   This is the second list item.
-&amp;gt;
-&amp;gt; Here&apos;s some example code:
-&amp;gt;
-&amp;gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;blockquote&gt;
-&lt;h2&gt;This is a header.&lt;/h2&gt;
+&lt;h2&gt;双链的优势&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;This is the first list item.&lt;/li&gt;
-&lt;li&gt;This is the second list item.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;快速导航&lt;/strong&gt;：点击即可跳转到相关文章&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;悬浮预览&lt;/strong&gt;：鼠标悬停可以预览文章内容&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;知识图谱&lt;/strong&gt;：自动构建文章之间的关联关系&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Here&apos;s some example code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;return shell_exec(&quot;echo $input | $markdown_script&quot;);
+&lt;p&gt;这样就可以构建一个知识网络，让笔记之间形成有机的联系！&lt;/p&gt;
+</content:encoded></item><item><title>双链测试文章B</title><link>http://localhost:4322/posts/wiki-link-test-b/</link><guid isPermaLink="true">http://localhost:4322/posts/wiki-link-test-b/</guid><description>这是用来测试双链功能的第二篇文章</description><pubDate>Fri, 28 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;双链测试文章B&lt;/h1&gt;
+&lt;p&gt;这是第二篇测试文章，与 [[wiki-link-test-a]] 互相连接。&lt;/p&gt;
+&lt;h2&gt;回链测试&lt;/h2&gt;
+&lt;p&gt;从 [[wiki-link-test-a]] 可以跳转到这里，这里也可以跳回去。&lt;/p&gt;
+&lt;h2&gt;双链语法&lt;/h2&gt;
+&lt;h3&gt;基本语法&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;[[文章标题]]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/blockquote&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Lists&lt;/h3&gt;
-&lt;p&gt;Markdown supports ordered (numbered) and unordered (bulleted) lists.&lt;/p&gt;
-&lt;h4&gt;Unordered&lt;/h4&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Unordered lists use &lt;strong&gt;asterisks (*)&lt;/strong&gt;, &lt;strong&gt;pluses (+)&lt;/strong&gt;, and &lt;strong&gt;hyphens (-)&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;*   Red
-*   Green
-*   Blue
+&lt;h3&gt;自定义显示文本&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;[[显示文本|实际链接]]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
+&lt;h2&gt;实际应用示例&lt;/h2&gt;
+&lt;p&gt;在实际使用中，我们可以这样引用：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Red&lt;/li&gt;
-&lt;li&gt;Green&lt;/li&gt;
-&lt;li&gt;Blue&lt;/li&gt;
+&lt;li&gt;关于 AI 工具，可以参考 [[ai-coding-agents-guide]] 这篇文章&lt;/li&gt;
+&lt;li&gt;如果你喜欢动漫，可以看看 [[keion-girls]]&lt;/li&gt;
+&lt;li&gt;想要了解起点，请阅读 [[wiki-link-test-a]]&lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr /&gt;
-&lt;p&gt;is equivalent to:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;+   Red
-+   Green
-+   Blue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;and:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;-   Red
--   Green
--   Blue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4&gt;Ordered&lt;/h4&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Ordered lists use numbers followed by periods:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1.  Bird
-2.  McHale
-3.  Parish
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
+&lt;h2&gt;为什么使用双链？&lt;/h2&gt;
+&lt;p&gt;双链让文章之间形成网络结构，而不是树状结构。这样可以：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Bird&lt;/li&gt;
-&lt;li&gt;McHale&lt;/li&gt;
-&lt;li&gt;Parish&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多维度思考&lt;/strong&gt;：一个概念可以从多个角度被引用&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;知识复用&lt;/strong&gt;：避免重复写相同的内容&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;灵感激发&lt;/strong&gt;：通过关联发现新的连接点&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;反向链接&lt;/strong&gt;：自动显示哪些文章引用了当前文章&lt;/li&gt;
 &lt;/ol&gt;
-&lt;hr /&gt;
-&lt;p&gt;It&apos;s possible to trigger an ordered list by accident, by writing something like this:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1986. What a great season.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;ol&gt;
-&lt;li&gt;What a great season.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr /&gt;
-&lt;p&gt;You can &lt;strong&gt;backslash-escape (\)&lt;/strong&gt; the period:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1986\. What a great season.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;1986. What a great season.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h4&gt;Indented&lt;/h4&gt;
-&lt;h5&gt;Blockquote&lt;/h5&gt;
-&lt;p&gt;To put a blockquote within a list item, the blockquote&apos;s &amp;gt; delimiters need to be indented:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;*   A list item with a blockquote:
-
-    &amp;gt; This is a blockquote
-    &amp;gt; inside a list item.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
+&lt;p&gt;这种方式特别适合构建个人知识库！&lt;/p&gt;
+</content:encoded></item><item><title>ai  agent</title><link>http://localhost:4322/posts/ai-coding-agents-guide/</link><guid isPermaLink="true">http://localhost:4322/posts/ai-coding-agents-guide/</guid><description>现在去编程还在用窗口一个一个问也太麻烦了，现在的agent已经很发达了，我推荐几个我用的agent工具</description><pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;现在去编程还在用窗口一个一个问也太麻烦了，现在的agent已经很发达了，我推荐几个我用的agent工具&lt;/p&gt;
+&lt;h1&gt;cursor  9.4&lt;/h1&gt;
+&lt;p&gt;从夯到拉 肯定是夯&lt;/p&gt;
+&lt;h2&gt;简介&lt;/h2&gt;
+&lt;p&gt;第一个使用的agent 直接是新的idea，让我打开了新世界的大门，综合很强，但是对中国用户太差了，最近还封了续杯工具，很难受
+新手我很推荐先用cursor，直接是新的编译器，plan模式还能养成你现准备计划，再做工作的习惯&lt;/p&gt;
+&lt;h2&gt;使用&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.bilibili.com/video/BV1WBG9zgECp/?spm_id_from=333.337.search-card.all.click&amp;amp;vd_source=05c30d87ead2eea4eabcc38a5a4f32fd&quot;&gt;史上最强 AI 编程工具免费啦！Cursor 保姆级使用教程！新手友好！看到就是赚到！｜ 集成 MCP ！_哔哩哔哩_bilibili&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;新人教程&lt;/p&gt;
+&lt;p&gt;新账号注册送7天试用，先注册一个试试，不过要绑卡，绑卡可以去闲鱼看看&lt;/p&gt;
+&lt;p&gt;进入后要将代理开到全局模式，然后建议将http2改为http1，否则大概率打不开
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116224420.png&quot; alt=&quot;Pasted image 20251116224420&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;cursor打开之后 应该就是这个结构，左边是对话框，问问题，下面有模式切换，做项目要先
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Snipaste_2025-11-16_22-40-01.png&quot; alt=&quot;Snipaste_2025-11-16_22-40-01&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;价格&lt;/h2&gt;
+&lt;p&gt;20美刀一个月，最重要的是量太低了
+以前可以去&lt;/p&gt;
+&lt;h1&gt;augment   9.3&lt;/h1&gt;
+&lt;p&gt;这个也是夯完了&lt;/p&gt;
+&lt;h2&gt;简介&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.augmentcode.com/&quot;&gt;Augment Code - 真实软件的 AI 编码平台。 --- Augment Code - AI coding platform for real software.&lt;/a&gt;
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225520.png&quot; alt=&quot;Pasted image 20251116225520&quot; /&gt;
+这个我用的是vscode插件版&lt;/p&gt;
+&lt;h2&gt;使用&lt;/h2&gt;
+&lt;p&gt;这个auto 一定要开一下试试，真的很爽，全都不要你按，他全搞好了 体验绝佳
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225808.png&quot; alt=&quot;Pasted image 20251116225808&quot; /&gt;&lt;/p&gt;
+&lt;h1&gt;windsurf    6&lt;/h1&gt;
+&lt;p&gt;拉完了&lt;/p&gt;
+&lt;p&gt;用的很难受不知道是不是我的问题
+不过现在续杯应该很好找，价格应该不贵&lt;/p&gt;
+&lt;h1&gt;codex    8&lt;/h1&gt;
+&lt;h2&gt;简介&lt;/h2&gt;
+&lt;p&gt;chatgpt的工具，什么都好，就是实在是太慢了，价格很便宜，可以去闲鱼拼车&lt;/p&gt;
+&lt;h2&gt;使用&lt;/h2&gt;
+&lt;p&gt;我用的插件版，总体使用大差不差吧&lt;/p&gt;
+&lt;h2&gt;价格&lt;/h2&gt;
+&lt;p&gt;官方价格忘了，拼车20左右一月
+我推荐直接拼车，还能白嫖chatgpt5的对话框，这个能直接生成word文档还是很实用的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116230101.png&quot; alt=&quot;Pasted image 20251116230101&quot; /&gt;&lt;/p&gt;
+&lt;h1&gt;ClaudeCode&lt;/h1&gt;
+&lt;h2&gt;简介&lt;/h2&gt;
+&lt;p&gt;Claude 写代码的都明白，遥遥领先，作为本家推出的agent，肯定有其独特点，不过我现在一直有bug，就先不评价了&lt;/p&gt;
+&lt;h1&gt;trae&lt;/h1&gt;
+&lt;p&gt;唯一的国产，但是没有Claude，建议用国际版吧，算了，还是不建议用这个，新手到可以尝尝鲜
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225311.png&quot; alt=&quot;Pasted image 20251116225311&quot; /&gt;
+&lt;a href=&quot;https://www.trae.cn/&quot;&gt;TRAE - The Real AI Engineer | TRAE - The Real AI Engineer&lt;/a&gt;&lt;/p&gt;
+</content:encoded></item><item><title>AI 视频笔记生成器</title><link>http://localhost:4322/posts/programming/bilinote/</link><guid isPermaLink="true">http://localhost:4322/posts/programming/bilinote/</guid><description>基于 AI 的本地视频笔记自动生成工具，支持语音转录、智能截图、结构化笔记生成，完美集成 Obsidian</description><pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;📖 项目简介&lt;/h2&gt;
+&lt;p&gt;本地视频笔记生成工具，能够自动将视频转换为结构化的 Markdown 笔记。&lt;/p&gt;
+&lt;p&gt;为什么不用bilinote  我的总是会报错，很烦，其他的像BiliGPT videoseek 会员都超级贵，你们一个用免费模型的怎么都这么贵，100多一个月，永久会员5000多，真吓人，不如我自己搞一个&lt;/p&gt;
+&lt;p&gt;有截图，图文结合。就是为的这个图才搞的这个项目，最后只能说是马马虎虎吧
+最后的结果大概是这样，勉强能用
+&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116222120.png&quot; alt=&quot;Pasted image 20251116222120&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;核心功能&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;A list item with a blockquote:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a blockquote
-inside a list item.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;🎙️ &lt;strong&gt;自动转录&lt;/strong&gt;：使用 Whisper 将视频语音转为带时间戳的文字&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr /&gt;
-&lt;h5&gt;Code Block&lt;/h5&gt;
-&lt;p&gt;To put a code block within a list item, the code block needs to be indented twice — &lt;strong&gt;8 spaces&lt;/strong&gt; or &lt;strong&gt;two tabs&lt;/strong&gt;:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;*   A list item with a code block:
-
-        &amp;lt;code goes here&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;A list item with a code block:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;code goes here&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;📸 &lt;strong&gt;智能截图&lt;/strong&gt;：基于场景检测自动提取关键帧&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;🧠 &lt;strong&gt;AI 分析&lt;/strong&gt;：使用 Gemini 提取核心要点、生成章节目录
+gemin最便宜了，建议用这个智谱的那个也不错&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;📝 &lt;strong&gt;生成笔记&lt;/strong&gt;：输出结构化 Markdown，完美兼容 Obsidian&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr /&gt;
-&lt;h5&gt;Nested List&lt;/h5&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;* A
-  * A1
-  * A2
-* B
-* C
+&lt;pre&gt;&lt;code&gt;graph LR
+    A[📹 视频文件] --&amp;gt; B[🎵 提取音频&amp;lt;br/&amp;gt;FFmpeg]
+    B --&amp;gt; C[🎙️ 语音转录&amp;lt;br/&amp;gt;Whisper]
+    A --&amp;gt; D[📸 提取关键帧&amp;lt;br/&amp;gt;OpenCV]
+    C --&amp;gt; E[🧠 AI 分析&amp;lt;br/&amp;gt;Gemini]
+    D --&amp;gt; E
+    E --&amp;gt; F[📝 生成笔记&amp;lt;br/&amp;gt;Markdown]
+    F --&amp;gt; G[📚 Obsidian]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;ul&gt;
-&lt;li&gt;A
-&lt;ul&gt;
-&lt;li&gt;A1&lt;/li&gt;
-&lt;li&gt;A2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;B&lt;/li&gt;
-&lt;li&gt;C&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Code Blocks&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Indent every line of the block by at least &lt;strong&gt;4 spaces&lt;/strong&gt; or &lt;strong&gt;1 tab&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This is a normal paragraph:
-
-    This is a code block.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This is a normal paragraph:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This is a code block.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr /&gt;
-&lt;p&gt;A code block continues until it reaches a line that is not indented (or the end of the article).&lt;/p&gt;
-&lt;p&gt;Within a code block, &lt;strong&gt;&lt;em&gt;ampersands (&amp;amp;)&lt;/em&gt;&lt;/strong&gt; and angle &lt;strong&gt;brackets (&amp;lt; and &amp;gt;)&lt;/strong&gt; are automatically converted into HTML entities.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    &amp;lt;div class=&quot;footer&quot;&amp;gt;
-        &amp;amp;copy; 2004 Foo Corporation
-    &amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;footer&quot;&amp;gt;
-    &amp;amp;copy; 2004 Foo Corporation
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr /&gt;
-&lt;p&gt;Following sections Fenced Code Blocks and Syntax Highlighting are extensions, you can use the other way to write the code block.&lt;/p&gt;
-&lt;h4&gt;Fenced Code Blocks&lt;/h4&gt;
-&lt;p&gt;Just wrap your code in &lt;code&gt;```&lt;/code&gt; (as shown below) and you won&apos;t need to indent it by four spaces.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Here&apos;s an example:
-
-```
-function test() {
-  console.log(&quot;notice the blank line before this function?&quot;);
-}
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;Here&apos;s an example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;function test() {
-  console.log(&quot;notice the blank line before this function?&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr /&gt;
-&lt;h4&gt;Syntax Highlighting&lt;/h4&gt;
-&lt;p&gt;In your fenced block, add an optional language identifier and we&apos;ll run it through syntax highlighting (&lt;a href=&quot;https://github.com/github/linguist/blob/master/lib/linguist/languages.yml&quot;&gt;Support Languages&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;```ruby
-require &apos;redcarpet&apos;
-markdown = Redcarpet.new(&quot;Hello World!&quot;)
-puts markdown.to_html
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;pre&gt;&lt;code&gt;require &apos;redcarpet&apos;
-markdown = Redcarpet.new(&quot;Hello World!&quot;)
-puts markdown.to_html
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Horizontal Rules&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;hr /&amp;gt;&lt;/code&gt;
-Places &lt;strong&gt;three or more hyphens (-), asterisks (*), or underscores (_)&lt;/strong&gt; on a line by themselves. You may use spaces between the hyphens or asterisks.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;* * *
-***
-*****
-- - -
----------------------------------------
-___
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Table&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;It&apos;s an extension.&lt;/p&gt;
-&lt;p&gt;Separates column by &lt;strong&gt;pipe (|)&lt;/strong&gt; and header by &lt;strong&gt;dashes (-)&lt;/strong&gt;, and uses &lt;strong&gt;colon (:)&lt;/strong&gt; for alignment.&lt;/p&gt;
-&lt;p&gt;The outer &lt;strong&gt;pipes (|)&lt;/strong&gt; and alignment are optional. There are &lt;strong&gt;3 delimiters&lt;/strong&gt; each cell at least for separating header.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;| Left | Center | Right |
-|:-----|:------:|------:|
-|aaa   |bbb     |ccc    |
-|ddd   |eee     |fff    |
-
- A | B
----|---
-123|456
-
-
-A |B
---|--
-12|45
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
+&lt;h3&gt;技术亮点&lt;/h3&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Left&lt;/th&gt;
-&lt;th&gt;Center&lt;/th&gt;
-&lt;th&gt;Right&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;aaa&lt;/td&gt;
-&lt;td&gt;bbb&lt;/td&gt;
-&lt;td&gt;ccc&lt;/td&gt;
+&lt;td&gt;🏠 &lt;strong&gt;本地处理&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;视频文件在本地处理，保护隐私&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;ddd&lt;/td&gt;
-&lt;td&gt;eee&lt;/td&gt;
-&lt;td&gt;fff&lt;/td&gt;
+&lt;td&gt;⚡ &lt;strong&gt;速度快&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;40 分钟视频，3-5 分钟处理完成&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;📚 &lt;strong&gt;质量高&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;自动生成多级标题、配图、思维导图&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;🎨 &lt;strong&gt;完美集成&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;生成的笔记直接导入 Obsidian&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;h2&gt;🛠️ 技术架构&lt;/h2&gt;
+&lt;h3&gt;技术栈&lt;/h3&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;A&lt;/th&gt;
-&lt;th&gt;B&lt;/th&gt;
+&lt;th&gt;模块&lt;/th&gt;
+&lt;th&gt;技术&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;123&lt;/td&gt;
-&lt;td&gt;456&lt;/td&gt;
+&lt;td&gt;语音识别&lt;/td&gt;
+&lt;td&gt;Faster-Whisper&lt;/td&gt;
+&lt;td&gt;OpenAI Whisper 的优化版本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;视频处理&lt;/td&gt;
+&lt;td&gt;OpenCV + FFmpeg&lt;/td&gt;
+&lt;td&gt;提取音频、关键帧截图&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;AI 分析&lt;/td&gt;
+&lt;td&gt;Google Gemini 2.5 Pro&lt;/td&gt;
+&lt;td&gt;多模态大语言模型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;后端框架&lt;/td&gt;
+&lt;td&gt;FastAPI&lt;/td&gt;
+&lt;td&gt;现代化的 Python Web 框架&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;前端界面&lt;/td&gt;
+&lt;td&gt;HTML + TailwindCSS&lt;/td&gt;
+&lt;td&gt;简洁的 Web 界面&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;A&lt;/th&gt;
-&lt;th&gt;B&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;12&lt;/td&gt;
-&lt;td&gt;45&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr /&gt;
-&lt;h2&gt;Span Elements&lt;/h2&gt;
-&lt;h3&gt;Links&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Markdown supports two style of links: inline and reference.&lt;/p&gt;
-&lt;h4&gt;Inline&lt;/h4&gt;
-&lt;p&gt;Inline link format like this: &lt;code&gt;[Link Text](URL &quot;Title&quot;)&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Title is optional.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This is [an example](http://example.com/ &quot;Title&quot;) inline link.
-
-[This link](http://example.net/) has no title attribute.
+&lt;h3&gt;处理流程&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;📹 视频文件 → 🎵 提取音频 → 🎙️ 语音转录
+ ↓            📸 提取关键帧                ↓
+ 🧠 AI 分析                ↓            📝 生成笔记 → 📚 Obsidian
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot;&gt;an example&lt;/a&gt; inline link.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://example.net/&quot;&gt;This link&lt;/a&gt; has no title attribute.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;If you&apos;re referring to a local resource on the same server, you can use relative paths:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;See my [About](/about/) page for details.
+&lt;h2&gt;💡 核心技术实现&lt;/h2&gt;
+&lt;h3&gt;1. 智能截图提取&lt;/h3&gt;
+&lt;p&gt;使用&lt;strong&gt;场景检测算法&lt;/strong&gt;，而不是简单的均匀采样：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def extract_keyframes(video_path, num_frames=40):    &quot;&quot;&quot;基于场景变化检测提取关键帧&quot;&quot;&quot;    cap = cv2.VideoCapture(video_path)    prev_hist = None    keyframes = []
+    while cap.isOpened():        ret, frame = cap.read()        if not ret:            break
+        # 计算直方图        hist = cv2.calcHist([frame], [0, 1, 2], None,                           [8, 8, 8], [0, 256, 0, 256, 0, 256])        hist = cv2.normalize(hist, hist).flatten()
+        # 比较相似度        if prev_hist is not None:            similarity = cv2.compareHist(prev_hist, hist,                                        cv2.HISTCMP_CORREL)            # 场景变化阈值            if similarity &amp;lt; 0.85:                keyframes.append(frame)
+        prev_hist = hist
+    return keyframes
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;See my &lt;a href=&quot;/about/&quot;&gt;About&lt;/a&gt; page for details.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h4&gt;Reference&lt;/h4&gt;
-&lt;p&gt;You could predefine link references. Format like this: &lt;code&gt;[id]: URL &quot;Title&quot;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Title is also optional. And the you refer the link, format like this: &lt;code&gt;[Link Text][id]&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[id]: http://example.com/  &quot;Optional Title Here&quot;
-This is [an example][id] reference-style link.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot;&gt;an example&lt;/a&gt; reference-style link.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;That is:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优势&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Square brackets containing the link identifier (&lt;strong&gt;not case sensitive&lt;/strong&gt;, optionally indented from the left margin using up to three spaces);&lt;/li&gt;
-&lt;li&gt;followed by a colon;&lt;/li&gt;
-&lt;li&gt;followed by one or more spaces (or tabs);&lt;/li&gt;
-&lt;li&gt;followed by the URL for the link;&lt;/li&gt;
-&lt;li&gt;The link URL may, optionally, be surrounded by angle brackets.&lt;/li&gt;
-&lt;li&gt;optionally followed by a title attribute for the link, enclosed in double or single quotes, or enclosed in parentheses.&lt;/li&gt;
+&lt;li&gt;✅ 自动识别画面切换点&lt;/li&gt;
+&lt;li&gt;✅ 避免重复截图&lt;/li&gt;
+&lt;li&gt;✅ 确保关键内容不遗漏&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;The following three link definitions are equivalent:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[foo]: http://example.com/  &quot;Optional Title Here&quot;
-[foo]: http://example.com/  &apos;Optional Title Here&apos;
-[foo]: http://example.com/  (Optional Title Here)
-[foo]: &amp;lt;http://example.com/&amp;gt;  &quot;Optional Title Here&quot;
+&lt;h3&gt;2. 解决 OpenCV 中文路径问题&lt;/h3&gt;
+&lt;p&gt;Windows 下 &lt;code&gt;cv2.imwrite()&lt;/code&gt; 无法处理中文路径，使用 &lt;code&gt;cv2.imencode()&lt;/code&gt; 方案：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def save_frame_with_chinese_path(frame, filepath):    &quot;&quot;&quot;支持中文路径的图片保存&quot;&quot;&quot;    success, encoded_image = cv2.imencode(&apos;.png&apos;, frame)    if not success:        raise Exception(&quot;图像编码失败&quot;)
+    with open(filepath, &apos;wb&apos;) as f:        f.write(encoded_image.tobytes())
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Uses an empty set of square brackets, the link text itself is used as the name.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[Google]: http://google.com/
-[Google][]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;a href=&quot;http://google.com/&quot;&gt;Google&lt;/a&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Emphasis&lt;/h3&gt;
-&lt;p&gt;HTML Tags: &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Markdown treats &lt;strong&gt;asterisks (*)&lt;/strong&gt; and &lt;strong&gt;underscores (_)&lt;/strong&gt; as indicators of emphasis. &lt;strong&gt;One delimiter&lt;/strong&gt; will be &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;; *&lt;em&gt;double delimiters&lt;/em&gt; will be &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;*single asterisks*
-
-_single underscores_
-
-**double asterisks**
-
-__double underscores__
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;em&gt;single asterisks&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;single underscores&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;double asterisks&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;double underscores&lt;/strong&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;But if you surround an * or _ with spaces, it&apos;ll be treated as a literal asterisk or underscore.&lt;/p&gt;
-&lt;p&gt;You can backslash escape it:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;\*this text is surrounded by literal asterisks\*
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;*this text is surrounded by literal asterisks*&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Code&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Wraps it with &lt;strong&gt;backtick quotes (`)&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Use the `printf()` function.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;Use the &lt;code&gt;printf()&lt;/code&gt; function.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;To include a literal backtick character within a code span, you can use &lt;strong&gt;multiple backticks&lt;/strong&gt; as the opening and closing delimiters:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;``There is a literal backtick (`) here.``
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;code&gt;There is a literal backtick (`) here.&lt;/code&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;The backtick delimiters surrounding a code span may include spaces — one after the opening, one before the closing. This allows you to place literal backtick characters at the beginning or end of a code span:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;A single backtick in a code span: `` ` ``
-
-A backtick-delimited string in a code span: `` `foo` ``
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;A backtick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Images&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;img /&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Markdown uses an image syntax that is intended to resemble the syntax for links, allowing for two styles: inline and reference.&lt;/p&gt;
-&lt;h4&gt;Inline&lt;/h4&gt;
-&lt;p&gt;Inline image syntax looks like this: &lt;code&gt;![Alt text](URL &quot;Title&quot;)&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Title is optional.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;![Alt text](/path/to/img.jpg)
-
-![Alt text](/path/to/img.jpg &quot;Optional title&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; title=&quot;Optional title&quot; /&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;That is:&lt;/p&gt;
+&lt;h3&gt;3. 优化 AI Prompt 避免超时&lt;/h3&gt;
+&lt;p&gt;Gemini API 的超时时间为 120 秒，通过优化 Prompt 提升性能：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优化前&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;An exclamation mark: !;&lt;/li&gt;
-&lt;li&gt;followed by a set of square brackets, containing the alt attribute text for the image;&lt;/li&gt;
-&lt;li&gt;followed by a set of parentheses, containing the URL or path to the image, and an optional title attribute enclosed in double or single quotes.&lt;/li&gt;
+&lt;li&gt;📄 Prompt 长度：300+ 行&lt;/li&gt;
+&lt;li&gt;⏱️ 处理时间：150 秒（超时）&lt;/li&gt;
+&lt;li&gt;❌ 成功率：60%&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4&gt;Reference&lt;/h4&gt;
-&lt;p&gt;Reference-style image syntax looks like this: &lt;code&gt;![Alt text][id]&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[img id]: https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp  &quot;Optional title attribute&quot;
-![Alt text][img id]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; title=&quot;Optional title attribute&quot; /&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Strikethrough&lt;/h3&gt;
-&lt;p&gt;HTML Tag: &lt;code&gt;&amp;lt;del&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;It&apos;s an extension.&lt;/p&gt;
-&lt;p&gt;GFM adds syntax to strikethrough text.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;~~Mistaken text.~~
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;s&gt;Mistaken text.&lt;/s&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h2&gt;Miscellaneous&lt;/h2&gt;
-&lt;h3&gt;Automatic Links&lt;/h3&gt;
-&lt;p&gt;Markdown supports a shortcut style for creating &quot;automatic&quot; links for URLs and email addresses: simply surround the URL or email address with angle brackets.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;http://example.com/&amp;gt;
-
-&amp;lt;address@example.com&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;a href=&quot;http://example.com/&quot;&gt;http://example.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;mailto:address@example.com&quot;&gt;address@example.com&lt;/a&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;GFM will autolink standard URLs.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;https://github.com/emn178/markdown
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;https://github.com/emn178/markdown&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h3&gt;Backslash Escapes&lt;/h3&gt;
-&lt;p&gt;Markdown allows you to use backslash escapes to generate literal characters which would otherwise have special meaning in Markdown&apos;s formatting syntax.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;\*literal asterisks\*
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;*literal asterisks*&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;Markdown provides backslash escapes for the following characters:&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;\   backslash
-`   backtick
-*   asterisk
-_   underscore
-{}  curly braces
-[]  square brackets
-()  parentheses
-#   hash mark
-+   plus sign
--   minus sign (hyphen)
-.   dot
-!   exclamation mark
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Inline HTML&lt;/h2&gt;
-&lt;p&gt;For any markup that is not covered by Markdown&apos;s syntax, you simply use HTML itself. There&apos;s no need to preface it or delimit it to indicate that you&apos;re switching from Markdown to HTML; you just use the tags.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;This is a regular paragraph.
-
-&amp;lt;table&amp;gt;
-    &amp;lt;tr&amp;gt;
-        &amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;
-    &amp;lt;/tr&amp;gt;
-&amp;lt;/table&amp;gt;
-
-This is another regular paragraph.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;This is a regular paragraph.&lt;/p&gt;
-&lt;p&gt;&amp;lt;table&amp;gt;
-&amp;lt;tr&amp;gt;
-&amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;
-&amp;lt;/tr&amp;gt;
-&amp;lt;/table&amp;gt;&lt;/p&gt;
-&lt;p&gt;This is another regular paragraph.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;Note that Markdown formatting syntax is &lt;strong&gt;not processed within block-level HTML tags&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Unlike block-level HTML tags, Markdown syntax is &lt;strong&gt;processed within span-level tags&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;span&amp;gt;**Work**&amp;lt;/span&amp;gt;
-
-&amp;lt;div&amp;gt;
-    **No Work**
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Preview:&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&amp;lt;span&amp;gt;&lt;strong&gt;Work&lt;/strong&gt;&amp;lt;/span&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;div&amp;gt;
-&lt;strong&gt;No Work&lt;/strong&gt;
-&amp;lt;/div&amp;gt;&lt;/p&gt;
-&lt;hr /&gt;
-</content:encoded></item><item><title>海贼王</title><link>https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E6%B5%B7%E8%B4%BC%E7%8E%8B/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E6%B5%B7%E8%B4%BC%E7%8E%8B/</guid><description>尾田荣一郎创作的冒险漫画，梦想成为海贼王的热血故事</description><pubDate>Thu, 06 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;《海贼王》（ONE PIECE）是日本漫画家尾田荣一郎作画的少年漫画作品，在《周刊少年Jump》1997年34号开始连载。&lt;/p&gt;
-&lt;h2&gt;故事简介&lt;/h2&gt;
-&lt;p&gt;传说中海贼王哥尔·D·罗杰在临死前曾留下关于其毕生的财富&quot;One Piece&quot;的消息，由此引得群雄并起，众海贼们为了这笔传说中的巨额财富展开争夺，各种势力、政权不断交替，整个世界进入了动荡混乱的&quot;大海贼时代&quot;。&lt;/p&gt;
-&lt;p&gt;生长在东海某小村庄的路飞受到海贼香克斯的精神指引，决定成为一名出色的海贼。为了达成这个目标，并找到万众瞩目的One Piece，路飞踏上艰苦的旅程。一路上他遇到了无数磨难，也结识了索隆、娜美、乌索普、香吉士、乔巴、罗宾、弗兰奇、布鲁克等一众性格各异的好友。他们携手一同展开充满传奇色彩的大冒险。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
-&lt;h3&gt;蒙奇·D·路飞&lt;/h3&gt;
-&lt;p&gt;草帽海贼团船长，梦想成为&quot;海贼王&quot;。误食橡胶果实，身体可以像橡胶一样伸缩自如。性格乐观积极，重视伙伴。&lt;/p&gt;
-&lt;h3&gt;罗罗诺亚·索隆&lt;/h3&gt;
-&lt;p&gt;草帽海贼团战斗员，三刀流剑士。梦想成为世界第一大剑豪。路痴属性严重，但实力强大。&lt;/p&gt;
-&lt;h3&gt;娜美&lt;/h3&gt;
-&lt;p&gt;草帽海贼团航海士，擅长天气预报和绘制海图。梦想绘制全世界的海图。贪财但善良。&lt;/p&gt;
-&lt;h3&gt;乌索普&lt;/h3&gt;
-&lt;p&gt;草帽海贼团狙击手，擅长说谎和发明。梦想成为勇敢的海上战士。虽然胆小但关键时刻会挺身而出。&lt;/p&gt;
-&lt;h3&gt;香吉士&lt;/h3&gt;
-&lt;p&gt;草帽海贼团厨师，使用脚技战斗。梦想找到传说中的ALL BLUE。对女性极其绅士，看到美女就会失去理智。&lt;/p&gt;
-&lt;h2&gt;作品特色&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;宏大的世界观&lt;/strong&gt;：故事设定了一个庞大而完整的海贼世界，包含众多岛屿、国家和势力。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;丰富的人物设定&lt;/strong&gt;：每个角色都有独特的背景故事和梦想，性格鲜明。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;热血的冒险精神&lt;/strong&gt;：强调友情、梦想和坚持不懈的精神。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;精妙的伏笔&lt;/strong&gt;：作者在故事中埋下大量伏笔，随着剧情发展逐渐揭晓，让读者欲罢不能。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;感人的情感描写&lt;/strong&gt;：虽然是热血漫画，但也包含许多催人泪下的情节。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;影响力&lt;/h2&gt;
-&lt;p&gt;《海贼王》连载至今已超过25年，是最畅销的日本漫画之一，在全球范围内拥有大量粉丝。作品传达的正能量和积极向上的精神激励了无数读者。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&quot;我是要成为海贼王的男人！&quot; —— 蒙奇·D·路飞&lt;/p&gt;
-&lt;/blockquote&gt;
-</content:encoded></item><item><title>火影忍者</title><link>https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E7%81%AB%E5%BD%B1%E5%BF%8D%E8%80%85/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E7%81%AB%E5%BD%B1%E5%BF%8D%E8%80%85/</guid><description>岸本齐史创作的忍者题材漫画，讲述少年鸣人追逐梦想成为火影的成长故事</description><pubDate>Thu, 06 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;《火影忍者》是日本漫画家岸本齐史的代表作品，讲述了忍者世界中主人公漩涡鸣人追逐梦想的热血故事。&lt;/p&gt;
-&lt;h2&gt;故事背景&lt;/h2&gt;
-&lt;p&gt;故事发生在一个忍者的世界，围绕着主角漩涡鸣人以及他所在的木叶忍者村展开。十几年前，一只九尾妖狐袭击木叶村，四代目火影为了保护村子，将九尾封印在了刚出生的鸣人体内，自己却牺牲了。&lt;/p&gt;
-&lt;h2&gt;主要人物&lt;/h2&gt;
-&lt;h3&gt;漩涡鸣人&lt;/h3&gt;
-&lt;p&gt;故事的主人公，体内封印着九尾妖狐的少年。虽然从小遭受村民的冷眼和排斥，但性格乐观开朗，立志成为火影，获得所有人的认可。&lt;/p&gt;
-&lt;h3&gt;宇智波佐助&lt;/h3&gt;
-&lt;p&gt;鸣人的挚友兼对手，天才忍者，宇智波一族的幸存者。为了复仇而不断追求力量，性格冷酷但内心善良。&lt;/p&gt;
-&lt;h3&gt;春野樱&lt;/h3&gt;
-&lt;p&gt;鸣人的队友，第七班的女性成员。起初只是一个普通的女孩，后来成为出色的医疗忍者和战斗型忍者。&lt;/p&gt;
-&lt;h3&gt;旗木卡卡西&lt;/h3&gt;
-&lt;p&gt;第七班的指导老师，拥有&quot;写轮眼&quot;的天才忍者。外表吊儿郎当，实力却非常强大。&lt;/p&gt;
-&lt;h3&gt;自来也&lt;/h3&gt;
-&lt;p&gt;传说中的三忍之一，鸣人的师父。性格豪爽好色，但实力高强，对鸣人的成长影响深远。&lt;/p&gt;
-&lt;h2&gt;核心主题&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;梦想与坚持&lt;/strong&gt;：鸣人从未放弃成为火影的梦想，即使遭遇重重困难。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;羁绊与友情&lt;/strong&gt;：作品强调伙伴之间的羁绊，以及这种羁绊带来的力量。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;宿命与选择&lt;/strong&gt;：探讨了宿命论与个人选择之间的关系。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;和平与理解&lt;/strong&gt;：通过忍者世界的战争与和平，探讨如何实现真正的相互理解。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;成长与蜕变&lt;/strong&gt;：每个角色都经历了从弱小到强大的成长过程。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;忍术体系&lt;/h2&gt;
-&lt;h3&gt;查克拉&lt;/h3&gt;
-&lt;p&gt;忍术的基础能量，由身体能量和精神能量组成。&lt;/p&gt;
-&lt;h3&gt;三大基本术&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;优化后&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;分身术&lt;/strong&gt;：制造幻象分身&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;变身术&lt;/strong&gt;：变化为其他人或物体的外貌&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;替身术&lt;/strong&gt;：在遭受攻击时用物体替代自身&lt;/li&gt;
+&lt;li&gt;📄 Prompt 长度：100 行&lt;/li&gt;
+&lt;li&gt;⏱️ 处理时间：40 秒&lt;/li&gt;
+&lt;li&gt;✅ 成功率：99%&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;高级忍术&lt;/h3&gt;
+&lt;h2&gt;🔗 项目链接&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;影分身之术&lt;/strong&gt;：鸣人的标志性技能&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;螺旋丸&lt;/strong&gt;：四代目和自来也的独特技能&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;千鸟&lt;/strong&gt;：佐助的雷遁忍术&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;写轮眼&lt;/strong&gt;：宇智波一族的血继限界&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub&lt;/strong&gt;：&lt;a href=&quot;https://github.com/1685901916/local-video-summary&quot;&gt;本地视频总结工具 - 用 AI 自动生成学习笔记 &lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;经典名言&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&quot;我绝对不会违背自己说过的话，这就是我的忍道！&quot; —— 漩涡鸣人&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&quot;我已经在想你死的时候的事情了。&quot; —— 宇智波佐助&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&quot;能原谅别人的人，才是真正强大的人。&quot; —— 长门&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2&gt;作品影响&lt;/h2&gt;
-&lt;p&gt;《火影忍者》自1999年开始连载，2014年完结，是继《龙珠》之后最成功的少年漫画之一。作品在全球范围内拥有大量粉丝，不仅推出了动画、电影等衍生作品，还对流行文化产生了深远影响。&lt;/p&gt;
-&lt;p&gt;故事传达的永不放弃的精神、对梦想的执着追求，以及对友情和羁绊的重视，激励了无数读者。作品中丰富的忍术设定和精彩的战斗场面也成为其一大特色。&lt;/p&gt;
-</content:encoded></item><item><title>进击的巨人</title><link>https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/</guid><description>谏山创创作的黑暗奇幻漫画，人类与巨人的生存之战</description><pubDate>Wed, 05 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;进击的巨人&lt;/h1&gt;
-&lt;h2&gt;简介&lt;/h2&gt;
-&lt;p&gt;《进击的巨人》是谏山创创作的黑暗奇幻漫画作品，讲述了在巨人统治的世界中，人类为了生存而奋战的故事。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
+&lt;h2&gt;🙏 致谢&lt;/h2&gt;
+&lt;p&gt;感谢以下开源项目：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;艾伦·耶格尔&lt;/strong&gt; - 主角，拥有进击的巨人之力，誓要消灭所有巨人&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;三笠·阿克曼&lt;/strong&gt; - 艾伦的青梅竹马，战斗力超群的调查兵团成员&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;阿明·阿诺德&lt;/strong&gt; - 艾伦的挚友，拥有超凡的智谋&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;利威尔·阿克曼&lt;/strong&gt; - 人类最强的士兵，调查兵团兵长&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/openai/whisper&quot;&gt;OpenAI Whisper&lt;/a&gt; - 语音识别模型&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/guillaumekln/faster-whisper&quot;&gt;Faster-Whisper&lt;/a&gt; - Whisper 优化实现&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://ai.google.dev/&quot;&gt;Google Gemini&lt;/a&gt; - 多模态 AI  模型&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://fastapi.tiangolo.com/&quot;&gt;FastAPI&lt;/a&gt; - Python Web 框架&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;评价&lt;/h2&gt;
-&lt;p&gt;作品以其宏大的世界观、复杂的人物关系和深刻的哲学思考而闻名，是近年来最具影响力的漫画作品之一。故事中对自由、战争、种族等主题的探讨引发了广泛的讨论。&lt;/p&gt;
-&lt;h2&gt;剧情特色&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;扣人心弦的悬念设定&lt;/li&gt;
-&lt;li&gt;多重反转的剧情发展&lt;/li&gt;
-&lt;li&gt;深刻的人性探讨&lt;/li&gt;
-&lt;li&gt;震撼的战斗场面&lt;/li&gt;
-&lt;/ul&gt;
-</content:encoded></item><item><title>金田一少年事件簿</title><link>https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E9%87%91%E7%94%B0%E4%B8%80%E5%B0%91%E5%B9%B4%E4%BA%8B%E4%BB%B6%E7%B0%BF/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E9%87%91%E7%94%B0%E4%B8%80%E5%B0%91%E5%B9%B4%E4%BA%8B%E4%BB%B6%E7%B0%BF/</guid><description>经典推理漫画，高中生金田一一破解各种密室杀人案件</description><pubDate>Wed, 05 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;金田一少年事件簿&lt;/h1&gt;
-&lt;h2&gt;简介&lt;/h2&gt;
-&lt;p&gt;《金田一少年事件簿》是天树征丸（原作）、さとうふみや（作画）创作的推理漫画，讲述了名侦探金田一耕助的孙子金田一一解决各种离奇案件的故事。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;金田一一&lt;/strong&gt; - 主角，高中生侦探，IQ180&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;七濑美雪&lt;/strong&gt; - 金田一的青梅竹马&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;剑持勇&lt;/strong&gt; - 警部，经常与金田一合作&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;明智健悟&lt;/strong&gt; - 警视厅精英警部，金田一的劲敌&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;评价&lt;/h2&gt;
-&lt;p&gt;作品以其精妙的诡计设计和扣人心弦的推理过程而深受读者喜爱，是日本推理漫画的经典之作。&lt;/p&gt;
-</content:encoded></item><item><title>阿松</title><link>https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E9%98%BF%E6%9D%BE/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E9%98%BF%E6%9D%BE/</guid><description>赤塚不二夫经典作品重制，六胞胎的日常搞笑故事</description><pubDate>Wed, 05 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;阿松&lt;/h1&gt;
-&lt;h2&gt;简介&lt;/h2&gt;
-&lt;p&gt;《阿松》是根据赤塚不二夫的经典漫画《小松君》改编的搞笑日常动画，讲述了松野家六胞胎成年后依然啃老的废柴日常。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;松野小松&lt;/strong&gt; - 长男，看似正常的废柴&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;松野轻松&lt;/strong&gt; - 次男，自恋的时尚废柴&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;松野一松&lt;/strong&gt; - 三男，阴暗的废柴&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;松野十四松&lt;/strong&gt; - 四男，神经质的废柴&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;松野椴松&lt;/strong&gt; - 五男，毒舌的废柴&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;松野小松&lt;/strong&gt; - 六男，最废的废柴&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;评价&lt;/h2&gt;
-&lt;p&gt;作品以其无厘头的搞笑风格和社会讽刺而大受欢迎，是近年来最火爆的搞笑动画之一。&lt;/p&gt;
-</content:encoded></item><item><title>下载已购小鹅通视频</title><link>https://mizuki.mysqil.com/posts/programming/xiaoe-downloader/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/programming/xiaoe-downloader/</guid><description>基于Python实现的小鹅通M3U8加密视频下载工具，支持AES-128解密、6线程并行下载、自动FFmpeg合并。实战验证28节课程100%成功率。</description><pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;📖 前言&lt;/h2&gt;
+</content:encoded></item><item><title>下载已购小鹅通视频</title><link>http://localhost:4322/posts/programming/xiaoe-downloader/</link><guid isPermaLink="true">http://localhost:4322/posts/programming/xiaoe-downloader/</guid><description>基于Python实现的小鹅通M3U8加密视频下载工具，支持AES-128解密、6线程并行下载、自动FFmpeg合并。实战验证28节课程100%成功率。</description><pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;📖 前言&lt;/h2&gt;
 &lt;p&gt;最近购买了小鹅通平台上的付费课程,想下载到本地方便用BiliNote总结视频。但发现小鹅通使用了M3U8+AES-128加密技术,普通的视频下载工具完全无法使用。&lt;/p&gt;
 &lt;p&gt;基本上是AI做的,给大家个参考吧。网上的软件大都要收费,CSDN上求软件的基本上都是课程的10%收费,然后设置个上限让你付款。&lt;/p&gt;
 &lt;p&gt;🔗 &lt;strong&gt;参考方案&lt;/strong&gt;: &lt;a href=&quot;https://1kcode.cn/%E5%A6%82%E4%BD%95%E5%85%8D%E8%B4%B9%E4%B8%8B%E8%BD%BD%E5%B0%8F%E9%B9%85%E9%80%9A%E4%BB%98%E8%B4%B9%E8%A7%86%E9%A2%91/&quot;&gt;🧠 技术干货｜如何免费下载小鹅通视频？（纯开源方案,无需付费软件）&lt;/a&gt;&lt;/p&gt;
@@ -1387,7 +774,7 @@ downloader.download_course(course)
 &lt;p&gt;&lt;strong&gt;如果这篇文章对你有帮助,欢迎：&lt;/strong&gt;&lt;br /&gt;
 👍 点赞支持 | 💬 评论交流 | ⭐ 收藏备用 | 🔗 分享给朋友&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;声明&lt;/strong&gt;: 本文仅供技术学习交流,请遵守法律法规和平台规则&lt;/p&gt;
-</content:encoded></item><item><title>轻音少女</title><link>https://mizuki.mysqil.com/posts/keion-girls/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/keion-girls/</guid><description>京阿尼经典校园日常番，讲述轻音部女孩们的青春故事</description><pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829221155.png&quot; alt=&quot;轻音少女封面&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>轻音少女</title><link>http://localhost:4322/posts/keion-girls/</link><guid isPermaLink="true">http://localhost:4322/posts/keion-girls/</guid><description>京阿尼经典校园日常番，讲述轻音部女孩们的青春故事</description><pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829221155.png&quot; alt=&quot;轻音少女封面&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829220821.png&quot; alt=&quot;轻音少女剧照&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;制作&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;制作公司&lt;/strong&gt;：京都动画（京阿尼）&lt;/p&gt;
@@ -1402,508 +789,7 @@ downloader.download_course(course)
 &lt;p&gt;动画不仅展现了少女们在音乐方面的成长，更描绘了她们之间深厚的友情和青春时光的美好。每一集都充满了欢笑与感动，让观众感受到青春的珍贵。&lt;/p&gt;
 &lt;h2&gt;周边&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250829220929.png&quot; alt=&quot;周边商品&quot; /&gt;&lt;/p&gt;
-</content:encoded></item><item><title>名侦探柯南</title><link>https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97/</guid><description>推理漫画的经典之作，高中生侦探变身小学生破案的故事</description><pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;名侦探柯南&lt;/h1&gt;
-&lt;h2&gt;简介&lt;/h2&gt;
-&lt;p&gt;《名侦探柯南》是青山刚昌创作的推理漫画，讲述了高中生侦探工藤新一被灌药变小后，化名江户川柯南继续侦破案件的故事。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;江户川柯南/工藤新一&lt;/strong&gt; - 主角，高中生侦探&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;毛利兰&lt;/strong&gt; - 新一的青梅竹马，空手道高手&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;毛利小五郎&lt;/strong&gt; - 私家侦探，&quot;沉睡的小五郎&quot;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;灰原哀&lt;/strong&gt; - 前黑衣组织成员，也被灌药变小&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;评价&lt;/h2&gt;
-&lt;p&gt;作为长寿推理漫画，柯南以其精巧的案件设计和扣人心弦的主线剧情深受读者喜爱。&lt;/p&gt;
-</content:encoded></item><item><title>悠哉日常大王</title><link>https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E6%82%A0%E5%93%89%E6%97%A5%E5%B8%B8%E5%A4%A7%E7%8E%8B/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E6%82%A0%E5%93%89%E6%97%A5%E5%B8%B8%E5%A4%A7%E7%8E%8B/</guid><description>描绘乡村田园生活的治愈系漫画，四个女孩的日常故事</description><pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;悠哉日常大王&lt;/h1&gt;
-&lt;h2&gt;简介&lt;/h2&gt;
-&lt;p&gt;《悠哉日常大王》是あっと创作的日常系漫画，讲述了在乡村小学校就读的四个女孩的悠闲日常生活。&lt;/p&gt;
-&lt;h2&gt;主要角色&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;宫内莲华&lt;/strong&gt; - 小学一年级生，活泼可爱&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;一条萤&lt;/strong&gt; - 从东京转学而来的小学五年级生&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;越谷夏海&lt;/strong&gt; - 小学五年级生，精力充沛&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;越谷小鞠&lt;/strong&gt; - 小学六年级生，身材娇小&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;评价&lt;/h2&gt;
-&lt;p&gt;作品以其缓慢的节奏、优美的乡村风景和温馨的日常描写而深受喜爱，是治愈系漫画的代表作。&lt;/p&gt;
-</content:encoded></item><item><title>测试导入工具功能</title><link>https://mizuki.mysqil.com/posts/-/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/-/</guid><description>这是一个测试 Obsidian 导入工具功能的文章</description><pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;hr /&gt;
-&lt;p&gt;tags:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;测试&lt;/li&gt;
-&lt;li&gt;导入工具
-评分: 5&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr /&gt;
-&lt;h1&gt;测试 Obsidian 导入工具&lt;/h1&gt;
-&lt;p&gt;这是一个测试文件，用来验证 Obsidian 导入工具的功能。&lt;/p&gt;
-&lt;h2&gt;功能特性&lt;/h2&gt;
-&lt;h3&gt;1. 文本内容转换&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;支持 &lt;strong&gt;粗体&lt;/strong&gt; 和 &lt;em&gt;斜体&lt;/em&gt; 文本&lt;/li&gt;
-&lt;li&gt;支持代码块和行内代码 &lt;code&gt;console.log()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;支持列表和引用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;2. 图片处理测试&lt;/h3&gt;
-&lt;p&gt;下面是一些测试图片：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/-/test-image-1.png&quot; alt=&quot;test-image-1&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;这是第二张图片：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/-/test-image-2.jpg&quot; alt=&quot;test-image-2&quot; /&gt;&lt;/p&gt;
-&lt;h3&gt;3. 链接转换测试&lt;/h3&gt;
-&lt;p&gt;这是一个 &lt;a href=&quot;%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5&quot;&gt;内部链接&lt;/a&gt; 的例子。&lt;/p&gt;
-&lt;h3&gt;4. 标签测试&lt;/h3&gt;
-&lt;p&gt;#重要 #测试标签&lt;/p&gt;
-&lt;h2&gt;总结&lt;/h2&gt;
-&lt;p&gt;这个工具应该能够：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;转换 Markdown 格式&lt;/li&gt;
-&lt;li&gt;复制图片文件&lt;/li&gt;
-&lt;li&gt;更新图片路径&lt;/li&gt;
-&lt;li&gt;生成正确的 Front Matter&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;测试完成！&lt;/p&gt;
-</content:encoded></item><item><title>服务器选购指南</title><link>https://mizuki.mysqil.com/posts/post-1761465536279/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/post-1761465536279/</guid><description>详细介绍各大云服务商的服务器选购建议，包括香港、硅谷、芭乐、阿里云、核云、雨云等平台的对比分析。</description><pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&amp;lt;!-- 外部文件图片已移除 --&amp;gt;&lt;br /&gt;
-我才用几天暂时没有发现什么问题，自己去判断吧都成年人了https://www.heyunidc.cn/aff/NHDEKXDQ&lt;/p&gt;
-&lt;h1&gt;香港&lt;/h1&gt;
-&lt;h2&gt;硅谷&lt;/h2&gt;
-&lt;p&gt;硅谷云服务器提供优质的海外服务器服务，以下是配置参考：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png&quot; alt=&quot;硅谷服务器配置&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;性价比较高，适合需要海外服务器的用户。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg&quot; alt=&quot;硅谷服务器详细信息&quot; /&gt;&lt;/p&gt;
-&lt;h2&gt;芭乐&lt;/h2&gt;
-&lt;p&gt;芭乐云是一个新兴的云服务提供商，提供多种配置选择：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png&quot; alt=&quot;芭乐云服务器配置&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;测试账号信息：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;用户名：l12mxxyj&lt;/li&gt;
-&lt;li&gt;密码：f37611d4&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg&quot; alt=&quot;芭乐云管理界面&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;正式账号登录信息：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;用户名：max_8le_me&lt;/li&gt;
-&lt;li&gt;密码：7Am4FX59pQtmbPSP&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;服务器性能稳定，价格合理。&lt;/p&gt;
-&lt;h2&gt;阿里云&lt;/h2&gt;
-&lt;p&gt;阿里云作为国内领先的云服务提供商，提供丰富的产品线：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png&quot; alt=&quot;阿里云服务器配置&quot; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;稳定性高&lt;/li&gt;
-&lt;li&gt;技术支持完善&lt;/li&gt;
-&lt;li&gt;产品线丰富&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;核云&lt;/h2&gt;
-&lt;p&gt;&amp;lt;!-- 外部文件图片已移除 --&amp;gt;&lt;br /&gt;
-我才用几天暂时没有发现什么问题，自己去判断吧都成年人了https://www.heyunidc.cn/aff/NHDEKXDQ&lt;/p&gt;
-&lt;h2&gt;雨云&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.rainyun.com/home&quot;&gt;雨云 - 新一代云服务提供商&lt;/a&gt;&lt;/p&gt;
-</content:encoded></item><item><title>Test Obsidian Import Tool</title><link>https://mizuki.mysqil.com/posts/test-obsidian-import-tool/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/test-obsidian-import-tool/</guid><description>Testing the Obsidian import functionality with automatic image copying</description><pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Test Obsidian Import Tool&lt;/h1&gt;
-&lt;p&gt;This is a test file to verify the Obsidian import tool functionality.&lt;/p&gt;
-&lt;h2&gt;Features&lt;/h2&gt;
-&lt;h3&gt;1. Text Content Conversion&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Support &lt;strong&gt;bold&lt;/strong&gt; and &lt;em&gt;italic&lt;/em&gt; text&lt;/li&gt;
-&lt;li&gt;Support code blocks and inline code &lt;code&gt;console.log()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Support lists and quotes&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;2. Image Processing Test&lt;/h3&gt;
-&lt;p&gt;Here are some test images:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png&quot; alt=&quot;test-image-1&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;This is the second image:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg&quot; alt=&quot;test-image-2&quot; /&gt;&lt;/p&gt;
-&lt;h3&gt;3. Link Conversion Test&lt;/h3&gt;
-&lt;p&gt;This is an example of [internal link](internal link).&lt;/p&gt;
-&lt;h3&gt;4. Tag Test&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;important&lt;/strong&gt; #test-tag&lt;/p&gt;
-&lt;h2&gt;Summary&lt;/h2&gt;
-&lt;p&gt;This tool should be able to:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Convert Markdown format&lt;/li&gt;
-&lt;li&gt;Copy image files&lt;/li&gt;
-&lt;li&gt;Update image paths&lt;/li&gt;
-&lt;li&gt;Generate correct Front Matter&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Test completed!&lt;/p&gt;
-</content:encoded></item><item><title>学习 Astro 框架</title><link>https://mizuki.mysqil.com/posts/-astro-/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/-astro-/</guid><description>记录我学习 Astro 静态网站生成器的过程和心得</description><pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;学习 Astro 框架&lt;/h1&gt;
-&lt;p&gt;今天开始学习 Astro 框架，这是一个现代化的静态网站生成器。&lt;/p&gt;
-&lt;h2&gt;什么是 Astro？&lt;/h2&gt;
-&lt;p&gt;Astro 是一个现代化的前端框架，专门用于构建快速、以内容为中心的网站。它的主要特点包括：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;零 JavaScript 默认&lt;/strong&gt;: 默认情况下不发送 JavaScript 到浏览器&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;组件岛屿&lt;/strong&gt;: 只在需要时加载交互组件&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;多框架支持&lt;/strong&gt;: 可以同时使用 React、Vue、Svelte 等&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;优秀的性能&lt;/strong&gt;: 生成的网站加载速度极快&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;学习计划&lt;/h2&gt;
-&lt;h3&gt;第一阶段：基础概念&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;[ ] 了解 Astro 的核心概念&lt;/li&gt;
-&lt;li&gt;[ ] 学习组件语法&lt;/li&gt;
-&lt;li&gt;[ ] 掌握路由系统&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;第二阶段：实践项目&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;[ ] 创建个人博客&lt;/li&gt;
-&lt;li&gt;[ ] 添加动态功能&lt;/li&gt;
-&lt;li&gt;[ ] 优化性能&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;第三阶段：高级特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;[ ] 学习 SSR 功能&lt;/li&gt;
-&lt;li&gt;[ ] 集成第三方服务&lt;/li&gt;
-&lt;li&gt;[ ] 部署优化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;今日收获&lt;/h2&gt;
-&lt;p&gt;通过今天的学习，我了解到：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Astro 的优势&lt;/strong&gt;: 相比传统的 SPA，Astro 生成的网站加载更快&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;开发体验&lt;/strong&gt;: 支持热重载，开发体验很好&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;生态系统&lt;/strong&gt;: 有丰富的插件和集成选项&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;代码示例&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;---
-// Astro 组件示例
-const title = &quot;Hello Astro&quot;;
-const items = [&quot;学习&quot;, &quot;实践&quot;, &quot;分享&quot;];
----
-
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;title&amp;gt;{title}&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;h1&amp;gt;{title}&amp;lt;/h1&amp;gt;
-    &amp;lt;ul&amp;gt;
-      {items.map(item =&amp;gt; &amp;lt;li&amp;gt;{item}&amp;lt;/li&amp;gt;)}
-    &amp;lt;/ul&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;下一步计划&lt;/h2&gt;
-&lt;p&gt;明天我将继续深入学习 Astro 的组件系统，并尝试创建一些实用的组件。&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;em&gt;学习永无止境，每天进步一点点！&lt;/em&gt;&lt;/p&gt;
-</content:encoded></item><item><title>资源网站构建</title><link>https://mizuki.mysqil.com/posts/resource-website-construction/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/resource-website-construction/</guid><description>探讨资源网站的构建思路和变现手段，分析一些优秀的资源分享平台案例。</description><pubDate>Sat, 26 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;资源网站构建&lt;/h1&gt;
-&lt;h2&gt;项目概述&lt;/h2&gt;
-&lt;p&gt;搭建资源网站可以自己使用，虽然看起来没什么特别的用处，但实际上这也是一个不错的变现手段。&lt;/p&gt;
-&lt;h2&gt;优秀案例分析&lt;/h2&gt;
-&lt;h3&gt;1. 源码猫 - 精品源码分享平台&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;网站链接&lt;/strong&gt;: &lt;a href=&quot;https://www.ymcat.cn/&quot;&gt;源码猫-精品源码,PHP源码,游戏源码,模板,插件,软件资源分享平台!&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;源码猫是一个专注于精品源码分享的平台，提供：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;PHP 源码&lt;/li&gt;
-&lt;li&gt;游戏源码&lt;/li&gt;
-&lt;li&gt;网站模板&lt;/li&gt;
-&lt;li&gt;插件资源&lt;/li&gt;
-&lt;li&gt;软件资源&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这类平台通过提供高质量的源码资源，吸引开发者用户，形成稳定的用户群体。&lt;/p&gt;
-&lt;h3&gt;2. 柏码 - 编程教育平台&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;网站链接&lt;/strong&gt;: &lt;a href=&quot;https://www.itbaima.cn/zh-CN&quot;&gt;柏码 - 让每一行代码都闪耀智慧的光芒&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;柏码是一个编程教育平台，其特色在于：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;优质的编程教程&lt;/li&gt;
-&lt;li&gt;系统化的学习路径&lt;/li&gt;
-&lt;li&gt;实践项目指导&lt;/li&gt;
-&lt;li&gt;社区互动功能&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;网站收益模式&lt;/h2&gt;
-&lt;p&gt;资源网站的主要收益来源包括：&lt;/p&gt;
-&lt;h3&gt;1. 会员订阅&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;提供免费和付费内容分层&lt;/li&gt;
-&lt;li&gt;VIP 会员享受更多资源和服务&lt;/li&gt;
-&lt;li&gt;按月/年收费的订阅模式&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;2. 广告收入&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;展示广告位&lt;/li&gt;
-&lt;li&gt;联盟营销&lt;/li&gt;
-&lt;li&gt;赞助内容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;3. 资源销售&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;独家资源付费下载&lt;/li&gt;
-&lt;li&gt;定制开发服务&lt;/li&gt;
-&lt;li&gt;技术咨询服务&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;4. 培训课程&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在线课程销售&lt;/li&gt;
-&lt;li&gt;一对一指导&lt;/li&gt;
-&lt;li&gt;企业培训服务&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;技术实现思路&lt;/h2&gt;
-&lt;h3&gt;前端技术栈&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;框架选择&lt;/strong&gt;: React/Vue.js 或静态生成器如 Astro&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;UI 组件&lt;/strong&gt;: 现代化的组件库&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;响应式设计&lt;/strong&gt;: 适配各种设备&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;后端技术栈&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;服务器&lt;/strong&gt;: Node.js/PHP/Python&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;数据库&lt;/strong&gt;: MySQL/PostgreSQL&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;文件存储&lt;/strong&gt;: 云存储服务&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;CDN&lt;/strong&gt;: 加速资源访问&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;核心功能模块&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;用户系统&lt;/strong&gt;: 注册、登录、权限管理&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;资源管理&lt;/strong&gt;: 上传、分类、搜索&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;支付系统&lt;/strong&gt;: 会员订阅、资源购买&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;内容管理&lt;/strong&gt;: 文章发布、评论系统&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;数据统计&lt;/strong&gt;: 用户行为分析&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;运营策略&lt;/h2&gt;
-&lt;h3&gt;内容策略&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;定期更新高质量资源&lt;/li&gt;
-&lt;li&gt;建立资源审核机制&lt;/li&gt;
-&lt;li&gt;鼓励用户贡献内容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;用户增长&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;SEO 优化提高搜索排名&lt;/li&gt;
-&lt;li&gt;社交媒体推广&lt;/li&gt;
-&lt;li&gt;与其他平台合作&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;社区建设&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;建立用户交流群&lt;/li&gt;
-&lt;li&gt;定期举办活动&lt;/li&gt;
-&lt;li&gt;设置积分奖励机制&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;法律合规&lt;/h2&gt;
-&lt;h3&gt;版权保护&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;确保资源来源合法&lt;/li&gt;
-&lt;li&gt;建立版权申诉机制&lt;/li&gt;
-&lt;li&gt;定期清理违规内容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;用户协议&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;明确使用条款&lt;/li&gt;
-&lt;li&gt;隐私政策完善&lt;/li&gt;
-&lt;li&gt;免责声明清晰&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;总结&lt;/h2&gt;
-&lt;p&gt;资源网站虽然看似简单，但要做好需要考虑很多方面：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;内容质量&lt;/strong&gt;: 是成功的关键因素&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;用户体验&lt;/strong&gt;: 决定用户留存率&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;技术架构&lt;/strong&gt;: 影响网站性能和扩展性&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;运营策略&lt;/strong&gt;: 决定网站的长期发展&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;合规经营&lt;/strong&gt;: 确保网站可持续发展&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;通过合理的规划和执行，资源网站确实可以成为一个不错的变现项目。&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;em&gt;本文分析了资源网站的构建思路，希望对有意向的朋友有所帮助。&lt;/em&gt;&lt;/p&gt;
-</content:encoded></item><item><title>我的第一篇文章</title><link>https://mizuki.mysqil.com/posts/my-first-article/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/my-first-article/</guid><description>这是我在 Mizuki 博客上创建的第一篇文章，记录我的学习和生活。</description><pubDate>Sat, 26 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;欢迎来到我的博客！&lt;/h1&gt;
-&lt;p&gt;这是我使用 &lt;strong&gt;Mizuki&lt;/strong&gt; 主题创建的第一篇文章。&lt;/p&gt;
-&lt;h2&gt;关于 Mizuki 主题&lt;/h2&gt;
-&lt;p&gt;Mizuki 是一个基于 Astro 的现代化静态博客模板，具有以下特色：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;🎨 &lt;strong&gt;精美设计&lt;/strong&gt;: 现代化的界面设计&lt;/li&gt;
-&lt;li&gt;🌙 &lt;strong&gt;主题切换&lt;/strong&gt;: 支持明暗主题&lt;/li&gt;
-&lt;li&gt;📱 &lt;strong&gt;响应式&lt;/strong&gt;: 完美适配各种设备&lt;/li&gt;
-&lt;li&gt;🔍 &lt;strong&gt;全文搜索&lt;/strong&gt;: 快速找到你需要的内容&lt;/li&gt;
-&lt;li&gt;🎵 &lt;strong&gt;音乐播放器&lt;/strong&gt;: 边听音乐边阅读&lt;/li&gt;
-&lt;li&gt;🌸 &lt;strong&gt;动画效果&lt;/strong&gt;: 优雅的交互动画&lt;/li&gt;
-&lt;li&gt;🤖 &lt;strong&gt;看板娘&lt;/strong&gt;: 可爱的 Pio Live2D 角色&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;我的写作计划&lt;/h2&gt;
-&lt;p&gt;接下来我计划在这个博客上分享：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;技术学习笔记&lt;/strong&gt; - 编程技巧和经验&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;生活感悟&lt;/strong&gt; - 日常思考和体验&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;项目经验&lt;/strong&gt; - 开发过程和心得&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;读书笔记&lt;/strong&gt; - 好书推荐和摘录&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;Markdown 功能展示&lt;/h2&gt;
-&lt;h3&gt;代码块&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;function greet(name) {
-    console.log(`Hello, ${name}!`);
-}
-
-greet(&apos;Mizuki&apos;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;列表&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;项目一&lt;/li&gt;
-&lt;li&gt;项目二
-&lt;ul&gt;
-&lt;li&gt;子项目 A&lt;/li&gt;
-&lt;li&gt;子项目 B&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;引用&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这是一个引用块，用来突出重要内容。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3&gt;表格&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;功能&lt;/th&gt;
-&lt;th&gt;状态&lt;/th&gt;
-&lt;th&gt;描述&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;文章发布&lt;/td&gt;
-&lt;td&gt;✅&lt;/td&gt;
-&lt;td&gt;支持 Markdown&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;主题切换&lt;/td&gt;
-&lt;td&gt;✅&lt;/td&gt;
-&lt;td&gt;明暗主题&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;搜索功能&lt;/td&gt;
-&lt;td&gt;✅&lt;/td&gt;
-&lt;td&gt;全文搜索&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;总结&lt;/h2&gt;
-&lt;p&gt;现在我可以开始我的写作之旅了！感谢 Mizuki 提供了这么棒的博客平台。&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;em&gt;感谢阅读我的第一篇文章！更多精彩内容即将到来。&lt;/em&gt;&lt;/p&gt;
-</content:encoded></item><item><title>Markdown Extended Features</title><link>https://mizuki.mysqil.com/posts/markdown-extended/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/markdown-extended/</guid><description>Read more about Markdown features in Mizuki</description><pubDate>Wed, 01 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;GitHub Repository Cards&lt;/h2&gt;
-&lt;p&gt;You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.&lt;/p&gt;
-&lt;p&gt;::github{repo=&quot;matsuzaka-yuki/Mizuki&quot;}&lt;/p&gt;
-&lt;p&gt;Create a GitHub repository card with the code &lt;code&gt;::github{repo=&quot;matsuzaka-yuki/Mizuki&quot;}&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;::github{repo=&quot;matsuzaka-yuki/Mizuki&quot;}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Admonitions&lt;/h2&gt;
-&lt;p&gt;Following types of admonitions are supported: &lt;code&gt;note&lt;/code&gt; &lt;code&gt;tip&lt;/code&gt; &lt;code&gt;important&lt;/code&gt; &lt;code&gt;warning&lt;/code&gt; &lt;code&gt;caution&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;:::note
-Highlights information that users should take into account, even when skimming.
-:::&lt;/p&gt;
-&lt;p&gt;:::tip
-Optional information to help a user be more successful.
-:::&lt;/p&gt;
-&lt;p&gt;:::important
-Crucial information necessary for users to succeed.
-:::&lt;/p&gt;
-&lt;p&gt;:::warning
-Critical content demanding immediate user attention due to potential risks.
-:::&lt;/p&gt;
-&lt;p&gt;:::caution
-Negative potential consequences of an action.
-:::&lt;/p&gt;
-&lt;h3&gt;Basic Syntax&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;:::note
-Highlights information that users should take into account, even when skimming.
-:::
-
-:::tip
-Optional information to help a user be more successful.
-:::
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Custom Titles&lt;/h3&gt;
-&lt;p&gt;The title of the admonition can be customized.&lt;/p&gt;
-&lt;p&gt;:::note[MY CUSTOM TITLE]
-This is a note with a custom title.
-:::&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;:::note[MY CUSTOM TITLE]
-This is a note with a custom title.
-:::
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;GitHub Syntax&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;[!TIP]
-&lt;a href=&quot;https://github.com/orgs/community/discussions/16925&quot;&gt;The GitHub syntax&lt;/a&gt; is also supported.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; [!NOTE]
-&amp;gt; The GitHub syntax is also supported.
-
-&amp;gt; [!TIP]
-&amp;gt; The GitHub syntax is also supported.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;Spoiler&lt;/h3&gt;
-&lt;p&gt;You can add spoilers to your text. The text also supports &lt;strong&gt;Markdown&lt;/strong&gt; syntax.&lt;/p&gt;
-&lt;p&gt;The content :spoiler[is hidden &lt;strong&gt;ayyy&lt;/strong&gt;]!&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;The content :spoiler[is hidden **ayyy**]!&lt;/code&gt;&lt;/pre&gt;
-</content:encoded></item><item><title>Simple Guides for Mizuki</title><link>https://mizuki.mysqil.com/posts/guide/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/guide/</guid><description>How to use this blog template.</description><pubDate>Mon, 01 Apr 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This blog template is built with &lt;a href=&quot;https://astro.build/&quot;&gt;Astro&lt;/a&gt;. For the things that are not mentioned in this guide, you may find the answers in the &lt;a href=&quot;https://docs.astro.build/&quot;&gt;Astro Docs&lt;/a&gt;.&lt;/p&gt;
-&lt;h2&gt;Front-matter of Posts&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
-draft: false
----
-&lt;/code&gt;&lt;/pre&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Attribute&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The title of the post.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;published&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The date the post was published.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;pinned&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Whether this post is pinned to the top of the post list.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;A short description of the post. Displayed on index page.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;image&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The cover image path of the post.&amp;lt;br/&amp;gt;1. Start with &lt;code&gt;http://&lt;/code&gt; or &lt;code&gt;https://&lt;/code&gt;: Use web image&amp;lt;br/&amp;gt;2. Start with &lt;code&gt;/&lt;/code&gt;: For image in &lt;code&gt;public&lt;/code&gt; dir&amp;lt;br/&amp;gt;3. With none of the prefixes: Relative to the markdown file&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;tags&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The tags of the post.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;category&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The category of the post.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;licenseName&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The license name for the post content.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;author&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The author of the post.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;sourceLink&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;The source link or reference for the post content.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;If this post is still a draft, which won&apos;t be displayed.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;Where to Place the Post Files&lt;/h2&gt;
-&lt;p&gt;Your post files should be placed in &lt;code&gt;src/content/posts/&lt;/code&gt; directory. You can also create sub-directories to better organize your posts and assets.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;src/content/posts/
-├── post-1.md
-└── post-2/
-    ├── cover.png
-    └── index.md
-&lt;/code&gt;&lt;/pre&gt;
-</content:encoded></item><item><title>个人博客系统</title><link>https://mizuki.mysqil.com/posts/programming/blog-system/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/programming/blog-system/</guid><description>基于 Astro 框架开发的个人博客系统，支持 Markdown、代码高亮、响应式设计</description><pubDate>Sat, 10 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;这是一个基于 Astro 框架开发的个人博客系统。&lt;/p&gt;
+</content:encoded></item><item><title>个人博客系统</title><link>http://localhost:4322/posts/programming/blog-system/</link><guid isPermaLink="true">http://localhost:4322/posts/programming/blog-system/</guid><description>基于 Astro 框架开发的个人博客系统，支持 Markdown、代码高亮、响应式设计</description><pubDate>Sat, 10 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;这是一个基于 Astro 框架开发的个人博客系统。&lt;/p&gt;
 &lt;h2&gt;技术栈&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Astro&lt;/li&gt;
@@ -1916,170 +802,6 @@ draft: false
 &lt;li&gt;支持暗色模式&lt;/li&gt;
 &lt;li&gt;Markdown 支持&lt;/li&gt;
 &lt;/ul&gt;
-</content:encoded></item><item><title>示例插画作品</title><link>https://mizuki.mysqil.com/posts/normal/illustration-work/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/normal/illustration-work/</guid><description>这是一个示例插画作品，展示风景插画的创作过程和技巧</description><pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;这是一个示例插画作品的内容。&lt;/p&gt;
+</content:encoded></item><item><title>示例插画作品</title><link>http://localhost:4322/posts/normal/illustration-work/</link><guid isPermaLink="true">http://localhost:4322/posts/normal/illustration-work/</guid><description>这是一个示例插画作品，展示风景插画的创作过程和技巧</description><pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;这是一个示例插画作品的内容。&lt;/p&gt;
 &lt;p&gt;你可以在这里添加作品的详细介绍、创作过程、使用的工具等信息。&lt;/p&gt;
-</content:encoded></item><item><title>Markdown Mermaid</title><link>https://mizuki.mysqil.com/posts/markdown-mermaid/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/markdown-mermaid/</guid><description>A simple example of a Markdown blog post with Mermaid.</description><pubDate>Sun, 01 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Complete Guide to Markdown with Mermaid Diagrams&lt;/h1&gt;
-&lt;p&gt;This article demonstrates how to create various complex diagrams using Mermaid in Markdown documents, including flowcharts, sequence diagrams, Gantt charts, class diagrams, and state diagrams.&lt;/p&gt;
-&lt;h2&gt;Flowchart Example&lt;/h2&gt;
-&lt;p&gt;Flowcharts are excellent for representing processes or algorithm steps.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;graph TD
-    A[Start] --&amp;gt; B{Condition Check}
-    B --&amp;gt;|Yes| C[Process Step 1]
-    B --&amp;gt;|No| D[Process Step 2]
-    C --&amp;gt; E[Subprocess]
-    D --&amp;gt; E
-    subgraph E [Subprocess Details]
-        E1[Substep 1] --&amp;gt; E2[Substep 2]
-        E2 --&amp;gt; E3[Substep 3]
-    end
-    E --&amp;gt; F{Another Decision}
-    F --&amp;gt;|Option 1| G[Result 1]
-    F --&amp;gt;|Option 2| H[Result 2]
-    F --&amp;gt;|Option 3| I[Result 3]
-    G --&amp;gt; J[End]
-    H --&amp;gt; J
-    I --&amp;gt; J
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Sequence Diagram Example&lt;/h2&gt;
-&lt;p&gt;Sequence diagrams show interactions between objects over time.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sequenceDiagram
-    participant User
-    participant WebApp
-    participant Server
-    participant Database
-
-    User-&amp;gt;&amp;gt;WebApp: Submit Login Request
-    WebApp-&amp;gt;&amp;gt;Server: Send Auth Request
-    Server-&amp;gt;&amp;gt;Database: Query User Credentials
-    Database--&amp;gt;&amp;gt;Server: Return User Data
-    Server--&amp;gt;&amp;gt;WebApp: Return Auth Result
-    
-    alt Auth Successful
-        WebApp-&amp;gt;&amp;gt;User: Show Welcome Page
-        WebApp-&amp;gt;&amp;gt;Server: Request User Data
-        Server-&amp;gt;&amp;gt;Database: Get User Preferences
-        Database--&amp;gt;&amp;gt;Server: Return Preferences
-        Server--&amp;gt;&amp;gt;WebApp: Return User Data
-        WebApp-&amp;gt;&amp;gt;User: Load Personalized Interface
-    else Auth Failed
-        WebApp-&amp;gt;&amp;gt;User: Show Error Message
-        WebApp-&amp;gt;&amp;gt;User: Prompt Re-entry
-    end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Gantt Chart Example&lt;/h2&gt;
-&lt;p&gt;Gantt charts are perfect for displaying project schedules and timelines.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;gantt
-    title Website Development Project Timeline
-    dateFormat  YYYY-MM-DD
-    axisFormat  %m/%d
-    
-    section Design Phase
-    Requirements Analysis      :a1, 2023-10-01, 7d
-    UI Design                 :a2, after a1, 10d
-    Prototype Creation        :a3, after a2, 5d
-    
-    section Development Phase
-    Frontend Development      :b1, 2023-10-20, 15d
-    Backend Development       :b2, after a2, 18d
-    Database Design           :b3, after a1, 12d
-    
-    section Testing Phase
-    Unit Testing              :c1, after b1, 8d
-    Integration Testing       :c2, after b2, 10d
-    User Acceptance Testing   :c3, after c2, 7d
-    
-    section Deployment
-    Production Deployment     :d1, after c3, 3d
-    Launch                    :milestone, after d1, 0d
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Class Diagram Example&lt;/h2&gt;
-&lt;p&gt;Class diagrams show the static structure of a system, including classes, attributes, methods, and their relationships.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;classDiagram
-    class User {
-        +String username
-        +String password
-        +String email
-        +Boolean active
-        +login()
-        +logout()
-        +updateProfile()
-    }
-    
-    class Article {
-        +String title
-        +String content
-        +Date publishDate
-        +Boolean published
-        +publish()
-        +edit()
-        +delete()
-    }
-    
-    class Comment {
-        +String content
-        +Date commentDate
-        +addComment()
-        +deleteComment()
-    }
-    
-    class Category {
-        +String name
-        +String description
-        +addArticle()
-        +removeArticle()
-    }
-    
-    User &quot;1&quot; -- &quot;*&quot; Article : writes
-    User &quot;1&quot; -- &quot;*&quot; Comment : posts
-    Article &quot;1&quot; -- &quot;*&quot; Comment : has
-    Article &quot;1&quot; -- &quot;*&quot; Category : belongs to
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;State Diagram Example&lt;/h2&gt;
-&lt;p&gt;State diagrams show the sequence of states an object goes through during its life cycle.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;stateDiagram-v2
-    [*] --&amp;gt; Draft
-    
-    Draft --&amp;gt; UnderReview : submit
-    UnderReview --&amp;gt; Draft : reject
-    UnderReview --&amp;gt; Approved : approve
-    Approved --&amp;gt; Published : publish
-    Published --&amp;gt; Archived : archive
-    Published --&amp;gt; Draft : retract
-    
-    state Published {
-        [*] --&amp;gt; Active
-        Active --&amp;gt; Hidden : temporarily hide
-        Hidden --&amp;gt; Active : restore
-        Active --&amp;gt; [*]
-        Hidden --&amp;gt; [*]
-    }
-    
-    Archived --&amp;gt; [*]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Pie Chart Example&lt;/h2&gt;
-&lt;p&gt;Pie charts are ideal for displaying proportions and percentage data.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;pie title Website Traffic Sources Analysis
-    &quot;Search Engines&quot; : 45.6
-    &quot;Direct Access&quot; : 30.1
-    &quot;Social Media&quot; : 15.3
-    &quot;Referral Links&quot; : 6.4
-    &quot;Other Sources&quot; : 2.6
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;Mermaid is a powerful tool for creating various types of diagrams in Markdown documents. This article demonstrated how to use flowcharts, sequence diagrams, Gantt charts, class diagrams, state diagrams, and pie charts. These diagrams can help you express complex concepts, processes, and data structures more clearly.&lt;/p&gt;
-&lt;p&gt;To use Mermaid, simply specify the mermaid language in a code block and describe the diagram using concise text syntax. Mermaid will automatically convert these descriptions into beautiful visual diagrams.&lt;/p&gt;
-&lt;p&gt;Try using Mermaid diagrams in your next technical blog post or project documentation - they will make your content more professional and easier to understand!&lt;/p&gt;
-</content:encoded></item><item><title>Include Video in the Posts</title><link>https://mizuki.mysqil.com/posts/video/</link><guid isPermaLink="true">https://mizuki.mysqil.com/posts/video/</guid><description>This post demonstrates how to include embedded video in a blog post.</description><pubDate>Mon, 01 Aug 2022 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Just copy the embed code from YouTube or other platforms, and paste it in the markdown file.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;---
-title: Include Video in the Post
-published: 2023-10-19
-// ...
----
-
-&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;YouTube&lt;/h2&gt;
-&lt;p&gt;&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
-&lt;h2&gt;Bilibili&lt;/h2&gt;
-&lt;p&gt;&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;//player.bilibili.com/player.html?bvid=BV1fK4y1s7Qf&amp;amp;p=1&amp;amp;autoplay=0&quot; scrolling=&quot;no&quot; border=&quot;0&quot; frameborder=&quot;no&quot; framespacing=&quot;0&quot; allowfullscreen=&quot;true&quot; &amp;amp;autoplay=0&amp;gt; &amp;lt;/iframe&amp;gt;&lt;/p&gt;
 </content:encoded></item></channel></rss>

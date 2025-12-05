@@ -1,4 +1,6 @@
 User-agent: *
-Disallow: /_astro/
+Disallow: /
+Allow: /$
+Allow: /posts/
 
-Sitemap: https://mizuki.mysqil.com/sitemap-index.xml
+Sitemap: http://localhost:4322/sitemap-index.xml

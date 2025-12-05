@@ -2,947 +2,308 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>文乃的小站</title>
   <subtitle>记录生活，分享美好</subtitle>
-  <link href="https://mizuki.mysqil.com/" rel="alternate" type="text/html"/>
-  <link href="https://mizuki.mysqil.com/atom.xml" rel="self" type="application/atom+xml"/>
-  <id>https://mizuki.mysqil.com/</id>
-  <updated>2025-11-12T14:28:48.319Z</updated>
+  <link href="http://localhost:4322/" rel="alternate" type="text/html"/>
+  <link href="http://localhost:4322/atom.xml" rel="self" type="application/atom+xml"/>
+  <id>http://localhost:4322/</id>
+  <updated>2025-12-05T06:41:11.987Z</updated>
   <language>zh_CN</language>
   <entry>
-    <title>Markdown Tutorial</title>
-    <link href="https://mizuki.mysqil.com/posts/markdown-tutorial/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/markdown-tutorial/</id>
-    <published>2025-01-20T00:00:00.000Z</published>
-    <updated>2025-01-20T00:00:00.000Z</updated>
-    <summary>A simple example of a Markdown blog post.</summary>
-    <content type="html"><![CDATA[<h1>Markdown Tutorial</h1>
-<p>A markdown example shows how to write a markdown file. This document integrates core syntax and extensions (GMF).</p>
+    <title>双链测试文章A</title>
+    <link href="http://localhost:4322/posts/wiki-link-test-a/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/wiki-link-test-a/</id>
+    <published>2025-11-28T00:00:00.000Z</published>
+    <updated>2025-11-28T00:00:00.000Z</updated>
+    <summary>这是用来测试双链功能的第一篇文章</summary>
+    <content type="html"><![CDATA[<h1>双链测试文章A</h1>
+<p>这是第一篇测试文章，用于演示双链（Wiki Links）功能。</p>
+<h2>什么是双链？</h2>
+<p>双链是一种类似 Obsidian 的笔记连接方式，可以让文章之间互相引用。</p>
+<h2>示例</h2>
+<p>我们可以引用另一篇文章：[[wiki-link-test-b]]</p>
+<p>也可以使用自定义显示文本：[[点击查看文章B|wiki-link-test-b]]</p>
+<p>测试普通链接对比：<a href="/posts/wiki-link-test-b/">普通链接到B</a></p>
+<h2>更多引用</h2>
 <ul>
-<li><a href="#block-elements">Block Elements</a>
-<ul>
-<li><a href="#paragraphs-and-line-breaks">Paragraphs and Line Breaks</a></li>
-<li><a href="#headers">Headers</a></li>
-<li><a href="#blockquotes">Blockquotes</a></li>
-<li><a href="#lists">Lists</a></li>
-<li><a href="#code-blocks">Code Blocks</a></li>
-<li><a href="#horizontal-rules">Horizontal Rules</a></li>
-<li><a href="#table">Table</a></li>
+<li>查看 [[ai-coding-agents-guide]] 了解 AI 编程工具</li>
+<li>了解 [[keion-girls]] 轻音少女的故事</li>
 </ul>
-</li>
-<li><a href="#span-elements">Span Elements</a>
-<ul>
-<li><a href="#links">Links</a></li>
-<li><a href="#emphasis">Emphasis</a></li>
-<li><a href="#code">Code</a></li>
-<li><a href="#images">Images</a></li>
-<li><a href="#strikethrough">Strikethrough</a></li>
-</ul>
-</li>
-<li><a href="#miscellaneous">Miscellaneous</a>
-<ul>
-<li><a href="#automatic-links">Automatic Links</a></li>
-<li><a href="#backslash-escapes">Backslash Escapes</a></li>
-</ul>
-</li>
-<li><a href="#inline-html">Inline HTML</a></li>
-</ul>
-<h2>Block Elements</h2>
-<h3>Paragraphs and Line Breaks</h3>
-<h4>Paragraphs</h4>
-<p>HTML Tag: <code>&lt;p&gt;</code></p>
-<p>One or more blank lines. (A blank line is a line containing nothing but <strong>spaces</strong> or <strong>tabs</strong> is considered blank.)</p>
-<p>Code:</p>
-<pre><code>This will be
-inline.
-
-This is second paragraph.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>This will be
-inline.</p>
-<p>This is second paragraph.</p>
-<hr />
-<h4>Line Breaks</h4>
-<p>HTML Tag: <code>&lt;br /&gt;</code></p>
-<p>End a line with <strong>two or more spaces</strong>.</p>
-<p>Code:</p>
-<pre><code>This will be not
-inline.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>This will be not<br />
-inline.</p>
-<hr />
-<h3>Headers</h3>
-<p>Markdown supports two styles of headers, Setext and atx.</p>
-<h4>Setext</h4>
-<p>HTML Tags: <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code></p>
-<p>"Underlined" using <strong>equal signs (=)</strong> as <code>&lt;h1&gt;</code> and <strong>dashes (-)</strong> as <code>&lt;h2&gt;</code> in any number.</p>
-<p>Code:</p>
-<pre><code>This is an H1
-=============
-This is an H2
--------------
-</code></pre>
-<p>Preview:</p>
-<hr />
-<h1>This is an H1</h1>
-<h2>This is an H2</h2>
-<hr />
-<h4>atx</h4>
-<p>HTML Tags: <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>, <code>&lt;h5&gt;</code>, <code>&lt;h6&gt;</code></p>
-<p>Uses 1-6 <strong>hash characters (#)</strong> at the start of the line, corresponding to <code>&lt;h1&gt;</code> - <code>&lt;h6&gt;</code>.</p>
-<p>Code:</p>
-<pre><code># This is an H1
-## This is an H2
-###### This is an H6
-</code></pre>
-<p>Preview:</p>
-<hr />
-<h1>This is an H1</h1>
-<h2>This is an H2</h2>
-<h6>This is an H6</h6>
-<hr />
-<p>Optionally, you may "close" atx-style headers. The closing hashes <strong>don't need to match</strong> the number of hashes used to open the header.</p>
-<p>Code:</p>
-<pre><code># This is an H1 #
-## This is an H2 ##
-### This is an H3 ######
-</code></pre>
-<p>Preview:</p>
-<hr />
-<h1>This is an H1</h1>
-<h2>This is an H2</h2>
-<h3>This is an H3</h3>
-<hr />
-<h3>Blockquotes</h3>
-<p>HTML Tag: <code>&lt;blockquote&gt;</code></p>
-<p>Markdown uses email-style <strong>&gt;</strong> characters for blockquoting. It looks best if you hard wrap the text and put a &gt; before every line.</p>
-<p>Code:</p>
-<pre><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-&gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-&gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-&gt;
-&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-&gt; id sem consectetuer libero luctus adipiscing.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<blockquote>
-<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
-<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.</p>
-</blockquote>
-<hr />
-<p>Markdown allows you to be lazy and only put the &gt; before the first line of a hard-wrapped paragraph.</p>
-<p>Code:</p>
-<pre><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<blockquote>
-<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
-</blockquote>
-<blockquote>
-<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.</p>
-</blockquote>
-<hr />
-<p>Blockquotes can be nested (i.e. a blockquote-in-a-blockquote) by adding additional levels of &gt;.</p>
-<p>Code:</p>
-<pre><code>&gt; This is the first level of quoting.
-&gt;
-&gt; &gt; This is nested blockquote.
-&gt;
-&gt; Back to the first level.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<blockquote>
-<p>This is the first level of quoting.</p>
-<blockquote>
-<p>This is nested blockquote.</p>
-</blockquote>
-<p>Back to the first level.</p>
-</blockquote>
-<hr />
-<p>Blockquotes can contain other Markdown elements, including headers, lists, and code blocks.</p>
-<p>Code:</p>
-<pre><code>&gt; ## This is a header.
-&gt;
-&gt; 1.   This is the first list item.
-&gt; 2.   This is the second list item.
-&gt;
-&gt; Here's some example code:
-&gt;
-&gt;     return shell_exec("echo $input | $markdown_script");
-</code></pre>
-<p>Preview:</p>
-<hr />
-<blockquote>
-<h2>This is a header.</h2>
+<h2>双链的优势</h2>
 <ol>
-<li>This is the first list item.</li>
-<li>This is the second list item.</li>
+<li><strong>快速导航</strong>：点击即可跳转到相关文章</li>
+<li><strong>悬浮预览</strong>：鼠标悬停可以预览文章内容</li>
+<li><strong>知识图谱</strong>：自动构建文章之间的关联关系</li>
 </ol>
-<p>Here's some example code:</p>
-<pre><code>return shell_exec("echo $input | $markdown_script");
+<p>这样就可以构建一个知识网络，让笔记之间形成有机的联系！</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="测试"></category>
+  </entry>
+  <entry>
+    <title>双链测试文章B</title>
+    <link href="http://localhost:4322/posts/wiki-link-test-b/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/wiki-link-test-b/</id>
+    <published>2025-11-28T00:00:00.000Z</published>
+    <updated>2025-11-28T00:00:00.000Z</updated>
+    <summary>这是用来测试双链功能的第二篇文章</summary>
+    <content type="html"><![CDATA[<h1>双链测试文章B</h1>
+<p>这是第二篇测试文章，与 [[wiki-link-test-a]] 互相连接。</p>
+<h2>回链测试</h2>
+<p>从 [[wiki-link-test-a]] 可以跳转到这里，这里也可以跳回去。</p>
+<h2>双链语法</h2>
+<h3>基本语法</h3>
+<pre><code>[[文章标题]]
 </code></pre>
-</blockquote>
-<hr />
-<h3>Lists</h3>
-<p>Markdown supports ordered (numbered) and unordered (bulleted) lists.</p>
-<h4>Unordered</h4>
-<p>HTML Tag: <code>&lt;ul&gt;</code></p>
-<p>Unordered lists use <strong>asterisks (*)</strong>, <strong>pluses (+)</strong>, and <strong>hyphens (-)</strong>.</p>
-<p>Code:</p>
-<pre><code>*   Red
-*   Green
-*   Blue
+<h3>自定义显示文本</h3>
+<pre><code>[[显示文本|实际链接]]
 </code></pre>
-<p>Preview:</p>
-<hr />
+<h2>实际应用示例</h2>
+<p>在实际使用中，我们可以这样引用：</p>
 <ul>
-<li>Red</li>
-<li>Green</li>
-<li>Blue</li>
+<li>关于 AI 工具，可以参考 [[ai-coding-agents-guide]] 这篇文章</li>
+<li>如果你喜欢动漫，可以看看 [[keion-girls]]</li>
+<li>想要了解起点，请阅读 [[wiki-link-test-a]]</li>
 </ul>
-<hr />
-<p>is equivalent to:</p>
-<p>Code:</p>
-<pre><code>+   Red
-+   Green
-+   Blue
-</code></pre>
-<p>and:</p>
-<p>Code:</p>
-<pre><code>-   Red
--   Green
--   Blue
-</code></pre>
-<h4>Ordered</h4>
-<p>HTML Tag: <code>&lt;ol&gt;</code></p>
-<p>Ordered lists use numbers followed by periods:</p>
-<p>Code:</p>
-<pre><code>1.  Bird
-2.  McHale
-3.  Parish
-</code></pre>
-<p>Preview:</p>
-<hr />
+<h2>为什么使用双链？</h2>
+<p>双链让文章之间形成网络结构，而不是树状结构。这样可以：</p>
 <ol>
-<li>Bird</li>
-<li>McHale</li>
-<li>Parish</li>
+<li><strong>多维度思考</strong>：一个概念可以从多个角度被引用</li>
+<li><strong>知识复用</strong>：避免重复写相同的内容</li>
+<li><strong>灵感激发</strong>：通过关联发现新的连接点</li>
+<li><strong>反向链接</strong>：自动显示哪些文章引用了当前文章</li>
 </ol>
-<hr />
-<p>It's possible to trigger an ordered list by accident, by writing something like this:</p>
-<p>Code:</p>
-<pre><code>1986. What a great season.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<ol>
-<li>What a great season.</li>
-</ol>
-<hr />
-<p>You can <strong>backslash-escape (\)</strong> the period:</p>
-<p>Code:</p>
-<pre><code>1986\. What a great season.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>1986. What a great season.</p>
-<hr />
-<h4>Indented</h4>
-<h5>Blockquote</h5>
-<p>To put a blockquote within a list item, the blockquote's &gt; delimiters need to be indented:</p>
-<p>Code:</p>
-<pre><code>*   A list item with a blockquote:
-
-    &gt; This is a blockquote
-    &gt; inside a list item.
-</code></pre>
-<p>Preview:</p>
-<hr />
+<p>这种方式特别适合构建个人知识库！</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="测试"></category>
+  </entry>
+  <entry>
+    <title>ai  agent</title>
+    <link href="http://localhost:4322/posts/ai-coding-agents-guide/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/ai-coding-agents-guide/</id>
+    <published>2025-11-16T00:00:00.000Z</published>
+    <updated>2025-11-16T00:00:00.000Z</updated>
+    <summary>现在去编程还在用窗口一个一个问也太麻烦了，现在的agent已经很发达了，我推荐几个我用的agent工具</summary>
+    <content type="html"><![CDATA[<p>现在去编程还在用窗口一个一个问也太麻烦了，现在的agent已经很发达了，我推荐几个我用的agent工具</p>
+<h1>cursor  9.4</h1>
+<p>从夯到拉 肯定是夯</p>
+<h2>简介</h2>
+<p>第一个使用的agent 直接是新的idea，让我打开了新世界的大门，综合很强，但是对中国用户太差了，最近还封了续杯工具，很难受
+新手我很推荐先用cursor，直接是新的编译器，plan模式还能养成你现准备计划，再做工作的习惯</p>
+<h2>使用</h2>
+<p><a href="https://www.bilibili.com/video/BV1WBG9zgECp/?spm_id_from=333.337.search-card.all.click&amp;vd_source=05c30d87ead2eea4eabcc38a5a4f32fd">史上最强 AI 编程工具免费啦！Cursor 保姆级使用教程！新手友好！看到就是赚到！｜ 集成 MCP ！_哔哩哔哩_bilibili</a></p>
+<p>新人教程</p>
+<p>新账号注册送7天试用，先注册一个试试，不过要绑卡，绑卡可以去闲鱼看看</p>
+<p>进入后要将代理开到全局模式，然后建议将http2改为http1，否则大概率打不开
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116224420.png" alt="Pasted image 20251116224420" /></p>
+<p>cursor打开之后 应该就是这个结构，左边是对话框，问问题，下面有模式切换，做项目要先
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Snipaste_2025-11-16_22-40-01.png" alt="Snipaste_2025-11-16_22-40-01" /></p>
+<h2>价格</h2>
+<p>20美刀一个月，最重要的是量太低了
+以前可以去</p>
+<h1>augment   9.3</h1>
+<p>这个也是夯完了</p>
+<h2>简介</h2>
+<p><a href="https://www.augmentcode.com/">Augment Code - 真实软件的 AI 编码平台。 --- Augment Code - AI coding platform for real software.</a>
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225520.png" alt="Pasted image 20251116225520" />
+这个我用的是vscode插件版</p>
+<h2>使用</h2>
+<p>这个auto 一定要开一下试试，真的很爽，全都不要你按，他全搞好了 体验绝佳
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225808.png" alt="Pasted image 20251116225808" /></p>
+<h1>windsurf    6</h1>
+<p>拉完了</p>
+<p>用的很难受不知道是不是我的问题
+不过现在续杯应该很好找，价格应该不贵</p>
+<h1>codex    8</h1>
+<h2>简介</h2>
+<p>chatgpt的工具，什么都好，就是实在是太慢了，价格很便宜，可以去闲鱼拼车</p>
+<h2>使用</h2>
+<p>我用的插件版，总体使用大差不差吧</p>
+<h2>价格</h2>
+<p>官方价格忘了，拼车20左右一月
+我推荐直接拼车，还能白嫖chatgpt5的对话框，这个能直接生成word文档还是很实用的</p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116230101.png" alt="Pasted image 20251116230101" /></p>
+<h1>ClaudeCode</h1>
+<h2>简介</h2>
+<p>Claude 写代码的都明白，遥遥领先，作为本家推出的agent，肯定有其独特点，不过我现在一直有bug，就先不评价了</p>
+<h1>trae</h1>
+<p>唯一的国产，但是没有Claude，建议用国际版吧，算了，还是不建议用这个，新手到可以尝尝鲜
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116225311.png" alt="Pasted image 20251116225311" />
+<a href="https://www.trae.cn/">TRAE - The Real AI Engineer | TRAE - The Real AI Engineer</a></p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="实用工具"></category>
+  </entry>
+  <entry>
+    <title>AI 视频笔记生成器</title>
+    <link href="http://localhost:4322/posts/programming/bilinote/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/programming/bilinote/</id>
+    <published>2025-11-16T00:00:00.000Z</published>
+    <updated>2025-11-16T00:00:00.000Z</updated>
+    <summary>基于 AI 的本地视频笔记自动生成工具，支持语音转录、智能截图、结构化笔记生成，完美集成 Obsidian</summary>
+    <content type="html"><![CDATA[<h2>📖 项目简介</h2>
+<p>本地视频笔记生成工具，能够自动将视频转换为结构化的 Markdown 笔记。</p>
+<p>为什么不用bilinote  我的总是会报错，很烦，其他的像BiliGPT videoseek 会员都超级贵，你们一个用免费模型的怎么都这么贵，100多一个月，永久会员5000多，真吓人，不如我自己搞一个</p>
+<p>有截图，图文结合。就是为的这个图才搞的这个项目，最后只能说是马马虎虎吧
+最后的结果大概是这样，勉强能用
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251116222120.png" alt="Pasted image 20251116222120" /></p>
+<h3>核心功能</h3>
 <ul>
 <li>
-<p>A list item with a blockquote:</p>
-<blockquote>
-<p>This is a blockquote
-inside a list item.</p>
-</blockquote>
+<p>🎙️ <strong>自动转录</strong>：使用 Whisper 将视频语音转为带时间戳的文字</p>
 </li>
-</ul>
-<hr />
-<h5>Code Block</h5>
-<p>To put a code block within a list item, the code block needs to be indented twice — <strong>8 spaces</strong> or <strong>two tabs</strong>:</p>
-<p>Code:</p>
-<pre><code>*   A list item with a code block:
-
-        &lt;code goes here&gt;
-</code></pre>
-<p>Preview:</p>
-<hr />
-<ul>
 <li>
-<p>A list item with a code block:</p>
-<pre><code>&lt;code goes here&gt;
-</code></pre>
+<p>📸 <strong>智能截图</strong>：基于场景检测自动提取关键帧</p>
+</li>
+<li>
+<p>🧠 <strong>AI 分析</strong>：使用 Gemini 提取核心要点、生成章节目录
+gemin最便宜了，建议用这个智谱的那个也不错</p>
+</li>
+<li>
+<p>📝 <strong>生成笔记</strong>：输出结构化 Markdown，完美兼容 Obsidian</p>
 </li>
 </ul>
-<hr />
-<h5>Nested List</h5>
-<p>Code:</p>
-<pre><code>* A
-  * A1
-  * A2
-* B
-* C
+<pre><code>graph LR
+    A[📹 视频文件] --&gt; B[🎵 提取音频&lt;br/&gt;FFmpeg]
+    B --&gt; C[🎙️ 语音转录&lt;br/&gt;Whisper]
+    A --&gt; D[📸 提取关键帧&lt;br/&gt;OpenCV]
+    C --&gt; E[🧠 AI 分析&lt;br/&gt;Gemini]
+    D --&gt; E
+    E --&gt; F[📝 生成笔记&lt;br/&gt;Markdown]
+    F --&gt; G[📚 Obsidian]
 </code></pre>
-<p>Preview:</p>
-<hr />
-<ul>
-<li>A
-<ul>
-<li>A1</li>
-<li>A2</li>
-</ul>
-</li>
-<li>B</li>
-<li>C</li>
-</ul>
-<hr />
-<h3>Code Blocks</h3>
-<p>HTML Tag: <code>&lt;pre&gt;</code></p>
-<p>Indent every line of the block by at least <strong>4 spaces</strong> or <strong>1 tab</strong>.</p>
-<p>Code:</p>
-<pre><code>This is a normal paragraph:
-
-    This is a code block.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>This is a normal paragraph:</p>
-<pre><code>This is a code block.
-</code></pre>
-<hr />
-<p>A code block continues until it reaches a line that is not indented (or the end of the article).</p>
-<p>Within a code block, <strong><em>ampersands (&amp;)</em></strong> and angle <strong>brackets (&lt; and &gt;)</strong> are automatically converted into HTML entities.</p>
-<p>Code:</p>
-<pre><code>    &lt;div class="footer"&gt;
-        &amp;copy; 2004 Foo Corporation
-    &lt;/div&gt;
-</code></pre>
-<p>Preview:</p>
-<hr />
-<pre><code>&lt;div class="footer"&gt;
-    &amp;copy; 2004 Foo Corporation
-&lt;/div&gt;
-</code></pre>
-<hr />
-<p>Following sections Fenced Code Blocks and Syntax Highlighting are extensions, you can use the other way to write the code block.</p>
-<h4>Fenced Code Blocks</h4>
-<p>Just wrap your code in <code>```</code> (as shown below) and you won't need to indent it by four spaces.</p>
-<p>Code:</p>
-<pre><code>Here's an example:
-
-```
-function test() {
-  console.log("notice the blank line before this function?");
-}
-```
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>Here's an example:</p>
-<pre><code>function test() {
-  console.log("notice the blank line before this function?");
-}
-</code></pre>
-<hr />
-<h4>Syntax Highlighting</h4>
-<p>In your fenced block, add an optional language identifier and we'll run it through syntax highlighting (<a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml">Support Languages</a>).</p>
-<p>Code:</p>
-<pre><code>```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-```
-</code></pre>
-<p>Preview:</p>
-<hr />
-<pre><code>require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-</code></pre>
-<hr />
-<h3>Horizontal Rules</h3>
-<p>HTML Tag: <code>&lt;hr /&gt;</code>
-Places <strong>three or more hyphens (-), asterisks (*), or underscores (_)</strong> on a line by themselves. You may use spaces between the hyphens or asterisks.</p>
-<p>Code:</p>
-<pre><code>* * *
-***
-*****
-- - -
----------------------------------------
-___
-</code></pre>
-<p>Preview:</p>
-<hr />
-<hr />
-<hr />
-<hr />
-<hr />
-<hr />
-<hr />
-<hr />
-<h3>Table</h3>
-<p>HTML Tag: <code>&lt;table&gt;</code></p>
-<p>It's an extension.</p>
-<p>Separates column by <strong>pipe (|)</strong> and header by <strong>dashes (-)</strong>, and uses <strong>colon (:)</strong> for alignment.</p>
-<p>The outer <strong>pipes (|)</strong> and alignment are optional. There are <strong>3 delimiters</strong> each cell at least for separating header.</p>
-<p>Code:</p>
-<pre><code>| Left | Center | Right |
-|:-----|:------:|------:|
-|aaa   |bbb     |ccc    |
-|ddd   |eee     |fff    |
-
- A | B
----|---
-123|456
-
-
-A |B
---|--
-12|45
-</code></pre>
-<p>Preview:</p>
-<hr />
+<h3>技术亮点</h3>
 <table>
 <thead>
 <tr>
-<th>Left</th>
-<th>Center</th>
-<th>Right</th>
+<th>特点</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>aaa</td>
-<td>bbb</td>
-<td>ccc</td>
+<td>🏠 <strong>本地处理</strong></td>
+<td>视频文件在本地处理，保护隐私</td>
 </tr>
 <tr>
-<td>ddd</td>
-<td>eee</td>
-<td>fff</td>
+<td>⚡ <strong>速度快</strong></td>
+<td>40 分钟视频，3-5 分钟处理完成</td>
+</tr>
+<tr>
+<td>📚 <strong>质量高</strong></td>
+<td>自动生成多级标题、配图、思维导图</td>
+</tr>
+<tr>
+<td>🎨 <strong>完美集成</strong></td>
+<td>生成的笔记直接导入 Obsidian</td>
 </tr>
 </tbody>
 </table>
+<h2>🛠️ 技术架构</h2>
+<h3>技术栈</h3>
 <table>
 <thead>
 <tr>
-<th>A</th>
-<th>B</th>
+<th>模块</th>
+<th>技术</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>123</td>
-<td>456</td>
+<td>语音识别</td>
+<td>Faster-Whisper</td>
+<td>OpenAI Whisper 的优化版本</td>
+</tr>
+<tr>
+<td>视频处理</td>
+<td>OpenCV + FFmpeg</td>
+<td>提取音频、关键帧截图</td>
+</tr>
+<tr>
+<td>AI 分析</td>
+<td>Google Gemini 2.5 Pro</td>
+<td>多模态大语言模型</td>
+</tr>
+<tr>
+<td>后端框架</td>
+<td>FastAPI</td>
+<td>现代化的 Python Web 框架</td>
+</tr>
+<tr>
+<td>前端界面</td>
+<td>HTML + TailwindCSS</td>
+<td>简洁的 Web 界面</td>
 </tr>
 </tbody>
 </table>
-<table>
-<thead>
-<tr>
-<th>A</th>
-<th>B</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>12</td>
-<td>45</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>Span Elements</h2>
-<h3>Links</h3>
-<p>HTML Tag: <code>&lt;a&gt;</code></p>
-<p>Markdown supports two style of links: inline and reference.</p>
-<h4>Inline</h4>
-<p>Inline link format like this: <code>[Link Text](URL "Title")</code></p>
-<p>Title is optional.</p>
-<p>Code:</p>
-<pre><code>This is [an example](http://example.com/ "Title") inline link.
-
-[This link](http://example.net/) has no title attribute.
+<h3>处理流程</h3>
+<pre><code>📹 视频文件 → 🎵 提取音频 → 🎙️ 语音转录
+ ↓            📸 提取关键帧                ↓
+ 🧠 AI 分析                ↓            📝 生成笔记 → 📚 Obsidian
 </code></pre>
-<p>Preview:</p>
-<hr />
-<p>This is <a href="http://example.com/">an example</a> inline link.</p>
-<p><a href="http://example.net/">This link</a> has no title attribute.</p>
-<hr />
-<p>If you're referring to a local resource on the same server, you can use relative paths:</p>
-<p>Code:</p>
-<pre><code>See my [About](/about/) page for details.
+<h2>💡 核心技术实现</h2>
+<h3>1. 智能截图提取</h3>
+<p>使用<strong>场景检测算法</strong>，而不是简单的均匀采样：</p>
+<pre><code>def extract_keyframes(video_path, num_frames=40):    """基于场景变化检测提取关键帧"""    cap = cv2.VideoCapture(video_path)    prev_hist = None    keyframes = []
+    while cap.isOpened():        ret, frame = cap.read()        if not ret:            break
+        # 计算直方图        hist = cv2.calcHist([frame], [0, 1, 2], None,                           [8, 8, 8], [0, 256, 0, 256, 0, 256])        hist = cv2.normalize(hist, hist).flatten()
+        # 比较相似度        if prev_hist is not None:            similarity = cv2.compareHist(prev_hist, hist,                                        cv2.HISTCMP_CORREL)            # 场景变化阈值            if similarity &lt; 0.85:                keyframes.append(frame)
+        prev_hist = hist
+    return keyframes
 </code></pre>
-<p>Preview:</p>
-<hr />
-<p>See my <a href="/about/">About</a> page for details.</p>
-<hr />
-<h4>Reference</h4>
-<p>You could predefine link references. Format like this: <code>[id]: URL "Title"</code></p>
-<p>Title is also optional. And the you refer the link, format like this: <code>[Link Text][id]</code></p>
-<p>Code:</p>
-<pre><code>[id]: http://example.com/  "Optional Title Here"
-This is [an example][id] reference-style link.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>This is <a href="http://example.com/">an example</a> reference-style link.</p>
-<hr />
-<p>That is:</p>
+<p><strong>优势</strong>：</p>
 <ul>
-<li>Square brackets containing the link identifier (<strong>not case sensitive</strong>, optionally indented from the left margin using up to three spaces);</li>
-<li>followed by a colon;</li>
-<li>followed by one or more spaces (or tabs);</li>
-<li>followed by the URL for the link;</li>
-<li>The link URL may, optionally, be surrounded by angle brackets.</li>
-<li>optionally followed by a title attribute for the link, enclosed in double or single quotes, or enclosed in parentheses.</li>
+<li>✅ 自动识别画面切换点</li>
+<li>✅ 避免重复截图</li>
+<li>✅ 确保关键内容不遗漏</li>
 </ul>
-<p>The following three link definitions are equivalent:</p>
-<p>Code:</p>
-<pre><code>[foo]: http://example.com/  "Optional Title Here"
-[foo]: http://example.com/  'Optional Title Here'
-[foo]: http://example.com/  (Optional Title Here)
-[foo]: &lt;http://example.com/&gt;  "Optional Title Here"
+<h3>2. 解决 OpenCV 中文路径问题</h3>
+<p>Windows 下 <code>cv2.imwrite()</code> 无法处理中文路径，使用 <code>cv2.imencode()</code> 方案：</p>
+<pre><code>def save_frame_with_chinese_path(frame, filepath):    """支持中文路径的图片保存"""    success, encoded_image = cv2.imencode('.png', frame)    if not success:        raise Exception("图像编码失败")
+    with open(filepath, 'wb') as f:        f.write(encoded_image.tobytes())
 </code></pre>
-<p>Uses an empty set of square brackets, the link text itself is used as the name.</p>
-<p>Code:</p>
-<pre><code>[Google]: http://google.com/
-[Google][]
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><a href="http://google.com/">Google</a></p>
-<hr />
-<h3>Emphasis</h3>
-<p>HTML Tags: <code>&lt;em&gt;</code>, <code>&lt;strong&gt;</code></p>
-<p>Markdown treats <strong>asterisks (*)</strong> and <strong>underscores (_)</strong> as indicators of emphasis. <strong>One delimiter</strong> will be <code>&lt;em&gt;</code>; *<em>double delimiters</em> will be <code>&lt;strong&gt;</code>.</p>
-<p>Code:</p>
-<pre><code>*single asterisks*
-
-_single underscores_
-
-**double asterisks**
-
-__double underscores__
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><em>single asterisks</em></p>
-<p><em>single underscores</em></p>
-<p><strong>double asterisks</strong></p>
-<p><strong>double underscores</strong></p>
-<hr />
-<p>But if you surround an * or _ with spaces, it'll be treated as a literal asterisk or underscore.</p>
-<p>You can backslash escape it:</p>
-<p>Code:</p>
-<pre><code>\*this text is surrounded by literal asterisks\*
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>*this text is surrounded by literal asterisks*</p>
-<hr />
-<h3>Code</h3>
-<p>HTML Tag: <code>&lt;code&gt;</code></p>
-<p>Wraps it with <strong>backtick quotes (`)</strong>.</p>
-<p>Code:</p>
-<pre><code>Use the `printf()` function.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>Use the <code>printf()</code> function.</p>
-<hr />
-<p>To include a literal backtick character within a code span, you can use <strong>multiple backticks</strong> as the opening and closing delimiters:</p>
-<p>Code:</p>
-<pre><code>``There is a literal backtick (`) here.``
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><code>There is a literal backtick (`) here.</code></p>
-<hr />
-<p>The backtick delimiters surrounding a code span may include spaces — one after the opening, one before the closing. This allows you to place literal backtick characters at the beginning or end of a code span:</p>
-<p>Code:</p>
-<pre><code>A single backtick in a code span: `` ` ``
-
-A backtick-delimited string in a code span: `` `foo` ``
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>A single backtick in a code span: <code>`</code></p>
-<p>A backtick-delimited string in a code span: <code>`foo`</code></p>
-<hr />
-<h3>Images</h3>
-<p>HTML Tag: <code>&lt;img /&gt;</code></p>
-<p>Markdown uses an image syntax that is intended to resemble the syntax for links, allowing for two styles: inline and reference.</p>
-<h4>Inline</h4>
-<p>Inline image syntax looks like this: <code>![Alt text](URL "Title")</code></p>
-<p>Title is optional.</p>
-<p>Code:</p>
-<pre><code>![Alt text](/path/to/img.jpg)
-
-![Alt text](/path/to/img.jpg "Optional title")
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" /></p>
-<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" title="Optional title" /></p>
-<hr />
-<p>That is:</p>
+<h3>3. 优化 AI Prompt 避免超时</h3>
+<p>Gemini API 的超时时间为 120 秒，通过优化 Prompt 提升性能：</p>
+<p><strong>优化前</strong>：</p>
 <ul>
-<li>An exclamation mark: !;</li>
-<li>followed by a set of square brackets, containing the alt attribute text for the image;</li>
-<li>followed by a set of parentheses, containing the URL or path to the image, and an optional title attribute enclosed in double or single quotes.</li>
+<li>📄 Prompt 长度：300+ 行</li>
+<li>⏱️ 处理时间：150 秒（超时）</li>
+<li>❌ 成功率：60%</li>
 </ul>
-<h4>Reference</h4>
-<p>Reference-style image syntax looks like this: <code>![Alt text][id]</code></p>
-<p>Code:</p>
-<pre><code>[img id]: https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp  "Optional title attribute"
-![Alt text][img id]
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" title="Optional title attribute" /></p>
-<hr />
-<h3>Strikethrough</h3>
-<p>HTML Tag: <code>&lt;del&gt;</code></p>
-<p>It's an extension.</p>
-<p>GFM adds syntax to strikethrough text.</p>
-<p>Code:</p>
-<pre><code>~~Mistaken text.~~
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><s>Mistaken text.</s></p>
-<hr />
-<h2>Miscellaneous</h2>
-<h3>Automatic Links</h3>
-<p>Markdown supports a shortcut style for creating "automatic" links for URLs and email addresses: simply surround the URL or email address with angle brackets.</p>
-<p>Code:</p>
-<pre><code>&lt;http://example.com/&gt;
-
-&lt;address@example.com&gt;
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p><a href="http://example.com/">http://example.com/</a></p>
-<p><a href="mailto:address@example.com">address@example.com</a></p>
-<hr />
-<p>GFM will autolink standard URLs.</p>
-<p>Code:</p>
-<pre><code>https://github.com/emn178/markdown
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>https://github.com/emn178/markdown</p>
-<hr />
-<h3>Backslash Escapes</h3>
-<p>Markdown allows you to use backslash escapes to generate literal characters which would otherwise have special meaning in Markdown's formatting syntax.</p>
-<p>Code:</p>
-<pre><code>\*literal asterisks\*
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>*literal asterisks*</p>
-<hr />
-<p>Markdown provides backslash escapes for the following characters:</p>
-<p>Code:</p>
-<pre><code>\   backslash
-`   backtick
-*   asterisk
-_   underscore
-{}  curly braces
-[]  square brackets
-()  parentheses
-#   hash mark
-+   plus sign
--   minus sign (hyphen)
-.   dot
-!   exclamation mark
-</code></pre>
-<h2>Inline HTML</h2>
-<p>For any markup that is not covered by Markdown's syntax, you simply use HTML itself. There's no need to preface it or delimit it to indicate that you're switching from Markdown to HTML; you just use the tags.</p>
-<p>Code:</p>
-<pre><code>This is a regular paragraph.
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Foo&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-This is another regular paragraph.
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>This is a regular paragraph.</p>
-<p>&lt;table&gt;
-&lt;tr&gt;
-&lt;td&gt;Foo&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/table&gt;</p>
-<p>This is another regular paragraph.</p>
-<hr />
-<p>Note that Markdown formatting syntax is <strong>not processed within block-level HTML tags</strong>.</p>
-<p>Unlike block-level HTML tags, Markdown syntax is <strong>processed within span-level tags</strong>.</p>
-<p>Code:</p>
-<pre><code>&lt;span&gt;**Work**&lt;/span&gt;
-
-&lt;div&gt;
-    **No Work**
-&lt;/div&gt;
-</code></pre>
-<p>Preview:</p>
-<hr />
-<p>&lt;span&gt;<strong>Work</strong>&lt;/span&gt;</p>
-<p>&lt;div&gt;
-<strong>No Work</strong>
-&lt;/div&gt;</p>
-<hr />
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Examples"></category>
-  </entry>
-  <entry>
-    <title>海贼王</title>
-    <link href="https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E6%B5%B7%E8%B4%BC%E7%8E%8B/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E6%B5%B7%E8%B4%BC%E7%8E%8B/</id>
-    <published>2025-11-06T00:00:00.000Z</published>
-    <updated>2025-11-06T00:00:00.000Z</updated>
-    <summary>尾田荣一郎创作的冒险漫画，梦想成为海贼王的热血故事</summary>
-    <content type="html"><![CDATA[<p>《海贼王》（ONE PIECE）是日本漫画家尾田荣一郎作画的少年漫画作品，在《周刊少年Jump》1997年34号开始连载。</p>
-<h2>故事简介</h2>
-<p>传说中海贼王哥尔·D·罗杰在临死前曾留下关于其毕生的财富"One Piece"的消息，由此引得群雄并起，众海贼们为了这笔传说中的巨额财富展开争夺，各种势力、政权不断交替，整个世界进入了动荡混乱的"大海贼时代"。</p>
-<p>生长在东海某小村庄的路飞受到海贼香克斯的精神指引，决定成为一名出色的海贼。为了达成这个目标，并找到万众瞩目的One Piece，路飞踏上艰苦的旅程。一路上他遇到了无数磨难，也结识了索隆、娜美、乌索普、香吉士、乔巴、罗宾、弗兰奇、布鲁克等一众性格各异的好友。他们携手一同展开充满传奇色彩的大冒险。</p>
-<h2>主要角色</h2>
-<h3>蒙奇·D·路飞</h3>
-<p>草帽海贼团船长，梦想成为"海贼王"。误食橡胶果实，身体可以像橡胶一样伸缩自如。性格乐观积极，重视伙伴。</p>
-<h3>罗罗诺亚·索隆</h3>
-<p>草帽海贼团战斗员，三刀流剑士。梦想成为世界第一大剑豪。路痴属性严重，但实力强大。</p>
-<h3>娜美</h3>
-<p>草帽海贼团航海士，擅长天气预报和绘制海图。梦想绘制全世界的海图。贪财但善良。</p>
-<h3>乌索普</h3>
-<p>草帽海贼团狙击手，擅长说谎和发明。梦想成为勇敢的海上战士。虽然胆小但关键时刻会挺身而出。</p>
-<h3>香吉士</h3>
-<p>草帽海贼团厨师，使用脚技战斗。梦想找到传说中的ALL BLUE。对女性极其绅士，看到美女就会失去理智。</p>
-<h2>作品特色</h2>
-<ol>
-<li>
-<p><strong>宏大的世界观</strong>：故事设定了一个庞大而完整的海贼世界，包含众多岛屿、国家和势力。</p>
-</li>
-<li>
-<p><strong>丰富的人物设定</strong>：每个角色都有独特的背景故事和梦想，性格鲜明。</p>
-</li>
-<li>
-<p><strong>热血的冒险精神</strong>：强调友情、梦想和坚持不懈的精神。</p>
-</li>
-<li>
-<p><strong>精妙的伏笔</strong>：作者在故事中埋下大量伏笔，随着剧情发展逐渐揭晓，让读者欲罢不能。</p>
-</li>
-<li>
-<p><strong>感人的情感描写</strong>：虽然是热血漫画，但也包含许多催人泪下的情节。</p>
-</li>
-</ol>
-<h2>影响力</h2>
-<p>《海贼王》连载至今已超过25年，是最畅销的日本漫画之一，在全球范围内拥有大量粉丝。作品传达的正能量和积极向上的精神激励了无数读者。</p>
-<blockquote>
-<p>"我是要成为海贼王的男人！" —— 蒙奇·D·路飞</p>
-</blockquote>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="热血系列"></category>
-  </entry>
-  <entry>
-    <title>火影忍者</title>
-    <link href="https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E7%81%AB%E5%BD%B1%E5%BF%8D%E8%80%85/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E7%83%AD%E8%A1%80%E7%B3%BB%E5%88%97/%E7%81%AB%E5%BD%B1%E5%BF%8D%E8%80%85/</id>
-    <published>2025-11-06T00:00:00.000Z</published>
-    <updated>2025-11-06T00:00:00.000Z</updated>
-    <summary>岸本齐史创作的忍者题材漫画，讲述少年鸣人追逐梦想成为火影的成长故事</summary>
-    <content type="html"><![CDATA[<p>《火影忍者》是日本漫画家岸本齐史的代表作品，讲述了忍者世界中主人公漩涡鸣人追逐梦想的热血故事。</p>
-<h2>故事背景</h2>
-<p>故事发生在一个忍者的世界，围绕着主角漩涡鸣人以及他所在的木叶忍者村展开。十几年前，一只九尾妖狐袭击木叶村，四代目火影为了保护村子，将九尾封印在了刚出生的鸣人体内，自己却牺牲了。</p>
-<h2>主要人物</h2>
-<h3>漩涡鸣人</h3>
-<p>故事的主人公，体内封印着九尾妖狐的少年。虽然从小遭受村民的冷眼和排斥，但性格乐观开朗，立志成为火影，获得所有人的认可。</p>
-<h3>宇智波佐助</h3>
-<p>鸣人的挚友兼对手，天才忍者，宇智波一族的幸存者。为了复仇而不断追求力量，性格冷酷但内心善良。</p>
-<h3>春野樱</h3>
-<p>鸣人的队友，第七班的女性成员。起初只是一个普通的女孩，后来成为出色的医疗忍者和战斗型忍者。</p>
-<h3>旗木卡卡西</h3>
-<p>第七班的指导老师，拥有"写轮眼"的天才忍者。外表吊儿郎当，实力却非常强大。</p>
-<h3>自来也</h3>
-<p>传说中的三忍之一，鸣人的师父。性格豪爽好色，但实力高强，对鸣人的成长影响深远。</p>
-<h2>核心主题</h2>
-<ol>
-<li>
-<p><strong>梦想与坚持</strong>：鸣人从未放弃成为火影的梦想，即使遭遇重重困难。</p>
-</li>
-<li>
-<p><strong>羁绊与友情</strong>：作品强调伙伴之间的羁绊，以及这种羁绊带来的力量。</p>
-</li>
-<li>
-<p><strong>宿命与选择</strong>：探讨了宿命论与个人选择之间的关系。</p>
-</li>
-<li>
-<p><strong>和平与理解</strong>：通过忍者世界的战争与和平，探讨如何实现真正的相互理解。</p>
-</li>
-<li>
-<p><strong>成长与蜕变</strong>：每个角色都经历了从弱小到强大的成长过程。</p>
-</li>
-</ol>
-<h2>忍术体系</h2>
-<h3>查克拉</h3>
-<p>忍术的基础能量，由身体能量和精神能量组成。</p>
-<h3>三大基本术</h3>
+<p><strong>优化后</strong>：</p>
 <ul>
-<li><strong>分身术</strong>：制造幻象分身</li>
-<li><strong>变身术</strong>：变化为其他人或物体的外貌</li>
-<li><strong>替身术</strong>：在遭受攻击时用物体替代自身</li>
+<li>📄 Prompt 长度：100 行</li>
+<li>⏱️ 处理时间：40 秒</li>
+<li>✅ 成功率：99%</li>
 </ul>
-<h3>高级忍术</h3>
+<h2>🔗 项目链接</h2>
 <ul>
-<li><strong>影分身之术</strong>：鸣人的标志性技能</li>
-<li><strong>螺旋丸</strong>：四代目和自来也的独特技能</li>
-<li><strong>千鸟</strong>：佐助的雷遁忍术</li>
-<li><strong>写轮眼</strong>：宇智波一族的血继限界</li>
+<li><strong>GitHub</strong>：<a href="https://github.com/1685901916/local-video-summary">本地视频总结工具 - 用 AI 自动生成学习笔记 </a></li>
 </ul>
-<h2>经典名言</h2>
-<blockquote>
-<p>"我绝对不会违背自己说过的话，这就是我的忍道！" —— 漩涡鸣人</p>
-</blockquote>
-<blockquote>
-<p>"我已经在想你死的时候的事情了。" —— 宇智波佐助</p>
-</blockquote>
-<blockquote>
-<p>"能原谅别人的人，才是真正强大的人。" —— 长门</p>
-</blockquote>
-<h2>作品影响</h2>
-<p>《火影忍者》自1999年开始连载，2014年完结，是继《龙珠》之后最成功的少年漫画之一。作品在全球范围内拥有大量粉丝，不仅推出了动画、电影等衍生作品，还对流行文化产生了深远影响。</p>
-<p>故事传达的永不放弃的精神、对梦想的执着追求，以及对友情和羁绊的重视，激励了无数读者。作品中丰富的忍术设定和精彩的战斗场面也成为其一大特色。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="热血系列"></category>
-  </entry>
-  <entry>
-    <title>进击的巨人</title>
-    <link href="https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E8%BF%9B%E5%87%BB%E7%9A%84%E5%B7%A8%E4%BA%BA/</id>
-    <published>2025-11-05T00:00:00.000Z</published>
-    <updated>2025-11-05T00:00:00.000Z</updated>
-    <summary>谏山创创作的黑暗奇幻漫画，人类与巨人的生存之战</summary>
-    <content type="html"><![CDATA[<h1>进击的巨人</h1>
-<h2>简介</h2>
-<p>《进击的巨人》是谏山创创作的黑暗奇幻漫画作品，讲述了在巨人统治的世界中，人类为了生存而奋战的故事。</p>
-<h2>主要角色</h2>
+<h2>🙏 致谢</h2>
+<p>感谢以下开源项目：</p>
 <ul>
-<li><strong>艾伦·耶格尔</strong> - 主角，拥有进击的巨人之力，誓要消灭所有巨人</li>
-<li><strong>三笠·阿克曼</strong> - 艾伦的青梅竹马，战斗力超群的调查兵团成员</li>
-<li><strong>阿明·阿诺德</strong> - 艾伦的挚友，拥有超凡的智谋</li>
-<li><strong>利威尔·阿克曼</strong> - 人类最强的士兵，调查兵团兵长</li>
-</ul>
-<h2>评价</h2>
-<p>作品以其宏大的世界观、复杂的人物关系和深刻的哲学思考而闻名，是近年来最具影响力的漫画作品之一。故事中对自由、战争、种族等主题的探讨引发了广泛的讨论。</p>
-<h2>剧情特色</h2>
-<ul>
-<li>扣人心弦的悬念设定</li>
-<li>多重反转的剧情发展</li>
-<li>深刻的人性探讨</li>
-<li>震撼的战斗场面</li>
+<li><a href="https://github.com/openai/whisper">OpenAI Whisper</a> - 语音识别模型</li>
+<li><a href="https://github.com/guillaumekln/faster-whisper">Faster-Whisper</a> - Whisper 优化实现</li>
+<li><a href="https://ai.google.dev/">Google Gemini</a> - 多模态 AI  模型</li>
+<li><a href="https://fastapi.tiangolo.com/">FastAPI</a> - Python Web 框架</li>
 </ul>
 ]]></content>
     <author>
       <name>Ayano</name>
     </author>
-    <category term="漫画"></category>
-  </entry>
-  <entry>
-    <title>金田一少年事件簿</title>
-    <link href="https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E9%87%91%E7%94%B0%E4%B8%80%E5%B0%91%E5%B9%B4%E4%BA%8B%E4%BB%B6%E7%B0%BF/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E9%87%91%E7%94%B0%E4%B8%80%E5%B0%91%E5%B9%B4%E4%BA%8B%E4%BB%B6%E7%B0%BF/</id>
-    <published>2025-11-05T00:00:00.000Z</published>
-    <updated>2025-11-05T00:00:00.000Z</updated>
-    <summary>经典推理漫画，高中生金田一一破解各种密室杀人案件</summary>
-    <content type="html"><![CDATA[<h1>金田一少年事件簿</h1>
-<h2>简介</h2>
-<p>《金田一少年事件簿》是天树征丸（原作）、さとうふみや（作画）创作的推理漫画，讲述了名侦探金田一耕助的孙子金田一一解决各种离奇案件的故事。</p>
-<h2>主要角色</h2>
-<ul>
-<li><strong>金田一一</strong> - 主角，高中生侦探，IQ180</li>
-<li><strong>七濑美雪</strong> - 金田一的青梅竹马</li>
-<li><strong>剑持勇</strong> - 警部，经常与金田一合作</li>
-<li><strong>明智健悟</strong> - 警视厅精英警部，金田一的劲敌</li>
-</ul>
-<h2>评价</h2>
-<p>作品以其精妙的诡计设计和扣人心弦的推理过程而深受读者喜爱，是日本推理漫画的经典之作。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="漫画"></category>
-  </entry>
-  <entry>
-    <title>阿松</title>
-    <link href="https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E9%98%BF%E6%9D%BE/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E9%98%BF%E6%9D%BE/</id>
-    <published>2025-11-05T00:00:00.000Z</published>
-    <updated>2025-11-05T00:00:00.000Z</updated>
-    <summary>赤塚不二夫经典作品重制，六胞胎的日常搞笑故事</summary>
-    <content type="html"><![CDATA[<h1>阿松</h1>
-<h2>简介</h2>
-<p>《阿松》是根据赤塚不二夫的经典漫画《小松君》改编的搞笑日常动画，讲述了松野家六胞胎成年后依然啃老的废柴日常。</p>
-<h2>主要角色</h2>
-<ul>
-<li><strong>松野小松</strong> - 长男，看似正常的废柴</li>
-<li><strong>松野轻松</strong> - 次男，自恋的时尚废柴</li>
-<li><strong>松野一松</strong> - 三男，阴暗的废柴</li>
-<li><strong>松野十四松</strong> - 四男，神经质的废柴</li>
-<li><strong>松野椴松</strong> - 五男，毒舌的废柴</li>
-<li><strong>松野小松</strong> - 六男，最废的废柴</li>
-</ul>
-<h2>评价</h2>
-<p>作品以其无厘头的搞笑风格和社会讽刺而大受欢迎，是近年来最火爆的搞笑动画之一。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="漫画"></category>
+    <category term="作品集"></category>
   </entry>
   <entry>
     <title>下载已购小鹅通视频</title>
-    <link href="https://mizuki.mysqil.com/posts/programming/xiaoe-downloader/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/programming/xiaoe-downloader/</id>
+    <link href="http://localhost:4322/posts/programming/xiaoe-downloader/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/programming/xiaoe-downloader/</id>
     <published>2025-11-01T00:00:00.000Z</published>
     <updated>2025-11-01T00:00:00.000Z</updated>
     <summary>基于Python实现的小鹅通M3U8加密视频下载工具，支持AES-128解密、6线程并行下载、自动FFmpeg合并。实战验证28节课程100%成功率。</summary>
@@ -1489,8 +850,8 @@ downloader.download_course(course)
   </entry>
   <entry>
     <title>轻音少女</title>
-    <link href="https://mizuki.mysqil.com/posts/keion-girls/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/keion-girls/</id>
+    <link href="http://localhost:4322/posts/keion-girls/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/keion-girls/</id>
     <published>2025-10-30T00:00:00.000Z</published>
     <updated>2025-10-30T00:00:00.000Z</updated>
     <summary>京阿尼经典校园日常番，讲述轻音部女孩们的青春故事</summary>
@@ -1516,640 +877,9 @@ downloader.download_course(course)
     <category term="动漫"></category>
   </entry>
   <entry>
-    <title>名侦探柯南</title>
-    <link href="https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E6%8E%A8%E7%90%86%E7%B3%BB%E5%88%97/%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97/</id>
-    <published>2025-10-30T00:00:00.000Z</published>
-    <updated>2025-10-30T00:00:00.000Z</updated>
-    <summary>推理漫画的经典之作，高中生侦探变身小学生破案的故事</summary>
-    <content type="html"><![CDATA[<h1>名侦探柯南</h1>
-<h2>简介</h2>
-<p>《名侦探柯南》是青山刚昌创作的推理漫画，讲述了高中生侦探工藤新一被灌药变小后，化名江户川柯南继续侦破案件的故事。</p>
-<h2>主要角色</h2>
-<ul>
-<li><strong>江户川柯南/工藤新一</strong> - 主角，高中生侦探</li>
-<li><strong>毛利兰</strong> - 新一的青梅竹马，空手道高手</li>
-<li><strong>毛利小五郎</strong> - 私家侦探，"沉睡的小五郎"</li>
-<li><strong>灰原哀</strong> - 前黑衣组织成员，也被灌药变小</li>
-</ul>
-<h2>评价</h2>
-<p>作为长寿推理漫画，柯南以其精巧的案件设计和扣人心弦的主线剧情深受读者喜爱。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="漫画"></category>
-  </entry>
-  <entry>
-    <title>悠哉日常大王</title>
-    <link href="https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E6%82%A0%E5%93%89%E6%97%A5%E5%B8%B8%E5%A4%A7%E7%8E%8B/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/%E6%97%A5%E5%B8%B8%E7%B3%BB%E5%88%97/%E6%82%A0%E5%93%89%E6%97%A5%E5%B8%B8%E5%A4%A7%E7%8E%8B/</id>
-    <published>2025-10-30T00:00:00.000Z</published>
-    <updated>2025-10-30T00:00:00.000Z</updated>
-    <summary>描绘乡村田园生活的治愈系漫画，四个女孩的日常故事</summary>
-    <content type="html"><![CDATA[<h1>悠哉日常大王</h1>
-<h2>简介</h2>
-<p>《悠哉日常大王》是あっと创作的日常系漫画，讲述了在乡村小学校就读的四个女孩的悠闲日常生活。</p>
-<h2>主要角色</h2>
-<ul>
-<li><strong>宫内莲华</strong> - 小学一年级生，活泼可爱</li>
-<li><strong>一条萤</strong> - 从东京转学而来的小学五年级生</li>
-<li><strong>越谷夏海</strong> - 小学五年级生，精力充沛</li>
-<li><strong>越谷小鞠</strong> - 小学六年级生，身材娇小</li>
-</ul>
-<h2>评价</h2>
-<p>作品以其缓慢的节奏、优美的乡村风景和温馨的日常描写而深受喜爱，是治愈系漫画的代表作。</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="漫画"></category>
-  </entry>
-  <entry>
-    <title>测试导入工具功能</title>
-    <link href="https://mizuki.mysqil.com/posts/-/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/-/</id>
-    <published>2025-10-26T00:00:00.000Z</published>
-    <updated>2025-10-26T00:00:00.000Z</updated>
-    <summary>这是一个测试 Obsidian 导入工具功能的文章</summary>
-    <content type="html"><![CDATA[<hr />
-<p>tags:</p>
-<ul>
-<li>测试</li>
-<li>导入工具
-评分: 5</li>
-</ul>
-<hr />
-<h1>测试 Obsidian 导入工具</h1>
-<p>这是一个测试文件，用来验证 Obsidian 导入工具的功能。</p>
-<h2>功能特性</h2>
-<h3>1. 文本内容转换</h3>
-<ul>
-<li>支持 <strong>粗体</strong> 和 <em>斜体</em> 文本</li>
-<li>支持代码块和行内代码 <code>console.log()</code></li>
-<li>支持列表和引用</li>
-</ul>
-<h3>2. 图片处理测试</h3>
-<p>下面是一些测试图片：</p>
-<p><img src="https://mizuki.mysqil.com/posts/-/test-image-1.png" alt="test-image-1" /></p>
-<p>这是第二张图片：</p>
-<p><img src="https://mizuki.mysqil.com/posts/-/test-image-2.jpg" alt="test-image-2" /></p>
-<h3>3. 链接转换测试</h3>
-<p>这是一个 <a href="%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5">内部链接</a> 的例子。</p>
-<h3>4. 标签测试</h3>
-<p>#重要 #测试标签</p>
-<h2>总结</h2>
-<p>这个工具应该能够：</p>
-<ol>
-<li>转换 Markdown 格式</li>
-<li>复制图片文件</li>
-<li>更新图片路径</li>
-<li>生成正确的 Front Matter</li>
-</ol>
-<p>测试完成！</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="测试"></category>
-  </entry>
-  <entry>
-    <title>服务器选购指南</title>
-    <link href="https://mizuki.mysqil.com/posts/post-1761465536279/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/post-1761465536279/</id>
-    <published>2025-10-26T00:00:00.000Z</published>
-    <updated>2025-10-26T00:00:00.000Z</updated>
-    <summary>详细介绍各大云服务商的服务器选购建议，包括香港、硅谷、芭乐、阿里云、核云、雨云等平台的对比分析。</summary>
-    <content type="html"><![CDATA[<p>&lt;!-- 外部文件图片已移除 --&gt;<br />
-我才用几天暂时没有发现什么问题，自己去判断吧都成年人了https://www.heyunidc.cn/aff/NHDEKXDQ</p>
-<h1>香港</h1>
-<h2>硅谷</h2>
-<p>硅谷云服务器提供优质的海外服务器服务，以下是配置参考：</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png" alt="硅谷服务器配置" /></p>
-<p>性价比较高，适合需要海外服务器的用户。</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg" alt="硅谷服务器详细信息" /></p>
-<h2>芭乐</h2>
-<p>芭乐云是一个新兴的云服务提供商，提供多种配置选择：</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png" alt="芭乐云服务器配置" /></p>
-<p><strong>测试账号信息：</strong></p>
-<ul>
-<li>用户名：l12mxxyj</li>
-<li>密码：f37611d4</li>
-</ul>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg" alt="芭乐云管理界面" /></p>
-<p><strong>正式账号登录信息：</strong></p>
-<ul>
-<li>用户名：max_8le_me</li>
-<li>密码：7Am4FX59pQtmbPSP</li>
-</ul>
-<p>服务器性能稳定，价格合理。</p>
-<h2>阿里云</h2>
-<p>阿里云作为国内领先的云服务提供商，提供丰富的产品线：</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png" alt="阿里云服务器配置" /></p>
-<ul>
-<li>稳定性高</li>
-<li>技术支持完善</li>
-<li>产品线丰富</li>
-</ul>
-<h2>核云</h2>
-<p>&lt;!-- 外部文件图片已移除 --&gt;<br />
-我才用几天暂时没有发现什么问题，自己去判断吧都成年人了https://www.heyunidc.cn/aff/NHDEKXDQ</p>
-<h2>雨云</h2>
-<p><a href="https://www.rainyun.com/home">雨云 - 新一代云服务提供商</a></p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="工具"></category>
-  </entry>
-  <entry>
-    <title>Test Obsidian Import Tool</title>
-    <link href="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/test-obsidian-import-tool/</id>
-    <published>2025-10-26T00:00:00.000Z</published>
-    <updated>2025-10-26T00:00:00.000Z</updated>
-    <summary>Testing the Obsidian import functionality with automatic image copying</summary>
-    <content type="html"><![CDATA[<h1>Test Obsidian Import Tool</h1>
-<p>This is a test file to verify the Obsidian import tool functionality.</p>
-<h2>Features</h2>
-<h3>1. Text Content Conversion</h3>
-<ul>
-<li>Support <strong>bold</strong> and <em>italic</em> text</li>
-<li>Support code blocks and inline code <code>console.log()</code></li>
-<li>Support lists and quotes</li>
-</ul>
-<h3>2. Image Processing Test</h3>
-<p>Here are some test images:</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-1.png" alt="test-image-1" /></p>
-<p>This is the second image:</p>
-<p><img src="https://mizuki.mysqil.com/posts/test-obsidian-import-tool/test-image-2.jpg" alt="test-image-2" /></p>
-<h3>3. Link Conversion Test</h3>
-<p>This is an example of [internal link](internal link).</p>
-<h3>4. Tag Test</h3>
-<p><strong>important</strong> #test-tag</p>
-<h2>Summary</h2>
-<p>This tool should be able to:</p>
-<ol>
-<li>Convert Markdown format</li>
-<li>Copy image files</li>
-<li>Update image paths</li>
-<li>Generate correct Front Matter</li>
-</ol>
-<p>Test completed!</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Testing"></category>
-  </entry>
-  <entry>
-    <title>学习 Astro 框架</title>
-    <link href="https://mizuki.mysqil.com/posts/-astro-/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/-astro-/</id>
-    <published>2025-10-26T00:00:00.000Z</published>
-    <updated>2025-10-26T00:00:00.000Z</updated>
-    <summary>记录我学习 Astro 静态网站生成器的过程和心得</summary>
-    <content type="html"><![CDATA[<h1>学习 Astro 框架</h1>
-<p>今天开始学习 Astro 框架，这是一个现代化的静态网站生成器。</p>
-<h2>什么是 Astro？</h2>
-<p>Astro 是一个现代化的前端框架，专门用于构建快速、以内容为中心的网站。它的主要特点包括：</p>
-<ul>
-<li><strong>零 JavaScript 默认</strong>: 默认情况下不发送 JavaScript 到浏览器</li>
-<li><strong>组件岛屿</strong>: 只在需要时加载交互组件</li>
-<li><strong>多框架支持</strong>: 可以同时使用 React、Vue、Svelte 等</li>
-<li><strong>优秀的性能</strong>: 生成的网站加载速度极快</li>
-</ul>
-<h2>学习计划</h2>
-<h3>第一阶段：基础概念</h3>
-<ul>
-<li>[ ] 了解 Astro 的核心概念</li>
-<li>[ ] 学习组件语法</li>
-<li>[ ] 掌握路由系统</li>
-</ul>
-<h3>第二阶段：实践项目</h3>
-<ul>
-<li>[ ] 创建个人博客</li>
-<li>[ ] 添加动态功能</li>
-<li>[ ] 优化性能</li>
-</ul>
-<h3>第三阶段：高级特性</h3>
-<ul>
-<li>[ ] 学习 SSR 功能</li>
-<li>[ ] 集成第三方服务</li>
-<li>[ ] 部署优化</li>
-</ul>
-<h2>今日收获</h2>
-<p>通过今天的学习，我了解到：</p>
-<ol>
-<li><strong>Astro 的优势</strong>: 相比传统的 SPA，Astro 生成的网站加载更快</li>
-<li><strong>开发体验</strong>: 支持热重载，开发体验很好</li>
-<li><strong>生态系统</strong>: 有丰富的插件和集成选项</li>
-</ol>
-<h2>代码示例</h2>
-<pre><code>---
-// Astro 组件示例
-const title = "Hello Astro";
-const items = ["学习", "实践", "分享"];
----
-
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;{title}&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1&gt;{title}&lt;/h1&gt;
-    &lt;ul&gt;
-      {items.map(item =&gt; &lt;li&gt;{item}&lt;/li&gt;)}
-    &lt;/ul&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h2>下一步计划</h2>
-<p>明天我将继续深入学习 Astro 的组件系统，并尝试创建一些实用的组件。</p>
-<hr />
-<p><em>学习永无止境，每天进步一点点！</em></p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="技术"></category>
-  </entry>
-  <entry>
-    <title>资源网站构建</title>
-    <link href="https://mizuki.mysqil.com/posts/resource-website-construction/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/resource-website-construction/</id>
-    <published>2024-10-26T00:00:00.000Z</published>
-    <updated>2024-10-26T00:00:00.000Z</updated>
-    <summary>探讨资源网站的构建思路和变现手段，分析一些优秀的资源分享平台案例。</summary>
-    <content type="html"><![CDATA[<h1>资源网站构建</h1>
-<h2>项目概述</h2>
-<p>搭建资源网站可以自己使用，虽然看起来没什么特别的用处，但实际上这也是一个不错的变现手段。</p>
-<h2>优秀案例分析</h2>
-<h3>1. 源码猫 - 精品源码分享平台</h3>
-<p><strong>网站链接</strong>: <a href="https://www.ymcat.cn/">源码猫-精品源码,PHP源码,游戏源码,模板,插件,软件资源分享平台!</a></p>
-<p>源码猫是一个专注于精品源码分享的平台，提供：</p>
-<ul>
-<li>PHP 源码</li>
-<li>游戏源码</li>
-<li>网站模板</li>
-<li>插件资源</li>
-<li>软件资源</li>
-</ul>
-<p>这类平台通过提供高质量的源码资源，吸引开发者用户，形成稳定的用户群体。</p>
-<h3>2. 柏码 - 编程教育平台</h3>
-<p><strong>网站链接</strong>: <a href="https://www.itbaima.cn/zh-CN">柏码 - 让每一行代码都闪耀智慧的光芒</a></p>
-<p>柏码是一个编程教育平台，其特色在于：</p>
-<ul>
-<li>优质的编程教程</li>
-<li>系统化的学习路径</li>
-<li>实践项目指导</li>
-<li>社区互动功能</li>
-</ul>
-<h2>网站收益模式</h2>
-<p>资源网站的主要收益来源包括：</p>
-<h3>1. 会员订阅</h3>
-<ul>
-<li>提供免费和付费内容分层</li>
-<li>VIP 会员享受更多资源和服务</li>
-<li>按月/年收费的订阅模式</li>
-</ul>
-<h3>2. 广告收入</h3>
-<ul>
-<li>展示广告位</li>
-<li>联盟营销</li>
-<li>赞助内容</li>
-</ul>
-<h3>3. 资源销售</h3>
-<ul>
-<li>独家资源付费下载</li>
-<li>定制开发服务</li>
-<li>技术咨询服务</li>
-</ul>
-<h3>4. 培训课程</h3>
-<ul>
-<li>在线课程销售</li>
-<li>一对一指导</li>
-<li>企业培训服务</li>
-</ul>
-<h2>技术实现思路</h2>
-<h3>前端技术栈</h3>
-<ul>
-<li><strong>框架选择</strong>: React/Vue.js 或静态生成器如 Astro</li>
-<li><strong>UI 组件</strong>: 现代化的组件库</li>
-<li><strong>响应式设计</strong>: 适配各种设备</li>
-</ul>
-<h3>后端技术栈</h3>
-<ul>
-<li><strong>服务器</strong>: Node.js/PHP/Python</li>
-<li><strong>数据库</strong>: MySQL/PostgreSQL</li>
-<li><strong>文件存储</strong>: 云存储服务</li>
-<li><strong>CDN</strong>: 加速资源访问</li>
-</ul>
-<h3>核心功能模块</h3>
-<ol>
-<li><strong>用户系统</strong>: 注册、登录、权限管理</li>
-<li><strong>资源管理</strong>: 上传、分类、搜索</li>
-<li><strong>支付系统</strong>: 会员订阅、资源购买</li>
-<li><strong>内容管理</strong>: 文章发布、评论系统</li>
-<li><strong>数据统计</strong>: 用户行为分析</li>
-</ol>
-<h2>运营策略</h2>
-<h3>内容策略</h3>
-<ul>
-<li>定期更新高质量资源</li>
-<li>建立资源审核机制</li>
-<li>鼓励用户贡献内容</li>
-</ul>
-<h3>用户增长</h3>
-<ul>
-<li>SEO 优化提高搜索排名</li>
-<li>社交媒体推广</li>
-<li>与其他平台合作</li>
-</ul>
-<h3>社区建设</h3>
-<ul>
-<li>建立用户交流群</li>
-<li>定期举办活动</li>
-<li>设置积分奖励机制</li>
-</ul>
-<h2>法律合规</h2>
-<h3>版权保护</h3>
-<ul>
-<li>确保资源来源合法</li>
-<li>建立版权申诉机制</li>
-<li>定期清理违规内容</li>
-</ul>
-<h3>用户协议</h3>
-<ul>
-<li>明确使用条款</li>
-<li>隐私政策完善</li>
-<li>免责声明清晰</li>
-</ul>
-<h2>总结</h2>
-<p>资源网站虽然看似简单，但要做好需要考虑很多方面：</p>
-<ol>
-<li><strong>内容质量</strong>: 是成功的关键因素</li>
-<li><strong>用户体验</strong>: 决定用户留存率</li>
-<li><strong>技术架构</strong>: 影响网站性能和扩展性</li>
-<li><strong>运营策略</strong>: 决定网站的长期发展</li>
-<li><strong>合规经营</strong>: 确保网站可持续发展</li>
-</ol>
-<p>通过合理的规划和执行，资源网站确实可以成为一个不错的变现项目。</p>
-<hr />
-<p><em>本文分析了资源网站的构建思路，希望对有意向的朋友有所帮助。</em></p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="项目"></category>
-  </entry>
-  <entry>
-    <title>我的第一篇文章</title>
-    <link href="https://mizuki.mysqil.com/posts/my-first-article/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/my-first-article/</id>
-    <published>2024-10-26T00:00:00.000Z</published>
-    <updated>2024-10-26T00:00:00.000Z</updated>
-    <summary>这是我在 Mizuki 博客上创建的第一篇文章，记录我的学习和生活。</summary>
-    <content type="html"><![CDATA[<h1>欢迎来到我的博客！</h1>
-<p>这是我使用 <strong>Mizuki</strong> 主题创建的第一篇文章。</p>
-<h2>关于 Mizuki 主题</h2>
-<p>Mizuki 是一个基于 Astro 的现代化静态博客模板，具有以下特色：</p>
-<ul>
-<li>🎨 <strong>精美设计</strong>: 现代化的界面设计</li>
-<li>🌙 <strong>主题切换</strong>: 支持明暗主题</li>
-<li>📱 <strong>响应式</strong>: 完美适配各种设备</li>
-<li>🔍 <strong>全文搜索</strong>: 快速找到你需要的内容</li>
-<li>🎵 <strong>音乐播放器</strong>: 边听音乐边阅读</li>
-<li>🌸 <strong>动画效果</strong>: 优雅的交互动画</li>
-<li>🤖 <strong>看板娘</strong>: 可爱的 Pio Live2D 角色</li>
-</ul>
-<h2>我的写作计划</h2>
-<p>接下来我计划在这个博客上分享：</p>
-<ol>
-<li><strong>技术学习笔记</strong> - 编程技巧和经验</li>
-<li><strong>生活感悟</strong> - 日常思考和体验</li>
-<li><strong>项目经验</strong> - 开发过程和心得</li>
-<li><strong>读书笔记</strong> - 好书推荐和摘录</li>
-</ol>
-<h2>Markdown 功能展示</h2>
-<h3>代码块</h3>
-<pre><code>function greet(name) {
-    console.log(`Hello, ${name}!`);
-}
-
-greet('Mizuki');
-</code></pre>
-<h3>列表</h3>
-<ul>
-<li>项目一</li>
-<li>项目二
-<ul>
-<li>子项目 A</li>
-<li>子项目 B</li>
-</ul>
-</li>
-</ul>
-<h3>引用</h3>
-<blockquote>
-<p>这是一个引用块，用来突出重要内容。</p>
-</blockquote>
-<h3>表格</h3>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>状态</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>文章发布</td>
-<td>✅</td>
-<td>支持 Markdown</td>
-</tr>
-<tr>
-<td>主题切换</td>
-<td>✅</td>
-<td>明暗主题</td>
-</tr>
-<tr>
-<td>搜索功能</td>
-<td>✅</td>
-<td>全文搜索</td>
-</tr>
-</tbody>
-</table>
-<h2>总结</h2>
-<p>现在我可以开始我的写作之旅了！感谢 Mizuki 提供了这么棒的博客平台。</p>
-<hr />
-<p><em>感谢阅读我的第一篇文章！更多精彩内容即将到来。</em></p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="日常"></category>
-  </entry>
-  <entry>
-    <title>Markdown Extended Features</title>
-    <link href="https://mizuki.mysqil.com/posts/markdown-extended/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/markdown-extended/</id>
-    <published>2024-05-01T00:00:00.000Z</published>
-    <updated>2024-11-29T00:00:00.000Z</updated>
-    <summary>Read more about Markdown features in Mizuki</summary>
-    <content type="html"><![CDATA[<h2>GitHub Repository Cards</h2>
-<p>You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.</p>
-<p>::github{repo="matsuzaka-yuki/Mizuki"}</p>
-<p>Create a GitHub repository card with the code <code>::github{repo="matsuzaka-yuki/Mizuki"}</code>.</p>
-<pre><code>::github{repo="matsuzaka-yuki/Mizuki"}
-</code></pre>
-<h2>Admonitions</h2>
-<p>Following types of admonitions are supported: <code>note</code> <code>tip</code> <code>important</code> <code>warning</code> <code>caution</code></p>
-<p>:::note
-Highlights information that users should take into account, even when skimming.
-:::</p>
-<p>:::tip
-Optional information to help a user be more successful.
-:::</p>
-<p>:::important
-Crucial information necessary for users to succeed.
-:::</p>
-<p>:::warning
-Critical content demanding immediate user attention due to potential risks.
-:::</p>
-<p>:::caution
-Negative potential consequences of an action.
-:::</p>
-<h3>Basic Syntax</h3>
-<pre><code>:::note
-Highlights information that users should take into account, even when skimming.
-:::
-
-:::tip
-Optional information to help a user be more successful.
-:::
-</code></pre>
-<h3>Custom Titles</h3>
-<p>The title of the admonition can be customized.</p>
-<p>:::note[MY CUSTOM TITLE]
-This is a note with a custom title.
-:::</p>
-<pre><code>:::note[MY CUSTOM TITLE]
-This is a note with a custom title.
-:::
-</code></pre>
-<h3>GitHub Syntax</h3>
-<blockquote>
-<p>[!TIP]
-<a href="https://github.com/orgs/community/discussions/16925">The GitHub syntax</a> is also supported.</p>
-</blockquote>
-<pre><code>&gt; [!NOTE]
-&gt; The GitHub syntax is also supported.
-
-&gt; [!TIP]
-&gt; The GitHub syntax is also supported.
-</code></pre>
-<h3>Spoiler</h3>
-<p>You can add spoilers to your text. The text also supports <strong>Markdown</strong> syntax.</p>
-<p>The content :spoiler[is hidden <strong>ayyy</strong>]!</p>
-<pre><code>The content :spoiler[is hidden **ayyy**]!</code></pre>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Examples"></category>
-  </entry>
-  <entry>
-    <title>Simple Guides for Mizuki</title>
-    <link href="https://mizuki.mysqil.com/posts/guide/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/guide/</id>
-    <published>2024-04-01T00:00:00.000Z</published>
-    <updated>2024-04-01T00:00:00.000Z</updated>
-    <summary>How to use this blog template.</summary>
-    <content type="html"><![CDATA[<p>This blog template is built with <a href="https://astro.build/">Astro</a>. For the things that are not mentioned in this guide, you may find the answers in the <a href="https://docs.astro.build/">Astro Docs</a>.</p>
-<h2>Front-matter of Posts</h2>
-<pre><code>---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
-draft: false
----
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Attribute</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>title</code></td>
-<td>The title of the post.</td>
-</tr>
-<tr>
-<td><code>published</code></td>
-<td>The date the post was published.</td>
-</tr>
-<tr>
-<td><code>pinned</code></td>
-<td>Whether this post is pinned to the top of the post list.</td>
-</tr>
-<tr>
-<td><code>description</code></td>
-<td>A short description of the post. Displayed on index page.</td>
-</tr>
-<tr>
-<td><code>image</code></td>
-<td>The cover image path of the post.&lt;br/&gt;1. Start with <code>http://</code> or <code>https://</code>: Use web image&lt;br/&gt;2. Start with <code>/</code>: For image in <code>public</code> dir&lt;br/&gt;3. With none of the prefixes: Relative to the markdown file</td>
-</tr>
-<tr>
-<td><code>tags</code></td>
-<td>The tags of the post.</td>
-</tr>
-<tr>
-<td><code>category</code></td>
-<td>The category of the post.</td>
-</tr>
-<tr>
-<td><code>licenseName</code></td>
-<td>The license name for the post content.</td>
-</tr>
-<tr>
-<td><code>author</code></td>
-<td>The author of the post.</td>
-</tr>
-<tr>
-<td><code>sourceLink</code></td>
-<td>The source link or reference for the post content.</td>
-</tr>
-<tr>
-<td><code>draft</code></td>
-<td>If this post is still a draft, which won't be displayed.</td>
-</tr>
-</tbody>
-</table>
-<h2>Where to Place the Post Files</h2>
-<p>Your post files should be placed in <code>src/content/posts/</code> directory. You can also create sub-directories to better organize your posts and assets.</p>
-<pre><code>src/content/posts/
-├── post-1.md
-└── post-2/
-    ├── cover.png
-    └── index.md
-</code></pre>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Guides"></category>
-  </entry>
-  <entry>
     <title>个人博客系统</title>
-    <link href="https://mizuki.mysqil.com/posts/programming/blog-system/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/programming/blog-system/</id>
+    <link href="http://localhost:4322/posts/programming/blog-system/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/programming/blog-system/</id>
     <published>2024-02-10T00:00:00.000Z</published>
     <updated>2024-02-10T00:00:00.000Z</updated>
     <summary>基于 Astro 框架开发的个人博客系统，支持 Markdown、代码高亮、响应式设计</summary>
@@ -2174,8 +904,8 @@ draft: false
   </entry>
   <entry>
     <title>示例插画作品</title>
-    <link href="https://mizuki.mysqil.com/posts/normal/illustration-work/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/normal/illustration-work/</id>
+    <link href="http://localhost:4322/posts/normal/illustration-work/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/normal/illustration-work/</id>
     <published>2024-01-15T00:00:00.000Z</published>
     <updated>2024-01-15T00:00:00.000Z</updated>
     <summary>这是一个示例插画作品，展示风景插画的创作过程和技巧</summary>
@@ -2186,195 +916,5 @@ draft: false
       <name>Ayano</name>
     </author>
     <category term="作品集"></category>
-  </entry>
-  <entry>
-    <title>Markdown Mermaid</title>
-    <link href="https://mizuki.mysqil.com/posts/markdown-mermaid/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/markdown-mermaid/</id>
-    <published>2023-10-01T00:00:00.000Z</published>
-    <updated>2023-10-01T00:00:00.000Z</updated>
-    <summary>A simple example of a Markdown blog post with Mermaid.</summary>
-    <content type="html"><![CDATA[<h1>Complete Guide to Markdown with Mermaid Diagrams</h1>
-<p>This article demonstrates how to create various complex diagrams using Mermaid in Markdown documents, including flowcharts, sequence diagrams, Gantt charts, class diagrams, and state diagrams.</p>
-<h2>Flowchart Example</h2>
-<p>Flowcharts are excellent for representing processes or algorithm steps.</p>
-<pre><code>graph TD
-    A[Start] --&gt; B{Condition Check}
-    B --&gt;|Yes| C[Process Step 1]
-    B --&gt;|No| D[Process Step 2]
-    C --&gt; E[Subprocess]
-    D --&gt; E
-    subgraph E [Subprocess Details]
-        E1[Substep 1] --&gt; E2[Substep 2]
-        E2 --&gt; E3[Substep 3]
-    end
-    E --&gt; F{Another Decision}
-    F --&gt;|Option 1| G[Result 1]
-    F --&gt;|Option 2| H[Result 2]
-    F --&gt;|Option 3| I[Result 3]
-    G --&gt; J[End]
-    H --&gt; J
-    I --&gt; J
-</code></pre>
-<h2>Sequence Diagram Example</h2>
-<p>Sequence diagrams show interactions between objects over time.</p>
-<pre><code>sequenceDiagram
-    participant User
-    participant WebApp
-    participant Server
-    participant Database
-
-    User-&gt;&gt;WebApp: Submit Login Request
-    WebApp-&gt;&gt;Server: Send Auth Request
-    Server-&gt;&gt;Database: Query User Credentials
-    Database--&gt;&gt;Server: Return User Data
-    Server--&gt;&gt;WebApp: Return Auth Result
-    
-    alt Auth Successful
-        WebApp-&gt;&gt;User: Show Welcome Page
-        WebApp-&gt;&gt;Server: Request User Data
-        Server-&gt;&gt;Database: Get User Preferences
-        Database--&gt;&gt;Server: Return Preferences
-        Server--&gt;&gt;WebApp: Return User Data
-        WebApp-&gt;&gt;User: Load Personalized Interface
-    else Auth Failed
-        WebApp-&gt;&gt;User: Show Error Message
-        WebApp-&gt;&gt;User: Prompt Re-entry
-    end
-</code></pre>
-<h2>Gantt Chart Example</h2>
-<p>Gantt charts are perfect for displaying project schedules and timelines.</p>
-<pre><code>gantt
-    title Website Development Project Timeline
-    dateFormat  YYYY-MM-DD
-    axisFormat  %m/%d
-    
-    section Design Phase
-    Requirements Analysis      :a1, 2023-10-01, 7d
-    UI Design                 :a2, after a1, 10d
-    Prototype Creation        :a3, after a2, 5d
-    
-    section Development Phase
-    Frontend Development      :b1, 2023-10-20, 15d
-    Backend Development       :b2, after a2, 18d
-    Database Design           :b3, after a1, 12d
-    
-    section Testing Phase
-    Unit Testing              :c1, after b1, 8d
-    Integration Testing       :c2, after b2, 10d
-    User Acceptance Testing   :c3, after c2, 7d
-    
-    section Deployment
-    Production Deployment     :d1, after c3, 3d
-    Launch                    :milestone, after d1, 0d
-</code></pre>
-<h2>Class Diagram Example</h2>
-<p>Class diagrams show the static structure of a system, including classes, attributes, methods, and their relationships.</p>
-<pre><code>classDiagram
-    class User {
-        +String username
-        +String password
-        +String email
-        +Boolean active
-        +login()
-        +logout()
-        +updateProfile()
-    }
-    
-    class Article {
-        +String title
-        +String content
-        +Date publishDate
-        +Boolean published
-        +publish()
-        +edit()
-        +delete()
-    }
-    
-    class Comment {
-        +String content
-        +Date commentDate
-        +addComment()
-        +deleteComment()
-    }
-    
-    class Category {
-        +String name
-        +String description
-        +addArticle()
-        +removeArticle()
-    }
-    
-    User "1" -- "*" Article : writes
-    User "1" -- "*" Comment : posts
-    Article "1" -- "*" Comment : has
-    Article "1" -- "*" Category : belongs to
-</code></pre>
-<h2>State Diagram Example</h2>
-<p>State diagrams show the sequence of states an object goes through during its life cycle.</p>
-<pre><code>stateDiagram-v2
-    [*] --&gt; Draft
-    
-    Draft --&gt; UnderReview : submit
-    UnderReview --&gt; Draft : reject
-    UnderReview --&gt; Approved : approve
-    Approved --&gt; Published : publish
-    Published --&gt; Archived : archive
-    Published --&gt; Draft : retract
-    
-    state Published {
-        [*] --&gt; Active
-        Active --&gt; Hidden : temporarily hide
-        Hidden --&gt; Active : restore
-        Active --&gt; [*]
-        Hidden --&gt; [*]
-    }
-    
-    Archived --&gt; [*]
-</code></pre>
-<h2>Pie Chart Example</h2>
-<p>Pie charts are ideal for displaying proportions and percentage data.</p>
-<pre><code>pie title Website Traffic Sources Analysis
-    "Search Engines" : 45.6
-    "Direct Access" : 30.1
-    "Social Media" : 15.3
-    "Referral Links" : 6.4
-    "Other Sources" : 2.6
-</code></pre>
-<h2>Conclusion</h2>
-<p>Mermaid is a powerful tool for creating various types of diagrams in Markdown documents. This article demonstrated how to use flowcharts, sequence diagrams, Gantt charts, class diagrams, state diagrams, and pie charts. These diagrams can help you express complex concepts, processes, and data structures more clearly.</p>
-<p>To use Mermaid, simply specify the mermaid language in a code block and describe the diagram using concise text syntax. Mermaid will automatically convert these descriptions into beautiful visual diagrams.</p>
-<p>Try using Mermaid diagrams in your next technical blog post or project documentation - they will make your content more professional and easier to understand!</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Examples"></category>
-  </entry>
-  <entry>
-    <title>Include Video in the Posts</title>
-    <link href="https://mizuki.mysqil.com/posts/video/" rel="alternate" type="text/html"/>
-    <id>https://mizuki.mysqil.com/posts/video/</id>
-    <published>2022-08-01T00:00:00.000Z</published>
-    <updated>2022-08-01T00:00:00.000Z</updated>
-    <summary>This post demonstrates how to include embedded video in a blog post.</summary>
-    <content type="html"><![CDATA[<p>Just copy the embed code from YouTube or other platforms, and paste it in the markdown file.</p>
-<pre><code>---
-title: Include Video in the Post
-published: 2023-10-19
-// ...
----
-
-&lt;iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
-</code></pre>
-<h2>YouTube</h2>
-<p>&lt;iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen&gt;&lt;/iframe&gt;</p>
-<h2>Bilibili</h2>
-<p>&lt;iframe width="100%" height="468" src="//player.bilibili.com/player.html?bvid=BV1fK4y1s7Qf&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" &amp;autoplay=0&gt; &lt;/iframe&gt;</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="Examples"></category>
   </entry>
 </feed>
