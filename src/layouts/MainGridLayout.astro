@@ -1057,29 +1057,14 @@ body.no-banner-mode .absolute.w-full.z-30 {
     }
     
     .mobile-hide-banner {
-        transform: translateY(-100%) translateZ(0) !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        /* 统一为 300ms，无延迟 */
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+        display: none !important;
+        /* 完全隐藏，不使用 transform，避免占据空间 */
     }
     
-    /* 手机端非首页时主内容区域从顶部开始 - 统一 300ms 动画 */
-    .absolute.w-full.z-30 {
-        transition: top 0.3s ease-in-out;
-        /* 硬件加速优化 */
-        will-change: top;
-        /* 禁用transform以保证back to top 按钮可以显示
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        */
-    }
-
+    /* 手机端非首页时主内容区域从顶部开始 */
     .absolute.w-full.z-30.mobile-main-no-banner {
         top: 5.5rem !important;
         min-height: calc(100vh - 5.5rem) !important;
-        /* 统一为 300ms，无延迟 */
-        transition: top 0.3s ease-in-out, min-height 0.3s ease-in-out !important;
     }
 }
 
@@ -1351,11 +1336,10 @@ body.no-banner-mode .absolute.w-full.z-30 {
         transition: transform 0.3s ease-in, opacity 0.2s ease-in;
     }
     
-    /* 当banner隐藏时，水波纹快速消失 */
+    /* 当banner隐藏时，水波纹也完全隐藏 */
     .mobile-hide-banner #header-waves {
-        transform: translateY(-100%);
-        opacity: 0;
-        /* 水波纹比banner更快消失 */
+        display: none !important;
+        /* 完全隐藏，避免占据空间 */
         transition: transform 0.25s ease-in, opacity 0.15s ease-in;
     }
     
