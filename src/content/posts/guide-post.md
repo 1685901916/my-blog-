@@ -1,5 +1,5 @@
 ---
-title: 欢迎来到本站！资源导航
+title: 引导贴
 published: 2025-11-28
 description: 现在发链接各种不方便，直接在博客里搞个转接感觉方便多了
 image: ''
@@ -26,6 +26,6 @@ novelpia吧里来的看这边
 [备用](https://yun.139.com/shareweb/#/w/i/2rJWEneapcMrj)
 
 详细可以看这个，按顺序介绍了大家要的书
-[[韩轻拼好书]]
+[韩轻拼好书](/resources/entertainment/小说资源/韩轻拼好书/)
 
 求书直接发信帖子就行，看见了会发的

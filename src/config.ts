@@ -54,7 +54,7 @@ export const siteConfig: SiteConfig = {
 		showBlogPosts: true, // ✅ 博客文章 - 设为 false 则主页不显示博客
 		showMangaPosts: false, // ❌ 漫画内容 - 关闭主页显示
 		showPortfolioPosts: true, // ✅ 作品集   - 在主页显示
-		showEntertainmentPosts: false, // ❌ 娱乐资源 - 关闭主页显示
+		showEntertainmentPosts: true, // ✅ 娱乐资源 - 在主页显示
 	},
 	// ==========================================
 
