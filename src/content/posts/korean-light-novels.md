@@ -1,0 +1,194 @@
+---
+title: 韩轻拼好书推荐
+published: 2025-11-28
+description: 贴吧把我二十多楼的贴直接删了，没办法在这写吧，在被删一回心态真的要崩了
+image: ''
+tags: [小说资源, 韩轻, 推荐]
+category: 资源
+draft: false
+---
+
+贴吧把我二十多楼的贴直接删了，没办法在这写吧，在被删一回心态真的要崩了
+
+## 资源获取
+
+[移动网盘](https://yun.139.com/shareweb/#/w/i/2rJV7xt3HAbg7)
+
+迅雷网盘：直接在app里面搜韩轻拼好书就行了
+
+## 0 拼好书集合
+
+吧主发的书单集合资源，有不少乱七八糟的东西，但还是缺了不少书，可以去看看
+
+![拼好书集合](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145856.png)
+
+## 1 浪漫小说的主角只喜欢我
+
+![浪漫小说的主角只喜欢我](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251012131042.png)
+
+轮回系作品，男主一次一次轮回，与不同却相似的女主相遇相处的故事
+
+这本真强吧，玛丽真王朝了，今年想不出来有哪本韩轻能比这本强，反正在我这应该是年度作品了
+
+玛丽超可爱的，看着玛丽一点一点把男主融化真的很甜，米虫玛丽超可爱，虽然大部分时间都很残念
+
+我比较喜欢这一段：
+
+88章 继承第二周目,夫君兰塞尔.
+
+> "敢逃第二次我就左拥右抱两个女人。"
+> "兰塞尔大人？！"
+> "逃三次就三个，四次就四个。"
+> "咿呀——！"
+
+![](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250904223702.png)
+
+## 2 借妻条约
+
+这本是吧里最火的一本书了，死掉的帖子都有六七个了，私信全是求这本的，我准备了两版
+
+## 3 TS美少女附身后竟然被催眠…？
+
+![TS美少女附身后竟然被催眠](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251007201051.png)
+
+这本很涩，尺度很大
+
+比雪荷不是玩具，青梅竹马催眠强太多了，女主是真心喜欢娚主，后面还让娚主在上面做过两回，世妍会害羞也会爱惜娚主。不过做法还是太艹了
+
+是可以感受到爱的作品，现在大部分催眠调教完全就是把人当玩具，感情是相互的，有互动的才更好看吧。
+
+说到底sm也是是调情的工具，又不是单纯的施暴，m是喜欢调情又不是喜欢被打
+
+## 4 我被黑幕家族收养了
+
+![我被黑幕家族收养了](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206135920.png)
+
+婴儿盐的作品
+
+这本没看完，听说主角情商不太好，婴儿盐肯定要看我的小公女殿下，这是真神。黑幕家族我感觉一般吧
+
+## 5 成为毁灭世界的魔女 好感度全是-100（完结）
+
+![成为毁灭世界的魔女](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251205143045.png)
+
+这本完结了，我倒是看完了，皇女和师傅写的很好，其他的角色受限篇幅倒是一般吧。总体还是好作品
+
+## 6 成为学院黑幕的女儿
+
+![成为学院黑幕的女儿](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206140812.png)
+
+这本老长了，算误解系，女主纯风傲天
+
+## 7 成为北部大公的小儿子
+
+这个没看过，伪娘tag？
+
+![成为北部大公的小儿子](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206140253.png)
+
+## 8 成为皇帝培养的巫女
+
+没看过把tag列一下：奇幻 言情 性转 轻度致郁 癌变 纯爱 魔物 东方奇幻 龙人
+
+![成为皇帝培养的巫女](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206140920.png)
+
+## 9 放弃攻略女主角
+
+259章版本：
+![放弃攻略女主角259章](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206141147.png)
+
+76章版本：
+![放弃攻略女主角76章](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206141119.png)
+
+## 10 飞机杯无线连接
+
+这个本子挺火的
+
+![飞机杯无线连接](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206141228.png)
+
+## 11 来自未来的情书（完结）
+
+这个完结了，999章
+
+![来自未来的情书](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206142828.png)
+
+## 12 异世界人妻猎人
+
+这个漫画还行
+
+![异世界人妻猎人](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206144519.png)
+
+## 13 魔法少女想要退休
+
+魔法少女yyds，是下班成为魔法少女那种类型
+
+不过这本是哥哥，那本是父亲
+
+插图很可爱，这本的看点是性冷淡ptsd男主被迫营业，很可爱
+
+![魔法少女想要退休](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206144714.png)
+
+## 14 末世催眠师
+
+看评论说一般，不够这个标题一眼望到头，不如去看末世枭雄
+
+![末世催眠师](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206144751.png)
+
+## 15 契约制魔法少女怎么可能可能可爱
+
+韩轻TS真多啊
+
+![契约制魔法少女](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206144941.png)
+
+## 16 随心所欲的异世界催眠
+
+这本400m，插图挺好看的
+
+![随心所欲的异世界催眠1](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145005.png)
+![随心所欲的异世界催眠2](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145044.png)
+
+## 17 色情鬼故事不是很可怕吗
+
+正太文，男主被各种女鬼抓住艾草
+
+![色情鬼故事](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145111.png)
+
+## 18 拜托拜托app
+
+有本子
+
+![拜托拜托app](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145637.png)
+
+## 19 特色新视界
+
+这给漫画也挺火的，小说没看过
+
+![特色新视界](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145252.png)
+
+## 20 第一轮的女主角记得调教
+
+esj上有精翻
+
+![第一轮的女主角记得调教1](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206140540.png)
+![第一轮的女主角记得调教2](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206140417.png)
+
+## 21 东罗马帝国的天才皇女
+
+非常好的ts嫁历史文，字数也多
+
+各方面素质都很高的军宅文，作者是万恶的p社玩家，知识储备量算丰富的，精罗这一块。虽然是韩轻，但里面的中国元素都快比韩国元素多了，作者多次引用三国故事，neta古代兵法，还提了糖葫芦等中国食物（都明确标注了是中国的），主人公设定里甚至还有条"从小看四渡赤水"。里面赛马娘、游戏王之类的acg neta要素也有很多。总之就是把里面韩国相关内容去掉，会让人觉得就是老中写的书的程度。
+
+感情戏这边进展不算快，ts主的各种心理算比较到位，小情趣这块也ok。男主是历史官配，死正经木头忠臣人设。
+
+![东罗马帝国的天才皇女](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206145446.png)
+
+## 22 我想成为vtuber
+
+![我想成为vtuber1](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206134746.jpg)
+![我想成为vtuber2](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206134723.jpg)
+
+## 23 穿越到武侠世界
+
+这本好长，esj上精翻都有上千章了
+
+![穿越到武侠世界1](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206135001.jpg)
+![穿越到武侠世界2](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251206135006.jpg)
