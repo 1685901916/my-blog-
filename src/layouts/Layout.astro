@@ -227,6 +227,11 @@ if (siteConfig.font) {
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
+
+		<!-- 标准 favicon，搜索引擎优先识别 -->
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="icon" href="/favicon/avatar-32.png" type="image/png" />
+
 		{favicons.map(favicon => (
 			<link rel="icon"
 				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
