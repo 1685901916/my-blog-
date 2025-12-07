@@ -5,14 +5,14 @@
   <link href="http://localhost:4322/" rel="alternate" type="text/html"/>
   <link href="http://localhost:4322/atom.xml" rel="self" type="application/atom+xml"/>
   <id>http://localhost:4322/</id>
-  <updated>2025-12-07T10:33:37.897Z</updated>
+  <updated>2025-12-07T10:50:34.808Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
     <link href="http://localhost:4322/posts/guide-post/" rel="alternate" type="text/html"/>
     <id>http://localhost:4322/posts/guide-post/</id>
-    <published>2025-11-28T00:00:00.000Z</published>
-    <updated>2025-11-28T00:00:00.000Z</updated>
+    <published>2025-12-07T00:00:00.000Z</published>
+    <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>现在发链接各种不方便，直接在博客里搞个转接感觉方便多了</summary>
     <content type="html"><![CDATA[<p>现在发链接各种不方便，直接在博客里搞个转接感觉方便多了</p>
 <p>或许有人会好奇为啥用移动云盘，没啥特殊的原因，因为这个新盘推广费给的多，站长含泪恰饭</p>
@@ -22,10 +22,10 @@
 <h3>资源链接</h3>
 <p><a href="https://yun.139.com/shareweb/#/w/i/2qie0ij3seXmc">移动云盘</a></p>
 <p><a href="https://yun.139.com/shareweb/#/w/i/2rJWEneapcMrj">备用</a></p>
-<p><a href="https://yun.139.com/shareweb/#/w/i/2rJV7UuCAzBji">阅读软件</a> - 阅读app是压缩包，不会用的可以用静读天下</p>
+<p><a href="https://yun.139.com/shareweb/#/w/i/2rJV7UuCAzBji">阅读软件</a> 阅读app是压缩包，不会用的可以用静读天下</p>
 <p>详细可以看这个，按顺序介绍了大家要的书
 <a href="/resources/entertainment/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/">韩轻拼好书</a></p>
-<p>求书直接发信帖子就行，看见了会发的</p>
+<p>求书直接在贴吧发帖子就行，看见了会发的</p>
 ]]></content>
     <author>
       <name>Ayano</name>
@@ -33,84 +33,11 @@
     <category term="公告"></category>
   </entry>
   <entry>
-    <title>双链测试文章A</title>
-    <link href="http://localhost:4322/posts/wiki-link-test-a/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/wiki-link-test-a/</id>
-    <published>2025-11-28T00:00:00.000Z</published>
-    <updated>2025-11-28T00:00:00.000Z</updated>
-    <summary>这是用来测试双链功能的第一篇文章</summary>
-    <content type="html"><![CDATA[<h1>双链测试文章A</h1>
-<p>这是第一篇测试文章，用于演示双链（Wiki Links）功能。</p>
-<h2>什么是双链？</h2>
-<p>双链是一种类似 Obsidian 的笔记连接方式，可以让文章之间互相引用。</p>
-<h2>示例</h2>
-<p>我们可以引用另一篇文章：[[wiki-link-test-b]]</p>
-<p>也可以使用自定义显示文本：[[点击查看文章B|wiki-link-test-b]]</p>
-<p>测试普通链接对比：<a href="/posts/wiki-link-test-b/">普通链接到B</a></p>
-<h2>更多引用</h2>
-<ul>
-<li>查看 [[ai-coding-agents-guide]] 了解 AI 编程工具</li>
-<li>了解 [[keion-girls]] 轻音少女的故事</li>
-</ul>
-<h2>双链的优势</h2>
-<ol>
-<li><strong>快速导航</strong>：点击即可跳转到相关文章</li>
-<li><strong>悬浮预览</strong>：鼠标悬停可以预览文章内容</li>
-<li><strong>知识图谱</strong>：自动构建文章之间的关联关系</li>
-</ol>
-<p>这样就可以构建一个知识网络，让笔记之间形成有机的联系！</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="测试"></category>
-  </entry>
-  <entry>
-    <title>双链测试文章B</title>
-    <link href="http://localhost:4322/posts/wiki-link-test-b/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/wiki-link-test-b/</id>
-    <published>2025-11-28T00:00:00.000Z</published>
-    <updated>2025-11-28T00:00:00.000Z</updated>
-    <summary>这是用来测试双链功能的第二篇文章</summary>
-    <content type="html"><![CDATA[<h1>双链测试文章B</h1>
-<p>这是第二篇测试文章，与 [[wiki-link-test-a]] 互相连接。</p>
-<h2>回链测试</h2>
-<p>从 [[wiki-link-test-a]] 可以跳转到这里，这里也可以跳回去。</p>
-<h2>双链语法</h2>
-<h3>基本语法</h3>
-<pre><code>[[文章标题]]
-</code></pre>
-<h3>自定义显示文本</h3>
-<pre><code>[[显示文本|实际链接]]
-</code></pre>
-<h2>实际应用示例</h2>
-<p>在实际使用中，我们可以这样引用：</p>
-<ul>
-<li>关于 AI 工具，可以参考 [[ai-coding-agents-guide]] 这篇文章</li>
-<li>如果你喜欢动漫，可以看看 [[keion-girls]]</li>
-<li>想要了解起点，请阅读 [[wiki-link-test-a]]</li>
-</ul>
-<h2>为什么使用双链？</h2>
-<p>双链让文章之间形成网络结构，而不是树状结构。这样可以：</p>
-<ol>
-<li><strong>多维度思考</strong>：一个概念可以从多个角度被引用</li>
-<li><strong>知识复用</strong>：避免重复写相同的内容</li>
-<li><strong>灵感激发</strong>：通过关联发现新的连接点</li>
-<li><strong>反向链接</strong>：自动显示哪些文章引用了当前文章</li>
-</ol>
-<p>这种方式特别适合构建个人知识库！</p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="测试"></category>
-  </entry>
-  <entry>
     <title>韩轻拼好书</title>
     <link href="http://localhost:4322/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/" rel="alternate" type="text/html"/>
     <id>http://localhost:4322/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/</id>
-    <published>2025-11-28T00:00:00.000Z</published>
-    <updated>2025-11-28T00:00:00.000Z</updated>
+    <published>2025-12-07T00:00:00.000Z</published>
+    <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>贴吧把我二十多楼的贴直接删了，没办法在这写吧，在被删一回心态真的要崩了</summary>
     <content type="html"><![CDATA[<p>贴吧把我二十多楼的贴直接删了，没办法在这写吧，在被删一回心态真的要崩了</p>
 <p>资源获取是
@@ -214,6 +141,110 @@
       <name>Ayano</name>
     </author>
     <category term="小说资源"></category>
+  </entry>
+  <entry>
+    <title>本子软件介绍</title>
+    <link href="http://localhost:4322/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/</id>
+    <published>2025-12-07T00:00:00.000Z</published>
+    <updated>2025-12-07T00:00:00.000Z</updated>
+    <summary>漫画资源获取渠道介绍，包括禁漫天堂、e站、哔咔等平台</summary>
+    <content type="html"><![CDATA[<p><a href="https://yun.139.com/shareweb/#/w/i/2rJV7usQjVKjz">漫画资源点这里</a></p>
+<p><a href="https://yun.139.com/shareweb/#/w/i/2rJV7UuCL6Ss7">备用</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251207183331.png" alt="Pasted image 20251207183331" /></p>
+<h1>禁漫天堂</h1>
+<p><a href="https://18comic.vip/">18comic.vip</a></p>
+<p>看一看350   吧（</p>
+<p>流传于各大评论区中，id传播最方便的一集，会看这个可以在评论区里看到不少英雄传播</p>
+<p>不然都有英雄了，你还不会用也太可惜了</p>
+<h1>e站</h1>
+<p><a href="https://exhentai.org/">https://exhentai.org/</a></p>
+<p>夯</p>
+<p>版本很多，用绿的就行，这个使用体验很好，本子资源最多，有多语言</p>
+<p>这个注册一定一定要用欧美梯子，里站是要资格的，注册后过一段时间应该就能用了</p>
+<p><a href="https://github.com/xiaojieonly/Ehviewer_CN_SXJ/issues/1065">如何注册并进入里站，解决（哭泣熊猫） · Issue #1065 · xiaojieonly/Ehviewer_CN_SXJ</a></p>
+<h1>哔咔</h1>
+<p>老字号了，但是广告还是有点多的</p>
+<p>有游戏区，可以在这下galgame</p>
+<p>我第一个galgame就是在哔咔下的</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="漫画资源"></category>
+  </entry>
+  <entry>
+    <title>双链测试文章A</title>
+    <link href="http://localhost:4322/posts/wiki-link-test-a/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/wiki-link-test-a/</id>
+    <published>2025-11-28T00:00:00.000Z</published>
+    <updated>2025-11-28T00:00:00.000Z</updated>
+    <summary>这是用来测试双链功能的第一篇文章</summary>
+    <content type="html"><![CDATA[<h1>双链测试文章A</h1>
+<p>这是第一篇测试文章，用于演示双链（Wiki Links）功能。</p>
+<h2>什么是双链？</h2>
+<p>双链是一种类似 Obsidian 的笔记连接方式，可以让文章之间互相引用。</p>
+<h2>示例</h2>
+<p>我们可以引用另一篇文章：[[wiki-link-test-b]]</p>
+<p>也可以使用自定义显示文本：[[点击查看文章B|wiki-link-test-b]]</p>
+<p>测试普通链接对比：<a href="/posts/wiki-link-test-b/">普通链接到B</a></p>
+<h2>更多引用</h2>
+<ul>
+<li>查看 [[ai-coding-agents-guide]] 了解 AI 编程工具</li>
+<li>了解 [[keion-girls]] 轻音少女的故事</li>
+</ul>
+<h2>双链的优势</h2>
+<ol>
+<li><strong>快速导航</strong>：点击即可跳转到相关文章</li>
+<li><strong>悬浮预览</strong>：鼠标悬停可以预览文章内容</li>
+<li><strong>知识图谱</strong>：自动构建文章之间的关联关系</li>
+</ol>
+<p>这样就可以构建一个知识网络，让笔记之间形成有机的联系！</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="测试"></category>
+  </entry>
+  <entry>
+    <title>双链测试文章B</title>
+    <link href="http://localhost:4322/posts/wiki-link-test-b/" rel="alternate" type="text/html"/>
+    <id>http://localhost:4322/posts/wiki-link-test-b/</id>
+    <published>2025-11-28T00:00:00.000Z</published>
+    <updated>2025-11-28T00:00:00.000Z</updated>
+    <summary>这是用来测试双链功能的第二篇文章</summary>
+    <content type="html"><![CDATA[<h1>双链测试文章B</h1>
+<p>这是第二篇测试文章，与 [[wiki-link-test-a]] 互相连接。</p>
+<h2>回链测试</h2>
+<p>从 [[wiki-link-test-a]] 可以跳转到这里，这里也可以跳回去。</p>
+<h2>双链语法</h2>
+<h3>基本语法</h3>
+<pre><code>[[文章标题]]
+</code></pre>
+<h3>自定义显示文本</h3>
+<pre><code>[[显示文本|实际链接]]
+</code></pre>
+<h2>实际应用示例</h2>
+<p>在实际使用中，我们可以这样引用：</p>
+<ul>
+<li>关于 AI 工具，可以参考 [[ai-coding-agents-guide]] 这篇文章</li>
+<li>如果你喜欢动漫，可以看看 [[keion-girls]]</li>
+<li>想要了解起点，请阅读 [[wiki-link-test-a]]</li>
+</ul>
+<h2>为什么使用双链？</h2>
+<p>双链让文章之间形成网络结构，而不是树状结构。这样可以：</p>
+<ol>
+<li><strong>多维度思考</strong>：一个概念可以从多个角度被引用</li>
+<li><strong>知识复用</strong>：避免重复写相同的内容</li>
+<li><strong>灵感激发</strong>：通过关联发现新的连接点</li>
+<li><strong>反向链接</strong>：自动显示哪些文章引用了当前文章</li>
+</ol>
+<p>这种方式特别适合构建个人知识库！</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="测试"></category>
   </entry>
   <entry>
     <title>ai  agent</title>
