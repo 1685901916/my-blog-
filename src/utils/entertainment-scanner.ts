@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import yaml from "js-yaml";
+import { getCategorySlug } from "../constants/category-slugs";
 
 export interface EntertainmentArticle {
 	id: string;
@@ -93,7 +94,9 @@ async function scanStandaloneEntertainment(): Promise<EntertainmentArticle[]> {
 					continue;
 				}
 
-				const slug = `entertainment-standalone-${file.name.replace(".md", "")}`;
+				// 优先使用 customSlug
+				const articleSlug = data.customSlug || file.name.replace(".md", "");
+				const slug = `entertainment-standalone-${articleSlug}`;
 
 				// 计算正文字数（排除 front matter）
 				const content = fileContent
@@ -195,7 +198,10 @@ function scanArticles(
 				continue;
 			}
 
-			const slug = `${categoryId}/${file.replace(".md", "")}`;
+			// 优先使用 customSlug，否则使用分类映射 + 文件名
+			const categorySlug = getCategorySlug(categoryId);
+			const articleSlug = data.customSlug || file.replace(".md", "");
+			const slug = `${categorySlug}/${articleSlug}`;
 
 			// 计算正文字数（排除 front matter）
 			const content = fileContent.replace(/^---\s*\n[\s\S]*?\n---/, "").trim();

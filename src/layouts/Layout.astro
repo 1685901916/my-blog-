@@ -211,7 +211,7 @@ if (siteConfig.font) {
 		<meta property="og:url" content={Astro.url}>
 		<meta property="og:title" content={pageTitle}>
 		<meta property="og:description" content={description || pageTitle}>
-		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+		{(ogImageUrl || banner) && <meta property="og:image" content={ogImageUrl || banner} />}
 		{
 			setOGTypeArticle ? (
 				<meta property="og:type" content="article" />
@@ -224,9 +224,13 @@ if (siteConfig.font) {
 		<meta property="twitter:url" content={Astro.url}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
+		{(ogImageUrl || banner) && <meta name="twitter:image" content={ogImageUrl || banner} />}
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href={Astro.url.href} />
 
 		<!-- 标准 favicon，搜索引擎优先识别 -->
 		<link rel="icon" href="/favicon.ico" sizes="any" />

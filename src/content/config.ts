@@ -18,9 +18,12 @@ const baseFields = {
 	licenseUrl: z.string().optional().default(""),
 	aliases: z.array(z.string()).optional().default([]),
 	links: z.array(z.string()).optional().default([]),
-	props: z.record(z.string(), z.string()).optional().default({}),
+	props: z.record(z.string(), z.string()).optional().default(),
 	showOnHome: z.boolean().optional().default(true),
 	showOnHomepage: z.boolean().optional().default(true),
+
+	/* SEO优化：自定义URL slug */
+	customSlug: z.string().optional().default(""),
 
 	/* Page encryption fields */
 	encrypted: z.boolean().optional().default(false),

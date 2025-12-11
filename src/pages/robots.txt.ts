@@ -2,9 +2,12 @@ import type { APIRoute } from "astro";
 
 const robotsTxt = `
 User-agent: *
-Disallow: /
-Allow: /$
-Allow: /posts/
+Allow: /
+
+# 禁止索引的路径
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /pagefind/
 
 Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
 `.trim();

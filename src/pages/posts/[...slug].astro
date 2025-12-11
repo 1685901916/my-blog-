@@ -70,17 +70,20 @@ const jsonLd = {
 	"@type": "BlogPosting",
 	headline: entry.data.title,
 	description: entry.data.description || entry.data.title,
-	keywords: entry.data.tags,
+	keywords: entry.data.tags?.join(", "),
 	author: {
 		"@type": "Person",
-		name: profileConfig.name,
+		name: entry.data.author || profileConfig.name,
 		url: Astro.site,
 	},
 	datePublished: formatDateToYYYYMMDD(entry.data.published),
+	dateModified: formatDateToYYYYMMDD(entry.data.updated || entry.data.published),
+	image: entry.data.image || `${Astro.site}avatar-icon.png`,
+	url: Astro.url.href,
+	articleBody: entry.data.excerpt || entry.data.description,
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
 };
 ---
 
