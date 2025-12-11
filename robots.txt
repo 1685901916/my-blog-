@@ -1,6 +1,9 @@
 User-agent: *
-Disallow: /
-Allow: /$
-Allow: /posts/
+Allow: /
+
+# 禁止索引的路径
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /pagefind/
 
 Sitemap: http://localhost:4322/sitemap-index.xml
