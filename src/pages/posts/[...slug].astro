@@ -21,10 +21,29 @@ import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
-	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
-	}));
+	const { getCategorySlug } = await import("../../constants/category-slugs");
+
+	return blogEntries.map((entry) => {
+		let finalSlug = entry.slug;
+
+		// 如果是 entertainment-resources 集合，构建英文 slug
+		if (entry.collection === "entertainment-resources") {
+			const slugParts = entry.slug.split('/');
+			if (slugParts.length === 2) {
+				const [category, articleName] = slugParts;
+				const categorySlug = getCategorySlug(category);
+				const articleSlug = entry.data.customSlug || articleName;
+				finalSlug = `${categorySlug}/${articleSlug}`;
+			} else if (entry.data.customSlug) {
+				finalSlug = entry.data.customSlug;
+			}
+		}
+
+		return {
+			params: { slug: finalSlug },
+			props: { entry },
+		};
+	});
 }
 
 const { entry } = Astro.props;

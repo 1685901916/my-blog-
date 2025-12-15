@@ -22,15 +22,34 @@ import { formatDateToYYYYMMDD } from "../../../utils/date-utils";
 export async function getStaticPaths() {
 	// 只获取 entertainment-resources collection 的文章
 	const { getCollection } = await import("astro:content");
+	const { getCategorySlug } = await import("../../../constants/category-slugs");
+
 	const entertainmentEntries = await getCollection(
 		"entertainment-resources",
 		({ data }) => data.draft !== true,
 	);
 
-	return entertainmentEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
-	}));
+	return entertainmentEntries.map((entry) => {
+		// 构建英文 slug
+		const slugParts = entry.slug.split('/');
+		let finalSlug = entry.slug;
+
+		if (slugParts.length === 2) {
+			// 格式: "分类/文章名"
+			const [category, articleName] = slugParts;
+			const categorySlug = getCategorySlug(category);
+			const articleSlug = entry.data.customSlug || articleName;
+			finalSlug = `${categorySlug}/${articleSlug}`;
+		} else if (entry.data.customSlug) {
+			// 独立文章使用 customSlug
+			finalSlug = entry.data.customSlug;
+		}
+
+		return {
+			params: { slug: finalSlug },
+			props: { entry },
+		};
+	});
 }
 
 const { entry } = Astro.props;

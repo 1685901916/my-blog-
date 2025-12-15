@@ -12,6 +12,7 @@ export const getStaticPaths = (async () => {
 		"entertainment-resources",
 		({ data }) => data.draft !== true,
 	);
+	const { getCategorySlug } = await import("../../../../constants/category-slugs");
 
 	// 按分类分组
 	const categoriesMap = new Map<string, any[]>();
@@ -23,17 +24,20 @@ export const getStaticPaths = (async () => {
 		categoriesMap.get(categoryId)?.push(entry);
 	}
 
-	// 生成路径
-	return Array.from(categoriesMap.entries()).map(([categoryId, entries]) => ({
-		params: { category: categoryId },
-		props: {
-			categoryId,
-			categoryTitle: categoryId,
-			entries: entries.sort(
-				(a, b) => b.data.published.getTime() - a.data.published.getTime(),
-			),
-		},
-	}));
+	// 生成路径，使用英文 slug
+	return Array.from(categoriesMap.entries()).map(([categoryId, entries]) => {
+		const categorySlug = getCategorySlug(categoryId);
+		return {
+			params: { category: categorySlug },
+			props: {
+				categoryId,
+				categoryTitle: categoryId,
+				entries: entries.sort(
+					(a, b) => b.data.published.getTime() - a.data.published.getTime(),
+				),
+			},
+		};
+	});
 }) satisfies GetStaticPaths;
 
 interface Props {
