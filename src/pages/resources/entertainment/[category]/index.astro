@@ -48,6 +48,24 @@ interface Props {
 
 const { categoryId, categoryTitle, entries } = Astro.props;
 
+// 导入 getCategorySlug 函数用于生成英文 slug
+const { getCategorySlug } = await import("../../../../constants/category-slugs");
+
+// 为每个 entry 生成正确的英文 slug
+function getEntrySlug(entry: typeof entries[0]): string {
+	const slugParts = entry.slug.split('/');
+	if (slugParts.length === 2) {
+		const [category, articleName] = slugParts;
+		const categorySlug = getCategorySlug(category);
+		const articleSlug = entry.data.customSlug || articleName;
+		return `${categorySlug}/${articleSlug}`;
+	}
+	if (entry.data.customSlug) {
+		return entry.data.customSlug;
+	}
+	return entry.slug;
+}
+
 if (!entries || entries.length === 0) {
 	return Astro.redirect("/404/");
 }
@@ -89,7 +107,7 @@ const interval = 50;
 				category={entry.data.category}
 				published={entry.data.published}
 				updated={entry.data.updated}
-				url={getPostUrlBySlug(entry.slug, "entertainment-resources")}
+				url={getPostUrlBySlug(getEntrySlug(entry), "entertainment-resources")}
 				image={entry.data.image}
 				description={entry.data.description}
 				draft={entry.data.draft}

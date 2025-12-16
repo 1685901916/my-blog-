@@ -156,9 +156,10 @@ async function processCategoryFolder(
 		cover = articles[0].image;
 	}
 
-	// 构建分类对象
+	// 构建分类对象，使用英文 slug 作为 id
+	const categorySlug = getCategorySlug(folderName);
 	return {
-		id: folderName,
+		id: categorySlug,
 		title: info.title || folderName,
 		description: info.description || "",
 		cover,
