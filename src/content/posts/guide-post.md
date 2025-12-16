@@ -31,6 +31,6 @@ novelpia吧里来的看这边
 [阅读软件](https://yun.139.com/shareweb/#/w/i/2rJV7UuCAzBji) 阅读app是压缩包，不会用的可以用静读天下
 
 详细可以看这个，按顺序介绍了大家要的书
-[韩轻拼好书](/resources/entertainment/小说资源/韩轻拼好书/)
+[韩轻拼好书](/resources/entertainment/novels/korean-light-novels/)
 
 求书直接在贴吧发帖子就行，看见了会发的
