@@ -26,6 +26,32 @@ type SupportedEntry =
 	| CollectionEntry<"manga-categories">
 	| CollectionEntry<"portfolio">
 	| CollectionEntry<"entertainment-resources">;
+
+// 导入 getCategorySlug 用于转换中文分类名
+const { getCategorySlug } = await import("../constants/category-slugs");
+
+// 为 entertainment-resources 生成正确的英文 slug
+function getEntrySlug(entry: SupportedEntry, collection: string): string {
+	// 只处理 entertainment-resources
+	if (collection !== "entertainment-resources") {
+		return entry.slug;
+	}
+
+	const slugParts = entry.slug.split('/');
+	if (slugParts.length === 2) {
+		const [category, articleName] = slugParts;
+		const categorySlug = getCategorySlug(category);  // 中文 → 英文
+		const articleSlug = entry.data.customSlug || articleName;
+		return `${categorySlug}/${articleSlug}`;
+	}
+
+	// 独立文章使用 customSlug
+	if (entry.data.customSlug) {
+		return entry.data.customSlug;
+	}
+
+	return entry.slug;
+}
 ---
 <div
   id="post-list-container"
@@ -45,7 +71,7 @@ type SupportedEntry =
                 category={entry.data.category}
                 published={entry.data.published}
                 updated={entry.data.updated}
-                url={getPostUrlBySlug(entry.slug, collection)}
+                url={getPostUrlBySlug(getEntrySlug(entry, collection), collection)}
                 image={entry.data.image}
                 description={entry.data.description}
                 draft={entry.data.draft}
