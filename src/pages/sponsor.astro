@@ -1,4 +1,19 @@
 ---
-// Redirect to external sponsor page
-return Astro.redirect('https://top.ayano29.cn/');
+// Sponsor page - redirects to external donation site
+const SPONSOR_URL = 'https://top.ayano29.cn/';
 ---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0;url=https://top.ayano29.cn/">
+    <script>
+        window.location.href = 'https://top.ayano29.cn/';
+    </script>
+    <title>跳转中...</title>
+</head>
+<body>
+    <p>正在跳转到赞助页面...</p>
+</body>
+</html>
