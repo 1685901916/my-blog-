@@ -22,7 +22,7 @@ const SITE_LANG = "zh_CN"; // 语言代码，例如：'en', 'zh_CN', 'ja' 等。
 export const siteConfig: SiteConfig = {
 	title: "文乃的小站",
 	subtitle: "记录生活，分享美好",
-	siteURL: "http://localhost:4322/",
+	siteURL: "https://ayano29.cn/",
 	timeZone: 8,
 
 	lang: SITE_LANG,
@@ -239,34 +239,34 @@ export const navBarConfig: NavBarConfig = {
 		},
 		{
 			name: "娱乐",
-			url: "/entertainment/",
+			url: "/resources/entertainment/",
 			icon: "material-symbols:sports-esports",
 			children: [
 				{
 					name: "动漫",
-					url: "/anime/",
+					url: "/resources/entertainment/anime/",
 					icon: "material-symbols:movie",
 				},
 				{
 					name: "漫画",
-					url: "/manga/",
+					url: "/resources/entertainment/manga/",
 					icon: "material-symbols:book",
 				},
 				{
 					name: "小说",
-					url: "/novel/",
+					url: "/resources/entertainment/novels/",
 					icon: "material-symbols:menu-book",
 				},
 				{
 					name: "游戏",
-					url: "/games/",
+					url: "/resources/entertainment/games/",
 					icon: "material-symbols:sports-esports",
 				},
 			],
 		},
 		// 支持自定义导航栏链接,并且支持多级菜单,3.1版本新加
 		{
-			name: "作品集",
+			name: "项目",
 			url: "/portfolio/",
 			icon: "material-symbols:work-outline",
 			children: [
@@ -283,9 +283,15 @@ export const navBarConfig: NavBarConfig = {
 			],
 		},
 		{
+			name: "赚钱",
+			url: "/money/",
+			icon: "material-symbols:account-balance-wallet",
+		},
+		{
 			name: "赞助",
-			url: "/sponsor/",
+			url: "https://top.ayano29.cn/",
 			icon: "material-symbols:favorite",
+			external: true,
 		},
 		{
 			name: "My",

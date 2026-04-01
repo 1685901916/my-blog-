@@ -668,3 +668,27 @@ html {
   border-bottom-style: solid;
   opacity: 0.8;
 }
+
+.custom-md a.external-link {
+  white-space: normal;
+}
+
+.custom-md a.external-link::after {
+  content: "";
+  display: inline-flex;
+  width: 0.78em;
+  height: 0.78em;
+  margin-left: 0.24rem;
+  background-color: currentColor;
+  opacity: 0.5;
+  vertical-align: text-top;
+  box-sizing: border-box;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath fill='black' d='M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240v80H200v560h560v-240h80v240q0 33-23.5 56.5T760-120H200Zm188-228-56-56 372-372H560v-80h280v280h-80v-144L388-348Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath fill='black' d='M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240v80H200v560h560v-240h80v240q0 33-23.5 56.5T760-120H200Zm188-228-56-56 372-372H560v-80h280v280h-80v-144L388-348Z'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}

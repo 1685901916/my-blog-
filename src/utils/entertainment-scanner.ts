@@ -21,6 +21,7 @@ export interface EntertainmentCategory {
 	description: string;
 	cover: string;
 	order: number;
+	hidden?: boolean;
 	articles: EntertainmentArticle[];
 }
 
@@ -50,7 +51,7 @@ export async function scanEntertainmentCategories(): Promise<
 		const categoryPath = path.join(categoriesDir, folder);
 		const category = await processCategoryFolder(categoryPath, folder);
 
-		if (category) {
+		if (category && !category.hidden) {
 			categories.push(category);
 		}
 	}
@@ -164,6 +165,7 @@ async function processCategoryFolder(
 		description: info.description || "",
 		cover,
 		order: info.order || 999,
+		hidden: info.hidden === true,
 		articles,
 	};
 }
