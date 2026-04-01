@@ -6,4 +6,4 @@ Disallow: /api/
 Disallow: /_astro/
 Disallow: /pagefind/
 
-Sitemap: http://localhost:4322/sitemap-index.xml
+Sitemap: https://ayano29.cn/sitemap-index.xml

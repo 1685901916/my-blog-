@@ -2,15 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>文乃的小站</title>
   <subtitle>记录生活，分享美好</subtitle>
-  <link href="http://localhost:4322/" rel="alternate" type="text/html"/>
-  <link href="http://localhost:4322/atom.xml" rel="self" type="application/atom+xml"/>
-  <id>http://localhost:4322/</id>
-  <updated>2026-03-30T12:58:14.651Z</updated>
+  <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
+  <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
+  <id>https://ayano29.cn/</id>
+  <updated>2026-04-01T14:30:09.148Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
-    <link href="http://localhost:4322/posts/guide-post/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/guide-post/</id>
+    <link href="https://ayano29.cn/posts/guide-post/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/guide-post/</id>
     <published>2025-12-07T00:00:00.000Z</published>
     <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>现在发链接各种不方便，直接在博客里搞个转接感觉方便多了</summary>
@@ -33,9 +33,50 @@
     <category term="公告"></category>
   </entry>
   <entry>
+    <title>轻小说资源推荐</title>
+    <link href="https://ayano29.cn/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E8%BD%BB%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90%E6%8E%A8%E8%8D%90/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E8%BD%BB%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90%E6%8E%A8%E8%8D%90/</id>
+    <published>2026-04-01T00:00:00.000Z</published>
+    <updated>2026-04-01T00:00:00.000Z</updated>
+    <summary>常用轻小说站点、韩轻机翻站和阅读整理工具汇总。</summary>
+    <content type="html"><![CDATA[<h1>资源</h1>
+<h2>esj</h2>
+<p><a href="https://www.esjzone.cc/">ESJ Zone</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144810.png" alt="Pasted image 20260401144810" /></p>
+<h2>真白萌</h2>
+<p><a href="https://masiro.me/admin/novels">真白萌</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144752.png" alt="Pasted image 20260401144752" /></p>
+<h2>轻小说机翻机器人</h2>
+<p><a href="https://n.novelia.cc/">轻小说机翻机器人</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144658.png" alt="Pasted image 20260401144658" /></p>
+<h2>novelpia 韩轻机翻</h2>
+<p><a href="https://novalpie.cc/">韩轻机翻站</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144210.png" alt="Pasted image 20260401144210" />
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251017195943.png" alt="Pasted image 20251017195943" />
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020251017200004.png" alt="Pasted image 20251017200004" /></p>
+<h2>书兔网 韩轻</h2>
+<p><a href="https://booktoki469.com/">북토끼 - 웹소설 자료실</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144517.png" alt="Pasted image 20260401144517" /></p>
+<h1>工具</h1>
+<h2>epub 编辑器 calibre</h2>
+<p><a href="https://www.bilibili.com/video/BV1De41197Mu?spm_id_from=333.788.recommend_more_video.1&amp;vd_source=05c30d87ead2eea4eabcc38a5a4f32fd">开源电子书管理神器calibre，一站式阅读，编辑，格式转换，翻译你的电子书|换封面|calibre使用指南|一键翻译外文书|免费用_哔哩哔哩_bilibili</a></p>
+<p>编辑元数据、更换封面都很方便。</p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250808163357.png" alt="Pasted image 20250808163357" /></p>
+<h2>爬虫</h2>
+<p>小说下载器：<code>https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js</code> 关闭 url 请求。</p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250731200333.png" alt="Pasted image 20250731200333" /></p>
+<p>novelpia 机翻站的爬虫我也做过一个，会玩的可以试试。</p>
+<p><a href="https://github.com/1685901916/novalpie-scraper-gui">机翻站爬虫</a></p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="小说资源"></category>
+  </entry>
+  <entry>
     <title>韩轻拼好书</title>
-    <link href="http://localhost:4322/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/</id>
+    <link href="https://ayano29.cn/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/%E5%B0%8F%E8%AF%B4%E8%B5%84%E6%BA%90/%E9%9F%A9%E8%BD%BB%E6%8B%BC%E5%A5%BD%E4%B9%A6/</id>
     <published>2025-12-07T00:00:00.000Z</published>
     <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>贴吧把我二十多楼的贴直接删了，没办法在这写吧，在被删一回心态真的要崩了</summary>
@@ -144,8 +185,8 @@
   </entry>
   <entry>
     <title>本子软件介绍</title>
-    <link href="http://localhost:4322/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/</id>
+    <link href="https://ayano29.cn/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/%E6%BC%AB%E7%94%BB%E8%B5%84%E6%BA%90/%E6%9C%AC%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%BB%8B%E7%BB%8D/</id>
     <published>2025-12-07T00:00:00.000Z</published>
     <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>漫画资源获取渠道介绍，包括禁漫天堂、e站、哔咔等平台</summary>
@@ -174,8 +215,8 @@
   </entry>
   <entry>
     <title>双链测试文章A</title>
-    <link href="http://localhost:4322/posts/wiki-link-test-a/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/wiki-link-test-a/</id>
+    <link href="https://ayano29.cn/posts/wiki-link-test-a/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/wiki-link-test-a/</id>
     <published>2025-11-28T00:00:00.000Z</published>
     <updated>2025-11-28T00:00:00.000Z</updated>
     <summary>这是用来测试双链功能的第一篇文章</summary>
@@ -207,8 +248,8 @@
   </entry>
   <entry>
     <title>双链测试文章B</title>
-    <link href="http://localhost:4322/posts/wiki-link-test-b/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/wiki-link-test-b/</id>
+    <link href="https://ayano29.cn/posts/wiki-link-test-b/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/wiki-link-test-b/</id>
     <published>2025-11-28T00:00:00.000Z</published>
     <updated>2025-11-28T00:00:00.000Z</updated>
     <summary>这是用来测试双链功能的第二篇文章</summary>
@@ -247,8 +288,8 @@
   </entry>
   <entry>
     <title>ai  agent</title>
-    <link href="http://localhost:4322/posts/ai-coding-agents-guide/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/ai-coding-agents-guide/</id>
+    <link href="https://ayano29.cn/posts/ai-coding-agents-guide/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/ai-coding-agents-guide/</id>
     <published>2025-11-16T00:00:00.000Z</published>
     <updated>2025-11-16T00:00:00.000Z</updated>
     <summary>现在去编程还在用窗口一个一个问也太麻烦了，现在的agent已经很发达了，我推荐几个我用的agent工具</summary>
@@ -306,8 +347,8 @@
   </entry>
   <entry>
     <title>AI 视频笔记生成器</title>
-    <link href="http://localhost:4322/posts/programming/bilinote/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/programming/bilinote/</id>
+    <link href="https://ayano29.cn/posts/programming/bilinote/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/programming/bilinote/</id>
     <published>2025-11-16T00:00:00.000Z</published>
     <updated>2025-11-16T00:00:00.000Z</updated>
     <summary>基于 AI 的本地视频笔记自动生成工具，支持语音转录、智能截图、结构化笔记生成，完美集成 Obsidian</summary>
@@ -467,8 +508,8 @@ gemin最便宜了，建议用这个智谱的那个也不错</p>
   </entry>
   <entry>
     <title>下载已购小鹅通视频</title>
-    <link href="http://localhost:4322/posts/programming/xiaoe-downloader/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/programming/xiaoe-downloader/</id>
+    <link href="https://ayano29.cn/posts/programming/xiaoe-downloader/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/programming/xiaoe-downloader/</id>
     <published>2025-11-01T00:00:00.000Z</published>
     <updated>2025-11-01T00:00:00.000Z</updated>
     <summary>基于Python实现的小鹅通M3U8加密视频下载工具，支持AES-128解密、6线程并行下载、自动FFmpeg合并。实战验证28节课程100%成功率。</summary>
@@ -1015,8 +1056,8 @@ downloader.download_course(course)
   </entry>
   <entry>
     <title>轻音少女</title>
-    <link href="http://localhost:4322/posts/keion-girls/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/keion-girls/</id>
+    <link href="https://ayano29.cn/posts/keion-girls/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/keion-girls/</id>
     <published>2025-10-30T00:00:00.000Z</published>
     <updated>2025-10-30T00:00:00.000Z</updated>
     <summary>京阿尼经典校园日常番，讲述轻音部女孩们的青春故事</summary>
@@ -1043,8 +1084,8 @@ downloader.download_course(course)
   </entry>
   <entry>
     <title>个人博客系统</title>
-    <link href="http://localhost:4322/posts/programming/blog-system/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/programming/blog-system/</id>
+    <link href="https://ayano29.cn/posts/programming/blog-system/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/programming/blog-system/</id>
     <published>2024-02-10T00:00:00.000Z</published>
     <updated>2024-02-10T00:00:00.000Z</updated>
     <summary>基于 Astro 框架开发的个人博客系统，支持 Markdown、代码高亮、响应式设计</summary>
@@ -1069,8 +1110,8 @@ downloader.download_course(course)
   </entry>
   <entry>
     <title>示例插画作品</title>
-    <link href="http://localhost:4322/posts/normal/illustration-work/" rel="alternate" type="text/html"/>
-    <id>http://localhost:4322/posts/normal/illustration-work/</id>
+    <link href="https://ayano29.cn/posts/normal/illustration-work/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/normal/illustration-work/</id>
     <published>2024-01-15T00:00:00.000Z</published>
     <updated>2024-01-15T00:00:00.000Z</updated>
     <summary>这是一个示例插画作品，展示风景插画的创作过程和技巧</summary>
