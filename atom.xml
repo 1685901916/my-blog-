@@ -5,7 +5,7 @@
   <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
   <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://ayano29.cn/</id>
-  <updated>2026-04-01T14:30:09.148Z</updated>
+  <updated>2026-04-02T00:44:02.663Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
@@ -43,6 +43,12 @@
 <h2>esj</h2>
 <p><a href="https://www.esjzone.cc/">ESJ Zone</a></p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144810.png" alt="Pasted image 20260401144810" /></p>
+<h2>哔哩轻小说</h2>
+<p><a href="https://www.linovelib.com/?ref=codernav.com">哔哩轻小说</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260402083241.png" alt="Pasted image 20260402083241" /></p>
+<h2>轻小说文库</h2>
+<p><a href="https://www.wenku8.net/index.php">轻小说文库</a></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260402083330.png" alt="Pasted image 20260402083330" /></p>
 <h2>真白萌</h2>
 <p><a href="https://masiro.me/admin/novels">真白萌</a></p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144752.png" alt="Pasted image 20260401144752" /></p>
@@ -58,14 +64,16 @@
 <p><a href="https://booktoki469.com/">북토끼 - 웹소설 자료실</a></p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260401144517.png" alt="Pasted image 20260401144517" /></p>
 <h1>工具</h1>
-<h2>epub 编辑器 calibre</h2>
+<h2>epub编辑器 calibre</h2>
 <p><a href="https://www.bilibili.com/video/BV1De41197Mu?spm_id_from=333.788.recommend_more_video.1&amp;vd_source=05c30d87ead2eea4eabcc38a5a4f32fd">开源电子书管理神器calibre，一站式阅读，编辑，格式转换，翻译你的电子书|换封面|calibre使用指南|一键翻译外文书|免费用_哔哩哔哩_bilibili</a></p>
-<p>编辑元数据、更换封面都很方便。</p>
+<p>编辑元数据
+更换封面</p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250808163357.png" alt="Pasted image 20250808163357" /></p>
 <h2>爬虫</h2>
-<p>小说下载器：<code>https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js</code> 关闭 url 请求。</p>
+<p>小说下载器<br />
+https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js 关闭url请求</p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020250731200333.png" alt="Pasted image 20250731200333" /></p>
-<p>novelpia 机翻站的爬虫我也做过一个，会玩的可以试试。</p>
+<p>novapie机翻站的爬虫我搞了一个，会玩的可以试试</p>
 <p><a href="https://github.com/1685901916/novalpie-scraper-gui">机翻站爬虫</a></p>
 ]]></content>
     <author>
