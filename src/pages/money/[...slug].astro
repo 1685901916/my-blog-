@@ -1,0 +1,145 @@
+---
+import path from "node:path";
+import Comment from "@components/comment/index.astro";
+import License from "@components/misc/License.astro";
+import Markdown from "@components/misc/Markdown.astro";
+import PasswordProtection from "@components/PasswordProtection.astro";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+import bcryptjs from "bcryptjs";
+import CryptoJS from "crypto-js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { licenseConfig } from "src/config";
+import ImageWrapper from "../../components/misc/ImageWrapper.astro";
+import PostMetadata from "../../components/PostMeta.astro";
+import { profileConfig, siteConfig } from "../../config";
+import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+
+export async function getStaticPaths() {
+	const { getCollection } = await import("astro:content");
+	const { getCategorySlug } = await import("../../constants/category-slugs");
+
+	const moneyEntries = await getCollection(
+		"money-resources",
+		({ data }) => data.draft !== true,
+	);
+
+	return moneyEntries.map((entry) => {
+		const slugParts = entry.slug.split('/');
+		let finalSlug = entry.slug;
+
+		if (slugParts.length === 2) {
+			const [category, articleName] = slugParts;
+			const categorySlug = getCategorySlug(category);
+			const articleSlug = entry.data.customSlug || articleName;
+			finalSlug = `${categorySlug}/${articleSlug}`;
+		} else if (entry.data.customSlug) {
+			finalSlug = entry.data.customSlug;
+		}
+
+		return {
+			params: { slug: finalSlug },
+			props: { entry },
+		};
+	});
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
+
+const { remarkPluginFrontmatter } = await entry.render();
+
+let encryptedContent = "";
+let passwordHash = "";
+let isEncrypted = entry.data.encrypted && entry.data.password;
+
+if (isEncrypted) {
+	const contentToEncrypt = entry.body;
+	encryptedContent = CryptoJS.AES.encrypt(
+		contentToEncrypt,
+		entry.data.password,
+	).toString();
+	const saltRounds = 10;
+	passwordHash = bcryptjs.hashSync(entry.data.password, saltRounds);
+}
+
+dayjs.extend(utc);
+const lastModified = dayjs(entry.data.updated || entry.data.published)
+	.utc()
+	.format("YYYY-MM-DDTHH:mm:ss");
+
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	headline: entry.data.title,
+	description: entry.data.description || entry.data.title,
+	keywords: entry.data.tags,
+	author: {
+		"@type": "Person",
+		name: profileConfig.name,
+		url: Astro.site,
+	},
+	datePublished: formatDateToYYYYMMDD(entry.data.published),
+	dateModified: lastModified,
+};
+---
+
+<MainGridLayout banner={entry.data.image} title={entry.data.title}>
+	<script
+		slot="head"
+		type="application/ld+json"
+		set:html={JSON.stringify(jsonLd)}
+	/>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ", {}]}>
+			<div class="transition onload-animation">
+				<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-3">
+					<div class="flex-1">
+						<div class="flex items-center gap-2 mb-2">
+							<Icon name="material-symbols:folder-open" class="text-[var(--primary)] text-2xl" />
+							<span class="text-sm text-75">{entry.data.category || "赚钱"}</span>
+						</div>
+						<h1 class="text-3xl md:text-4xl font-bold text-90 mb-3">{entry.data.title}</h1>
+					</div>
+				</div>
+				<PostMetadata
+					published={entry.data.published}
+					tags={entry.data.tags}
+					category={entry.data.category}
+					hideTagsForMobile={false}
+				/>
+				{entry.data.description && (
+					<div class="text-sm text-75 italic mt-3 mb-4 border-l-4 border-[var(--primary)] pl-4">
+						{entry.data.description}
+					</div>
+				)}
+				<div class="border-[var(--line-divider)] border-dashed border-b-[1px] my-5"></div>
+			</div>
+
+			{!isEncrypted && (
+				<Markdown class="mb-6 markdown-content onload-animation">
+					<Content />
+				</Markdown>
+			)}
+
+			{isEncrypted && (
+				<PasswordProtection
+					encryptedContent={encryptedContent}
+					passwordHash={passwordHash}
+				/>
+			)}
+
+			{licenseConfig.enable && (
+				<License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl" />
+			)}
+
+			{siteConfig?.comment?.enable && (
+				<Comment class="mt-6" />
+			)}
+		</div>
+	</div>
+</MainGridLayout>

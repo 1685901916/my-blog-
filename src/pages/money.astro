@@ -1,12 +1,150 @@
-﻿---
-import MainGridLayout from "../layouts/MainGridLayout.astro";
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { scanMoneyCategories } from "@utils/money-scanner";
+import { Icon } from "astro-icon/components";
+import { sidebarLayoutConfig, siteConfig } from "../config";
+
+const categories = await scanMoneyCategories();
+const isBothSidebars = sidebarLayoutConfig.position === "both";
+const defaultLayout = siteConfig.postListLayout.defaultMode || "list";
+const initialLayoutClass =
+	defaultLayout === "grid"
+		? "grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 grid-mode"
+		: "flex flex-col gap-2 md:gap-4 list-mode";
 ---
 
-<MainGridLayout title="赚钱">
-	<div class="card-base px-8 py-8 rounded-[var(--radius-large)]">
-		<h1 class="text-3xl font-bold mb-4">赚钱</h1>
-		<p class="text-lg leading-8 opacity-80">
-			这里先作为赚钱相关内容的占位页，后续可以补充副业、接单、工具变现或资源整合。
-		</p>
+<MainGridLayout banner={undefined} title="赚钱">
+	<div
+		id="post-list-container"
+		class={`transition-all duration-500 ease-in-out rounded-[var(--radius-large)] bg-[var(--card-bg)] py-0 md:py-0 md:bg-transparent gap-2 md:gap-4 mb-4 ${initialLayoutClass}`}
+		data-default-layout={defaultLayout}
+		data-both-sidebars={isBothSidebars}
+	>
+		{categories.map((category) => (
+			<div class="card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative">
+				<div
+					class:list={[
+						"pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative",
+						category.cover ? "w-full md:w-[calc(100%-28%-12px)]" : "w-full md:w-[calc(100%-52px-12px)]",
+					]}
+				>
+					<a
+						href={`/money/${category.id}/`}
+						class="transition group w-full block font-bold mb-3 text-3xl text-90
+                       hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
+                       active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
+                       before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+                       before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block"
+					>
+						<Icon name="material-symbols:folder-open" class="inline text-[var(--primary)] text-3xl mr-2.5 -translate-y-1" />
+						{category.title}
+						<Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" />
+						<Icon
+							class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0"
+							name="material-symbols:chevron-right-rounded"
+						/>
+					</a>
+
+					<div class="flex flex-wrap items-center gap-4 gap-x-4 gap-y-2 mb-4">
+						<div class="flex items-center">
+							<div class="meta-icon">
+								<Icon name="material-symbols:folder-open" class="text-2xl" />
+							</div>
+							<span class="text-50 text-base font-semibold">文件夹</span>
+						</div>
+						<div class="flex items-center">
+							<div class="meta-icon">
+								<Icon name="material-symbols:article-outline-rounded" class="text-xl" />
+							</div>
+							<span class="text-50 text-sm font-medium">{category.articles.length} 篇</span>
+						</div>
+					</div>
+
+					<div class="transition text-75 mb-3.5 pr-4 line-clamp-2">{category.description}</div>
+
+					<div class="flex md:hidden">
+						<a
+							href={`/money/${category.id}/`}
+							aria-label={`查看 ${category.title}`}
+							class="transition text-sm text-[var(--primary)] hover:text-[var(--primary)] px-4 py-1.5 rounded-lg"
+						>
+							查看详情
+						</a>
+					</div>
+				</div>
+
+				{category.cover && (
+					<a
+						href={`/money/${category.id}/`}
+						aria-label={category.title}
+						class="flex items-center relative w-full md:w-[28%] overflow-hidden active:scale-95 md:rounded-lg"
+					>
+						<img
+							src={category.cover}
+							alt={`${category.title}封面`}
+							class="transition w-full h-full object-cover md:group-hover:scale-105"
+							loading="lazy"
+							decoding="async"
+						/>
+					</a>
+				)}
+			</div>
+		))}
 	</div>
 </MainGridLayout>
+
+<script>
+	function updateLayout(layout) {
+		const container = document.getElementById("post-list-container");
+		if (!container) return;
+
+		container.classList.add("layout-switching");
+		container.classList.remove("list-mode", "grid-mode");
+
+		if (layout === "grid") {
+			container.classList.add("grid-mode");
+			container.classList.add("grid", "grid-cols-1", "md:grid-cols-2");
+			container.classList.remove("flex", "flex-col");
+			document.querySelector(".right-sidebar-container")?.classList.add("hidden-in-grid-mode");
+			document.getElementById("main-grid")?.setAttribute("data-layout-mode", "grid");
+		} else {
+			container.classList.add("list-mode");
+			container.classList.add("flex", "flex-col");
+			container.classList.remove("grid", "grid-cols-1", "md:grid-cols-2");
+			document.querySelector(".right-sidebar-container")?.classList.remove("hidden-in-grid-mode");
+			document.getElementById("main-grid")?.setAttribute("data-layout-mode", "list");
+		}
+
+		setTimeout(() => container.classList.remove("layout-switching"), 500);
+	}
+
+	function initLayout() {
+		setTimeout(() => {
+			const container = document.getElementById("post-list-container");
+			if (!container) return;
+
+			const saved = localStorage.getItem("postListLayout");
+			const defaultLayout = container.getAttribute("data-default-layout") || "list";
+			const current = saved || defaultLayout;
+
+			if (window.innerWidth >= 769) {
+				updateLayout(current);
+			} else {
+				container.classList.add("js-initialized");
+			}
+		}, 50);
+	}
+
+	window.addEventListener("layoutChange", (event) => {
+		const mode = event.detail?.layout;
+		if (mode === "grid" || mode === "list") {
+			updateLayout(mode);
+		}
+	});
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initLayout);
+	} else {
+		initLayout();
+	}
+</script>
