@@ -3,7 +3,7 @@ title: 任推邦推广教程
 published: 2026-04-04
 description: 网上赚钱的基本模式介绍，通过任推邦平台做推广拉新赚佣金
 tags: [网赚, 推广, 副业]
-category: 网赚平台
+category: 赚钱
 customSlug: rentui-guide
 image: ""
 draft: false

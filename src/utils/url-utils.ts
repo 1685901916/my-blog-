@@ -28,9 +28,6 @@ export function getPostUrlBySlug(slug: string, collection?: string): string {
 		// entertainment-resources 的 slug 格式是 "分类/文章名"
 		return url(`/resources/entertainment/${slug}/`);
 	}
-	if (collection === "money-resources") {
-		return url(`/money/${slug}/`);
-	}
 	return url(`/posts/${slug}/`);
 }
 

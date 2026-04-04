@@ -9,9 +9,6 @@ export const CATEGORY_SLUG_MAP: Record<string, string> = {
 	'动漫资源': 'anime',
 	'游戏资源': 'games',
 
-	// 赚钱资源分类
-	'网赚平台': 'earning-platforms',
-
 	// 其他分类可以在这里添加
 	'实用工具': 'tools',
 	'实用信息': 'info',

@@ -77,15 +77,6 @@ const entertainmentResourcesCollection = defineCollection({
 	}),
 });
 
-// 赚钱资源集合
-const moneyResourcesCollection = defineCollection({
-	schema: z.object({
-		...baseFields,
-		category: z.string().optional(),
-		collection: z.string().optional().default("money-resources"),
-	}),
-});
-
 export const collections = {
 	posts: postsCollection,
 	spec: specCollection,
@@ -93,5 +84,4 @@ export const collections = {
 	portfolio: portfolioCollection,
 	"manga-categories": mangaCategoriesCollection,
 	"entertainment-resources": entertainmentResourcesCollection,
-	"money-resources": moneyResourcesCollection,
 };
