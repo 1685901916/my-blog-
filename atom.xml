@@ -5,7 +5,7 @@
   <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
   <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://ayano29.cn/</id>
-  <updated>2026-04-06T13:14:52.999Z</updated>
+  <updated>2026-04-07T13:04:28.180Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
@@ -15,7 +15,7 @@
     <updated>2025-12-07T00:00:00.000Z</updated>
     <summary>现在发链接各种不方便，直接在博客里搞个转接感觉方便多了</summary>
     <content type="html"><![CDATA[<p>建了个qq群 可以来玩玩</p>
-<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260330204705.png" alt="Pasted image 20260330204705" /></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260330204822.png" alt="Pasted image 20260330204822" /></p>
 <h2>novelpia吧</h2>
 <p>novelpia吧里来的看这边，现在机翻站复活了 感觉我没啥必要干搬运了 直接去机翻站看吧 ，就是r18要登录天数和认证才能看</p>
 <h3>资源链接</h3>
@@ -65,7 +65,9 @@
     <published>2026-04-04T00:00:00.000Z</published>
     <updated>2026-04-04T00:00:00.000Z</updated>
     <summary>英语四六级历年真题资源分享</summary>
-    <content type="html"><![CDATA[<p>可以下载下来直接给ai搞一个知识库 ，做完就问，很方便的
+    <content type="html"><![CDATA[<p>闲鱼上买的，需要可以拿</p>
+<p><a href="https://yun.139.com/shareweb/#/w/i/2uh92fQxX60hj">英语四六级下载链接</a></p>
+<p>可以下载下来直接给ai搞一个知识库，做完就问，很方便的
 数据本地化真的很方便</p>
 <h1>英语四级</h1>
 <p>1990到2025
@@ -591,7 +593,7 @@ gemin最便宜了，建议用这个智谱的那个也不错</p>
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品集"></category>
+    <category term="作品分类"></category>
   </entry>
   <entry>
     <title>下载已购小鹅通视频</title>
@@ -1129,7 +1131,7 @@ downloader.download_course(course)
 </ul>
 <hr />
 <p><strong>发布时间</strong>: 2025年11月1日<br />
-<strong>分类</strong>: 作品集<br />
+<strong>分类</strong>: 作品分类<br />
 <strong>标签</strong>: 程序系、Python、小鹅通、视频下载、技术实战</p>
 <hr />
 <p><strong>如果这篇文章对你有帮助,欢迎：</strong><br />
@@ -1139,7 +1141,7 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品集"></category>
+    <category term="作品分类"></category>
   </entry>
   <entry>
     <title>轻音少女</title>
@@ -1193,7 +1195,7 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品集"></category>
+    <category term="作品分类"></category>
   </entry>
   <entry>
     <title>示例插画作品</title>
@@ -1208,6 +1210,6 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品集"></category>
+    <category term="作品分类"></category>
   </entry>
 </feed>
