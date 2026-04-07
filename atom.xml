@@ -5,7 +5,7 @@
   <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
   <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://ayano29.cn/</id>
-  <updated>2026-04-07T13:04:28.180Z</updated>
+  <updated>2026-04-07T13:50:16.866Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
@@ -593,7 +593,7 @@ gemin最便宜了，建议用这个智谱的那个也不错</p>
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品分类"></category>
+    <category term="作品"></category>
   </entry>
   <entry>
     <title>下载已购小鹅通视频</title>
@@ -1141,7 +1141,7 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品分类"></category>
+    <category term="作品"></category>
   </entry>
   <entry>
     <title>轻音少女</title>
@@ -1195,7 +1195,7 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品分类"></category>
+    <category term="作品"></category>
   </entry>
   <entry>
     <title>示例插画作品</title>
@@ -1210,6 +1210,6 @@ downloader.download_course(course)
     <author>
       <name>Ayano</name>
     </author>
-    <category term="作品分类"></category>
+    <category term="作品"></category>
   </entry>
 </feed>
