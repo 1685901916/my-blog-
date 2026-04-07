@@ -4,7 +4,7 @@ published: 2024-02-10
 description: 基于 Astro 框架开发的个人博客系统，支持 Markdown、代码高亮、响应式设计
 image: ""
 tags: ["程序系", "Astro", "TypeScript", "Web开发"]
-category: 作品分类
+category: 作品
 draft: false
 showOnHomepage: true
 ---

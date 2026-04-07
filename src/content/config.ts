@@ -56,7 +56,7 @@ const mangaCollection = defineCollection({
 const portfolioCollection = defineCollection({
 	schema: z.object({
 		...baseFields,
-		category: z.string().optional().nullable().default("作品集"),
+		category: z.string().optional().nullable().default("作品"),
 	}),
 });
 

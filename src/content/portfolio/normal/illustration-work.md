@@ -4,7 +4,7 @@ published: 2024-01-15
 description: 这是一个示例插画作品，展示风景插画的创作过程和技巧
 image: ""
 tags: ["正常系", "插画", "原创", "风景"]
-category: 作品分类
+category: 作品
 draft: false
 showOnHomepage: true
 ---

@@ -4,7 +4,7 @@ published: 2025-11-01
 description: '基于Python实现的小鹅通M3U8加密视频下载工具，支持AES-128解密、6线程并行下载、自动FFmpeg合并。实战验证28节课程100%成功率。'
 image: ''
 tags: ['程序系', 'Python', '小鹅通', '视频下载', '技术实战']
-category: '作品分类'
+category: '作品'
 draft: false
 showOnHomepage: true
 lang: 'zh_CN'

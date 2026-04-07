@@ -266,9 +266,9 @@ export const navBarConfig: NavBarConfig = {
 		},
 		// 支持自定义导航栏链接,并且支持多级菜单,3.1版本新加
 		{
-			name: "项目",
+			name: "作品",
 			url: "/portfolio/",
-			icon: "material-symbols:work-outline",
+			icon: "material-symbols:work",
 			children: [
 				{
 					name: "正常系",
