@@ -11,7 +11,7 @@ pinned: true
 
 建了个qq群 可以来玩玩
 
-![Pasted image 20260330204705](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260330204705.png)
+![Pasted image 20260330204822](https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260330204822.png)
 
 
 

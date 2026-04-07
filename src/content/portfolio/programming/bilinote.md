@@ -4,7 +4,7 @@ published: 2025-11-16
 description: 基于 AI 的本地视频笔记自动生成工具，支持语音转录、智能截图、结构化笔记生成，完美集成 Obsidian
 image: ""
 tags: ["程序系", "Python", "AI", "FastAPI", "Whisper"]
-category: 作品集
+category: 作品分类
 draft: false
 showOnHomepage: true
 ---

@@ -1,33 +1,650 @@
 
-> mizuki@7.1.0 dev
-> astro dev --host --port 4321
+> mizuki@7.1.0 dev F:\cursor\project8  blog\test
+> astro dev "--host" "0.0.0.0" "--port" "4321"
 
-22:08:39 [types] Generated 3ms
-22:08:52 [content] Syncing content
-22:08:52 [WARN] [glob-loader] No files found matching "**/*.md,!**/_*/**/*.md,!**/_*.md" in directory "src\content\manga"
-22:08:52 [WARN] [glob-loader] No files found matching "**/*.md,!**/_*/**/*.md,!**/_*.md" in directory "src\content\manga-categories"
-22:08:52 [content] Synced content
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[2m16:29:05[22m [34m[types][39m Generated [2m4ms[22m
+[2m16:29:56[22m [34m[content][39m Syncing content
+[2m16:29:56[22m [34m[content][39m Synced content
 
- astro  v5.14.6 ready in 18999 ms
+[42m[1m astro [22m[49m [32mv5.15.8[39m [2mready in[22m 60845 [2mms[22m
 
-┃ Local    http://localhost:4321/
-┃ Network  http://169.254.125.97:4321/
-           http://169.254.163.218:4321/
-           http://192.168.56.1:4321/
-           http://192.168.160.1:4321/
-           http://192.168.37.1:4321/
-           http://192.168.1.172:4321/
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [36mhttp://169.254.125.97:4321/[39m
+           [36mhttp://169.254.163.218:4321/[39m
+           [36mhttp://192.168.56.1:4321/[39m
+           [36mhttp://192.168.160.1:4321/[39m
+           [36mhttp://192.168.37.1:4321/[39m
+           [36mhttp://172.29.21.50:4321/[39m
 
-22:08:52 watching for file changes...
-The collection "manga" does not exist or is empty. Please check your content config file for errors.
-The collection "manga-categories" does not exist or is empty. Please check your content config file for errors.
-娱乐资源分类 娓告垙璧勬簮 缺少 info.json 文件
-娱乐资源分类 婕敾璧勬簮 缺少 info.json 文件
-娱乐资源分类 灏忚璧勬簮 缺少 info.json 文件
-娱乐资源分类 鍔ㄦ极璧勬簮 缺少 info.json 文件
-22:09:05 [200] /posts/ai-coding-agents-guide/ 4063ms
-22:09:05 [200] /resources/entertainment/ 300ms
-22:09:09 [200] / 104ms
-22:09:24 [200] /portfolio/programming/blog-system/ 50ms
-22:11:19 [200] /portfolio/programming/ 62ms
-22:23:43 [200] /portfolio/programming/ 36ms
+[2m16:29:56[22m [32mwatching for file changes...[39m
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[2m16:31:23[22m [34m[200][39m / [2m5132ms[22m
+[2m16:32:46[22m [34m[200][39m / [2m102ms[22m
+[2m16:32:51[22m [34m[200][39m /_image/ [2m628ms[22m
+[2m16:41:32[22m [34m[200][39m /posts/guide-post/ [2m2764ms[22m
+[2m16:41:40[22m [34m[200][39m / [2m143ms[22m
+[2m16:50:05[22m [34m[watch][39m src/config.ts
+[2m16:50:05[22m [34m[watch][39m src/config.ts
+[2m16:50:05[22m [34m[watch][39m src/pages/money.astro
+[2m16:50:05[22m [34m[watch][39m src/pages/portfolio.astro
+[2m16:50:05[22m [34m[watch][39m src/pages/portfolio.astro
+[31m[1m16:50:06[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:50:06[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:50:31[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:50:31[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:51:02[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m16:56:03[22m [34m[watch][39m src/config.ts
+[2m16:56:03[22m [34m[watch][39m src/config.ts
+[2m16:56:04[22m [34m[watch][39m src/config.ts
+[2m16:56:04[22m [34m[watch][39m src/config.ts
+[31m[1m16:56:05[22m [ERROR][39m Expected identifier but found "`ttitle: \"文乃的小站\",\r\n`"
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:56:05[22m [ERROR][39m Expected identifier but found "`ttitle: \"文乃的小站\",\r\n`"
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m16:56:05[22m [ERROR][39m Expected identifier but found "`ttitle: \"文乃的小站\",\r\n`"
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m16:56:44[22m [34m[watch][39m src/config.ts
+[2m16:56:44[22m [34m[watch][39m src/config.ts
+[2m16:56:44[22m [34m[watch][39m src/config.ts
+[2m16:56:44[22m [34m[watch][39m src/config.ts
+[2m16:56:47[22m [34m[200][39m / [2m1473ms[22m
+[2m16:56:47[22m [34m[200][39m / [2m1474ms[22m
+[2m16:56:47[22m [34m[200][39m / [2m1475ms[22m
+[2m16:56:47[22m [34m[200][39m / [2m1476ms[22m
+[2m16:57:22[22m [34m[200][39m /money/ [2m58ms[22m
+[2m16:57:22[22m [34m[200][39m / [2m58ms[22m
+[2m17:28:55[22m [34m[watch][39m src/components/widget/DropdownMenu.astro
+[2m17:28:59[22m [34m[200][39m / [2m1288ms[22m
+[2m17:29:40[22m [34m[200][39m / [2m55ms[22m
+[2m17:33:25[22m [34m[200][39m /posts/guide-post/ [2m81ms[22m
+[2m17:33:28[22m [34m[200][39m /posts/guide-post/ [2m57ms[22m
+[2m17:34:22[22m [34m[200][39m / [2m99ms[22m
+[2m17:34:57[22m [34m[200][39m /posts/guide-post/ [2m112ms[22m
+[2m17:35:04[22m [34m[200][39m /2/ [2m92ms[22m
+[2m17:35:07[22m [34m[200][39m /portfolio/programming/blog-system/ [2m58ms[22m
+[2m17:36:23[22m [34m[watch][39m src/config.ts
+[2m17:36:23[22m [34m[watch][39m src/config.ts
+[2m17:36:31[22m [34m[200][39m /2/ [2m1417ms[22m
+[2m17:37:07[22m [34m[200][39m /money/ [2m66ms[22m
+[2m17:37:16[22m [34m[200][39m /portfolio/normal/ [2m69ms[22m
+[2m17:37:17[22m [34m[200][39m /portfolio/programming/ [2m61ms[22m
+[2m17:37:19[22m [34m[200][39m / [2m61ms[22m
+[2m17:37:19[22m [34m[200][39m /anime/ [2m51ms[22m
+[2m17:37:20[22m [34m[200][39m /manga/ [2m61ms[22m
+[2m17:37:21[22m [34m[200][39m /novel/ [2m45ms[22m
+[2m17:37:22[22m [34m[200][39m /games/ [2m47ms[22m
+[2m17:39:56[22m [34m[watch][39m src/config.ts
+[2m17:39:56[22m [34m[watch][39m src/config.ts
+[2m17:40:08[22m [34m[200][39m /anime/ [2m2771ms[22m
+[2m17:40:48[22m [34m[200][39m / [2m173ms[22m
+[2m17:44:48[22m [34m[watch][39m src/config.ts
+[2m17:44:48[22m [34m[watch][39m src/config.ts
+[2m17:44:52[22m [34m[200][39m /anime/ [2m1278ms[22m
+[2m17:45:35[22m [34m[200][39m / [2m62ms[22m
+[2m20:30:26[22m [34m[200][39m /archive/ [2m530ms[22m
+[2m20:30:26[22m [34m[200][39m / [2m91ms[22m
+[2m20:30:32[22m [34m[200][39m /novel/ [2m85ms[22m
+[2m20:30:35[22m [34m[200][39m /resources/entertainment/ [2m115ms[22m
+[2m20:30:42[22m [34m[200][39m /resources/info/ [2m88ms[22m
+[2m20:30:43[22m [34m[200][39m /resources/utility/ [2m52ms[22m
+[2m20:31:25[22m [34m[200][39m /anime/ [2m97ms[22m
+[2m20:31:26[22m [34m[200][39m /manga/ [2m57ms[22m
+[2m20:31:29[22m [34m[200][39m /games/ [2m48ms[22m
+[2m20:31:31[22m [34m[200][39m /manga/sample-category/ [2m51ms[22m
+[2m20:31:43[22m [34m[200][39m /sponsor/ [2m4ms[22m
+[2m20:31:44[22m [34m[200][39m /sponsor/ [2m5ms[22m
+[2m20:33:18[22m [34m[watch][39m src/config.ts
+[2m20:33:18[22m [34m[watch][39m src/config.ts
+[2m20:33:19[22m [34m[watch][39m src/config.ts
+[2m20:33:19[22m [34m[watch][39m src/config.ts
+[2m20:33:25[22m [34m[200][39m /games/ [2m1434ms[22m
+[2m20:33:25[22m [34m[200][39m /games/ [2m1435ms[22m
+[2m20:34:30[22m [34m[watch][39m src/config.ts
+[2m20:34:31[22m [34m[watch][39m src/config.ts
+[2m20:34:31[22m [34m[watch][39m src/pages/portfolio.astro
+[2m20:34:31[22m [34m[watch][39m src/pages/portfolio.astro
+[2m20:34:35[22m [34m[200][39m /games/ [2m2024ms[22m
+[2m20:34:35[22m [34m[200][39m /games/ [2m2031ms[22m
+[2m20:35:17[22m [34m[200][39m / [2m59ms[22m
+[2m20:38:59[22m [34m[200][39m /archive/ [2m379ms[22m
+[2m20:39:00[22m [34m[200][39m / [2m132ms[22m
+[2m20:42:18[22m [34m[watch][39m src/config.ts
+[2m20:42:18[22m [34m[watch][39m src/config.ts
+[2m20:42:22[22m [34m[200][39m / [2m1556ms[22m
+[2m20:42:54[22m [34m[watch][39m src/pages/sponsor.astro
+[2m20:42:54[22m [34m[watch][39m src/pages/sponsor.astro
+[2m20:43:39[22m [34m[200][39m / [2m1218ms[22m
+[2m20:44:26[22m [34m[200][39m / [2m71ms[22m
+[2m20:44:32[22m [34m[200][39m / [2m64ms[22m
+[2m20:44:43[22m [34m[200][39m /posts/guide-post/ [2m98ms[22m
+[2m20:44:46[22m [34m[200][39m / [2m163ms[22m
+[2m20:45:48[22m [34m[200][39m /resources/entertainment/manga/manga-software-guide/ [2m294ms[22m
+[2m20:45:51[22m [34m[200][39m / [2m68ms[22m
+[2m20:45:57[22m [34m[200][39m /money/ [2m97ms[22m
+[2m20:45:59[22m [34m[200][39m /portfolio/normal/ [2m65ms[22m
+[2m20:46:00[22m [34m[200][39m /portfolio/programming/ [2m71ms[22m
+[2m20:46:25[22m [34m[200][39m /posts/guide-post/ [2m93ms[22m
+[2m20:46:37[22m [34m[200][39m /resources/entertainment/manga/manga-software-guide/ [2m65ms[22m
+[2m20:46:39[22m [34m[200][39m /posts/guide-post/ [2m55ms[22m
+[2m20:46:46[22m [34m[200][39m /resources/entertainment/novels/korean-light-novels/ [2m62ms[22m
+[2m20:50:24[22m [34m[200][39m /archive/ [2m388ms[22m
+[2m20:50:25[22m [34m[200][39m / [2m57ms[22m
+[2m20:50:31[22m [34m[200][39m /novel/ [2m62ms[22m
+[2m20:53:57[22m Configuration file updated. Restarting...
+Local icons changed, reloading
+[2m20:53:58[22m [34m[watch][39m /src/styles/main.css
+[2m20:53:58[22m [34m[watch][39m src/plugins/rehype-external-links.mjs
+[2m20:54:05[22m [34m[200][39m / [2m2385ms[22m
+[2m20:54:05[22m [34m[200][39m / [2m62ms[22m
+[2m20:54:11[22m [34m[vite][39m Forced re-optimization of dependencies
+[2m20:54:47[22m [34m[content][39m Syncing content
+[2m20:54:47[22m [34m[content][39m Astro config changed
+[2m20:54:47[22m [34m[content][39m Clearing content store
+[2m20:54:48[22m [34m[content][39m Synced content
+[2m20:54:48[22m [34m[types][39m Generated [2m40.81s[22m
+[2m20:54:48[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[31m[1m20:54:48[22m [ERROR] [vite][39m [31mInternal server error: [postcss] F:/cursor/project8  blog/test/src/components/widget/Pio.svelte?svelte&type=style&lang.css:2:10: Unknown word onDestroy,[39m
+  Plugin: [35mvite:css[39m
+  File: [36mF:/cursor/project8  blog/test/src/components/widget/Pio.svelte?svelte&type=style&lang.css[39m:2:9
+[33m  1  |  <script>
+  2  |  import { onDestroy, onMount } from "svelte";
+     |           ^
+  3  |  import { pioConfig } from "@/config";
+  4  |  [39m
+      at Input.error (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\input.js:135:16)
+      at Parser.unknownWord (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parser.js:595:22)
+      at Parser.other (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parser.js:437:12)
+      at Parser.parse (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parser.js:472:16)
+      at parse (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parse.js:11:12)
+      at new LazyResult (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\lazy-result.js:165:16)
+      at Processor.process (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\processor.js:53:14)
+      at runPostCSS (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:43853:52)
+      at async compilePostCSS (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:43823:18)
+      at async compileCSS (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:43678:27)
+[2m20:55:11[22m [34m[200][39m /posts/guide-post/ [2m4828ms[22m
+[2m20:55:11[22m [34m[200][39m /posts/guide-post/ [2m4834ms[22m
+[2m20:55:11[22m [34m[200][39m /posts/guide-post/ [2m4835ms[22m
+[2m20:55:38[22m [34m[200][39m /posts/wiki-link-test-a/ [2m90ms[22m
+[2m20:55:38[22m [34m[200][39m /posts/guide-post/ [2m55ms[22m
+[2m20:59:24[22m [34m[watch][39m /src/styles/main.css
+[2m20:59:25[22m [34m[watch][39m src/components/widget/DropdownMenu.astro
+[2m20:59:25[22m [34m[watch][39m src/components/widget/NavMenuPanel.astro
+[2m20:59:25[22m [34m[watch][39m src/components/widget/DropdownMenu.astro
+[31m[1m20:59:25[22m [ERROR] [vite][39m [31mInternal server error: [postcss] F:/cursor/project8  blog/test/src/styles/main.css:690:239: Unclosed string[39m
+  Plugin: [35mvite:css[39m
+  File: [36mF:/cursor/project8  blog/test/src/styles/main.css[39m:690:238
+[33m  688|    -webkit-mask-position: center;
+  689|    -webkit-mask-size: contain;
+  690|    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M200-200v-560h280v80H280v480h480v-200h80v280H200Zm236-236-56-56 284-284H520v-80h280v280h-80v-144L436-436Z'/%3E%3C/svg%3E");
+     |                                                                                                                                                                                                                                                ^
+  691|    mask-repeat: no-repeat;
+  692|    mask-position: center;[39m
+      at Input.error (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\input.js:135:16)
+      at unclosed (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\tokenize.js:45:17)
+      at Object.nextToken (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\tokenize.js:157:15)
+      at Parser.other (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parser.js:421:30)
+      at Parser.parse (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parser.js:472:16)
+      at parse (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\parse.js:11:12)
+      at new LazyResult (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\lazy-result.js:165:16)
+      at Processor.process (F:\cursor\project8  blog\test\node_modules\.pnpm\postcss@8.5.6\node_modules\postcss\lib\processor.js:53:14)
+      at runPostCSS (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:43853:52)
+      at async compilePostCSS (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:43823:18)
+[2m20:59:29[22m [34m[200][39m /posts/guide-post/ [2m1120ms[22m
+[2m20:59:29[22m [34m[200][39m /posts/guide-post/ [2m1124ms[22m
+[2m21:00:34[22m [34m[200][39m /posts/guide-post/ [2m80ms[22m
+[2m21:00:35[22m [34m[200][39m / [2m79ms[22m
+[2m21:01:42[22m [34m[watch][39m /src/styles/main.css
+[2m21:01:43[22m [34m[200][39m /posts/guide-post/ [2m170ms[22m
+[2m21:02:07[22m [34m[200][39m / [2m110ms[22m
+[2m21:03:22[22m [34m[200][39m /posts/guide-post/ [2m87ms[22m
+[2m21:04:44[22m [34m[200][39m / [2m104ms[22m
+[2m21:05:43[22m [34m[watch][39m src/components/widget/DropdownMenu.astro
+[2m21:05:47[22m [34m[200][39m / [2m795ms[22m
+[2m21:05:47[22m [34m[200][39m / [2m71ms[22m
+[2m21:06:58[22m [34m[watch][39m src/components/widget/NavMenuPanel.astro
+[2m21:07:01[22m [34m[200][39m / [2m884ms[22m
+[2m21:07:48[22m [34m[200][39m / [2m548ms[22m
+[2m21:07:48[22m [34m[200][39m / [2m109ms[22m
+[2m21:07:58[22m [34m[200][39m / [2m294ms[22m
+[2m21:07:58[22m [34m[200][39m /posts/guide-post/ [2m335ms[22m
+[2m21:11:56[22m [34m[200][39m / [2m314ms[22m
+[2m21:14:40[22m [34m[watch][39m src/config.ts
+[2m21:14:40[22m [34m[watch][39m src/config.ts
+[2m21:14:40[22m Configuration file removed. Restarting...
+Local icons changed, reloading
+[2m21:14:40[22m [34m[watch][39m /src/styles/main.css
+[2m21:14:41[22m [34m[watch][39m src/config.ts
+[2m21:14:41[22m [34m[watch][39m src/config.ts
+Local icons changed, reloading
+[2m21:14:41[22m [34m[watch][39m src/components/widget/DropdownMenu.astro
+[2m21:14:42[22m [34m[watch][39m src/components/widget/NavMenuPanel.astro
+[2m21:14:42[22m [34m[watch][39m src/pages/portfolio.astro
+[2m21:14:42[22m [34m[watch][39m src/pages/portfolio.astro
+[2m21:14:42[22m [34m[watch][39m src/pages/sponsor.astro
+[31m[1m21:14:44[22m [ERROR][39m Vite module runner has been closed.
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\node_modules\.pnpm\vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba\node_modules\vite\dist\node\module-runner.js:1201:13
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:14:44[22m [ERROR][39m Vite module runner has been closed.
+  [1mStack trace:[22m
+[2m    at SSRCompatModuleRunner.getModuleInformation (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/vite@6.4.1_@types+node@24.1_1c405d19228c53908ebc68ce944650ba/node_modules/vite/dist/node/module-runner.js:1201:13)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m21:14:55[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m21:15:14[22m [34m[content][39m Syncing content
+[2m21:15:14[22m [34m[content][39m Astro config changed
+[2m21:15:14[22m [34m[content][39m Clearing content store
+[2m21:15:15[22m [34m[content][39m Synced content
+[2m21:15:15[22m [34m[types][39m Generated [2m29.21s[22m
+[2m21:15:15[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m21:15:33[22m [34m[200][39m / [2m4061ms[22m
+[2m21:15:34[22m [34m[vite][39m [32m✨ new dependencies optimized: [33m@swup/astro/serialise, @swup/astro/idle, @swup/astro/client/Swup, @swup/astro/client/SwupA11yPlugin, @swup/astro/client/SwupHeadPlugin, @swup/astro/client/SwupScriptsPlugin[32m[39m
+[2m21:15:34[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[2m21:15:42[22m [34m[200][39m /posts/guide-post/ [2m139ms[22m
+[2m21:15:49[22m [34m[200][39m / [2m83ms[22m
+[2m21:16:05[22m [34m[200][39m /2/ [2m102ms[22m
+[2m21:16:33[22m [34m[200][39m / [2m72ms[22m
+[2m21:17:08[22m [34m[200][39m / [2m76ms[22m
+[2m21:17:48[22m [34m[200][39m /portfolio/normal/ [2m63ms[22m
+[2m21:18:45[22m [34m[200][39m / [2m64ms[22m
+[2m21:18:47[22m [34m[200][39m /posts/guide-post/ [2m39ms[22m
+[2m21:25:54[22m [34m[watch][39m src/config.ts
+[2m21:25:54[22m [34m[watch][39m src/config.ts
+[2m21:26:00[22m [34m[200][39m /posts/guide-post/ [2m1841ms[22m
+[2m21:26:51[22m [34m[watch][39m src/config.ts
+[2m21:26:51[22m [34m[watch][39m src/config.ts
+[33m[1m21:26:53[22m [WARN] [vite][39m [33mwarning: [33mDuplicate key "name" in object literal[33m
+270|  			url: "/portfolio/",
+271|  			icon: "material-symbols:work-outline",
+272|  			name: "项目",
+   |     ^
+273|  			children: [
+274|  				{
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mF:/cursor/project8  blog/test/src/config.ts[39m
+[2m21:26:56[22m [34m[200][39m /posts/guide-post/ [2m1924ms[22m
+[33m[1m21:26:58[22m [WARN] [vite][39m [33mwarning: [33mDuplicate key "name" in object literal[33m
+270|  			url: "/portfolio/",
+271|  			icon: "material-symbols:work-outline",
+272|  			name: "项目",
+   |     ^
+273|  			children: [
+274|  				{
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mF:/cursor/project8  blog/test/src/config.ts[39m
+[2m21:28:11[22m [34m[watch][39m src/pages/portfolio.astro
+[2m21:28:11[22m [34m[watch][39m src/pages/portfolio.astro
+[2m21:28:15[22m [34m[200][39m /posts/guide-post/ [2m1623ms[22m
+[2m21:28:21[22m Configuration file updated. Restarting...
+Local icons changed, reloading
+[2m21:28:21[22m [33m[1m[vite][22m[39m [33m[2m(ssr)[22m[39m [33mwarning: [33mDuplicate key "name" in object literal[33m
+270|  			url: "/portfolio/",
+271|  			icon: "material-symbols:work-outline",
+272|  			name: "项目",
+   |     ^
+273|  			children: [
+274|  				{
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mF:/cursor/project8  blog/test/src/config.ts[39m
+[2m21:28:33[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m21:28:54[22m [34m[content][39m Syncing content
+[2m21:28:54[22m [34m[content][39m Astro config changed
+[2m21:28:54[22m [34m[content][39m Clearing content store
+[2m21:28:55[22m [34m[content][39m Synced content
+[2m21:28:55[22m [34m[types][39m Generated [2m32.23s[22m
+[2m21:28:55[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[33m[1m21:29:13[22m [WARN] [vite][39m [33mwarning: [33mDuplicate key "name" in object literal[33m
+270|  			url: "/portfolio/",
+271|  			icon: "material-symbols:work-outline",
+272|  			name: "项目",
+   |     ^
+273|  			children: [
+274|  				{
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mF:/cursor/project8  blog/test/src/config.ts[39m
+[2m21:29:31[22m [34m[200][39m / [2m6008ms[22m
+[2m21:29:31[22m [34m[200][39m /posts/guide-post/ [2m5250ms[22m
+[2m21:30:08[22m [34m[200][39m /posts/guide-post/ [2m55ms[22m
+[2m21:30:10[22m [34m[vite][39m [32m✨ new dependencies optimized: [33m@swup/astro/serialise, @swup/astro/idle, @swup/astro/client/Swup, @swup/astro/client/SwupA11yPlugin, @swup/astro/client/SwupHeadPlugin, @swup/astro/client/SwupScriptsPlugin[32m[39m
+[2m21:30:10[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[33m[1m21:30:12[22m [WARN] [vite][39m [33mwarning: [33mDuplicate key "name" in object literal[33m
+270|  			url: "/portfolio/",
+271|  			icon: "material-symbols:work-outline",
+272|  			name: "项目",
+   |     ^
+273|  			children: [
+274|  				{
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mF:/cursor/project8  blog/test/src/config.ts[39m
+[2m21:30:14[22m [34m[200][39m / [2m154ms[22m
+[2m21:31:20[22m [34m[watch][39m src/config.ts
+[2m21:31:20[22m [34m[watch][39m src/config.ts
+[2m21:31:20[22m [34m[watch][39m src/pages/portfolio.astro
+[2m21:31:20[22m [34m[watch][39m src/pages/portfolio.astro
+[31m[1m21:31:20[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:31:21[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:31:29[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:31:29[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:32:02[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m21:32:51[22m [34m[watch][39m src/config.ts
+[2m21:32:51[22m [34m[watch][39m src/config.ts
+[31m[1m21:32:52[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:32:52[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:32:52[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:32:52[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:33:05[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:33:06[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\config.ts:23:32
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m21:33:06[22m [ERROR][39m Unterminated string literal
+  [1mStack trace:[22m
+[2m    at failureErrorWithLog (F:\cursor\project8  blog\test\node_modules\.pnpm\esbuild@0.25.12\node_modules\esbuild\lib\main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m21:33:28[22m [34m[watch][39m src/config.ts
+[2m21:33:28[22m [34m[watch][39m src/config.ts
+[2m21:33:35[22m [34m[200][39m / [2m1522ms[22m
+[2m21:33:35[22m [34m[200][39m / [2m56ms[22m
+[2m21:34:19[22m [34m[200][39m / [2m55ms[22m
+[2m21:35:25[22m [34m[200][39m / [2m81ms[22m
+[2m21:35:43[22m [34m[200][39m / [2m114ms[22m
+[2m21:36:13[22m [34m[200][39m / [2m1467ms[22m
+[2m21:36:14[22m [34m[200][39m /posts/guide-post/ [2m601ms[22m
+[2m21:36:38[22m [34m[200][39m /posts/guide-post/ [2m138ms[22m
+[2m21:38:05[22m [34m[200][39m / [2m106ms[22m
+[2m21:38:47[22m [34m[200][39m / [2m84ms[22m
+[2m21:38:54[22m [34m[200][39m /novel/ [2m73ms[22m
+[2m21:38:57[22m [34m[200][39m /resources/utility/ [2m74ms[22m
+[2m21:38:58[22m [34m[200][39m /resources/info/ [2m63ms[22m
+[2m21:39:00[22m [34m[200][39m /archive/ [2m89ms[22m
+[2m21:39:03[22m [34m[200][39m / [2m105ms[22m
+[2m21:39:06[22m [34m[200][39m / [2m61ms[22m
+[2m21:39:56[22m [34m[200][39m / [2m108ms[22m
+[2m21:42:29[22m [34m[200][39m / [2m88ms[22m
+ ELIFECYCLE  Command failed with exit code 4294967295.
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[2m21:44:04[22m [34m[types][39m Generated [2m2ms[22m
+[2m21:44:28[22m [34m[content][39m Syncing content
+[2m21:44:28[22m [34m[content][39m Synced content
+[2m21:44:28[22m [34m[vite][39m Forced re-optimization of dependencies
+
+[42m[1m astro [22m[49m [32mv5.15.8[39m [2mready in[22m 30391 [2mms[22m
+
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [36mhttp://169.254.125.97:4321/[39m
+           [36mhttp://169.254.163.218:4321/[39m
+           [36mhttp://192.168.56.1:4321/[39m
+           [36mhttp://192.168.160.1:4321/[39m
+           [36mhttp://192.168.37.1:4321/[39m
+           [36mhttp://172.29.21.50:4321/[39m
+
+[2m21:44:28[22m [32mwatching for file changes...[39m
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[2m21:45:01[22m [34m[200][39m / [2m4667ms[22m
+[2m21:45:02[22m [34m[200][39m / [2m48ms[22m
+[2m21:45:02[22m [34m[200][39m /posts/guide-post/ [2m34ms[22m
+[2m21:45:03[22m [34m[vite][39m [32m✨ new dependencies optimized: [33m@swup/astro/serialise, @swup/astro/idle, @swup/astro/client/Swup, @swup/astro/client/SwupA11yPlugin, @swup/astro/client/SwupHeadPlugin, @swup/astro/client/SwupScriptsPlugin[32m[39m
+[2m21:45:03[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[2m21:45:12[22m [34m[200][39m /posts/guide-post/ [2m126ms[22m
+[2m21:45:27[22m [34m[200][39m /money/ [2m53ms[22m
+[2m21:45:33[22m [34m[200][39m /portfolio/normal/ [2m50ms[22m
+[2m21:45:36[22m [34m[200][39m /portfolio/programming/ [2m43ms[22m
+[2m21:45:38[22m [34m[200][39m /anime/ [2m49ms[22m
+[2m21:45:39[22m [34m[200][39m /manga/ [2m48ms[22m
+[2m21:45:41[22m [34m[200][39m /novel/ [2m54ms[22m
+[2m21:45:42[22m [34m[200][39m /games/ [2m48ms[22m
+[2m21:45:43[22m [34m[200][39m / [2m48ms[22m
+[2m21:46:14[22m [34m[200][39m / [2m56ms[22m
+[2m21:46:14[22m [34m[200][39m / [2m61ms[22m
+[2m21:46:14[22m [34m[200][39m / [2m50ms[22m
+[2m21:46:37[22m [34m[200][39m /resources/entertainment/manga/manga-software-guide/ [2m55ms[22m
+[2m21:46:41[22m [34m[200][39m /resources/entertainment/novels/korean-light-novels/ [2m37ms[22m
+[2m21:50:18[22m [34m[watch][39m src/config.ts
+[2m21:50:18[22m [34m[watch][39m src/config.ts
+[2m21:50:24[22m [34m[200][39m / [2m2597ms[22m
+[2m21:50:57[22m [34m[watch][39m /src/styles/main.css
+[2m21:50:59[22m [34m[200][39m / [2m2108ms[22m
+[2m21:51:07[22m [34m[200][39m /about/ [2m44ms[22m
+[2m21:51:11[22m [34m[200][39m / [2m49ms[22m
+[2m21:51:12[22m [34m[200][39m / [2m48ms[22m
+[2m21:51:12[22m [34m[200][39m /posts/guide-post/ [2m47ms[22m
+[2m21:53:29[22m [34m[watch][39m /src/components/Search.svelte, /node_modules/.pnpm/@astrojs+tailwind@6.0.2_ast_a82d6bbca2a59e55641afffe2a29e316/node_modules/@astrojs/tailwind/base.css, /src/layouts/Layout.astro?astro&type=style&index=0&lang.css, /src/styles/main.css
+[2m21:53:32[22m [34m[200][39m / [2m2027ms[22m
+[2m21:54:23[22m [34m[200][39m / [2m48ms[22m
+[2m21:55:56[22m [34m[200][39m / [2m50ms[22m
+[2m21:56:07[22m [34m[200][39m /money/ [2m57ms[22m
+[2m21:56:12[22m [34m[200][39m /archive/ [2m64ms[22m
+[2m21:56:20[22m [34m[200][39m / [2m70ms[22m
+[2m21:56:24[22m [34m[200][39m /posts/guide-post/ [2m66ms[22m
+[2m21:58:41[22m [34m[200][39m /resources/entertainment/ [2m105ms[22m
+[2m21:58:49[22m [34m[200][39m /resources/entertainment/novels/ [2m58ms[22m
+[2m21:59:07[22m [34m[200][39m /novel/ [2m51ms[22m
+[2m22:01:57[22m [34m[watch][39m src/config.ts
+[2m22:01:57[22m [34m[watch][39m src/config.ts
+[2m22:02:01[22m [34m[200][39m / [2m1365ms[22m
+[2m22:02:09[22m [34m[200][39m /resources/entertainment/ [2m41ms[22m
+[2m22:02:12[22m [34m[200][39m /resources/entertainment/manga/ [2m46ms[22m
+[31m[1m22:02:18[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 小说资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\小说资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m22:02:18[22m [34m[200][39m /resources/entertainment/manga/ [2m84ms[22m
+[2m22:02:31[22m [34m[200][39m /resources/entertainment/manga/ [2m38ms[22m
+[2m22:03:22[22m [34m[watch][39m src/utils/entertainment-scanner.ts
+[2m22:03:22[22m [34m[watch][39m src/utils/entertainment-scanner.ts
+[2m22:03:24[22m [34m[200][39m /resources/entertainment/manga/ [2m1062ms[22m
+[2m22:03:41[22m [34m[watch][39m src/content/entertainment-resources/小说资源/韩轻拼好书.md
+[2m22:03:41[22m [34m[watch][39m src/content/entertainment-resources/小说资源/韩轻拼好书.md
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 动漫资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\动漫资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 小说资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\小说资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 游戏资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at getEntryDataAndImages (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/astro@5.15.8_@types+node@24_244c59944e78ca9f94410b1f21bb9d97/node_modules/astro/dist/content/utils.js:161:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 小说资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\小说资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 漫画资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\漫画资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 游戏资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at getEntryDataAndImages (file:///F:/cursor/project8%20%20blog/test/node_modules/.pnpm/astro@5.15.8_@types+node@24_244c59944e78ca9f94410b1f21bb9d97/node_modules/astro/dist/content/utils.js:161:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m22:03:41[22m [34m[glob-loader][39m Reloaded data from [32m小说资源/韩轻拼好书.md[39m
+[31m[1m22:03:41[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 漫画资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\漫画资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m22:03:44[22m [34m[200][39m /resources/entertainment/manga/ [2m1258ms[22m
+[2m22:03:44[22m [34m[200][39m /resources/entertainment/manga/ [2m37ms[22m
+[2m22:04:03[22m [34m[200][39m /resources/entertainment/ [2m37ms[22m
+[2m22:04:03[22m [34m[200][39m /resources/entertainment/novels/ [2m30ms[22m
+[2m22:04:24[22m [34m[200][39m /resources/entertainment/novels/ [2m72ms[22m
+[2m22:05:10[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:05:10[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:05:10[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:05:10[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:05:38[22m [34m[200][39m /resources/entertainment/novels/ [2m2258ms[22m
+[2m22:05:38[22m [34m[200][39m /resources/entertainment/ [2m2421ms[22m
+[2m22:09:19[22m [34m[200][39m /resources/entertainment/novels/ [2m534ms[22m
+[2m22:09:23[22m [34m[200][39m /resources/entertainment/ [2m102ms[22m
+[2m22:10:08[22m [34m[200][39m /resources/entertainment/manga/ [2m81ms[22m
+[2m22:10:30[22m [34m[200][39m /resources/entertainment/novels/ [2m59ms[22m
+[2m22:11:21[22m [34m[200][39m / [2m127ms[22m
+[2m22:11:48[22m [34m[200][39m /resources/entertainment/novels/korean-light-novels/ [2m75ms[22m
+[2m22:12:00[22m [34m[200][39m /money/ [2m72ms[22m
+[2m22:12:02[22m [34m[200][39m /archive/ [2m50ms[22m
+[2m22:12:30[22m [34m[watch][39m src/config.ts
+[2m22:12:30[22m [34m[watch][39m src/config.ts
+[2m22:12:36[22m [34m[200][39m / [2m2755ms[22m
+[2m22:13:04[22m [34m[watch][39m src/content/entertainment-resources/小说资源/韩轻拼好书.md
+[2m22:13:04[22m [34m[watch][39m src/content/entertainment-resources/小说资源/韩轻拼好书.md
+[31m[1m22:13:04[22m [ERROR][39m [31m[InvalidContentEntryDataError][39m [1mentertainment-resources → 小说资源/info[22m data does not match collection schema.
+
+  [1mpublished**: **published[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mStack trace:[22m
+[2m    at F:\cursor\project8  blog\test\F:\cursor\project8  blog\test\src\content\entertainment-resources\小说资源\info.json
+    [...] See full stack trace in the browser, or rerun with --verbose.[22m
+[2m22:13:04[22m [34m[glob-loader][39m Reloaded data from [32m小说资源/韩轻拼好书.md[39m
+[2m22:13:11[22m [34m[200][39m / [2m2837ms[22m
+[2m22:13:11[22m [34m[200][39m / [2m2695ms[22m
+[2m22:13:42[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:13:42[22m [34m[watch][39m src/pages/resources/entertainment/[category]/index.astro
+[2m22:13:46[22m [34m[200][39m / [2m1580ms[22m
+[2m22:16:47[22m [34m[200][39m /resources/entertainment/novels/ [2m51ms[22m
+[2m22:16:50[22m [34m[200][39m /resources/entertainment/manga/ [2m42ms[22m
+[2m22:16:52[22m [34m[200][39m / [2m52ms[22m
+[2m22:20:32[22m [34m[200][39m /archive/ [2m92ms[22m
+[2m22:20:40[22m [34m[200][39m /2/ [2m91ms[22m
+[2m22:23:32[22m [34m[watch][39m src/content/entertainment-resources/小说资源/轻小说资源推荐.md
+[2m22:23:32[22m [34m[glob-loader][39m Reloaded data from [32m小说资源/轻小说资源推荐.md[39m
+[2m22:23:36[22m [34m[200][39m / [2m1670ms[22m
+[2m22:24:10[22m [34m[200][39m /resources/entertainment/novels/ [2m58ms[22m
+[2m22:24:17[22m [34m[200][39m /archive/ [2m50ms[22m
+[2m22:24:24[22m [34m[200][39m /resources/entertainment/novels/light-novel-resources/ [2m67ms[22m
+[2m22:25:02[22m [34m[200][39m / [2m73ms[22m
+[2m22:25:27[22m [34m[200][39m /resources/utility/ [2m50ms[22m
+[2m22:25:29[22m [34m[200][39m /resources/info/ [2m39ms[22m
+[33m[1m22:25:31[22m [WARN] [router][39m A `getStaticPaths()` route pattern was matched, but no matching static path was found for requested path `/resources/entertainment/anime/`.
+
+Possible dynamic routes being matched: src/pages/resources/entertainment/[category]/index.astro, src/pages/resources/entertainment/[...slug].astro, src/pages/[...page].astro.
+[2m22:25:31[22m [33m[404][39m /resources/entertainment/anime/ [2m44ms[22m
+[2m22:25:32[22m [34m[200][39m /resources/entertainment/manga/ [2m47ms[22m
+[33m[1m22:25:34[22m [WARN] [router][39m A `getStaticPaths()` route pattern was matched, but no matching static path was found for requested path `/resources/entertainment/games/`.
+
+Possible dynamic routes being matched: src/pages/resources/entertainment/[category]/index.astro, src/pages/resources/entertainment/[...slug].astro, src/pages/[...page].astro.
+[2m22:25:34[22m [33m[404][39m /resources/entertainment/games/ [2m41ms[22m
+[2m22:25:40[22m [34m[200][39m /posts/guide-post/ [2m51ms[22m
+[2m22:27:56[22m [34m[200][39m /resources/entertainment/novels/ [2m987ms[22m
+[2m22:27:56[22m [34m[200][39m / [2m169ms[22m
+[2m22:27:56[22m [34m[200][39m /resources/entertainment/manga/manga-software-guide/ [2m52ms[22m
