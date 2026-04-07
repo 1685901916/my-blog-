@@ -10,6 +10,595 @@
 &lt;p&gt;详细可以看这个，按顺序介绍了大家要的书
 &lt;a href=&quot;/resources/entertainment/novels/korean-light-novels/&quot;&gt;韩轻拼好书&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;求书直接在贴吧发帖子就行，看见了会发的&lt;/p&gt;
+</content:encoded></item><item><title>漫画画质提升</title><link>https://ayano29.cn/posts/programming/manga-enhancer/</link><guid isPermaLink="true">https://ayano29.cn/posts/programming/manga-enhancer/</guid><description>基于 AI 超分辨率的本地漫画画质增强工具，支持 Real-ESRGAN、Waifu2x 多引擎智能增强，自动识别页面类型并选择最优策略</description><pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;前言&lt;/h1&gt;
+&lt;p&gt;现在平台上的漫画大多都压缩的很糊，手机端看起来还可以，平板就真的看不下去，网上提升画质的模型很多，但是没有专们搞漫画的工具，我就自己做了一个
+现在这个还有很多不足，欢迎提意见改正 ，如果有帮助的话我会很开心&lt;/p&gt;
+&lt;p&gt;效果可以去移动云盘看看   现在搞了金牌的主的到58话
+&lt;a href=&quot;https://yun.139.com/shareweb/#/w/i/2uh93wW93pLxj&quot;&gt;漫画&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;使用教程&lt;/h1&gt;
+&lt;h2&gt;下载启动&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://pan.quark.cn/s/8d65dcdb3e4f&quot;&gt;夸克&lt;/a&gt;
+&lt;a href=&quot;https://pan.xunlei.com/s/VOpc3je1KrOND7aysj1p0jlxA1?pwd=wc8v#&quot;&gt;迅雷&lt;/a&gt;
+先解压点击exe
+然后跳出启动器
+点击启动器启动前端页面&lt;/p&gt;
+&lt;h2&gt;导入素材&lt;/h2&gt;
+&lt;p&gt;第一页是导入素材的地方，可以在网上下好素材 ，我推荐贴吧，或者直接在拷贝下载 ，我大多都在拷贝上看的，推荐一下拷贝漫画下载器
+[GitHub 拷贝漫画下载器](&lt;a href=&quot;https://github.com/lanyeeee/copymanga-downloader&quot;&gt;lanyeeee/copymanga-downloader: 拷贝漫画 copymanga 的多线程下载器，带图形界面 带收藏夹 支持下载下架的漫画 支持导出cbz和pdf，已打包exe 没有每分钟15次API请求的限制 下载速度飞快&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;要是没有梯子的话可以直接 在夸克里一块下了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404163538.png&quot; alt=&quot;导入素材&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;功能模块&lt;/h2&gt;
+&lt;p&gt;然后是功能模块
+漫画要拆成图片才能让模型提升画质 ，第一个就是拆页了，拆完后不用我的模型自己搞一个也行&lt;/p&gt;
+&lt;p&gt;第二个是画质增强 我想其他图片之类的也能用我这个来提升画质 ，但预览页一直没太搞好&lt;/p&gt;
+&lt;p&gt;带三个是导出模块 就是图片导出成漫画格式 ，好像还有几种没加上，推荐cbz或者zip  其他格式或许有点小bug 之后会修，有时间在加几个格式&lt;/p&gt;
+&lt;h2&gt;执行模块&lt;/h2&gt;
+&lt;p&gt;最后是执行模块
+要是就像提升画质就看这个就行了，我搞了是否保留原本图片和画质增强的图片，这个可以自己选
+合并成一个文件，这个还是蛮有用的不然一大堆还是挺麻烦的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404163504.png&quot; alt=&quot;执行模块&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;任务列表&lt;/h2&gt;
+&lt;p&gt;然后就是任务列表了 在任务列表里看进度 ，点进去按打开输出目录就可以很方便跳转到文件夹位置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404163435.png&quot; alt=&quot;任务列表&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;分析一下该项目 写博客&lt;/p&gt;
+&lt;h1&gt;技术说明&lt;/h1&gt;
+&lt;h2&gt;一、项目概述&lt;/h2&gt;
+&lt;p&gt;MOBI Manga Enhancer 是一个面向 &lt;strong&gt;Kindle 漫画阅读场景&lt;/strong&gt;的本地画质增强工具。它能够将低分辨率的 MOBI、CBZ、PDF 等格式的漫画资源，通过 AI 超分辨率模型与传统图像处理算法的协同工作，输出高清晰度的 CBZ 文件，并可直接对接 Kindle Comic Converter (KCC) 转换为 Kindle 设备可读格式。&lt;/p&gt;
+&lt;p&gt;整个项目完全&lt;strong&gt;本地离线运行&lt;/strong&gt;，不上传任何数据，确保隐私安全。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术栈一览：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;| 层级 | 技术选型 |&lt;/p&gt;
+&lt;p&gt;|------|----------|&lt;/p&gt;
+&lt;p&gt;| 后端 | Python 3.12+ |&lt;/p&gt;
+&lt;p&gt;| 图像处理 | OpenCV、Pillow、PyMuPDF (fitz) |&lt;/p&gt;
+&lt;p&gt;| AI 超分辨率 | Real-ESRGAN (PyTorch)、Waifu2x-NCNN-Vulkan |&lt;/p&gt;
+&lt;p&gt;| GUI 启动器 | PySide6 |&lt;/p&gt;
+&lt;p&gt;| 前端 | React 18 + Vite 5 |&lt;/p&gt;
+&lt;p&gt;| API | 原生 &lt;code&gt;http.server.ThreadingHTTPServer&lt;/code&gt; |&lt;/p&gt;
+&lt;p&gt;| 打包分发 | PyInstaller + Inno Setup |&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;二、系统架构&lt;/h2&gt;
+&lt;p&gt;项目采用经典的&lt;strong&gt;前后端分离架构&lt;/strong&gt;，后端 Python 通过 HTTP API (端口 8765) 为 React 前端提供 RESTful 服务，同时提供 CLI 命令行入口，满足不同使用场景。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+┌─────────────────────────────────────────────────────────────┐
+
+│                      用户交互层                              │
+
+│  ┌──────────────┐  ┌──────────────────┐  ┌──────────────┐  │
+
+│  │  React 前端   │  │  PySide6 启动器  │  │  CLI 命令行   │  │
+
+│  │  (Web 界面)   │  │  (桌面 GUI)      │  │  (脚本化)     │  │
+
+│  └──────┬───────┘  └──────┬───────────┘  └──────┬───────┘  │
+
+└─────────┼─────────────────┼──────────────────────┼──────────┘
+
+          │                 │                      │
+
+          ▼                 ▼                      ▼
+
+┌─────────────────────────────────────────────────────────────┐
+
+│                   HTTP API 层 (api.py)                       │
+
+│              ThreadingHTTPServer :8765                       │
+
+├─────────────────────────────────────────────────────────────┤
+
+│                     工作流层 (workflow.py)                    │
+
+│  ┌────────┐ ┌────────┐ ┌─────────┐ ┌────────┐ ┌────────┐  │
+
+│  │ Import │ │ Analyze│ │ Enhance │ │Package │ │ Export │  │
+
+│  └────┬───┘ └───┬────┘ └────┬────┘ └───┬────┘ └───┬────┘  │
+
+├───────┼─────────┼──────────┼──────────┼──────────┼─────────┤
+
+│       ▼         ▼          ▼          ▼          ▼         │
+
+│  ┌─────────┐ ┌────────┐ ┌────────────────────────────┐     │
+
+│  │ unpack  │ │analyze │ │     Enhancer Registry      │     │
+
+│  │  .py    │ │  .py   │ │  ┌─────────┐ ┌──────────┐ │     │
+
+│  │         │ │        │ │  │Real-ESRGAN│ │ Waifu2x  │ │     │
+
+│  │ MOBI    │ │ Page   │ │  │ Anime    │ │ NCNN     │ │     │
+
+│  │ CBZ/ZIP │ │Profile │ │  │ (PyTorch)│ │ (Vulkan) │ │     │
+
+│  │ PDF     │ │Quality │ │  ├─────────┤ ├──────────┤ │     │
+
+│  │ Folder  │ │ Score  │ │  │Real-ESRGAN│ │ OpenCV   │ │     │
+
+│  └─────────┘ └────────┘ │  │ General  │ │ (内置)   │ │     │
+
+│                          │  └─────────┘ └──────────┘ │     │
+
+│                          └────────────────────────────┘     │
+
+├─────────────────────────────────────────────────────────────┤
+
+│                   基础设施层                                  │
+
+│  ┌──────────┐ ┌───────────┐ ┌────────────────┐             │
+
+│  │ JobStore │ │RuntimePaths│ │ External Tools │             │
+
+│  │ (持久化)  │ │ (路径解析)  │ │KindleUnpack/KCC│             │
+
+│  └──────────┘ └───────────┘ └────────────────┘             │
+
+└─────────────────────────────────────────────────────────────┘
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2.1 核心模块职责&lt;/h3&gt;
+&lt;p&gt;| 模块 | 文件 | 职责 |&lt;/p&gt;
+&lt;p&gt;|------|------|------|&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;流水线编排&lt;/strong&gt; | &lt;code&gt;pipeline.py&lt;/code&gt; | 一键式端到端处理：解包→分析→增强→打包 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;工作流引擎&lt;/strong&gt; | &lt;code&gt;workflow.py&lt;/code&gt; | 分步式精细控制：Import/Analyze/Enhance/Optimize/Package/Export |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;页面分析&lt;/strong&gt; | &lt;code&gt;analyze.py&lt;/code&gt; | 多维度质量评分与页面类型分类 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;智能增强&lt;/strong&gt; | &lt;code&gt;enhance.py&lt;/code&gt; | 多策略降级、AI 预处理、质量验证 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;源文件解包&lt;/strong&gt; | &lt;code&gt;unpack.py&lt;/code&gt; | MOBI/CBZ/PDF/Folder 多格式解包与归一化 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;导出打包&lt;/strong&gt; | &lt;code&gt;repack.py&lt;/code&gt; | CBZ/PDF/ZIP 封装，KCC 集成 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;增强引擎&lt;/strong&gt; | &lt;code&gt;enhancers/&lt;/code&gt; | 插件式 AI 引擎注册与管理 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;API 服务&lt;/strong&gt; | &lt;code&gt;api.py&lt;/code&gt; | HTTP RESTful API，支持前端 Dashboard |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;任务持久化&lt;/strong&gt; | &lt;code&gt;job_store.py&lt;/code&gt; | Job 状态管理，支持断点恢复 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;运行时路径&lt;/strong&gt; | &lt;code&gt;runtime_paths.py&lt;/code&gt; | 开发/打包/便携三模式路径自适应 |&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;三、处理流水线详解&lt;/h2&gt;
+&lt;p&gt;整个流水线设计为 &lt;strong&gt;六阶段有向无环流&lt;/strong&gt;，每个阶段可独立运行，也可组合为完整流水线：&lt;/p&gt;
+&lt;h3&gt;3.1 阶段一：Import（源文件解包）&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;
+输入: .mobi / .cbz / .zip / .pdf / 图片文件夹
+
+  │
+
+  ├─ MOBI/AZW3 → KindleUnpack 提取 → XHTML 解析 &amp;lt;img&amp;gt; 标签 → 收集图片
+
+  │                                                   ↓ 回退
+
+  │                                           Images 目录扫描
+
+  ├─ CBZ/ZIP   → zipfile 解压 → 扫描图片文件
+
+  ├─ PDF       → 逐页决策（见下文）→ 归一化命名 page_NNNN.ext
+
+  └─ Folder    → 直接扫描
+
+  │
+
+输出: pages/ 目录（统一命名、统一格式的原始页面图片）
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;PDF 智能处理是此阶段的亮点。&lt;/strong&gt; 对于 PDF 漫画，系统不是简单地全部渲染或全部提取，而是逐页决策：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+# _decide_pdf_page_mode() 的决策逻辑
+
+if mode == &quot;extract&quot;:
+
+    source_mode = &quot;extract&quot;                    # 强制提取
+
+elif mode == &quot;render&quot;:
+
+    source_mode = &quot;render&quot;                     # 强制渲染
+
+elif picked is None:
+
+    source_mode = &quot;render&quot;                     # 无内嵌图片 → 渲染
+
+elif quality_mode == &quot;fast_auto&quot;:
+
+    source_mode = &quot;extract&quot;                    # 快速模式优先提取
+
+elif has_vector_content:
+
+    source_mode = &quot;render&quot;                     # 矢量内容 → 渲染
+
+elif embedded_size &amp;lt; target_size * 0.85:
+
+    source_mode = &quot;render&quot;                     # 内嵌图太小 → 渲染
+
+else:
+
+    source_mode = &quot;extract&quot;                    # 内嵌图足够大 → 直接提取
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;决策结果会写入 &lt;code&gt;pdf_split_meta.json&lt;/code&gt;，供后续增强阶段作为上下文参考。每个页面还会检测是否存在&lt;strong&gt;矢量内容&lt;/strong&gt;（文字/绘图），这对增强时的参数选择至关重要。&lt;/p&gt;
+&lt;h3&gt;3.2 阶段二：Analyze（页面质量分析）&lt;/h3&gt;
+&lt;p&gt;系统对每一页提取 &lt;strong&gt;8 项图像质量指标&lt;/strong&gt;，并据此进行页面类型分类：&lt;/p&gt;
+&lt;p&gt;| 指标 | 算法 | 含义 |&lt;/p&gt;
+&lt;p&gt;|------|------|------|&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Sharpness&lt;/strong&gt; | Laplacian 方差 | 图像整体锐度 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Edge Density&lt;/strong&gt; | Canny 边缘检测 | 线条/轮廓密度 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Blockiness&lt;/strong&gt; | 8px 边界像素差均值 | JPEG 压缩块效应 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Text Density&lt;/strong&gt; | OTSU 二值化 + 连通域分析 | 文字占比 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Line Density&lt;/strong&gt; | Canny 边缘占比 | 线稿密度 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Halftone Score&lt;/strong&gt; | Laplacian 能量 + 局部残差 | 半色调/网点特征 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Noise Score&lt;/strong&gt; | 中值滤波残差均值 | 噪声水平 |&lt;/p&gt;
+&lt;p&gt;| &lt;strong&gt;Background Cleanliness&lt;/strong&gt; | 高亮区域均值/标准差 | 背景纯净度 |&lt;/p&gt;
+&lt;p&gt;基于这些指标，系统通过决策树将页面分为 &lt;strong&gt;5 种画像 (Profile)&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+def _classify_page_profile(...):
+
+    if is_color:                          return &quot;color_illustration&quot;
+
+    if noise &amp;gt;= 0.42 or blockiness &amp;gt;= 14 or cleanliness &amp;lt; 0.18:
+
+                                        return &quot;low_quality_scan&quot;
+
+    if text_density &amp;gt;= 0.22:            return &quot;text_heavy&quot;
+
+    if halftone &amp;gt;= 0.34:                return &quot;halftone_gray&quot;
+
+    # 默认:                              return &quot;lineart_bw&quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;同时计算一个综合质量分数 (0~100)，基于锐度加分、分辨率加分、块效应/噪声减分。&lt;/p&gt;
+&lt;h3&gt;3.3 阶段三：Enhance（智能增强）——核心算法&lt;/h3&gt;
+&lt;p&gt;这是整个系统最具技术含量的部分，包含三个关键设计：&lt;/p&gt;
+&lt;h4&gt;3.3.1 基于页面画像的策略路由&lt;/h4&gt;
+&lt;p&gt;系统根据每页的 &lt;code&gt;page_profile&lt;/code&gt; 和处理策略 (&lt;code&gt;strategy&lt;/code&gt;)，动态构建不同的增强尝试序列。以默认的 &lt;code&gt;quality_auto&lt;/code&gt; 策略为例：&lt;/p&gt;
+&lt;p&gt;| 页面画像 | 第一选择 | 第二选择 (降级) | 第三选择 (兜底) |&lt;/p&gt;
+&lt;p&gt;|----------|----------|-----------------|-----------------|&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;color_illustration&lt;/code&gt; | Real-ESRGAN Anime (standard) | Waifu2x (standard) | — |&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;lineart_bw&lt;/code&gt; | Waifu2x (standard, noise=1) | Waifu2x (conservative) | Real-ESRGAN Anime (conservative) |&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;text_heavy&lt;/code&gt; | Waifu2x (conservative, noise=0) | Waifu2x (conservative, noise=-1) | Real-ESRGAN Anime (conservative) |&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;halftone_gray&lt;/code&gt; | Waifu2x (conservative, noise=0) | Waifu2x (conservative, noise=-1) | Real-ESRGAN Anime (conservative) |&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;low_quality_scan&lt;/code&gt; | Waifu2x (conservative, noise=2) | Waifu2x (conservative, noise=1) | Real-ESRGAN Anime (conservative) |&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;设计考量：&lt;/strong&gt; 线稿和文字页首选 Waifu2x，因其对线条的保持能力优于 Real-ESRGAN；低质量扫描页开启去噪 (noise=2)；半色调和文字页关闭去噪 (noise=0/-1)，避免破坏网点纹理；彩色插画页优先使用 Real-ESRGAN Anime 以获得更好的色彩还原能力。&lt;/p&gt;
+&lt;p&gt;对于检测到&lt;strong&gt;矢量内容的 PDF 页面&lt;/strong&gt;，系统会自动将所有尝试降级为 &lt;code&gt;conservative&lt;/code&gt; 模式并禁用去噪，防止 AI 引擎在矢量转栅格的页面上产生过度增强伪影。&lt;/p&gt;
+&lt;h4&gt;3.3.2 AI 预处理流水线&lt;/h4&gt;
+&lt;p&gt;图像在送入 AI 模型之前，经过一个精心设计的 LAB 色彩空间预处理：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+def _preprocess_for_ai(image, options, page_metrics):
+
+    # 1. 转换到 LAB 色彩空间，分离亮度与色度
+
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+
+    l_channel, a_channel, b_channel = cv2.split(lab)
+
+  
+
+    # 2. 亮度通道归一化（拉伸到 0-255 全动态范围）
+
+    l_channel = cv2.normalize(l_channel, None, 0, 255, cv2.NORM_MINMAX)
+
+  
+
+    # 3. 非局部均值去噪（仅作用于亮度通道，保留色度不变）
+
+    l_channel = cv2.fastNlMeansDenoising(l_channel, None, h=4 + max(noise, 0))
+
+  
+
+    # 4. 低质量扫描特殊处理：附加中值滤波去除块效应
+
+    if pdf_source == &quot;extract&quot; and (low_quality or blockiness &amp;gt;= 10):
+
+        l_channel = cv2.medianBlur(l_channel, 3)
+
+  
+
+    # 5. 亮度补偿：防止偏暗页面增强后进一步变暗
+
+    bright = np.percentile(l_channel, 97)
+
+    if bright &amp;gt; 0:
+
+        scale = min(255.0 / bright, 1.08)  # 最大补偿 8%
+
+        l_channel = clip(l_channel * scale, 0, 255)
+
+  
+
+    # 6. 合并回 BGR
+
+    return cv2.cvtColor(merge(l, a, b), cv2.COLOR_LAB2BGR)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预处理后经 AI 模型增强，再施加一个&lt;strong&gt;双边滤波&lt;/strong&gt; (&lt;code&gt;bilateralFilter d=5, σ_color=12, σ_space=12&lt;/code&gt;) 作为后处理，在保持边缘的同时平滑 AI 模型可能引入的噪声。&lt;/p&gt;
+&lt;h4&gt;3.3.3 增强结果质量验证&lt;/h4&gt;
+&lt;p&gt;每次增强尝试后，系统&lt;strong&gt;不会盲目接受结果&lt;/strong&gt;，而是执行严格的验证检查：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+def _validate_candidate(original, candidate, page_profile, page_metrics, enhancer):
+
+    # 1. 亮度检查：防止过暗/过曝
+
+    if candidate_mean &amp;lt; original_mean * 0.72:     → &quot;output too dark&quot;
+
+    if candidate_mean &amp;gt; original_mean * 1.28 + 12: → &quot;output overexposed&quot;
+
+  
+
+    # 2. 边缘保持检查：防止线条退化
+
+    if lineart/text and candidate_edges &amp;lt; original * 0.79: → &quot;edge clarity regressed&quot;
+
+  
+
+    # 3. 锐度检查：防止过度锐化
+
+    if candidate_sharpness &amp;gt; original * 5.5 + 4000: → &quot;oversharpened&quot;
+
+  
+
+    # 4. 块效应检查：防止引入压缩伪影
+
+    if halftone and candidate_blockiness &amp;gt; original * 1.35 + 1.5: → &quot;halftone artifacts increased&quot;
+
+  
+
+    # 5. PDF 特殊检查
+
+    if pdf_render and edges_drop_significant:     → &quot;pdf render edge clarity regressed&quot;
+
+    if pdf_vector and sharpness_spike:            → &quot;pdf vector page oversharpened&quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;验证不通过则自动降级到下一个增强策略。如果所有策略都失败，则将原图直通 (passthrough) 保存，保证输出完整性。&lt;/p&gt;
+&lt;h3&gt;3.4 阶段四至六：Optimize → Package → Export&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Optimize&lt;/strong&gt;：将增强结果复制到输出目录的 &lt;code&gt;pages_ai/&lt;/code&gt; 子目录&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Package&lt;/strong&gt;：将页面打包为目标格式（CBZ/PDF/ZIP），MOBI/EPUB 通过调用 KCC 生成&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Export&lt;/strong&gt;：写入 &lt;code&gt;manifest.json&lt;/code&gt; 清单文件，可选清理中间文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;h2&gt;四、增强引擎插件体系&lt;/h2&gt;
+&lt;p&gt;系统采用&lt;strong&gt;注册器模式 (Registry Pattern)&lt;/strong&gt; 实现增强引擎的插件化管理：&lt;/p&gt;
+&lt;h3&gt;4.1 基类设计&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;
+class BaseEnhancer(ABC):
+
+    @abstractmethod
+
+    def name(self) -&amp;gt; str: ...            # 引擎唯一标识
+
+    @abstractmethod
+
+    def requires_gpu(self) -&amp;gt; bool: ...   # GPU 依赖声明
+
+    @abstractmethod
+
+    def is_available(self) -&amp;gt; bool: ...   # 运行时可用性检查
+
+    @abstractmethod
+
+    def enhance(self, image, options) -&amp;gt; np.ndarray: ...  # 核心增强方法
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;基类还提供了 &lt;code&gt;enhance_file()&lt;/code&gt; 默认实现，统一处理灰度图→BGR 3通道的转换、BGRA 透明通道剥离、GIF 帧提取等边界情况，子类只需关注增强算法本身。&lt;/p&gt;
+&lt;h3&gt;4.2 引擎注册与自动发现&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;
+# registry.py
+
+_AUTO_PRIORITY = [&quot;realesrgan-anime&quot;, &quot;waifu2x&quot;]  # AI 引擎优先级
+
+  
+
+def _ensure_enhancers_loaded():
+
+    # 延迟导入，缺依赖的引擎静默跳过
+
+    try: from .realesrgan_anime_enhancer import RealESRGANAnimeEnhancer; register(...)
+
+    except: pass
+
+    try: from .waifu2x_enhancer import Waifu2xEnhancer; register(...)
+
+    except: pass
+
+    register(OpenCVEnhancer)  # 内置引擎始终可用
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这种设计确保了：即使只安装了 OpenCV，系统仍可运行（降级到传统增强）；安装了 AI 引擎时，自动按优先级选择最优方案。&lt;/p&gt;
+&lt;h3&gt;4.3 各引擎技术细节&lt;/h3&gt;
+&lt;h4&gt;Real-ESRGAN Anime&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;模型&lt;/strong&gt;: &lt;code&gt;realesr-animevideov3.pth&lt;/code&gt; (SRVGGNetCompact, 4x 上采样)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;推理后端&lt;/strong&gt;: PyTorch，自动检测 CUDA 可用性，GPU 可用时启用 FP16 (&lt;code&gt;half=True&lt;/code&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Tiling&lt;/strong&gt;: &lt;code&gt;tile=512, tile_pad=10&lt;/code&gt;，控制显存占用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;兼容性补丁&lt;/strong&gt;: 针对 PyInstaller 打包环境，运行时修复 &lt;code&gt;basicsr&lt;/code&gt; 和 &lt;code&gt;realesrgan&lt;/code&gt; 的包导入路径；针对新版 torchvision 移除 &lt;code&gt;functional_tensor&lt;/code&gt; 模块的问题，动态注入兼容实现&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Waifu2x-NCNN-Vulkan&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;模型&lt;/strong&gt;: &lt;code&gt;models-cunet&lt;/code&gt; (默认，适合通用动漫) / &lt;code&gt;models-upconv_7_anime_style_art_rgb&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;推理后端&lt;/strong&gt;: NCNN Vulkan，优先 GPU (&lt;code&gt;gpuid=0&lt;/code&gt;)，失败回退 CPU&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;参数控制&lt;/strong&gt;: 支持 noise (-1~3)、scale、tta_mode、model 选择&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;尺寸校准&lt;/strong&gt;: 模型输出尺寸可能与目标不一致，通过 &lt;code&gt;INTER_LANCZOS4&lt;/code&gt; 插值校正&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;OpenCV (内置降级方案)&lt;/h4&gt;
+&lt;p&gt;纯传统图像处理流水线，无任何外部依赖：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+非局部均值去噪 → LANCZOS4 上采样 → CLAHE 对比度增强 → 混合保留暗部 → USM 锐化
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过 &lt;code&gt;mode&lt;/code&gt; 参数控制三档强度：&lt;code&gt;conservative&lt;/code&gt; / &lt;code&gt;standard&lt;/code&gt; / &lt;code&gt;strong&lt;/code&gt;，调整去噪强度、锐化幅度和对比度混合比。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;五、运行时路径系统&lt;/h2&gt;
+&lt;p&gt;项目需要同时支持&lt;strong&gt;开发环境、PyInstaller 打包版、便携版&lt;/strong&gt;三种部署模式，路径解析的复杂性不容忽视。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;runtime_paths.py&lt;/code&gt; 通过检测 &lt;code&gt;sys.frozen&lt;/code&gt; 属性和文件系统特征，自动判断运行模式：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+def get_runtime_paths():
+
+    frozen = bool(getattr(sys, &quot;frozen&quot;, False))
+
+    if frozen:
+
+        # PyInstaller 打包模式：基于可执行文件所在目录
+
+        install_root = Path(sys.executable).parent
+
+        runtime_mode = &quot;bundle&quot;
+
+    else:
+
+        # 检测是否为 bundle 目录结构（有 frontend/tools/models 等子目录）
+
+        bundle_root = python_dir.parent if python_dir.name == &quot;python&quot; else None
+
+        if bundle_root and has_bundle_indicators(bundle_root):
+
+            install_root = bundle_root
+
+            runtime_mode = &quot;bundle&quot;
+
+        else:
+
+            # 开发模式：基于仓库根目录
+
+            install_root = repo_root
+
+            runtime_mode = &quot;dev&quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;RuntimePaths&lt;/code&gt; 类的每个属性都使用 &lt;code&gt;_first_existing(*candidates)&lt;/code&gt; 模式，按优先级搜索多个候选路径，确保在所有部署模式下都能正确定位资源文件（模型、工具、前端构建产物等）。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;六、任务管理与容错&lt;/h2&gt;
+&lt;h3&gt;6.1 JobStore 持久化&lt;/h3&gt;
+&lt;p&gt;所有任务状态持久化到 JSON 文件，支持 API 重启后恢复：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;任务创建时写入 &lt;code&gt;appdata/jobs.json&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;后台任务进度通过节流机制（0.75s 间隔）定期持久化&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;API 启动时自动恢复中断的任务（标记为 &lt;code&gt;failed&lt;/code&gt;，提示用户）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;6.2 后台任务架构&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;
+def _run_in_background(store, job, step):
+
+    def worker():
+
+        try:
+
+            # 执行对应阶段的 workflow
+
+            # 实时更新进度到 JobStore
+
+        except Exception:
+
+            # 捕获异常，标记任务失败，保留完整错误堆栈
+
+    threading.Thread(target=worker, daemon=True).start()
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;所有耗时操作（增强、打包）都在守护线程中异步执行，API 立即返回 &lt;code&gt;202 Accepted&lt;/code&gt;，前端通过轮询获取进度更新。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;七、前端设计&lt;/h2&gt;
+&lt;p&gt;React 前端作为 Web Dashboard 提供可视化操作界面：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;源文件管理&lt;/strong&gt;：拖拽上传、文件夹导入、文件预览&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;任务控制&lt;/strong&gt;：分步执行 / 一键全流程、参数配置&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;实时预览&lt;/strong&gt;：增强前后对比，基于 SHA1 的预览缓存机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;进度追踪&lt;/strong&gt;：任务列表、阶段进度、日志输出&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多源合并&lt;/strong&gt;：选择多个源文件合并为单一输出&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;前端通过 Vite 构建，静态文件由 Python 后端的 &lt;code&gt;http.server&lt;/code&gt; 直接托管，无需 Nginx 等独立 Web 服务器。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;八、构建与分发&lt;/h2&gt;
+&lt;p&gt;项目提供完整的 Windows 分发方案：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+# 开发环境
+
+pip install -e .
+
+cd frontend &amp;amp;&amp;amp; npm install &amp;amp;&amp;amp; npm run dev
+
+  
+
+# 生产构建
+
+cd frontend &amp;amp;&amp;amp; npm run build
+
+scripts/build-launcher.ps1    # PyInstaller 打包
+
+scripts/build-release.ps1     # Inno Setup 安装包 + 便携版 ZIP
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;分发产物：&lt;/p&gt;
+&lt;p&gt;| 格式 | 说明 |&lt;/p&gt;
+&lt;p&gt;|------|------|&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;setup.exe&lt;/code&gt; | Inno Setup 安装包，含完整依赖 |&lt;/p&gt;
+&lt;p&gt;| &lt;code&gt;portable.zip&lt;/code&gt; | 便携版，解压即用 |&lt;/p&gt;
+&lt;p&gt;| AI 模型 | 需单独下载放置到 &lt;code&gt;models/&lt;/code&gt; 目录 |&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;九、技术亮点总结&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;感知驱动的智能增强&lt;/strong&gt;：不是&quot;一刀切&quot;的超分辨率，而是根据每页内容类型（线稿/文字/网点/彩页/扫描件）动态选择最优增强策略与参数组合&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多级降级容错机制&lt;/strong&gt;：每个增强策略都预设 2~3 级降级路径，配合严格的质量验证门控，确保在任何情况下都不会输出劣于原图的结果&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;PDF 逐页智能决策&lt;/strong&gt;：区分矢量/光栅内容，根据内嵌图片分辨率自动选择提取或渲染模式，并记录决策元数据供下游使用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;LAB 色彩空间预处理&lt;/strong&gt;：分离亮度与色度处理，在去噪的同时保持色彩保真度，亮度补偿机制防止暗部丢失&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;插件式引擎架构&lt;/strong&gt;：注册器模式 + 延迟导入，引擎可选安装，缺依赖时静默降级，保持系统鲁棒性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;全链路离线运行&lt;/strong&gt;：AI 推理完全本地化，不依赖任何云端 API，适合处理版权敏感的漫画资源&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr /&gt;
+&lt;h2&gt;十、适用场景&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Kindle 漫画读者需要提升低分辨率漫画画质&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将 MOBI 格式漫画转换为 CBZ 格式并增强&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;批量处理 PDF/CBZ 漫画资源的画质优化&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;扫描版漫画的数字化增强与清晰化&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 </content:encoded></item><item><title>学习通签到</title><link>https://ayano29.cn/posts/xuexitong-checkin/</link><guid isPermaLink="true">https://ayano29.cn/posts/xuexitong-checkin/</guid><description>大学生网课签到神器，第三方小程序代签教程</description><pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;之前还可以用学习通微信一个手机登录两个号，现在都被封完了&lt;/p&gt;
 &lt;p&gt;现在基本上就是第三方小程序代签了 ，当然最好还是直接把手机给舍友最简单方便&lt;/p&gt;
 &lt;h1&gt;御坂博学笃行小程序&lt;/h1&gt;
