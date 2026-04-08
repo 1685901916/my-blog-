@@ -5,7 +5,7 @@
   <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
   <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://ayano29.cn/</id>
-  <updated>2026-04-08T04:03:35.054Z</updated>
+  <updated>2026-04-08T04:32:16.930Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
@@ -53,7 +53,7 @@
 点击启动器启动前端页面</p>
 <h2>导入素材</h2>
 <p>第一页是导入素材的地方，可以在网上下好素材 ，我推荐贴吧，或者直接在拷贝下载 ，我大多都在拷贝上看的，推荐一下拷贝漫画下载器
-[GitHub 拷贝漫画下载器](<a href="https://github.com/lanyeeee/copymanga-downloader">lanyeeee/copymanga-downloader: 拷贝漫画 copymanga 的多线程下载器，带图形界面 带收藏夹 支持下载下架的漫画 支持导出cbz和pdf，已打包exe 没有每分钟15次API请求的限制 下载速度飞快</a>)</p>
+<a href="https://github.com/lanyeeee/copymanga-downloader">GitHub 拷贝漫画下载器</a></p>
 <p>要是没有梯子的话可以直接 在夸克里一块下了</p>
 <p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404163538.png" alt="导入素材" /></p>
 <h2>功能模块</h2>
@@ -661,32 +661,6 @@ scripts/build-release.ps1     # Inno Setup 安装包 + 便携版 ZIP
     <category term="实用工具"></category>
   </entry>
   <entry>
-    <title>英语四六级</title>
-    <link href="https://ayano29.cn/posts/cet4-6/" rel="alternate" type="text/html"/>
-    <id>https://ayano29.cn/posts/cet4-6/</id>
-    <published>2026-04-04T00:00:00.000Z</published>
-    <updated>2026-04-04T00:00:00.000Z</updated>
-    <summary>英语四六级历年真题资源分享</summary>
-    <content type="html"><![CDATA[<p>闲鱼上买的，需要可以拿</p>
-<p><a href="https://yun.139.com/shareweb/#/w/i/2uh92fQxX60hj">英语四六级下载链接</a></p>
-<p>可以下载下来直接给ai搞一个知识库，做完就问，很方便的
-数据本地化真的很方便</p>
-<h1>英语四级</h1>
-<p>1990到2025
-<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155106.png" alt="Pasted image 20260404155106" />
-有试卷有对照答案</p>
-<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155415.png" alt="Pasted image 20260404155415" /></p>
-<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155353.png" alt="Pasted image 20260404155353" /></p>
-<h1>英语六级</h1>
-<p>1990到2025 基本上东西都差不多</p>
-<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155643.png" alt="Pasted image 20260404155643" /></p>
-]]></content>
-    <author>
-      <name>Ayano</name>
-    </author>
-    <category term="实用信息"></category>
-  </entry>
-  <entry>
     <title>网赚平台</title>
     <link href="https://ayano29.cn/posts/rentui-guide/" rel="alternate" type="text/html"/>
     <id>https://ayano29.cn/posts/rentui-guide/</id>
@@ -714,6 +688,32 @@ scripts/build-release.ps1     # Inno Setup 安装包 + 便携版 ZIP
       <name>Ayano</name>
     </author>
     <category term="赚钱"></category>
+  </entry>
+  <entry>
+    <title>英语四六级</title>
+    <link href="https://ayano29.cn/posts/cet4-6/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/cet4-6/</id>
+    <published>2026-04-04T00:00:00.000Z</published>
+    <updated>2026-04-04T00:00:00.000Z</updated>
+    <summary>英语四六级历年真题资源分享</summary>
+    <content type="html"><![CDATA[<p>闲鱼上买的，需要可以拿</p>
+<p><a href="https://yun.139.com/shareweb/#/w/i/2uh92fQxX60hj">英语四六级下载链接</a></p>
+<p>可以下载下来直接给ai搞一个知识库，做完就问，很方便的
+数据本地化真的很方便</p>
+<h1>英语四级</h1>
+<p>1990到2025
+<img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155106.png" alt="Pasted image 20260404155106" />
+有试卷有对照答案</p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155415.png" alt="Pasted image 20260404155415" /></p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155353.png" alt="Pasted image 20260404155353" /></p>
+<h1>英语六级</h1>
+<p>1990到2025 基本上东西都差不多</p>
+<p><img src="https://image29135.oss-cn-wuhan-lr.aliyuncs.com/imag/Pasted%20image%2020260404155643.png" alt="Pasted image 20260404155643" /></p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="实用信息"></category>
   </entry>
   <entry>
     <title>轻小说资源推荐</title>
