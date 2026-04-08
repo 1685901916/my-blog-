@@ -7,8 +7,15 @@ import PostPage from "../../components/PostPage.astro";
 const portfolioArticles = await getCollection("portfolio", ({ data }) => {
 	const isProd = import.meta.env.PROD;
 	const isNotDraft = data.draft !== true;
-	const hasNormalTag = data.tags && data.tags.includes("正常系");
+	const hasNormalTag = data.tags?.includes("正常系");
 	return isProd ? isNotDraft && hasNormalTag : hasNormalTag;
+});
+
+// 按发布日期降序排列（新的在上，旧的在下）
+portfolioArticles.sort((a, b) => {
+	return (
+		new Date(b.data.published).getTime() - new Date(a.data.published).getTime()
+	);
 });
 
 // 构造与主页相同的 page 对象结构
