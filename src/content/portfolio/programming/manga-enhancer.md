@@ -29,7 +29,7 @@ showOnHomepage: true
 
 ##  导入素材
  第一页是导入素材的地方，可以在网上下好素材 ，我推荐贴吧，或者直接在拷贝下载 ，我大多都在拷贝上看的，推荐一下拷贝漫画下载器
- [GitHub 拷贝漫画下载器]([lanyeeee/copymanga-downloader: 拷贝漫画 copymanga 的多线程下载器，带图形界面 带收藏夹 支持下载下架的漫画 支持导出cbz和pdf，已打包exe 没有每分钟15次API请求的限制 下载速度飞快](https://github.com/lanyeeee/copymanga-downloader))  
+ [GitHub 拷贝漫画下载器](https://github.com/lanyeeee/copymanga-downloader)  
  
  要是没有梯子的话可以直接 在夸克里一块下了
  
