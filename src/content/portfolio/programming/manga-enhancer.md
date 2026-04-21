@@ -16,9 +16,17 @@ showOnHomepage: true
 效果可以去移动云盘看看   现在搞了金牌的主的到58话
 [漫画](https://yun.139.com/shareweb/#/w/i/2uh93wW93pLxj)
 
+<div style="position:relative;padding-bottom:75%;height:0;overflow:hidden;">
+  <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116368213019406&bvid=BV1UwDjBXEQV&cid=37332586216&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+</div>
+
+
 
 # 使用教程
 ## 下载启动
+
+
+
 [夸克](https://pan.quark.cn/s/8d65dcdb3e4f)
 [迅雷](https://pan.xunlei.com/s/VOpc3je1KrOND7aysj1p0jlxA1?pwd=wc8v#)
 先解压点击exe
