@@ -10,6 +10,199 @@
 &lt;p&gt;详细可以看这个，按顺序介绍了大家要的书
 &lt;a href=&quot;/resources/entertainment/novels/korean-light-novels/&quot;&gt;韩轻拼好书&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;求书直接在贴吧发帖子就行，看见了会发的&lt;/p&gt;
+</content:encoded></item><item><title>自动化头歌任务 Skill</title><link>https://ayano29.cn/posts/programming/educoder-auto-skill/</link><guid isPermaLink="true">https://ayano29.cn/posts/programming/educoder-auto-skill/</guid><description>用 Codex 配合浏览器自动化、VNC 截图和终端检查脚本，自动化处理头歌 EduCoder 网页与远程虚拟机任务的流程记录</description><pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;自动化头歌任务 Skill&lt;/h1&gt;
+&lt;p&gt;GitHub 地址：&lt;a href=&quot;https://github.com/1685901916/educoder-auto-skill&quot;&gt;1685901916/educoder-auto-skill&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这个 Skill 耗的 token 比较多，用之前要注意一下。&lt;/p&gt;
+&lt;p&gt;这里记录一下用 Codex 自动化处理头歌 EduCoder 任务的基本流程。&lt;/p&gt;
+&lt;p&gt;头歌任务一般运行在网页和远程虚拟机里。页面上有任务说明、VNC 桌面、代码编辑器和评测按钮。手动做当然可以，但步骤多，容易漏看任务图片、点错位置，或者没搞清楚检查脚本到底检查什么。&lt;/p&gt;
+&lt;p&gt;所以我的思路是：让 Codex 配合浏览器自动化、VNC 截图和终端命令，完成大部分重复操作。&lt;/p&gt;
+&lt;h2&gt;一、自动化用到什么&lt;/h2&gt;
+&lt;p&gt;主要用到四类能力。&lt;/p&gt;
+&lt;h3&gt;1. 浏览器自动化&lt;/h3&gt;
+&lt;p&gt;浏览器自动化用来操作头歌网页。&lt;/p&gt;
+&lt;p&gt;可以完成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;打开任务页面&lt;/li&gt;
+&lt;li&gt;读取任务说明&lt;/li&gt;
+&lt;li&gt;查看任务图片&lt;/li&gt;
+&lt;li&gt;点击“开始学习”“继续挑战”“评测”等按钮&lt;/li&gt;
+&lt;li&gt;切换上一关、下一关&lt;/li&gt;
+&lt;li&gt;读取评测结果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这部分适合处理普通网页元素，比如按钮、链接、任务文本。&lt;/p&gt;
+&lt;h3&gt;2. VNC 截图和坐标操作&lt;/h3&gt;
+&lt;p&gt;头歌里的虚拟机桌面通常不是普通网页元素，而是一个远程桌面画面。&lt;/p&gt;
+&lt;p&gt;也就是说，虚拟机里的终端、图标、文件管理器，不能直接用网页选择器控制。&lt;/p&gt;
+&lt;p&gt;所以需要通过：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;截图&lt;/li&gt;
+&lt;li&gt;坐标点击&lt;/li&gt;
+&lt;li&gt;键盘输入&lt;/li&gt;
+&lt;li&gt;观察终端输出&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;来操作虚拟机。&lt;/p&gt;
+&lt;p&gt;这一步要特别注意焦点。输入命令前，要确认光标确实在终端里。&lt;/p&gt;
+&lt;h3&gt;3. 终端命令&lt;/h3&gt;
+&lt;p&gt;进入虚拟机后，用终端命令查看文件、修改文件、运行检查脚本。&lt;/p&gt;
+&lt;p&gt;常用命令包括：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;find /data/workspace -maxdepth 6 -type f 2&amp;gt;/dev/null | grep -Ei &apos;check|main|run|test|step&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个命令用来查找可能的检查脚本。&lt;/p&gt;
+&lt;p&gt;查看脚本内容：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sed -n &apos;1,220p&apos; /data/workspace/myshixun/src/check.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;搜索脚本里检查的文件路径：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;grep -R &quot;FILEPATH\|file_path\|-f \|result.txt\|aggregate.csv\|jmeter.log&quot; /data/workspace/myshixun/src /data/workspace/myshixun 2&amp;gt;/dev/null | head -120
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;4. 本地检查脚本&lt;/h3&gt;
+&lt;p&gt;修改完成后，不要马上点击网页上的“评测”。&lt;/p&gt;
+&lt;p&gt;应该先在虚拟机终端里运行检查脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;bash /data/workspace/myshixun/src/check.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;本地检查通过后，再点击网页评测。&lt;/p&gt;
+&lt;p&gt;这样可以减少无效提交，也更容易定位问题。&lt;/p&gt;
+&lt;h2&gt;二、自动化处理流程&lt;/h2&gt;
+&lt;p&gt;整体流程可以这样理解：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Codex 打开头歌页面
+↓
+浏览器自动化读取任务说明
+↓
+查看任务图片和 VNC 桌面
+↓
+进入虚拟机终端
+↓
+查找 check / test / main 脚本
+↓
+分析检查脚本到底检查什么
+↓
+修改对应文件或环境
+↓
+运行本地检查脚本
+↓
+本地通过后点击网页评测
+↓
+读取评测结果
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个流程的重点不是让 Codex 直接猜答案，而是让它先收集信息，再根据检查脚本判断真正的通过条件。&lt;/p&gt;
+&lt;h2&gt;三、为什么要看检查脚本&lt;/h2&gt;
+&lt;p&gt;头歌页面上的提示不一定是真正要写入的内容。&lt;/p&gt;
+&lt;p&gt;比如页面可能显示：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;恭喜你，通关成功！
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但检查脚本真正检查的可能是某个文件内容是不是：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;OK
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果只看页面提示，很容易把错误内容写进文件。&lt;/p&gt;
+&lt;p&gt;所以核心原则是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;页面告诉你任务是什么，检查脚本告诉你怎样才算通过。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;四、常见情况&lt;/h2&gt;
+&lt;h3&gt;1. 权限问题&lt;/h3&gt;
+&lt;p&gt;有些任务不是代码错，而是文件没有执行权限。&lt;/p&gt;
+&lt;p&gt;比如出现：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Permission denied
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这时可能需要修改权限：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;chmod 777 文件名
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;不要一看到报错就急着改代码。先判断是不是环境权限问题。&lt;/p&gt;
+&lt;h3&gt;2. 文件路径问题&lt;/h3&gt;
+&lt;p&gt;有些任务会检查固定路径下的文件。&lt;/p&gt;
+&lt;p&gt;比如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/data/workspace/myshixun/Jmeter/result/result.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这时文件必须放在正确路径，文件名也不能写错。&lt;/p&gt;
+&lt;p&gt;如果目录不存在，需要先创建目录：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir -p /data/workspace/myshixun/Jmeter/result
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;3. 多关卡任务&lt;/h3&gt;
+&lt;p&gt;多关卡任务不要自己猜 URL。&lt;/p&gt;
+&lt;p&gt;应该使用页面里的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;继续挑战&lt;/li&gt;
+&lt;li&gt;上一关&lt;/li&gt;
+&lt;li&gt;下一关&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这样不容易跳错关卡，也不容易漏做某一关。&lt;/p&gt;
+&lt;h3&gt;4. Monaco 编辑器问题&lt;/h3&gt;
+&lt;p&gt;有些任务是在网页代码编辑器里写代码。&lt;/p&gt;
+&lt;p&gt;普通复制粘贴可能导致：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;缩进错误&lt;/li&gt;
+&lt;li&gt;内容没有真正写入编辑器&lt;/li&gt;
+&lt;li&gt;页面显示和真实代码不一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果运行时报：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;IndentationError
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;就要重点检查缩进和真实代码内容。&lt;/p&gt;
+&lt;h3&gt;5. JMeter 或 Postman 任务&lt;/h3&gt;
+&lt;p&gt;这类任务不要只看工具界面。&lt;/p&gt;
+&lt;p&gt;很多时候检查脚本会检查：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;result.txt&lt;/li&gt;
+&lt;li&gt;aggregate.csv&lt;/li&gt;
+&lt;li&gt;jmeter.log&lt;/li&gt;
+&lt;li&gt;result.json&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以要先看脚本，确认它到底检查哪个文件、哪个字段、哪个结果。&lt;/p&gt;
+&lt;h2&gt;五、自动化时要注意什么&lt;/h2&gt;
+&lt;h3&gt;1. VNC 不是普通网页&lt;/h3&gt;
+&lt;p&gt;虚拟机里的内容是远程桌面画面，不是普通 DOM 元素。&lt;/p&gt;
+&lt;p&gt;所以不能直接用网页选择器点里面的终端或图标。&lt;/p&gt;
+&lt;p&gt;要通过截图、坐标点击和键盘输入来操作。&lt;/p&gt;
+&lt;h3&gt;2. 输入命令前确认焦点&lt;/h3&gt;
+&lt;p&gt;如果终端没有焦点，命令可能会输入到别的地方。&lt;/p&gt;
+&lt;p&gt;所以自动化操作时，输入命令前要先确认终端可用。&lt;/p&gt;
+&lt;h3&gt;3. 不要频繁点击评测&lt;/h3&gt;
+&lt;p&gt;更稳的方式是：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;先本地运行检查脚本
+通过后再点击网页评测
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样比反复点“评测”更稳定。&lt;/p&gt;
+&lt;h3&gt;4. 不要只读页面预期输出&lt;/h3&gt;
+&lt;p&gt;页面预期输出不一定等于文件内容。&lt;/p&gt;
+&lt;p&gt;最终以检查脚本为准。&lt;/p&gt;
+&lt;h2&gt;六、常用命令整理&lt;/h2&gt;
+&lt;p&gt;查找检查脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;find /data/workspace -maxdepth 6 -type f 2&amp;gt;/dev/null | grep -Ei &apos;check|main|run|test|step&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;查看检查脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sed -n &apos;1,220p&apos; /data/workspace/myshixun/src/check.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;搜索检查路径：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;grep -R &quot;FILEPATH\|file_path\|-f \|result.txt\|aggregate.csv\|jmeter.log&quot; /data/workspace/myshixun/src /data/workspace/myshixun 2&amp;gt;/dev/null | head -120
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行本地检查：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;bash /data/workspace/myshixun/src/check.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;查看文件权限：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ls -l 文件名
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改执行权限：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;chmod 777 文件名
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;创建目录：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir -p 目录路径
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;七、总结&lt;/h2&gt;
+&lt;p&gt;用 Codex 自动化处理头歌任务，重点不是直接猜答案，而是把重复流程自动化：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;读取页面&lt;/li&gt;
+&lt;li&gt;查看图片&lt;/li&gt;
+&lt;li&gt;操作 VNC&lt;/li&gt;
+&lt;li&gt;查找检查脚本&lt;/li&gt;
+&lt;li&gt;分析通过条件&lt;/li&gt;
+&lt;li&gt;修改文件或环境&lt;/li&gt;
+&lt;li&gt;本地运行检查&lt;/li&gt;
+&lt;li&gt;最后点击评测&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最稳定的做法是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;先自动化收集信息，再根据检查脚本操作，最后本地验证通过后再提交。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这样可以减少反复提交失败，也能更快定位问题。&lt;/p&gt;
 </content:encoded></item><item><title>漫画画质提升</title><link>https://ayano29.cn/posts/programming/manga-enhancer/</link><guid isPermaLink="true">https://ayano29.cn/posts/programming/manga-enhancer/</guid><description>基于 AI 超分辨率的本地漫画画质增强工具，支持 Real-ESRGAN、Waifu2x 多引擎智能增强，自动识别页面类型并选择最优策略</description><pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;前言&lt;/h1&gt;
 &lt;p&gt;现在平台上的漫画大多都压缩的很糊，手机端看起来还可以，平板就真的看不下去，网上提升画质的模型很多，但是没有专们搞漫画的工具，我就自己做了一个
 现在这个还有很多不足，欢迎提意见改正 ，如果有帮助的话我会很开心&lt;/p&gt;

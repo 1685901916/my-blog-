@@ -5,7 +5,7 @@
   <link href="https://ayano29.cn/" rel="alternate" type="text/html"/>
   <link href="https://ayano29.cn/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://ayano29.cn/</id>
-  <updated>2026-04-23T02:24:14.837Z</updated>
+  <updated>2026-05-22T14:11:20.929Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>引导贴</title>
@@ -31,6 +31,212 @@
       <name>Ayano</name>
     </author>
     <category term="公告"></category>
+  </entry>
+  <entry>
+    <title>自动化头歌任务 Skill</title>
+    <link href="https://ayano29.cn/posts/programming/educoder-auto-skill/" rel="alternate" type="text/html"/>
+    <id>https://ayano29.cn/posts/programming/educoder-auto-skill/</id>
+    <published>2026-05-22T00:00:00.000Z</published>
+    <updated>2026-05-22T00:00:00.000Z</updated>
+    <summary>用 Codex 配合浏览器自动化、VNC 截图和终端检查脚本，自动化处理头歌 EduCoder 网页与远程虚拟机任务的流程记录</summary>
+    <content type="html"><![CDATA[<h1>自动化头歌任务 Skill</h1>
+<p>GitHub 地址：<a href="https://github.com/1685901916/educoder-auto-skill">1685901916/educoder-auto-skill</a></p>
+<p>这个 Skill 耗的 token 比较多，用之前要注意一下。</p>
+<p>这里记录一下用 Codex 自动化处理头歌 EduCoder 任务的基本流程。</p>
+<p>头歌任务一般运行在网页和远程虚拟机里。页面上有任务说明、VNC 桌面、代码编辑器和评测按钮。手动做当然可以，但步骤多，容易漏看任务图片、点错位置，或者没搞清楚检查脚本到底检查什么。</p>
+<p>所以我的思路是：让 Codex 配合浏览器自动化、VNC 截图和终端命令，完成大部分重复操作。</p>
+<h2>一、自动化用到什么</h2>
+<p>主要用到四类能力。</p>
+<h3>1. 浏览器自动化</h3>
+<p>浏览器自动化用来操作头歌网页。</p>
+<p>可以完成：</p>
+<ul>
+<li>打开任务页面</li>
+<li>读取任务说明</li>
+<li>查看任务图片</li>
+<li>点击“开始学习”“继续挑战”“评测”等按钮</li>
+<li>切换上一关、下一关</li>
+<li>读取评测结果</li>
+</ul>
+<p>这部分适合处理普通网页元素，比如按钮、链接、任务文本。</p>
+<h3>2. VNC 截图和坐标操作</h3>
+<p>头歌里的虚拟机桌面通常不是普通网页元素，而是一个远程桌面画面。</p>
+<p>也就是说，虚拟机里的终端、图标、文件管理器，不能直接用网页选择器控制。</p>
+<p>所以需要通过：</p>
+<ul>
+<li>截图</li>
+<li>坐标点击</li>
+<li>键盘输入</li>
+<li>观察终端输出</li>
+</ul>
+<p>来操作虚拟机。</p>
+<p>这一步要特别注意焦点。输入命令前，要确认光标确实在终端里。</p>
+<h3>3. 终端命令</h3>
+<p>进入虚拟机后，用终端命令查看文件、修改文件、运行检查脚本。</p>
+<p>常用命令包括：</p>
+<pre><code>find /data/workspace -maxdepth 6 -type f 2&gt;/dev/null | grep -Ei 'check|main|run|test|step'
+</code></pre>
+<p>这个命令用来查找可能的检查脚本。</p>
+<p>查看脚本内容：</p>
+<pre><code>sed -n '1,220p' /data/workspace/myshixun/src/check.sh
+</code></pre>
+<p>搜索脚本里检查的文件路径：</p>
+<pre><code>grep -R "FILEPATH\|file_path\|-f \|result.txt\|aggregate.csv\|jmeter.log" /data/workspace/myshixun/src /data/workspace/myshixun 2&gt;/dev/null | head -120
+</code></pre>
+<h3>4. 本地检查脚本</h3>
+<p>修改完成后，不要马上点击网页上的“评测”。</p>
+<p>应该先在虚拟机终端里运行检查脚本：</p>
+<pre><code>bash /data/workspace/myshixun/src/check.sh
+</code></pre>
+<p>本地检查通过后，再点击网页评测。</p>
+<p>这样可以减少无效提交，也更容易定位问题。</p>
+<h2>二、自动化处理流程</h2>
+<p>整体流程可以这样理解：</p>
+<pre><code>Codex 打开头歌页面
+↓
+浏览器自动化读取任务说明
+↓
+查看任务图片和 VNC 桌面
+↓
+进入虚拟机终端
+↓
+查找 check / test / main 脚本
+↓
+分析检查脚本到底检查什么
+↓
+修改对应文件或环境
+↓
+运行本地检查脚本
+↓
+本地通过后点击网页评测
+↓
+读取评测结果
+</code></pre>
+<p>这个流程的重点不是让 Codex 直接猜答案，而是让它先收集信息，再根据检查脚本判断真正的通过条件。</p>
+<h2>三、为什么要看检查脚本</h2>
+<p>头歌页面上的提示不一定是真正要写入的内容。</p>
+<p>比如页面可能显示：</p>
+<pre><code>恭喜你，通关成功！
+</code></pre>
+<p>但检查脚本真正检查的可能是某个文件内容是不是：</p>
+<pre><code>OK
+</code></pre>
+<p>如果只看页面提示，很容易把错误内容写进文件。</p>
+<p>所以核心原则是：</p>
+<blockquote>
+<p>页面告诉你任务是什么，检查脚本告诉你怎样才算通过。</p>
+</blockquote>
+<h2>四、常见情况</h2>
+<h3>1. 权限问题</h3>
+<p>有些任务不是代码错，而是文件没有执行权限。</p>
+<p>比如出现：</p>
+<pre><code>Permission denied
+</code></pre>
+<p>这时可能需要修改权限：</p>
+<pre><code>chmod 777 文件名
+</code></pre>
+<p>不要一看到报错就急着改代码。先判断是不是环境权限问题。</p>
+<h3>2. 文件路径问题</h3>
+<p>有些任务会检查固定路径下的文件。</p>
+<p>比如：</p>
+<pre><code>/data/workspace/myshixun/Jmeter/result/result.txt
+</code></pre>
+<p>这时文件必须放在正确路径，文件名也不能写错。</p>
+<p>如果目录不存在，需要先创建目录：</p>
+<pre><code>mkdir -p /data/workspace/myshixun/Jmeter/result
+</code></pre>
+<h3>3. 多关卡任务</h3>
+<p>多关卡任务不要自己猜 URL。</p>
+<p>应该使用页面里的：</p>
+<ul>
+<li>继续挑战</li>
+<li>上一关</li>
+<li>下一关</li>
+</ul>
+<p>这样不容易跳错关卡，也不容易漏做某一关。</p>
+<h3>4. Monaco 编辑器问题</h3>
+<p>有些任务是在网页代码编辑器里写代码。</p>
+<p>普通复制粘贴可能导致：</p>
+<ul>
+<li>缩进错误</li>
+<li>内容没有真正写入编辑器</li>
+<li>页面显示和真实代码不一致</li>
+</ul>
+<p>如果运行时报：</p>
+<pre><code>IndentationError
+</code></pre>
+<p>就要重点检查缩进和真实代码内容。</p>
+<h3>5. JMeter 或 Postman 任务</h3>
+<p>这类任务不要只看工具界面。</p>
+<p>很多时候检查脚本会检查：</p>
+<ul>
+<li>result.txt</li>
+<li>aggregate.csv</li>
+<li>jmeter.log</li>
+<li>result.json</li>
+</ul>
+<p>所以要先看脚本，确认它到底检查哪个文件、哪个字段、哪个结果。</p>
+<h2>五、自动化时要注意什么</h2>
+<h3>1. VNC 不是普通网页</h3>
+<p>虚拟机里的内容是远程桌面画面，不是普通 DOM 元素。</p>
+<p>所以不能直接用网页选择器点里面的终端或图标。</p>
+<p>要通过截图、坐标点击和键盘输入来操作。</p>
+<h3>2. 输入命令前确认焦点</h3>
+<p>如果终端没有焦点，命令可能会输入到别的地方。</p>
+<p>所以自动化操作时，输入命令前要先确认终端可用。</p>
+<h3>3. 不要频繁点击评测</h3>
+<p>更稳的方式是：</p>
+<pre><code>先本地运行检查脚本
+通过后再点击网页评测
+</code></pre>
+<p>这样比反复点“评测”更稳定。</p>
+<h3>4. 不要只读页面预期输出</h3>
+<p>页面预期输出不一定等于文件内容。</p>
+<p>最终以检查脚本为准。</p>
+<h2>六、常用命令整理</h2>
+<p>查找检查脚本：</p>
+<pre><code>find /data/workspace -maxdepth 6 -type f 2&gt;/dev/null | grep -Ei 'check|main|run|test|step'
+</code></pre>
+<p>查看检查脚本：</p>
+<pre><code>sed -n '1,220p' /data/workspace/myshixun/src/check.sh
+</code></pre>
+<p>搜索检查路径：</p>
+<pre><code>grep -R "FILEPATH\|file_path\|-f \|result.txt\|aggregate.csv\|jmeter.log" /data/workspace/myshixun/src /data/workspace/myshixun 2&gt;/dev/null | head -120
+</code></pre>
+<p>运行本地检查：</p>
+<pre><code>bash /data/workspace/myshixun/src/check.sh
+</code></pre>
+<p>查看文件权限：</p>
+<pre><code>ls -l 文件名
+</code></pre>
+<p>修改执行权限：</p>
+<pre><code>chmod 777 文件名
+</code></pre>
+<p>创建目录：</p>
+<pre><code>mkdir -p 目录路径
+</code></pre>
+<h2>七、总结</h2>
+<p>用 Codex 自动化处理头歌任务，重点不是直接猜答案，而是把重复流程自动化：</p>
+<ul>
+<li>读取页面</li>
+<li>查看图片</li>
+<li>操作 VNC</li>
+<li>查找检查脚本</li>
+<li>分析通过条件</li>
+<li>修改文件或环境</li>
+<li>本地运行检查</li>
+<li>最后点击评测</li>
+</ul>
+<p>最稳定的做法是：</p>
+<blockquote>
+<p>先自动化收集信息，再根据检查脚本操作，最后本地验证通过后再提交。</p>
+</blockquote>
+<p>这样可以减少反复提交失败，也能更快定位问题。</p>
+]]></content>
+    <author>
+      <name>Ayano</name>
+    </author>
+    <category term="作品"></category>
   </entry>
   <entry>
     <title>漫画画质提升</title>
