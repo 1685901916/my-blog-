@@ -208,6 +208,7 @@ for config in "$VHOST_DIR"/*.conf; do
     awk '
       $1 == "ssl_certificate" {
         gsub(/;/, "", $2)
+        gsub(/\r/, "", $2)
         print $2
         exit
       }
@@ -217,6 +218,7 @@ for config in "$VHOST_DIR"/*.conf; do
     awk '
       $1 == "ssl_certificate_key" {
         gsub(/;/, "", $2)
+        gsub(/\r/, "", $2)
         print $2
         exit
       }
@@ -226,6 +228,7 @@ for config in "$VHOST_DIR"/*.conf; do
     awk '
       $1 == "root" {
         gsub(/;/, "", $2)
+        gsub(/\r/, "", $2)
         print $2
         exit
       }
@@ -236,6 +239,7 @@ for config in "$VHOST_DIR"/*.conf; do
       $1 == "server_name" {
         for (i = 2; i <= NF; i++) {
           gsub(/;/, "", $i)
+          gsub(/\r/, "", $i)
           print $i
         }
         exit
