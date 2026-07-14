@@ -1,4 +1,4 @@
-name: Certificate Inventory
+name: Certificate Automation Deploy
 
 on:
   workflow_dispatch:
@@ -6,15 +6,32 @@ on:
     branches: [main]
     paths:
       - .github/workflows/certificate-inventory.yml
+      - scripts/renew-all-nginx-certificates.sh
 
 permissions:
   contents: read
 
 jobs:
-  inventory-old-server:
+  deploy-old-server-automation:
     runs-on: ubuntu-latest
     steps:
-      - name: Inventory domains and certificates
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload renewal script
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 38.76.169.35
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          fingerprint: SHA256:B0UTPbr5lNkpfSnRg6/QrVa6yYCZCUlU9lffmKQIsiU
+          source: scripts/renew-all-nginx-certificates.sh
+          target: /tmp/certificate-automation-${{ github.sha }}
+          strip_components: 1
+          overwrite: true
+
+      - name: Install and verify renewal automation
         uses: appleboy/ssh-action@v1
         with:
           host: 38.76.169.35
@@ -24,24 +41,40 @@ jobs:
           fingerprint: SHA256:B0UTPbr5lNkpfSnRg6/QrVa6yYCZCUlU9lffmKQIsiU
           command_timeout: 10m
           script: |
-            set -u
+            set -euo pipefail
 
-            echo "=== nginx sites ==="
-            for config in /www/server/panel/vhost/nginx/*.conf; do
-              [ -f "$config" ] || continue
-              echo "CONFIG=$config"
-              grep -nE '^[[:space:]]*(server_name|root|ssl_certificate|ssl_certificate_key)[[:space:]]' "$config" || true
-            done
+            SOURCE="/tmp/certificate-automation-${{ github.sha }}/renew-all-nginx-certificates.sh"
+            TARGET="/usr/local/sbin/renew-all-nginx-certificates"
+            BACKUP_DIR="/root/cert-backups/automation-install"
+            CRON_BACKUP="$BACKUP_DIR/crontab-$(date +%Y%m%d-%H%M%S)"
+            CRON_LINE="17 3 * * * THRESHOLD_DAYS=20 $TARGET >> /var/log/certificate-auto-renew.log 2>&1"
 
-            echo "=== installed certificates ==="
-            for cert in /www/server/panel/vhost/cert/*/fullchain.pem; do
-              [ -f "$cert" ] || continue
-              echo "CERT=$cert"
-              openssl x509 -in "$cert" -noout -subject -issuer -dates 2>/dev/null || true
-            done
+            test -s "$SOURCE"
+            bash -n "$SOURCE"
+            mkdir -p "$BACKUP_DIR"
+            chmod 700 "$BACKUP_DIR"
 
-            echo "=== acme registry ==="
-            /root/.acme.sh/acme.sh --list 2>/dev/null || true
+            if crontab -l >"$CRON_BACKUP" 2>/dev/null; then
+              echo "Existing crontab backed up to $CRON_BACKUP"
+            else
+              : >"$CRON_BACKUP"
+            fi
 
-            echo "=== cron ==="
-            crontab -l 2>/dev/null | grep -Ei 'acme|cert|letsencrypt|panel' || true
+            install -m 750 "$SOURCE" "$TARGET"
+
+            {
+              crontab -l 2>/dev/null |
+                grep -vF "$TARGET" || true
+              echo "$CRON_LINE"
+            } | crontab -
+
+            echo "=== dry run ==="
+            THRESHOLD_DAYS=20 "$TARGET" --dry-run
+
+            echo "=== live safe run ==="
+            THRESHOLD_DAYS=20 "$TARGET"
+
+            echo "=== installed cron ==="
+            crontab -l | grep -F "$TARGET"
+
+            rm -rf "/tmp/certificate-automation-${{ github.sha }}"
