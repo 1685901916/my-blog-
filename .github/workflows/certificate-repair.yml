@@ -11,10 +11,10 @@ permissions:
   contents: read
 
 jobs:
-  diagnose:
+  repair:
     runs-on: ubuntu-latest
     steps:
-      - name: Inspect ayano29.cn certificate configuration
+      - name: Issue and install ayano29.cn certificate
         uses: appleboy/ssh-action@v1
         with:
           host: 38.76.169.35
@@ -24,50 +24,86 @@ jobs:
           fingerprint: SHA256:B0UTPbr5lNkpfSnRg6/QrVa6yYCZCUlU9lffmKQIsiU
           command_timeout: 10m
           script: |
-            set -u
+            set -euo pipefail
 
-            echo "=== host ==="
-            hostname
-            date -Is
-            uname -a
+            DOMAIN="ayano29.cn"
+            WEBROOT="/www/wwwroot/blog"
+            CERT_DIR="/www/server/panel/vhost/cert/$DOMAIN"
+            SITE_CONFIG="/www/server/panel/vhost/nginx/$DOMAIN.conf"
+            ACME="/root/.acme.sh/acme.sh"
+            NGINX="/www/server/nginx/sbin/nginx"
+            BACKUP_ROOT="/root/cert-backups"
+            BACKUP_DIR="$BACKUP_ROOT/$DOMAIN-$(date +%Y%m%d-%H%M%S)"
+            SUCCESS=0
 
-            echo "=== web server ==="
-            command -v nginx || true
-            command -v certbot || true
-            command -v acme.sh || true
-            test -x /www/server/nginx/sbin/nginx && /www/server/nginx/sbin/nginx -v 2>&1 || true
-            systemctl is-active nginx 2>/dev/null || true
-
-            echo "=== site configuration ==="
-            for config in \
-              /www/server/panel/vhost/nginx/ayano29.cn.conf \
-              /etc/nginx/sites-enabled/ayano29.cn \
-              /etc/nginx/conf.d/ayano29.cn.conf; do
-              if [ -f "$config" ]; then
-                echo "CONFIG=$config"
-                grep -nE 'server_name|listen|root|ssl_certificate|ssl_certificate_key' "$config" || true
-              fi
-            done
-
-            echo "=== certificate files ==="
-            find /www/server/panel/vhost/cert /etc/letsencrypt/live \
-              -maxdepth 3 -type f \( -name fullchain.pem -o -name cert.pem \) \
-              2>/dev/null | while read -r cert; do
-                if openssl x509 -in "$cert" -noout -subject 2>/dev/null | grep -q 'ayano29.cn'; then
-                  echo "CERT=$cert"
-                  openssl x509 -in "$cert" -noout -subject -issuer -dates -fingerprint -sha256
+            rollback() {
+              status=$?
+              if [ "$SUCCESS" -ne 1 ]; then
+                echo "Repair failed; restoring certificate backup."
+                if [ -d "$BACKUP_DIR/cert" ]; then
+                  rm -rf "$CERT_DIR"
+                  cp -a "$BACKUP_DIR/cert" "$CERT_DIR"
                 fi
-              done
+                if [ -f "$BACKUP_DIR/site.conf" ]; then
+                  cp -a "$BACKUP_DIR/site.conf" "$SITE_CONFIG"
+                fi
+                "$NGINX" -t && "$NGINX" -s reload || true
+              fi
+              exit "$status"
+            }
+            trap rollback EXIT
 
-            echo "=== certificate managers ==="
-            certbot certificates 2>/dev/null || true
-            if [ -x /root/.acme.sh/acme.sh ]; then
-              /root/.acme.sh/acme.sh --list 2>/dev/null || true
-            fi
-            if [ -x /www/server/panel/pyenv/bin/python ]; then
-              echo "BT_PANEL_PRESENT=yes"
-            fi
+            test -x "$ACME"
+            test -x "$NGINX"
+            test -d "$WEBROOT"
+            test -d "$CERT_DIR"
+            test -f "$SITE_CONFIG"
 
-            echo "=== renewal scheduling ==="
-            systemctl list-timers --all 2>/dev/null | grep -Ei 'certbot|acme|letsencrypt' || true
-            crontab -l 2>/dev/null | grep -Ei 'certbot|acme|letsencrypt|panel' || true
+            echo "=== preflight ==="
+            "$NGINX" -t
+            openssl x509 -in "$CERT_DIR/fullchain.pem" -noout -subject -issuer -dates
+
+            echo "=== backup ==="
+            mkdir -p "$BACKUP_ROOT" "$BACKUP_DIR"
+            chmod 700 "$BACKUP_ROOT" "$BACKUP_DIR"
+            cp -a "$CERT_DIR" "$BACKUP_DIR/cert"
+            cp -a "$SITE_CONFIG" "$BACKUP_DIR/site.conf"
+            echo "BACKUP_DIR=$BACKUP_DIR"
+
+            echo "=== issue ==="
+            "$ACME" --issue \
+              --server letsencrypt \
+              --webroot "$WEBROOT" \
+              --domain "$DOMAIN" \
+              --keylength ec-256 \
+              --force
+
+            ACME_CERT="/root/.acme.sh/${DOMAIN}_ecc/fullchain.cer"
+            ACME_KEY="/root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key"
+            test -s "$ACME_CERT"
+            test -s "$ACME_KEY"
+            openssl x509 -in "$ACME_CERT" -noout -subject -issuer -dates
+            openssl x509 -checkend 2592000 -noout -in "$ACME_CERT"
+
+            echo "=== install ==="
+            "$ACME" --install-cert \
+              --domain "$DOMAIN" \
+              --ecc \
+              --key-file "$CERT_DIR/privkey.pem" \
+              --fullchain-file "$CERT_DIR/fullchain.pem" \
+              --reloadcmd "$NGINX -t && $NGINX -s reload"
+
+            echo "=== verify on server ==="
+            "$NGINX" -t
+            openssl x509 -in "$CERT_DIR/fullchain.pem" -noout \
+              -subject -issuer -dates -fingerprint -sha256
+            echo | openssl s_client \
+              -connect 127.0.0.1:443 \
+              -servername "$DOMAIN" \
+              -verify_return_error 2>/dev/null |
+              openssl x509 -noout -subject -issuer -dates
+            "$ACME" --list | grep "$DOMAIN"
+
+            SUCCESS=1
+            trap - EXIT
+            echo "Certificate repair completed successfully."
