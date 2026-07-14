@@ -1,0 +1,47 @@
+name: Certificate Inventory
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/certificate-inventory.yml
+
+permissions:
+  contents: read
+
+jobs:
+  inventory-old-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inventory domains and certificates
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 38.76.169.35
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          fingerprint: SHA256:B0UTPbr5lNkpfSnRg6/QrVa6yYCZCUlU9lffmKQIsiU
+          command_timeout: 10m
+          script: |
+            set -u
+
+            echo "=== nginx sites ==="
+            for config in /www/server/panel/vhost/nginx/*.conf; do
+              [ -f "$config" ] || continue
+              echo "CONFIG=$config"
+              grep -nE '^[[:space:]]*(server_name|root|ssl_certificate|ssl_certificate_key)[[:space:]]' "$config" || true
+            done
+
+            echo "=== installed certificates ==="
+            for cert in /www/server/panel/vhost/cert/*/fullchain.pem; do
+              [ -f "$cert" ] || continue
+              echo "CERT=$cert"
+              openssl x509 -in "$cert" -noout -subject -issuer -dates 2>/dev/null || true
+            done
+
+            echo "=== acme registry ==="
+            /root/.acme.sh/acme.sh --list 2>/dev/null || true
+
+            echo "=== cron ==="
+            crontab -l 2>/dev/null | grep -Ei 'acme|cert|letsencrypt|panel' || true
