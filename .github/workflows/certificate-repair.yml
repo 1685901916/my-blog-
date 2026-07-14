@@ -70,16 +70,22 @@ jobs:
             cp -a "$SITE_CONFIG" "$BACKUP_DIR/site.conf"
             echo "BACKUP_DIR=$BACKUP_DIR"
 
-            echo "=== issue ==="
-            "$ACME" --issue \
-              --server letsencrypt \
-              --webroot "$WEBROOT" \
-              --domain "$DOMAIN" \
-              --keylength ec-256 \
-              --force
-
             ACME_CERT="/root/.acme.sh/${DOMAIN}_ecc/fullchain.cer"
             ACME_KEY="/root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key"
+
+            echo "=== issue ==="
+            if [ -s "$ACME_CERT" ] &&
+               [ -s "$ACME_KEY" ] &&
+               openssl x509 -checkend 2592000 -noout -in "$ACME_CERT"; then
+              echo "Reusing the valid certificate already issued by acme.sh."
+            else
+              "$ACME" --issue \
+                --server letsencrypt \
+                --webroot "$WEBROOT" \
+                --domain "$DOMAIN" \
+                --keylength ec-256
+            fi
+
             test -s "$ACME_CERT"
             test -s "$ACME_KEY"
             openssl x509 -in "$ACME_CERT" -noout -subject -issuer -dates
@@ -97,11 +103,16 @@ jobs:
             "$NGINX" -t
             openssl x509 -in "$CERT_DIR/fullchain.pem" -noout \
               -subject -issuer -dates -fingerprint -sha256
-            echo | openssl s_client \
-              -connect 127.0.0.1:443 \
-              -servername "$DOMAIN" \
-              -verify_return_error 2>/dev/null |
-              openssl x509 -noout -subject -issuer -dates
+            TLS_OUTPUT="$(
+              echo |
+                openssl s_client \
+                  -connect 127.0.0.1:443 \
+                  -servername "$DOMAIN" \
+                  -CAfile "$CERT_DIR/fullchain.pem" \
+                  -verify_return_error 2>&1
+            )"
+            echo "$TLS_OUTPUT" | grep -E 'subject=|issuer=|Verify return code' || true
+            echo "$TLS_OUTPUT" | grep -q 'Verify return code: 0 (ok)'
             "$ACME" --list | grep "$DOMAIN"
 
             SUCCESS=1
