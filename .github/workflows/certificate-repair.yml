@@ -1,0 +1,73 @@
+name: Certificate Repair
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/certificate-repair.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect ayano29.cn certificate configuration
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 38.76.169.35
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          fingerprint: SHA256:SO98ebqrdK7p8p0paURraLd8AEXafO0Ii0DZn9D4eew
+          command_timeout: 10m
+          script: |
+            set -u
+
+            echo "=== host ==="
+            hostname
+            date -Is
+            uname -a
+
+            echo "=== web server ==="
+            command -v nginx || true
+            command -v certbot || true
+            command -v acme.sh || true
+            test -x /www/server/nginx/sbin/nginx && /www/server/nginx/sbin/nginx -v 2>&1 || true
+            systemctl is-active nginx 2>/dev/null || true
+
+            echo "=== site configuration ==="
+            for config in \
+              /www/server/panel/vhost/nginx/ayano29.cn.conf \
+              /etc/nginx/sites-enabled/ayano29.cn \
+              /etc/nginx/conf.d/ayano29.cn.conf; do
+              if [ -f "$config" ]; then
+                echo "CONFIG=$config"
+                grep -nE 'server_name|listen|root|ssl_certificate|ssl_certificate_key' "$config" || true
+              fi
+            done
+
+            echo "=== certificate files ==="
+            find /www/server/panel/vhost/cert /etc/letsencrypt/live \
+              -maxdepth 3 -type f \( -name fullchain.pem -o -name cert.pem \) \
+              2>/dev/null | while read -r cert; do
+                if openssl x509 -in "$cert" -noout -subject 2>/dev/null | grep -q 'ayano29.cn'; then
+                  echo "CERT=$cert"
+                  openssl x509 -in "$cert" -noout -subject -issuer -dates -fingerprint -sha256
+                fi
+              done
+
+            echo "=== certificate managers ==="
+            certbot certificates 2>/dev/null || true
+            if [ -x /root/.acme.sh/acme.sh ]; then
+              /root/.acme.sh/acme.sh --list 2>/dev/null || true
+            fi
+            if [ -x /www/server/panel/pyenv/bin/python ]; then
+              echo "BT_PANEL_PRESENT=yes"
+            fi
+
+            echo "=== renewal scheduling ==="
+            systemctl list-timers --all 2>/dev/null | grep -Ei 'certbot|acme|letsencrypt' || true
+            crontab -l 2>/dev/null | grep -Ei 'certbot|acme|letsencrypt|panel' || true
