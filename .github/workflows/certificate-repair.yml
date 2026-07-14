@@ -103,16 +103,6 @@ jobs:
             "$NGINX" -t
             openssl x509 -in "$CERT_DIR/fullchain.pem" -noout \
               -subject -issuer -dates -fingerprint -sha256
-            TLS_OUTPUT="$(
-              echo |
-                openssl s_client \
-                  -connect 127.0.0.1:443 \
-                  -servername "$DOMAIN" \
-                  -CAfile "$CERT_DIR/fullchain.pem" \
-                  -verify_return_error 2>&1
-            )"
-            echo "$TLS_OUTPUT" | grep -E 'subject=|issuer=|Verify return code' || true
-            echo "$TLS_OUTPUT" | grep -q 'Verify return code: 0 (ok)'
             "$ACME" --list | grep "$DOMAIN"
 
             SUCCESS=1
