@@ -91,17 +91,14 @@ renew_site() {
   local timestamp
   local acme_cert
   local acme_key
+  local acme_config
   local issue_args
   local domain
 
   cert_dir="$(dirname -- "$cert_path")"
   timestamp="$(date +%Y%m%d-%H%M%S)"
   backup_dir="$BACKUP_ROOT/${main_domain}-${timestamp}"
-
-  if ! challenge_preflight "$root" "${domains[@]}"; then
-    log "ERROR domain=$main_domain challenge_preflight_failed root=$root"
-    return 1
-  fi
+  acme_config="/root/.acme.sh/${main_domain}_ecc/${main_domain}.conf"
 
   mkdir -p -- "$backup_dir" || return 1
   chmod 700 "$BACKUP_ROOT" "$backup_dir" 2>/dev/null || true
@@ -111,19 +108,37 @@ renew_site() {
   cp -a -- "$config" "$backup_dir/site.conf" || return 1
   log "BACKUP domain=$main_domain path=$backup_dir"
 
-  issue_args=(
-    --issue
-    --server letsencrypt
-    --webroot "$root"
-    --keylength ec-256
-    --force
-  )
-  for domain in "${domains[@]}"; do
-    issue_args+=(--domain "$domain")
-  done
+  if [[ -d "$root" ]]; then
+    if ! challenge_preflight "$root" "${domains[@]}"; then
+      log "ERROR domain=$main_domain challenge_preflight_failed root=$root"
+      return 1
+    fi
 
-  if ! "$ACME" "${issue_args[@]}"; then
-    log "ERROR domain=$main_domain acme_issue_failed"
+    issue_args=(
+      --issue
+      --server letsencrypt
+      --webroot "$root"
+      --keylength ec-256
+      --force
+    )
+    for domain in "${domains[@]}"; do
+      issue_args+=(--domain "$domain")
+    done
+
+    if ! "$ACME" "${issue_args[@]}"; then
+      log "ERROR domain=$main_domain acme_issue_failed"
+      restore_site "$cert_dir" "$config" "$backup_dir"
+      return 1
+    fi
+  elif [[ -f "$acme_config" ]]; then
+    log "INFO domain=$main_domain mode=registered_acme webroot_missing=$root"
+    if ! "$ACME" --renew --domain "$main_domain" --ecc --force; then
+      log "ERROR domain=$main_domain registered_acme_renew_failed"
+      restore_site "$cert_dir" "$config" "$backup_dir"
+      return 1
+    fi
+  else
+    log "ERROR domain=$main_domain webroot_missing_and_not_registered root=$root"
     restore_site "$cert_dir" "$config" "$backup_dir"
     return 1
   fi
@@ -230,10 +245,6 @@ for config in "$VHOST_DIR"/*.conf; do
 
   [[ -n "$cert_path" && -n "$key_path" && -n "$root" && -n "$server_names" ]] || continue
   [[ "$cert_path" == /www/server/panel/vhost/cert/* ]] || continue
-  [[ -d "$root" ]] || {
-    log "SKIP config=$config reason=webroot_missing root=$root"
-    continue
-  }
 
   domains=()
   while IFS= read -r domain; do
@@ -254,9 +265,9 @@ for config in "$VHOST_DIR"/*.conf; do
   if [[ "$DRY_RUN" -eq 1 ]]; then
     if [[ -s "$cert_path" ]]; then
       expires="$(openssl x509 -in "$cert_path" -noout -enddate 2>/dev/null | cut -d= -f2-)"
-      log "DUE domain=$main_domain expires=$expires root=$root"
+      log "DUE domain=$main_domain expires=$expires root=$root root_exists=$([[ -d "$root" ]] && echo yes || echo no)"
     else
-      log "DUE domain=$main_domain expires=missing root=$root"
+      log "DUE domain=$main_domain expires=missing root=$root root_exists=$([[ -d "$root" ]] && echo yes || echo no)"
     fi
     continue
   fi
