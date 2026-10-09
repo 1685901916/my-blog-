@@ -215,61 +215,54 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		// 设计分支：「资源」「娱乐」合并成收藏库，旧页面先留在下拉里方便对比
 		{
-			name: "资源",
-			url: "/resources/",
-			icon: "material-symbols:folder-open",
+			name: "收藏库",
+			url: "/library/",
+			icon: "material-symbols:collections-bookmark-outline-rounded",
 			children: [
 				{
-					name: "娱乐资源",
-					url: "/resources/entertainment/",
-					icon: "material-symbols:sports-esports",
+					name: "全部书架",
+					url: "/library/",
+					icon: "material-symbols:collections-bookmark-outline-rounded",
 				},
 				{
-					name: "实用工具",
+					name: "动漫",
+					url: "/library/anime/",
+					icon: "material-symbols:movie-outline-rounded",
+				},
+				{
+					name: "资源站",
+					url: "/library/sites/",
+					icon: "material-symbols:bookmark-star-outline-rounded",
+				},
+				{
+					name: "实用工具（旧）",
 					url: "/resources/utility/",
 					icon: "material-symbols:construction",
 				},
 				{
-					name: "实用信息",
+					name: "实用信息（旧）",
 					url: "/resources/info/",
 					icon: "material-symbols:menu-book",
 				},
 			],
 		},
 		{
-			name: "娱乐",
-			url: "/resources/entertainment/",
-			icon: "material-symbols:sports-esports",
-			children: [
-				{
-					name: "动漫",
-					url: "/resources/entertainment/anime/",
-					icon: "material-symbols:movie",
-				},
-				{
-					name: "漫画",
-					url: "/resources/entertainment/manga/",
-					icon: "material-symbols:book",
-				},
-				{
-					name: "小说",
-					url: "/resources/entertainment/novels/",
-					icon: "material-symbols:menu-book",
-				},
-				{
-					name: "游戏",
-					url: "/resources/entertainment/games/",
-					icon: "material-symbols:sports-esports",
-				},
-			],
+			name: "月记",
+			url: "/journal/",
+			icon: "material-symbols:calendar-month-outline-rounded",
 		},
-		// 支持自定义导航栏链接,并且支持多级菜单,3.1版本新加
 		{
 			name: "作品",
-			url: "/portfolio/",
+			url: "/works/",
 			icon: "material-symbols:work",
 			children: [
+				{
+					name: "作品墙",
+					url: "/works/",
+					icon: "material-symbols:auto-awesome-outline-rounded",
+				},
 				{
 					name: "正常系",
 					url: "/portfolio/normal/",

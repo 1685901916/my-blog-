@@ -1,0 +1,150 @@
+---
+import { Icon } from "astro-icon/components";
+import { dayKey, type FeedItem } from "../../utils/kit/content";
+import Cover from "./Cover.astro";
+
+interface Props {
+	work: FeedItem;
+	index?: number;
+	// featured：大卡片，封面在左、信息在右
+	featured?: boolean;
+}
+const { work, index = 0, featured = false } = Astro.props;
+// 「作品」分组标签（程序系 / 正常系）和技术标签分开显示
+const group = work.tags.find((t) => t.endsWith("系"));
+const stack = work.tags.filter((t) => t !== group);
+const date = dayKey(work.date);
+---
+
+<div
+	data-item
+	data-reveal
+	data-title={work.title}
+	data-tags={work.tags.join("|")}
+	data-date={date}
+	style={`--i: ${Math.min(index, 12)}`}
+>
+	<article class:list={["kit-card", "work", featured && "work--featured"]} data-tilt={featured ? 3 : 4}>
+		<a href={work.url} class="work__cover" aria-label={work.title}>
+			<Cover src={work.cover} title={work.title} aspect="16 / 10" eager={featured} />
+			{group && <span class="kit-chip work__group">{group}</span>}
+		</a>
+		<div class="kit-card__body work__body">
+			<div class="work__date">{date}</div>
+			<a href={work.url} class="work__title">{work.title}</a>
+			<p class="work__desc">{work.description}</p>
+			<div class="kit-card__tags">
+				{stack.slice(0, featured ? 8 : 4).map((t) => <span class="kit-chip">{t}</span>)}
+			</div>
+			{
+				featured && (
+					<div class="work__actions">
+						<a class="kit-btn kit-btn--solid" href={work.url}>
+							看看怎么做的 <Icon name="material-symbols:arrow-forward-rounded" />
+						</a>
+						{work.sourceLink && (
+							<a class="kit-btn" href={work.sourceLink} target="_blank" rel="noopener noreferrer">
+								<Icon name="material-symbols:code-rounded" /> 源码
+							</a>
+						)}
+					</div>
+				)
+			}
+		</div>
+	</article>
+</div>
+
+<style>
+	.work__cover {
+		position: relative;
+		display: block;
+	}
+
+	.work__group {
+		position: absolute;
+		left: 0.6rem;
+		top: 0.6rem;
+		background: rgb(0 0 0 / 0.5);
+		color: white;
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
+	}
+
+	.work__body {
+		padding: 0.9rem 1rem 1rem;
+	}
+
+	.work__date {
+		font-family: var(--kit-num);
+		font-size: 0.75rem;
+		color: var(--kit-ink-3);
+	}
+
+	.work__title {
+		font-size: 1.05rem;
+		font-weight: 800;
+		line-height: 1.35;
+		color: var(--kit-ink);
+		transition: color 0.2s;
+	}
+
+	.work__title:hover {
+		color: var(--primary);
+	}
+
+	.work__desc {
+		font-size: 0.875rem;
+		line-height: 1.65;
+		color: var(--kit-ink-2);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.work__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-top: 0.5rem;
+	}
+
+	@media (min-width: 768px) {
+		.work--featured {
+			flex-direction: row;
+			align-items: stretch;
+		}
+
+		.work--featured .work__cover {
+			flex: 0 0 55%;
+		}
+
+		.work--featured .work__cover :global(.kit-cover) {
+			height: 100%;
+		}
+
+		.work--featured .work__body {
+			padding: 1.75rem 2rem;
+			justify-content: center;
+			gap: 0.7rem;
+		}
+
+		.work--featured .work__title {
+			font-size: 1.75rem;
+		}
+
+		.work--featured .work__desc {
+			font-size: 0.95rem;
+			-webkit-line-clamp: 4;
+		}
+	}
+
+	/* 列表视图下的作品卡 */
+	:global(.kit-grid.is-list) .work .work__cover {
+		flex: 0 0 9rem;
+	}
+
+	:global(.kit-grid.is-list) .work .work__desc {
+		-webkit-line-clamp: 1;
+	}
+</style>

@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+import { dayKey, type LibraryItem } from "../../utils/kit/content";
+import Cover from "./Cover.astro";
+
+interface Props {
+	item: LibraryItem;
+	index?: number;
+}
+const { item, index = 0 } = Astro.props;
+const { shelf } = item;
+const dateText = item.date ? dayKey(item.date) : "";
+const host = item.link ? new URL(item.link).hostname.replace(/^www\./, "") : "";
+---
+
+<div
+	data-item
+	data-reveal
+	data-title={item.title}
+	data-tags={item.tags.join("|")}
+	data-rating={item.rating ?? ""}
+	data-date={dateText}
+	style={`--i: ${Math.min(index, 12)}`}
+>
+	<a class="kit-card" href={item.url}>
+		<Cover src={item.cover} title={item.title} aspect={shelf.aspect}>
+			{
+				shelf.show.includes("rating") && typeof item.rating === "number" && (
+					<span class="kit-rating">
+						<Icon name="material-symbols:star-rounded" />
+						{item.rating.toFixed(1)}
+					</span>
+				)
+			}
+		</Cover>
+		<div class="kit-card__body">
+			<div class="kit-card__title">
+				<span>{item.title}</span>
+				{item.marks.map((m) => (
+					<Icon class="kit-mark" name={m === "star" ? "material-symbols:star-rounded" : "material-symbols:favorite-rounded"} />
+				))}
+			</div>
+			{
+				shelf.show.includes("tags") && item.tags.length > 0 && (
+					<div class="kit-card__tags">
+						{item.tags.slice(0, 4).map((t) => <span class="kit-chip">{t}</span>)}
+					</div>
+				)
+			}
+			<div class="kit-card__meta">
+				<span>{shelf.show.includes("link") ? host : dateText || "—"}</span>
+				{item.year && <span>{item.year}</span>}
+			</div>
+		</div>
+	</a>
+</div>

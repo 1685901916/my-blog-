@@ -1,0 +1,20 @@
+---
+interface Props {
+	stats: Array<{ label: string; value: number; unit?: string; decimals?: number }>;
+}
+const { stats } = Astro.props;
+---
+
+<div class="kit-stats">
+	{
+		stats.map((s, i) => (
+			<div class="kit-stat" data-reveal data-count={s.value} data-decimals={s.decimals ?? 0} style={`--i: ${i}`}>
+				<div class="kit-stat__label">{s.label}</div>
+				<div class="kit-stat__value">
+					<span data-count-value>{s.value.toFixed(s.decimals ?? 0)}</span>
+					{s.unit && <small>{s.unit}</small>}
+				</div>
+			</div>
+		))
+	}
+</div>

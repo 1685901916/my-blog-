@@ -77,6 +77,72 @@ const entertainmentResourcesCollection = defineCollection({
 	}),
 });
 
+// Obsidian 里的日期可能是 "2024-08-28 12:17"、"2024-08-28T12:17" 或 YAML 日期
+// 一律按 UTC 解析（和 YAML 日期一致），避免构建机器时区不同导致跨月
+const looseDate = z
+	.union([z.date(), z.string(), z.number()])
+	.optional()
+	.transform((v) => {
+		if (v === undefined || v === "") return undefined;
+		if (typeof v === "string") {
+			const m = v.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/);
+			if (m) {
+				const [, y, mo, d, h = "0", mi = "0"] = m;
+				return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi));
+			}
+		}
+		const d = v instanceof Date ? v : new Date(v);
+		return Number.isNaN(d.getTime()) ? undefined : d;
+	});
+
+// 收藏库：一个子文件夹 = 一个书架（anime / sites ...），书架配置见 src/data/shelves.ts
+// 属性名同时接受 Obsidian 里的中文写法，笔记可以原样拷过来
+const libraryCollection = defineCollection({
+	schema: z
+		.object({
+			title: z.string().optional(),
+			cover: z.string().optional(),
+			封面: z.string().optional(),
+			image: z.string().optional(),
+			rating: z.number().optional(),
+			评分: z.number().optional(),
+			tags: z.array(z.string()).optional(),
+			文件标签: z.array(z.string()).optional(),
+			date: looseDate,
+			status: z.string().optional(),
+			状态: z.string().optional(),
+			year: z.coerce.string().optional(),
+			link: z.string().optional(),
+			summary: z.string().optional(),
+			draft: z.boolean().optional().default(false),
+		})
+		.transform((d) => ({
+			title: d.title,
+			cover: d.cover || d.封面 || d.image || "",
+			rating: d.rating ?? d.评分,
+			tags: (d.tags ?? d.文件标签 ?? []).map((t) =>
+				String(t).replace(/^\[\[|\]\]$/g, ""),
+			),
+			date: d.date,
+			status: d.status ?? d.状态,
+			year: d.year,
+			link: d.link,
+			summary: d.summary ?? "",
+			draft: d.draft,
+		})),
+});
+
+// 月记：文件名或 month 属性为 YYYY-MM；正文只写手写部分，其余自动汇总
+const journalCollection = defineCollection({
+	schema: z.object({
+		month: z.coerce.string().regex(/^\d{4}-\d{2}$/),
+		title: z.string().optional().default(""),
+		summary: z.string().optional().default(""),
+		cover: z.string().optional().default(""),
+		draft: z.boolean().optional().default(false),
+	}),
+});
+
 export const collections = {
 	posts: postsCollection,
 	spec: specCollection,
@@ -84,4 +150,6 @@ export const collections = {
 	portfolio: portfolioCollection,
 	"manga-categories": mangaCategoriesCollection,
 	"entertainment-resources": entertainmentResourcesCollection,
+	library: libraryCollection,
+	journal: journalCollection,
 };

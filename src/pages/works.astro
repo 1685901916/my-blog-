@@ -1,0 +1,61 @@
+---
+import CollectionView from "../components/kit/CollectionView.astro";
+import PageHero from "../components/kit/PageHero.astro";
+import WorkCard from "../components/kit/WorkCard.astro";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { getWorks } from "../utils/kit/content";
+
+const works = await getWorks();
+const [featured] = works;
+
+// 「程序系 / 正常系」放在最前，其余技术标签按出现次数
+const tagCount = new Map<string, number>();
+for (const w of works) for (const t of w.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const tags = [...tagCount.entries()]
+	.sort((a, b) => Number(b[0].endsWith("系")) - Number(a[0].endsWith("系")) || b[1] - a[1])
+	.slice(0, 14)
+	.map(([name, count]) => ({ name, count }));
+
+const stack = tags.filter((t) => !t.name.endsWith("系")).map((t) => t.name.toUpperCase());
+const groups = tags.filter((t) => t.name.endsWith("系"));
+const years = new Set(works.map((w) => w.date.getFullYear()));
+---
+
+<MainGridLayout title="作品" description="写过的工具、做过的东西">
+	<div class="kit">
+		<PageHero
+			eyebrow="WORKS · 作品"
+			title="作品"
+			subtitle="写过的工具、做过的东西。每个作品都有一篇完整的过程记录。"
+			kinetic={[["WORKS", "作品", ...groups.map((g) => g.name)], stack.slice(0, 6), stack.slice(6)]}
+		>
+			<span><b>{works.length}</b>个作品</span>
+			{groups.map((g) => <span><b>{g.count}</b>{g.name}</span>)}
+			<span><b>{years.size}</b>年</span>
+		</PageHero>
+
+		{
+			featured && (
+				<section data-reveal style="--i: 1">
+					<div class="kit-eyebrow" style="margin: 0 0 .6rem .25rem">最新作品</div>
+					<WorkCard work={featured} featured />
+				</section>
+			)
+		}
+
+		<CollectionView
+			total={works.length}
+			tags={tags}
+			sorts={[
+				{ value: "date", label: "日期" },
+				{ value: "title", label: "标题" },
+			]}
+			defaultSort="date"
+			groups={[{ value: "year", label: "年份" }]}
+			wide
+			searchPlaceholder="搜索作品或技术栈"
+		>
+			{works.map((w, i) => <WorkCard work={w} index={i} />)}
+		</CollectionView>
+	</div>
+</MainGridLayout>

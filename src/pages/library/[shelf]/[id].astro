@@ -1,0 +1,243 @@
+---
+import { Icon } from "astro-icon/components";
+import Cover from "../../../components/kit/Cover.astro";
+import LibraryCard from "../../../components/kit/LibraryCard.astro";
+import MainGridLayout from "../../../layouts/MainGridLayout.astro";
+import { dayKey, getLibrary, type LibraryItem } from "../../../utils/kit/content";
+
+export async function getStaticPaths() {
+	const items = await getLibrary();
+	return items.map((item) => ({
+		params: { shelf: item.shelf.id, id: item.id },
+		props: { item, siblings: items.filter((i) => i.shelf.id === item.shelf.id) },
+	}));
+}
+
+const { item, siblings } = Astro.props as { item: LibraryItem; siblings: LibraryItem[] };
+const { shelf } = item;
+const { Content } = await item.entry.render();
+const hasBody = (item.entry.body ?? "").trim().length > 0;
+const wide = shelf.aspect !== "3 / 4";
+
+// 相关条目：同书架里共享标签最多的几个
+const related = siblings
+	.filter((s) => s.id !== item.id)
+	.map((s) => ({ s, score: s.tags.filter((t) => item.tags.includes(t)).length }))
+	.filter((x) => x.score > 0)
+	.sort((a, b) => b.score - a.score || (b.s.rating ?? 0) - (a.s.rating ?? 0))
+	.slice(0, 6)
+	.map((x) => x.s);
+
+const dateText = item.date
+	? `${dayKey(item.date)}${item.date.getUTCHours() || item.date.getUTCMinutes() ? ` ${item.date.toISOString().slice(11, 16)}` : ""}`
+	: "";
+const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问";
+---
+
+<MainGridLayout title={item.title} description={`${shelf.title} · ${item.tags.join(" / ")}`}>
+	<div class="kit">
+		<article class:list={["kit-panel", "entry", wide && "is-wide"]}>
+			<div class="entry__cover" data-reveal>
+				<Cover src={item.cover} title={item.title} aspect={shelf.aspect} eager />
+			</div>
+			<div class="entry__info">
+				<a class="kit-eyebrow entry__crumb" href={`/library/${shelf.id}/`} data-reveal>
+					<Icon name="material-symbols:arrow-back-rounded" class="inline -translate-y-px" /> 收藏库 / {shelf.title}
+				</a>
+				<h1 class="kit-title entry__title">
+					<span data-split>{item.title}</span>
+					{
+						item.marks.map((m) => (
+							<Icon class="kit-mark" name={m === "star" ? "material-symbols:star-rounded" : "material-symbols:favorite-rounded"} />
+						))
+					}
+				</h1>
+
+				<!-- 仿 Obsidian 属性面板 -->
+				<dl class="props" data-reveal style="--i: 3">
+					{
+						typeof item.rating === "number" && (
+							<div class="props__row">
+								<dt>
+									<Icon name="material-symbols:star-rounded" />评分
+								</dt>
+								<dd class="props__rating">
+									<b>{item.rating.toFixed(1)}</b>
+									<span class="meter">
+										<span style={`width: ${item.rating * 10}%`} />
+									</span>
+								</dd>
+							</div>
+						)
+					}
+					{
+						item.tags.length > 0 && (
+							<div class="props__row">
+								<dt>
+									<Icon name="material-symbols:bookmark-star-outline-rounded" />文件标签
+								</dt>
+								<dd class="flex flex-wrap gap-1.5">
+									{item.tags.map((t) => (
+										<a class="kit-chip" href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`}>
+											{t}
+										</a>
+									))}
+								</dd>
+							</div>
+						)
+					}
+					{
+						dateText && (
+							<div class="props__row">
+								<dt>
+									<Icon name="material-symbols:calendar-month-outline-rounded" />date
+								</dt>
+								<dd>{dateText}</dd>
+							</div>
+						)
+					}
+					{
+						item.year && (
+							<div class="props__row">
+								<dt>
+									<Icon name="material-symbols:event-note-outline-rounded" />年份
+								</dt>
+								<dd>{item.year}</dd>
+							</div>
+						)
+					}
+				</dl>
+
+				{
+					item.link && (
+						<div class="mt-5" data-reveal style="--i: 5">
+							<a class="kit-btn kit-btn--solid" href={item.link} target="_blank" rel="noopener noreferrer">
+								{linkLabel} <Icon name="material-symbols:open-in-new-rounded" />
+							</a>
+						</div>
+					)
+				}
+			</div>
+		</article>
+
+		{
+			hasBody && (
+				<section class="kit-panel" data-reveal style="--i: 2">
+					<div class="kit-prose">
+						<Content />
+					</div>
+				</section>
+			)
+		}
+
+		{
+			related.length > 0 && (
+				<section class="kit-panel" data-reveal style="--i: 3">
+					<h2 class="kit-section-title">标签相近</h2>
+					<div class:list={["kit-grid", wide && "kit-grid--wide"]}>
+						{related.map((r, i) => <LibraryCard item={r} index={i} />)}
+					</div>
+				</section>
+			)
+		}
+	</div>
+</MainGridLayout>
+
+<style>
+	.entry {
+		display: grid;
+		gap: 1.75rem;
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 640px) {
+		.entry {
+			grid-template-columns: 12rem minmax(0, 1fr);
+		}
+		.entry.is-wide {
+			grid-template-columns: 18rem minmax(0, 1fr);
+		}
+	}
+
+	.entry__cover :global(.kit-cover) {
+		border-radius: 1rem;
+		box-shadow: var(--kit-shadow);
+	}
+
+	.entry__crumb {
+		display: inline-block;
+	}
+
+	.entry__crumb:hover {
+		text-decoration: underline;
+	}
+
+	.entry__title {
+		font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	.props {
+		margin-top: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid var(--kit-line);
+	}
+
+	.props__row {
+		display: grid;
+		grid-template-columns: 7rem minmax(0, 1fr);
+		align-items: center;
+		gap: 1rem;
+		padding: 0.7rem 0;
+		border-bottom: 1px solid var(--kit-line);
+		font-size: 0.9375rem;
+	}
+
+	.props__row dt {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--kit-ink-3);
+		font-size: 0.875rem;
+	}
+
+	.props__rating {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.props__rating b {
+		font-family: var(--kit-num);
+		font-size: 1.5rem;
+		color: var(--primary);
+	}
+
+	.meter {
+		flex: 1;
+		max-width: 12rem;
+		height: 0.4rem;
+		border-radius: 999px;
+		background: var(--btn-regular-bg);
+		overflow: hidden;
+	}
+
+	.meter span {
+		display: block;
+		height: 100%;
+		border-radius: inherit;
+		background: var(--primary);
+		transform-origin: left;
+		animation: meter-in 1.1s var(--kit-ease-out) 0.3s both;
+	}
+
+	@keyframes meter-in {
+		from {
+			transform: scaleX(0);
+		}
+	}
+</style>

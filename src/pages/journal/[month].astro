@@ -1,0 +1,265 @@
+---
+import { Icon } from "astro-icon/components";
+import LibraryCard from "../../components/kit/LibraryCard.astro";
+import StatStrip from "../../components/kit/StatStrip.astro";
+import WorkCard from "../../components/kit/WorkCard.astro";
+import { shelves } from "../../data/shelves";
+import MainGridLayout from "../../layouts/MainGridLayout.astro";
+import { getMonthDigests, type MonthDigest } from "../../utils/kit/content";
+
+export async function getStaticPaths() {
+	const digests = await getMonthDigests();
+	return digests.map((d, i) => ({
+		params: { month: d.month },
+		// digests 是倒序的：前一项是更新的月份
+		props: { d, newer: digests[i - 1], older: digests[i + 1] },
+	}));
+}
+
+const { d, newer, older } = Astro.props as {
+	d: MonthDigest;
+	newer?: MonthDigest;
+	older?: MonthDigest;
+};
+const Content = d.note ? (await d.note.render()).Content : null;
+const monthLabel = String(d.monthNumber).padStart(2, "0");
+const heading = d.title || `${d.year} 年 ${d.monthNumber} 月`;
+
+const stats = [
+	{ label: "写了", value: d.stats.writings, unit: "篇" },
+	{ label: "新作品", value: d.stats.works, unit: "个" },
+	{ label: "收录", value: d.stats.library, unit: "条" },
+	...(d.stats.avgRating ? [{ label: "收录均分", value: d.stats.avgRating, decimals: 1 }] : []),
+];
+
+// 本月收录按书架分组，不同书架的封面比例不同
+const libraryByShelf = shelves
+	.map((shelf) => ({ shelf, items: d.library.filter((i) => i.shelf.id === shelf.id) }))
+	.filter((g) => g.items.length > 0);
+
+const KIND_LABEL = { post: "文章", resource: "资源", work: "作品" } as const;
+const fmt = (date: Date) => date.toISOString().slice(5, 10);
+const isDev = import.meta.env.DEV;
+---
+
+<MainGridLayout title={`${heading} · 月记`} description={d.summary || `${d.year} 年 ${d.monthNumber} 月的记录`}>
+	<div class="kit">
+		<header class="kit-panel mhead">
+			<div class="mhead__num" data-split>{monthLabel}</div>
+			<div class="mhead__info">
+				<a class="kit-eyebrow mhead__crumb" href="/journal/" data-reveal>
+					<Icon name="material-symbols:arrow-back-rounded" class="inline -translate-y-px" /> 月记 / {d.year}
+				</a>
+				<h1 class="mhead__title" data-reveal style="--i: 2">{heading}</h1>
+				{d.summary && <p class="kit-subtitle" data-reveal style="--i: 3">{d.summary}</p>}
+			</div>
+			<div class="mhead__stats"><StatStrip stats={stats} /></div>
+			{d.cover && <img class="mhead__cover" src={d.cover} alt="" referrerpolicy="no-referrer" data-reveal style="--i: 4" />}
+		</header>
+
+		{
+			d.works.length > 0 && (
+				<section class="kit-panel" data-reveal>
+					<h2 class="kit-section-title">
+						本月作品 {isDev && <span class="kit-chip">自动</span>}
+					</h2>
+					<div class="flex flex-col gap-4">
+						{d.works.map((w, i) => <WorkCard work={w} index={i} featured={d.works.length === 1} />)}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			d.writings.length > 0 && (
+				<section class="kit-panel" data-reveal>
+					<h2 class="kit-section-title">
+						本月写了 {isDev && <span class="kit-chip">自动</span>}
+					</h2>
+					<div class="kit-rows">
+						{d.writings.map((w, i) => (
+							<a class="kit-row" href={w.url} data-reveal style={`--i: ${i}`}>
+								{w.cover ? <img class="kit-row__thumb" src={w.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span class="kit-row__thumb" />}
+								<span class="kit-row__title">
+									{w.title}
+									{w.description && <small>{w.description}</small>}
+								</span>
+								<span class="kit-chip hidden sm:inline-flex">{w.category || KIND_LABEL[w.kind]}</span>
+								<span class="kit-row__date">{fmt(w.date)}</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			libraryByShelf.length > 0 && (
+				<section class="kit-panel" data-reveal>
+					<h2 class="kit-section-title">
+						本月收录 {isDev && <span class="kit-chip">自动</span>}
+					</h2>
+					{libraryByShelf.map(({ shelf, items }) => (
+						<div class="mb-5 last:mb-0">
+							<div class="text-sm font-semibold mb-2.5" style="color: var(--kit-ink-2)">
+								<Icon name={shelf.icon} class="inline -translate-y-px" /> {shelf.title} · {items.length}
+							</div>
+							<div class:list={["kit-grid", shelf.aspect !== "3 / 4" && "kit-grid--wide"]}>
+								{items.map((it, i) => <LibraryCard item={it} index={i} />)}
+							</div>
+						</div>
+					))}
+				</section>
+			)
+		}
+
+		{
+			Content ? (
+				<section class="kit-panel" data-reveal>
+					{isDev && <span class="kit-chip dev-chip">手写</span>}
+					<div class="kit-prose">
+						<Content />
+					</div>
+				</section>
+			) : (
+				isDev && (
+					<section class="kit-panel hint" data-reveal>
+						<Icon name="material-symbols:edit-note-outline-rounded" class="text-3xl" />
+						<div>
+							<b>这个月还没写月记。</b>
+							新建 <code>src/content/journal/{d.month}.md</code>，写上 <code>month: {d.month}</code> 和几句话就行。
+							<br />
+							<small>这块提示只在本地开发时显示，线上不会出现。</small>
+						</div>
+					</section>
+				)
+			)
+		}
+
+		<nav class="pager" data-reveal>
+			{
+				older ? (
+					<a class="kit-panel pager__item" href={`/journal/${older.month}/`}>
+						<small>
+							<Icon name="material-symbols:chevron-left-rounded" class="inline" /> 上个月
+						</small>
+						<span>{older.title || `${older.year} 年 ${older.monthNumber} 月`}</span>
+					</a>
+				) : (
+					<span />
+				)
+			}
+			{
+				newer && (
+					<a class="kit-panel pager__item is-next" href={`/journal/${newer.month}/`}>
+						<small>
+							下个月 <Icon name="material-symbols:chevron-right-rounded" class="inline" />
+						</small>
+						<span>{newer.title || `${newer.year} 年 ${newer.monthNumber} 月`}</span>
+					</a>
+				)
+			}
+		</nav>
+	</div>
+</MainGridLayout>
+
+<style>
+	.mhead {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		align-items: end;
+		gap: 0.5rem 1.5rem;
+	}
+
+	.mhead__num {
+		font-family: var(--kit-num);
+		font-weight: 700;
+		font-size: clamp(5rem, 16vw, 9rem);
+		line-height: 0.85;
+		letter-spacing: -0.05em;
+		color: var(--primary);
+	}
+
+	.mhead__crumb:hover {
+		text-decoration: underline;
+	}
+
+	.mhead__title {
+		font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+		font-weight: 800;
+		line-height: 1.25;
+		color: var(--kit-ink);
+	}
+
+	.mhead__stats {
+		grid-column: 1 / -1;
+		margin-top: 1.5rem;
+	}
+
+	.dev-chip {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+	}
+
+	.mhead__cover {
+		grid-column: 1 / -1;
+		margin-top: 1rem;
+		width: 100%;
+		max-height: 20rem;
+		object-fit: cover;
+		border-radius: 1rem;
+		border: 1px solid var(--kit-line);
+	}
+
+	.hint {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+		color: var(--kit-ink-2);
+		font-size: 0.9375rem;
+		line-height: 1.8;
+		border: 1.5px dashed var(--kit-soft-2);
+	}
+
+	.hint code {
+		font-size: 0.85em;
+		padding: 0.1em 0.4em;
+		border-radius: 0.35em;
+		background: var(--btn-regular-bg);
+	}
+
+	.hint small {
+		color: var(--kit-ink-3);
+	}
+
+	.pager {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	.pager__item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 1rem 1.25rem;
+		color: var(--kit-ink);
+		font-weight: 700;
+		transition: transform 0.5s var(--kit-spring);
+	}
+
+	.pager__item:hover {
+		transform: translateY(-3px);
+	}
+
+	.pager__item small {
+		font-weight: 500;
+		color: var(--kit-ink-3);
+	}
+
+	.pager__item.is-next {
+		text-align: right;
+		grid-column: 2;
+	}
+</style>

@@ -1,0 +1,30 @@
+---
+// 封面：有图显示图（加载时模糊淡入），没图或加载失败时显示字体封面
+interface Props {
+	src?: string;
+	title: string;
+	aspect?: string;
+	eager?: boolean;
+	class?: string;
+}
+const { src, title, aspect = "3 / 4", eager = false, class: className } = Astro.props;
+const initial = [...title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
+---
+
+<div class:list={["kit-cover", className]} style={`--aspect: ${aspect}`}>
+	<div class="kit-cover__fallback" aria-hidden="true">{initial}</div>
+	{
+		src && (
+			<img
+				src={src}
+				alt={title}
+				loading={eager ? "eager" : "lazy"}
+				decoding="async"
+				referrerpolicy="no-referrer"
+				data-loading
+				style="position: relative"
+			/>
+		)
+	}
+	<slot />
+</div>

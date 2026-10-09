@@ -1,0 +1,934 @@
+/*
+ * 内容设计系统（kit）
+ * 收藏库 / 月记 / 作品墙共用的样式和动效。
+ * 只依赖主题已有的变量（--primary、--card-bg、--page-bg、--line-divider…），
+ * 所以换主题色、切暗色都会自动跟随。
+ */
+
+:root {
+	/* 动效曲线：参考 folia-major 的手感重新调的参数 */
+	--kit-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--kit-ease-quint: cubic-bezier(0.22, 1, 0.36, 1);
+	--kit-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+	/* 弹簧（stiffness 300 / damping 24），回弹约 5% */
+	--kit-spring: linear(0, 0.058, 0.193, 0.359, 0.527, 0.678, 0.802, 0.898, 0.966, 1.01, 1.035, 1.047, 1.049, 1.045, 1.037, 1.029, 1.021, 1.014, 1.008, 1.004, 1.001, 0.999, 0.998, 0.998, 0.998, 0.998, 0.998, 0.999, 1);
+	/* 弹入（stiffness 460 / damping 20 / mass 0.8），回弹约 15%，用于逐字动画 */
+	--kit-pop: linear(0, 0.143, 0.442, 0.747, 0.976, 1.104, 1.146, 1.131, 1.088, 1.043, 1.007, 0.986, 0.979, 0.98, 0.986, 0.993, 0.998, 1.002, 1.003, 1.003, 1.002, 1.001, 1, 1, 1, 1, 1, 1, 1);
+
+	--kit-font: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+	--kit-num: "Roboto", "PingFang SC", system-ui, sans-serif;
+	--kit-ink: oklch(0.25 0.02 var(--hue));
+	--kit-ink-2: oklch(0.45 0.02 var(--hue));
+	--kit-ink-3: oklch(0.6 0.015 var(--hue));
+	--kit-soft: color-mix(in oklch, var(--primary) 12%, transparent);
+	--kit-soft-2: color-mix(in oklch, var(--primary) 22%, transparent);
+	--kit-line: var(--line-divider);
+	--kit-shadow: 0 18px 40px -22px color-mix(in oklch, var(--primary) 55%, transparent);
+}
+
+:root.dark {
+	--kit-ink: oklch(0.93 0.01 var(--hue));
+	--kit-ink-2: oklch(0.78 0.015 var(--hue));
+	--kit-ink-3: oklch(0.62 0.015 var(--hue));
+	--kit-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.7);
+}
+
+.kit {
+	font-family: var(--kit-font);
+	color: var(--kit-ink);
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.kit-panel {
+	position: relative;
+	background: var(--card-bg);
+	border-radius: var(--radius-large);
+	padding: 1.5rem;
+	overflow: hidden;
+}
+
+@media (min-width: 768px) {
+	.kit-panel {
+		padding: 2rem 2.25rem;
+	}
+}
+
+/* ---------- 页面头部 ---------- */
+
+.kit-hero {
+	position: relative;
+	overflow: hidden;
+	min-height: 15rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.kit-hero__inner {
+	position: relative;
+	z-index: 1;
+}
+
+.kit-eyebrow {
+	font-size: 0.8125rem;
+	letter-spacing: 0.08em;
+	color: var(--primary);
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.kit-title {
+	font-size: clamp(2.25rem, 6vw, 3.5rem);
+	line-height: 1.1;
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	color: var(--kit-ink);
+}
+
+.kit-subtitle {
+	margin-top: 0.75rem;
+	font-size: 1rem;
+	color: var(--kit-ink-2);
+	max-width: 36em;
+	line-height: 1.7;
+}
+
+.kit-hero__meta {
+	margin-top: 1.25rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+	font-size: 0.875rem;
+	color: var(--kit-ink-3);
+}
+
+.kit-hero__meta b {
+	font-family: var(--kit-num);
+	font-weight: 700;
+	color: var(--kit-ink);
+	margin-right: 0.25em;
+}
+
+/* 背景里缓慢漂移的大字（folia 首页那种歌词背景） */
+.kit-kinetic {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.25rem;
+	pointer-events: none;
+	user-select: none;
+	-webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+	mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+.kit-kinetic__row {
+	display: flex;
+	width: max-content;
+	white-space: nowrap;
+	font-size: clamp(3.5rem, 9vw, 6.5rem);
+	line-height: 1;
+	font-weight: 900;
+	letter-spacing: 0.04em;
+	color: color-mix(in oklch, var(--primary) 9%, transparent);
+	animation: kit-drift var(--kit-drift, 60s) linear infinite;
+}
+
+.kit-kinetic__row:nth-child(2) {
+	animation-direction: reverse;
+	--kit-drift: 75s;
+	color: color-mix(in oklch, var(--primary) 6%, transparent);
+}
+
+.kit-kinetic__row:nth-child(3) {
+	--kit-drift: 90s;
+	color: color-mix(in oklch, var(--primary) 4%, transparent);
+}
+
+.kit-kinetic__row span {
+	padding-right: 0.6em;
+}
+
+@keyframes kit-drift {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+/* ---------- 逐字入场（folia 歌词逐字的思路：模糊 + 位移 + 弹入） ---------- */
+
+[data-split] .kit-char {
+	display: inline-block;
+	white-space: pre;
+	opacity: 0;
+	transform: translateY(0.45em) scale(0.6);
+	filter: blur(8px);
+}
+
+[data-split].is-in .kit-char {
+	opacity: 1;
+	transform: none;
+	filter: blur(0);
+	transition:
+		opacity 0.35s var(--kit-ease-out),
+		filter 0.45s var(--kit-ease-out),
+		transform 0.7s var(--kit-pop);
+	transition-delay: calc(var(--ci, 0) * 38ms);
+}
+
+/* ---------- 滚动入场：模糊对焦 ---------- */
+
+[data-reveal] {
+	opacity: 0;
+	transform: translateY(18px) scale(0.985);
+	filter: blur(8px);
+}
+
+[data-reveal].is-in {
+	opacity: 1;
+	transform: none;
+	filter: blur(0);
+	transition:
+		opacity 0.6s var(--kit-ease-out),
+		filter 0.6s var(--kit-ease-out),
+		transform 0.8s var(--kit-spring);
+	transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+/* 动画结束后去掉 filter，避免一直占用合成层 */
+[data-reveal].is-done,
+[data-split].is-done .kit-char {
+	filter: none;
+	transition: none;
+}
+
+/* ---------- 标签 / 按钮 ---------- */
+
+.kit-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: 0.75rem;
+	line-height: 1;
+	padding: 0.35rem 0.6rem;
+	border-radius: 999px;
+	background: var(--kit-soft);
+	color: color-mix(in oklch, var(--primary) 80%, var(--kit-ink));
+	white-space: nowrap;
+}
+
+button.kit-chip {
+	cursor: pointer;
+	border: 1px solid transparent;
+	font-size: 0.8125rem;
+	padding: 0.4rem 0.8rem;
+	background: transparent;
+	color: var(--kit-ink-2);
+	border-color: var(--kit-line);
+	transition:
+		background 0.2s,
+		color 0.2s,
+		border-color 0.2s,
+		transform 0.4s var(--kit-spring);
+}
+
+button.kit-chip:hover {
+	border-color: var(--kit-soft-2);
+	color: var(--primary);
+}
+
+button.kit-chip:active {
+	transform: scale(0.94);
+}
+
+button.kit-chip[aria-pressed="true"] {
+	background: var(--primary);
+	border-color: var(--primary);
+	color: white;
+}
+
+.kit-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	height: 2.25rem;
+	padding: 0 0.9rem;
+	border-radius: 0.75rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	background: var(--kit-soft);
+	color: var(--primary);
+	transition:
+		background 0.2s,
+		transform 0.4s var(--kit-spring);
+}
+
+.kit-btn:hover {
+	background: var(--kit-soft-2);
+}
+
+.kit-btn:active {
+	transform: scale(0.96);
+}
+
+.kit-btn--solid {
+	background: var(--primary);
+	color: white;
+}
+
+.kit-btn--solid:hover {
+	background: color-mix(in oklch, var(--primary) 88%, black);
+}
+
+/* ---------- 分段标签（带滑动指示条，相当于 folia 的 layoutId pill） ---------- */
+
+.kit-tabs {
+	position: relative;
+	display: inline-flex;
+	padding: 0.25rem;
+	border-radius: 999px;
+	background: var(--btn-regular-bg);
+	isolation: isolate;
+}
+
+.kit-tabs__item {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.45rem 1rem;
+	border-radius: 999px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--kit-ink-2);
+	transition: color 0.25s;
+	white-space: nowrap;
+}
+
+.kit-tabs__item[aria-current="page"],
+.kit-tabs__item[aria-pressed="true"] {
+	color: white;
+}
+
+.kit-tabs__ind {
+	position: absolute;
+	z-index: 0;
+	top: 0.25rem;
+	bottom: 0.25rem;
+	left: 0;
+	width: var(--w, 0);
+	transform: translateX(var(--x, 0));
+	border-radius: 999px;
+	background: var(--primary);
+	transition:
+		transform 0.5s var(--kit-spring),
+		width 0.5s var(--kit-spring);
+}
+
+.kit-tabs:not(.is-ready) .kit-tabs__ind {
+	transition: none;
+}
+
+/* ---------- 工具栏（Bases 那一排：结果数 / 搜索 / 排序 / 分组 / 视图） ---------- */
+
+.kit-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+}
+
+.kit-toolbar__count {
+	font-size: 0.875rem;
+	color: var(--kit-ink-3);
+	margin-right: auto;
+}
+
+.kit-toolbar__count b {
+	font-family: var(--kit-num);
+	color: var(--kit-ink);
+}
+
+.kit-input,
+.kit-select {
+	height: 2.25rem;
+	border-radius: 0.75rem;
+	background: var(--btn-regular-bg);
+	color: var(--kit-ink);
+	font-size: 0.875rem;
+	padding: 0 0.75rem;
+	border: 1px solid transparent;
+	outline: none;
+	transition: border-color 0.2s, background 0.2s;
+}
+
+.kit-input:focus,
+.kit-select:focus {
+	border-color: var(--primary);
+	background: var(--card-bg);
+}
+
+.kit-input {
+	width: 11rem;
+}
+
+.kit-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin-top: 0.85rem;
+}
+
+/* ---------- 卡片网格 ---------- */
+
+.kit-grid {
+	display: grid;
+	gap: 0.9rem;
+	grid-template-columns: repeat(auto-fill, minmax(var(--kit-min, 9.5rem), 1fr));
+}
+
+.kit-grid--wide {
+	--kit-min: 14rem;
+}
+
+.kit-grid.is-list {
+	grid-template-columns: 1fr;
+	gap: 0.5rem;
+}
+
+.kit-group-head {
+	grid-column: 1 / -1;
+	display: flex;
+	align-items: baseline;
+	gap: 0.6rem;
+	margin-top: 0.75rem;
+	font-weight: 700;
+	font-size: 1.05rem;
+	color: var(--kit-ink);
+}
+
+.kit-group-head:first-child {
+	margin-top: 0;
+}
+
+.kit-group-head small {
+	font-family: var(--kit-num);
+	font-weight: 500;
+	font-size: 0.8125rem;
+	color: var(--kit-ink-3);
+}
+
+.kit-empty {
+	grid-column: 1 / -1;
+	padding: 2.5rem 1rem;
+	text-align: center;
+	color: var(--kit-ink-3);
+	font-size: 0.9rem;
+}
+
+.kit-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	border-radius: 0.9rem;
+	background: var(--card-bg);
+	border: 1px solid var(--kit-line);
+	overflow: hidden;
+	color: inherit;
+	transition:
+		transform 0.55s var(--kit-spring),
+		box-shadow 0.4s var(--kit-ease-out),
+		border-color 0.3s;
+}
+
+.kit-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--kit-shadow);
+	border-color: var(--kit-soft-2);
+}
+
+.kit-card:active {
+	transform: translateY(-1px) scale(0.985);
+}
+
+.kit-card__body {
+	padding: 0.7rem 0.8rem 0.85rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.45rem;
+	flex: 1;
+	min-width: 0;
+}
+
+.kit-card__title {
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.35;
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+	min-width: 0;
+}
+
+.kit-card__title > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kit-card__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem;
+}
+
+.kit-card__tags .kit-chip {
+	font-size: 0.6875rem;
+	padding: 0.25rem 0.45rem;
+}
+
+.kit-card__meta {
+	margin-top: auto;
+	font-size: 0.75rem;
+	color: var(--kit-ink-3);
+	font-family: var(--kit-num);
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.kit-mark {
+	flex: none;
+	color: var(--primary);
+	font-size: 0.95em;
+}
+
+/* 列表视图：同一张卡片变成一行 */
+.kit-grid.is-list .kit-card {
+	flex-direction: row;
+	align-items: center;
+}
+
+.kit-grid.is-list .kit-cover {
+	width: 3.25rem;
+	flex: none;
+	margin: 0.5rem 0 0.5rem 0.5rem;
+	border-radius: 0.5rem;
+}
+
+.kit-grid.is-list .kit-card__body {
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.4rem 1rem;
+}
+
+.kit-grid.is-list .kit-card__title {
+	flex: 1 1 12rem;
+}
+
+.kit-grid.is-list .kit-card__meta {
+	margin-top: 0;
+}
+
+.kit-grid.is-list .kit-rating {
+	position: static;
+	order: 3;
+}
+
+/* ---------- 封面 ---------- */
+
+.kit-cover {
+	position: relative;
+	aspect-ratio: var(--aspect, 3 / 4);
+	overflow: hidden;
+	background: var(--btn-regular-bg);
+}
+
+.kit-cover img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition:
+		transform 0.8s var(--kit-ease-out),
+		opacity 0.5s,
+		filter 0.6s;
+}
+
+.kit-cover img[data-loading] {
+	opacity: 0;
+	filter: blur(12px);
+	transform: scale(1.06);
+}
+
+.kit-card:hover .kit-cover img {
+	transform: scale(1.05);
+}
+
+/* 没封面时的字体封面 */
+.kit-cover__fallback {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: clamp(2rem, 30cqi, 4rem);
+	font-weight: 900;
+	color: color-mix(in oklch, var(--primary) 70%, var(--kit-ink));
+	background:
+		radial-gradient(circle at 20% 15%, var(--kit-soft-2), transparent 55%),
+		radial-gradient(circle at 85% 90%, var(--kit-soft), transparent 50%),
+		var(--btn-regular-bg);
+	container-type: inline-size;
+}
+
+.kit-rating {
+	position: absolute;
+	top: 0.45rem;
+	right: 0.45rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15rem;
+	padding: 0.2rem 0.45rem;
+	border-radius: 0.5rem;
+	font-family: var(--kit-num);
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: white;
+	background: rgb(0 0 0 / 0.5);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+}
+
+.kit-grid.is-list .kit-rating {
+	color: var(--kit-ink);
+	background: var(--btn-regular-bg);
+}
+
+/* ---------- 统计条 ---------- */
+
+.kit-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+	gap: 0.6rem;
+}
+
+.kit-stat {
+	border-radius: 0.9rem;
+	background: var(--btn-regular-bg);
+	padding: 0.8rem 1rem;
+}
+
+.kit-stat__label {
+	font-size: 0.8125rem;
+	color: var(--kit-ink-2);
+}
+
+.kit-stat__value {
+	font-family: var(--kit-num);
+	font-size: 1.75rem;
+	font-weight: 700;
+	line-height: 1.2;
+	color: var(--kit-ink);
+}
+
+.kit-stat__value small {
+	font-family: var(--kit-font);
+	font-size: 0.875rem;
+	font-weight: 500;
+	margin-left: 0.2rem;
+	color: var(--kit-ink-2);
+}
+
+/* ---------- 分节标题 ---------- */
+
+.kit-section-title {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	color: var(--kit-ink);
+}
+
+.kit-section-title::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--kit-line);
+}
+
+.kit-section-title .kit-chip {
+	font-weight: 500;
+}
+
+/* ---------- 行列表（本月写了） ---------- */
+
+.kit-rows {
+	display: flex;
+	flex-direction: column;
+}
+
+.kit-row {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	padding: 0.8rem 0.5rem;
+	margin: 0 -0.5rem;
+	border-radius: 0.75rem;
+	transition: background 0.2s;
+}
+
+.kit-row + .kit-row {
+	border-top: 1px solid var(--kit-line);
+}
+
+.kit-row:hover {
+	background: var(--btn-regular-bg);
+}
+
+.kit-row__title {
+	flex: 1;
+	min-width: 0;
+	font-weight: 600;
+	font-size: 0.9375rem;
+}
+
+.kit-row__title small {
+	display: block;
+	font-weight: 400;
+	font-size: 0.8125rem;
+	color: var(--kit-ink-3);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-top: 0.15rem;
+}
+
+.kit-row__date {
+	font-family: var(--kit-num);
+	font-size: 0.8125rem;
+	color: var(--kit-ink-3);
+}
+
+.kit-row__thumb {
+	width: 4.5rem;
+	aspect-ratio: 16 / 10;
+	border-radius: 0.5rem;
+	object-fit: cover;
+	flex: none;
+	background: var(--btn-regular-bg);
+}
+
+/* ---------- 正文排版（中文优先） ---------- */
+
+.kit-prose {
+	font-family: var(--kit-font);
+	font-size: 1.0625rem;
+	line-height: 1.85;
+	letter-spacing: 0.02em;
+	color: var(--kit-ink);
+	max-width: 42em;
+	overflow-wrap: break-word;
+	text-align: justify;
+}
+
+/* remark-sectionize 会把每个标题和它下面的内容包进 <section>，所以间距不能只写直接子元素 */
+.kit-prose :is(p, ul, ol, blockquote, pre, figure, table, section) {
+	margin-top: 1em;
+}
+
+.kit-prose > :first-child,
+.kit-prose > section:first-child > :first-child {
+	margin-top: 0;
+}
+
+/* 标题后面的锚点平时隐藏，悬停标题时出现 */
+.kit-prose .anchor {
+	margin-left: 0.35em;
+	color: var(--primary);
+	text-decoration: none;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+.kit-prose :is(h2, h3, h4):hover .anchor {
+	opacity: 0.6;
+}
+
+.kit-prose h2 {
+	font-size: 1.375rem;
+	font-weight: 800;
+	line-height: 1.4;
+	margin-top: 2em;
+	letter-spacing: 0.03em;
+}
+
+.kit-prose h3 {
+	font-size: 1.15rem;
+	font-weight: 700;
+	margin-top: 1.6em;
+}
+
+.kit-prose h2 + *,
+.kit-prose h3 + * {
+	margin-top: 0.6em;
+}
+
+.kit-prose a {
+	color: var(--primary);
+	text-decoration: underline;
+	text-decoration-color: var(--kit-soft-2);
+	text-underline-offset: 0.25em;
+	text-decoration-thickness: 0.12em;
+	transition: text-decoration-color 0.2s;
+}
+
+.kit-prose a:hover {
+	text-decoration-color: var(--primary);
+}
+
+.kit-prose strong {
+	font-weight: 700;
+	background: linear-gradient(transparent 62%, var(--kit-soft-2) 62%);
+}
+
+.kit-prose blockquote {
+	padding: 0.85rem 1.1rem;
+	border-radius: 0.9rem;
+	background: var(--btn-regular-bg);
+	color: var(--kit-ink-2);
+	font-size: 0.95em;
+}
+
+.kit-prose img {
+	display: block;
+	max-width: 100%;
+	max-height: 70vh;
+	margin: 1.5em auto;
+	border-radius: 0.9rem;
+	border: 1px solid var(--kit-line);
+}
+
+.kit-prose ul,
+.kit-prose ol {
+	padding-left: 1.4em;
+}
+
+.kit-prose ul {
+	list-style: disc;
+}
+
+.kit-prose ol {
+	list-style: decimal;
+}
+
+.kit-prose li + li {
+	margin-top: 0.35em;
+}
+
+.kit-prose li::marker {
+	color: var(--primary);
+}
+
+.kit-prose .contains-task-list,
+.kit-prose ul:has(> li > input[type="checkbox"]) {
+	list-style: none;
+	padding-left: 0.2em;
+}
+
+.kit-prose input[type="checkbox"] {
+	accent-color: var(--primary);
+	margin-right: 0.5em;
+	transform: translateY(0.1em);
+}
+
+.kit-prose code {
+	font-size: 0.875em;
+	padding: 0.15em 0.4em;
+	border-radius: 0.4em;
+	background: var(--btn-regular-bg);
+}
+
+/* ---------- 视图切换动画（View Transitions，不支持的浏览器直接切换） ---------- */
+
+:root.kit-vt::view-transition-old(root),
+:root.kit-vt::view-transition-new(root) {
+	animation: none;
+}
+
+:root.kit-vt::view-transition-group(*) {
+	animation-duration: 0.55s;
+	animation-timing-function: var(--kit-spring);
+}
+
+:root.kit-vt::view-transition-old(*),
+:root.kit-vt::view-transition-new(*) {
+	animation-duration: 0.25s;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* ---------- 3D 微倾斜（作品卡片） ---------- */
+
+[data-tilt] {
+	transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ty, 0));
+	transition: transform 0.6s var(--kit-spring);
+}
+
+[data-tilt].is-tilting {
+	transition: transform 0.12s linear;
+}
+
+/* 卡片自带的悬停上浮改由 --ty 驱动，和倾斜叠加 */
+.kit-card[data-tilt]:hover {
+	--ty: -4px;
+	transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ty));
+}
+
+/* ---------- 导航栏：文字不换行，1280–1439 之间收紧间距 ---------- */
+
+#navbar .btn-plain,
+#navbar .dropdown-trigger {
+	white-space: nowrap;
+}
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+	#navbar .dropdown-trigger,
+	#navbar a.btn-plain.h-11 {
+		padding-left: 0.7rem;
+		padding-right: 0.7rem;
+	}
+}
+
+/* ---------- 少动效模式 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.kit-kinetic__row {
+		animation: none;
+	}
+
+	[data-reveal],
+	[data-split] .kit-char {
+		transform: none !important;
+		filter: none !important;
+	}
+
+	[data-reveal].is-in,
+	[data-split].is-in .kit-char {
+		transition: opacity 0.3s;
+	}
+
+	[data-tilt] {
+		transform: none !important;
+	}
+}
