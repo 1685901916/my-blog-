@@ -1,0 +1,34 @@
+---
+// 左栏导航：外观和主题的「分类」小组件一致（WidgetLayout + 带数字角标的行）
+import { Icon } from "astro-icon/components";
+import WidgetLayout from "../widget/WidgetLayout.astro";
+
+export type SideNavRow = {
+	label: string;
+	href: string;
+	count?: number | string;
+	icon?: string;
+	active?: boolean;
+};
+
+interface Props {
+	id: string;
+	title: string;
+	rows: SideNavRow[];
+}
+const { id, title, rows } = Astro.props;
+---
+
+<WidgetLayout id={id} name={title}>
+	<nav class="kit-side__list">
+		{
+			rows.map((r) => (
+				<a href={r.href} class:list={["kit-side__row", r.active && "is-active"]} aria-current={r.active ? "page" : undefined}>
+					{r.icon && <Icon name={r.icon} class="text-lg flex-none" />}
+					<span>{r.label}</span>
+					{r.count !== undefined && <span class="kit-side__badge">{r.count}</span>}
+				</a>
+			))
+		}
+	</nav>
+</WidgetLayout>

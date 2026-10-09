@@ -24,6 +24,9 @@ export function getPostUrlBySlug(slug: string, collection?: string): string {
 	if (collection === "portfolio") {
 		return url(`/portfolio/${slug}/`);
 	}
+	if (collection === "journal") {
+		return url(`/journal/${slug}/`);
+	}
 	if (collection === "entertainment-resources") {
 		// entertainment-resources 的 slug 格式是 "分类/文章名"
 		return url(`/resources/entertainment/${slug}/`);

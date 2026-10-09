@@ -1,0 +1,29 @@
+---
+// 月记左栏：按时间倒序列出所有有记录的月份，写了月记的带笔的图标
+import type { MonthDigest } from "../../utils/kit/content";
+import SideNav from "./SideNav.astro";
+
+interface Props {
+	digests: MonthDigest[];
+	current?: string;
+}
+const { digests, current } = Astro.props;
+const total = (d: MonthDigest) => d.stats.writings + d.stats.works + d.stats.library;
+const rows = [
+	{
+		label: "全部月份",
+		href: "/journal/",
+		icon: "material-symbols:calendar-month-outline-rounded",
+		active: !current,
+	},
+	...digests.map((d) => ({
+		label: `${d.year} 年 ${d.monthNumber} 月`,
+		href: `/journal/${d.month}/`,
+		count: total(d) || undefined,
+		icon: d.note ? "material-symbols:edit-note-outline-rounded" : "material-symbols:event-note-outline-rounded",
+		active: d.month === current,
+	})),
+];
+---
+
+<SideNav id="kit-months" title="月记" rows={rows} />

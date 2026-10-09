@@ -132,15 +132,31 @@ const libraryCollection = defineCollection({
 		})),
 });
 
-// 月记：文件名或 month 属性为 YYYY-MM；正文只写手写部分，其余自动汇总
+// 月记：month 属性为 YYYY-MM；正文只写手写部分，其余自动汇总
+// 字段和文章兼容（baseFields），所以手写的月记也会出现在首页列表、归档、分类和 RSS 里
 const journalCollection = defineCollection({
-	schema: z.object({
-		month: z.coerce.string().regex(/^\d{4}-\d{2}$/),
-		title: z.string().optional().default(""),
-		summary: z.string().optional().default(""),
-		cover: z.string().optional().default(""),
-		draft: z.boolean().optional().default(false),
-	}),
+	schema: z
+		.object({
+			...baseFields,
+			month: z.coerce.string().regex(/^\d{4}-\d{2}$/),
+			title: z.string().optional().default(""),
+			published: z.date().optional(),
+			summary: z.string().optional().default(""),
+			cover: z.string().optional().default(""),
+		})
+		.transform((d) => {
+			const [y, m] = d.month.split("-").map(Number);
+			return {
+				...d,
+				title: d.title || `${y} 年 ${m} 月`,
+				// 没写发布日期就算当月最后一天，首页和归档按它排序
+				published: d.published ?? new Date(Date.UTC(y, m, 0)),
+				description: d.description || d.summary,
+				image: d.image || d.cover,
+				category: d.category || "月记",
+				tags: d.tags.length > 0 ? d.tags : ["月记"],
+			};
+		}),
 });
 
 export const collections = {

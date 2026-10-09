@@ -1,67 +1,15 @@
 ---
-import CollectionView from "../../../components/kit/CollectionView.astro";
-import LibraryCard from "../../../components/kit/LibraryCard.astro";
-import PageHero from "../../../components/kit/PageHero.astro";
-import ShelfTabs from "../../../components/kit/ShelfTabs.astro";
+import LibraryView from "../../../components/kit/LibraryView.astro";
 import { shelves } from "../../../data/shelves";
 import MainGridLayout from "../../../layouts/MainGridLayout.astro";
-import { getLibrary } from "../../../utils/kit/content";
 
 export function getStaticPaths() {
 	return shelves.map((shelf) => ({ params: { shelf: shelf.id }, props: { shelf } }));
 }
 
 const { shelf } = Astro.props;
-const items = await getLibrary(shelf.id);
-
-// 标签按出现次数排序，做成筛选按钮
-const tagCount = new Map<string, number>();
-for (const it of items) for (const t of it.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
-const tags = [...tagCount.entries()]
-	.sort((a, b) => b[1] - a[1])
-	.map(([name, count]) => ({ name, count }));
-
-const rated = items.filter((i) => typeof i.rating === "number");
-const hasRating = rated.length > 0;
-const avg = hasRating ? rated.reduce((s, i) => s + (i.rating ?? 0), 0) / rated.length : 0;
-const sorts = [
-	...(hasRating ? [{ value: "rating", label: "评分" }] : []),
-	{ value: "date", label: "日期" },
-	{ value: "title", label: "标题" },
-];
-const groups = [
-	{ value: "year", label: "年份" },
-	{ value: "tag", label: "标签" },
-	...(hasRating ? [{ value: "rating", label: "评分段" }] : []),
-];
-const titles = items.map((i) => i.title);
-const half = Math.ceil(titles.length / 2);
 ---
 
 <MainGridLayout title={`${shelf.title} · 收藏库`} description={shelf.description}>
-	<div class="kit">
-		<PageHero
-			eyebrow={`LIBRARY / ${shelf.id.toUpperCase()}`}
-			title={shelf.title}
-			subtitle={shelf.description}
-			kinetic={[titles.slice(0, half), titles.slice(half)]}
-		>
-			<span><b>{items.length}</b>个条目</span>
-			{hasRating && <span><b>{avg.toFixed(2)}</b>平均分</span>}
-			<span><b>{tags.length}</b>个标签</span>
-		</PageHero>
-
-		<div data-reveal style="--i: 1"><ShelfTabs current={shelf.id} /></div>
-
-		<CollectionView
-			total={items.length}
-			tags={tags}
-			sorts={sorts}
-			defaultSort={shelf.sort}
-			groups={groups}
-			wide={shelf.aspect !== "3 / 4"}
-		>
-			{items.map((item, i) => <LibraryCard item={item} index={i} />)}
-		</CollectionView>
-	</div>
+	<LibraryView shelf={shelf} />
 </MainGridLayout>

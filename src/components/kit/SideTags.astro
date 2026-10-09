@@ -1,0 +1,48 @@
+---
+// 左栏标签：外观和主题的「标签」小组件一致。
+// mode="filter" 时是筛选按钮（需要在 KitShell collection 作用域里），mode="link" 时跳转到 href(tag)
+import WidgetLayout from "../widget/WidgetLayout.astro";
+
+interface Props {
+	id: string;
+	title: string;
+	tags: Array<{ name: string; count: number }>;
+	mode?: "filter" | "link";
+	href?: (tag: string) => string;
+	// 同一页有两组筛选标签时，第二组不用再放「全部」
+	allLabel?: string | false;
+}
+const { id, title, tags, mode = "filter", href, allLabel = "全部" } = Astro.props;
+const cls = "btn-regular h-8 text-sm px-3 rounded-lg whitespace-nowrap";
+---
+
+{
+	tags.length > 0 && (
+		<WidgetLayout id={id} name={title}>
+			<div class="kit-side__tags">
+				{mode === "filter" ? (
+					<>
+						{allLabel && (
+							<button type="button" class={cls} data-filter="" aria-pressed="true">
+								{allLabel}
+							</button>
+						)}
+						{tags.map((t) => (
+							<button type="button" class={cls} data-filter={t.name} aria-pressed="false">
+								{t.name}
+								<span class="ml-1.5 opacity-60 text-xs">{t.count}</span>
+							</button>
+						))}
+					</>
+				) : (
+					tags.map((t) => (
+						<a class={cls} href={href?.(t.name)}>
+							{t.name}
+							<span class="ml-1.5 opacity-60 text-xs">{t.count}</span>
+						</a>
+					))
+				)}
+			</div>
+		</WidgetLayout>
+	)
+}

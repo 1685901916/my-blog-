@@ -26,6 +26,7 @@ async function getRawSortedPosts() {
 	let allMangaCategoriesPosts: CollectionEntry<"manga-categories">[] = [];
 	let allPortfolioPosts: CollectionEntry<"portfolio">[] = [];
 	let allEntertainmentPosts: CollectionEntry<"entertainment-resources">[] = [];
+	let allJournalPosts: CollectionEntry<"journal">[] = [];
 
 	// 根据配置获取博客内容
 	if (siteConfig.homepageContent.showBlogPosts) {
@@ -79,13 +80,24 @@ async function getRawSortedPosts() {
 		}
 	}
 
-	// 合并博客文章、漫画文章、作品集文章和娱乐资源文章
+	// 手写的月记（src/content/journal/）也进入首页列表和归档，链接指向 /journal/YYYY-MM/
+	try {
+		allJournalPosts = await getCollection(
+			"journal",
+			({ data }) => data.draft !== true,
+		);
+	} catch (_e) {
+		// Journal collection might not exist
+	}
+
+	// 合并博客文章、漫画文章、作品集文章、娱乐资源文章和月记
 	const allPosts = [
 		...allBlogPosts,
 		...allMangaPosts,
 		...allMangaCategoriesPosts,
 		...allPortfolioPosts,
 		...allEntertainmentPosts,
+		...allJournalPosts,
 	];
 
 	const sorted = allPosts.sort((a, b) => {

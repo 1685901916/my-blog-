@@ -1,0 +1,24 @@
+---
+// 页面骨架：左栏 + 主区。页面里有它时，全站侧边栏会被隐藏（见 kit.css 的 :has 规则），
+// 左栏换成和当前页面相关的内容，像 Obsidian 左边的数据库列表。
+// 传 collection 时整块区域就是一个 Bases 式视图的作用域：左栏的标签按钮、主区的工具栏和卡片联动。
+interface Props {
+	collection?: { defaultSort: string; defaultGroup?: string };
+}
+const { collection } = Astro.props;
+---
+
+<div
+	class="kit-shell"
+	data-kit-shell
+	data-collection={collection ? "" : undefined}
+	data-default-sort={collection?.defaultSort}
+	data-default-group={collection?.defaultGroup}
+>
+	<aside class="kit-side onload-animation">
+		<slot name="side" />
+	</aside>
+	<div class="kit-main">
+		<slot />
+	</div>
+</div>

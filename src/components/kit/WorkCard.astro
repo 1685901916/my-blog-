@@ -22,28 +22,39 @@ const date = dayKey(work.date);
 	data-title={work.title}
 	data-tags={work.tags.join("|")}
 	data-date={date}
-	style={`--i: ${Math.min(index, 12)}`}
+	data-featured={featured ? "" : undefined}
+	style={`--i: ${Math.min(index, 10)}`}
 >
-	<article class:list={["kit-card", "work", featured && "work--featured"]} data-tilt={featured ? 3 : 4}>
-		<a href={work.url} class="work__cover" aria-label={work.title}>
+	<article class:list={["card-base", "kit-card", "work", featured && "work--featured"]} data-tilt={featured ? 2 : 4}>
+		<a class="kit-card__link" href={work.url} aria-label={work.title}></a>
+		<div class="work__cover">
 			<Cover src={work.cover} title={work.title} aspect="16 / 10" eager={featured} />
-			{group && <span class="kit-chip work__group">{group}</span>}
-		</a>
+			{group && <span class="work__group">{group}</span>}
+		</div>
 		<div class="kit-card__body work__body">
-			<div class="work__date">{date}</div>
-			<a href={work.url} class="work__title">{work.title}</a>
-			<p class="work__desc">{work.description}</p>
+			<div class="work__date text-50">
+				<Icon name="material-symbols:calendar-today-outline-rounded" class="inline -translate-y-px" />
+				{date}
+			</div>
+			<h3 class="kit-card__title work__title text-90">{work.title}</h3>
+			<p class="work__desc text-75">{work.description}</p>
 			<div class="kit-card__tags">
-				{stack.slice(0, featured ? 8 : 4).map((t) => <span class="kit-chip">{t}</span>)}
+				{
+					stack.slice(0, featured ? 8 : 4).map((t) => (
+						<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={`/works/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
+							# {t}
+						</button>
+					))
+				}
 			</div>
 			{
 				featured && (
 					<div class="work__actions">
-						<a class="kit-btn kit-btn--solid" href={work.url}>
+						<a class="kit-btn-solid" href={work.url}>
 							看看怎么做的 <Icon name="material-symbols:arrow-forward-rounded" />
 						</a>
 						{work.sourceLink && (
-							<a class="kit-btn" href={work.sourceLink} target="_blank" rel="noopener noreferrer">
+							<a class="btn-regular h-9 px-4 rounded-lg text-sm font-bold gap-1.5" href={work.sourceLink} target="_blank" rel="noopener noreferrer">
 								<Icon name="material-symbols:code-rounded" /> 源码
 							</a>
 						)}
@@ -57,15 +68,19 @@ const date = dayKey(work.date);
 <style>
 	.work__cover {
 		position: relative;
-		display: block;
 	}
 
 	.work__group {
 		position: absolute;
+		z-index: 2;
 		left: 0.6rem;
 		top: 0.6rem;
-		background: rgb(0 0 0 / 0.5);
+		padding: 0.2rem 0.55rem;
+		border-radius: 0.5rem;
+		font-size: 0.75rem;
+		font-weight: 700;
 		color: white;
+		background: rgb(0 0 0 / 0.5);
 		-webkit-backdrop-filter: blur(8px);
 		backdrop-filter: blur(8px);
 	}
@@ -77,25 +92,15 @@ const date = dayKey(work.date);
 	.work__date {
 		font-family: var(--kit-num);
 		font-size: 0.75rem;
-		color: var(--kit-ink-3);
 	}
 
 	.work__title {
-		font-size: 1.05rem;
-		font-weight: 800;
-		line-height: 1.35;
-		color: var(--kit-ink);
-		transition: color 0.2s;
-	}
-
-	.work__title:hover {
-		color: var(--primary);
+		font-size: 1.1rem;
 	}
 
 	.work__desc {
 		font-size: 0.875rem;
 		line-height: 1.65;
-		color: var(--kit-ink-2);
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
@@ -103,6 +108,8 @@ const date = dayKey(work.date);
 	}
 
 	.work__actions {
+		position: relative;
+		z-index: 2;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.6rem;
@@ -116,7 +123,7 @@ const date = dayKey(work.date);
 		}
 
 		.work--featured .work__cover {
-			flex: 0 0 55%;
+			flex: 0 0 52%;
 		}
 
 		.work--featured .work__cover :global(.kit-cover) {

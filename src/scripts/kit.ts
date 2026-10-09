@@ -245,6 +245,8 @@ function initCollection(scope: HTMLElement) {
 		...scope.querySelectorAll<HTMLButtonElement>("[data-view]"),
 	];
 	const storeKey = `kit-view:${location.pathname}`;
+	const defaultSort = scope.dataset.defaultSort ?? "date";
+	const defaultGroup = scope.dataset.defaultGroup ?? "";
 
 	// 初始状态：URL 参数 > 本地记住的视图 > 默认值
 	const params = new URLSearchParams(location.search);
@@ -255,12 +257,18 @@ function initCollection(scope: HTMLElement) {
 	const state: State = {
 		q: params.get("q") ?? "",
 		tag: params.get("tag") ?? "",
-		sort: params.get("sort") ?? scope.dataset.defaultSort ?? "date",
-		group: params.get("group") ?? "",
+		sort: params.get("sort") ?? defaultSort,
+		group: params.has("group")
+			? (params.get("group") ?? "").replace(/^none$/, "")
+			: defaultGroup,
 		view: params.get("view") ?? (savedView || "cards"),
 	};
 
 	const key = (el: HTMLElement, k: string) => el.dataset[k] ?? "";
+	// 书架分组按书架配置里的顺序排
+	const shelfOrder = new Map(
+		items.map((el) => [key(el, "shelf"), Number(key(el, "shelfOrder"))]),
+	);
 
 	function sortValue(a: HTMLElement, b: HTMLElement) {
 		switch (state.sort) {
@@ -282,6 +290,7 @@ function initCollection(scope: HTMLElement) {
 	const RATING_BANDS = ["神作 9.5+", "佳作 9+", "其他", "未评分"];
 
 	function groupOf(el: HTMLElement) {
+		if (state.group === "shelf") return key(el, "shelf");
 		if (state.group === "year") return key(el, "date").slice(0, 4) || "未记录";
 		if (state.group === "tag") return key(el, "tags").split("|")[0] || "无标签";
 		if (state.group === "rating") {
@@ -300,6 +309,9 @@ function initCollection(scope: HTMLElement) {
 	function compareGroups(ga: string, gb: string) {
 		if (state.group === "rating") {
 			return RATING_BANDS.indexOf(ga) - RATING_BANDS.indexOf(gb);
+		}
+		if (state.group === "shelf") {
+			return (shelfOrder.get(ga) ?? 0) - (shelfOrder.get(gb) ?? 0);
 		}
 		const tail = /^(未|无)/;
 		if (tail.test(ga) !== tail.test(gb)) return tail.test(ga) ? 1 : -1;
@@ -328,8 +340,9 @@ function initCollection(scope: HTMLElement) {
 			v && v !== def ? p.set(k, v) : p.delete(k);
 		set("q", state.q, "");
 		set("tag", state.tag, "");
-		set("sort", state.sort, scope.dataset.defaultSort ?? "date");
-		set("group", state.group, "");
+		set("sort", state.sort, defaultSort);
+		// 默认有分组时，「不分组」要显式写成 none，否则刷新会回到默认分组
+		set("group", state.group || (defaultGroup ? "none" : ""), defaultGroup);
 		const qs = p.toString();
 		history.replaceState(
 			history.state,
@@ -358,6 +371,9 @@ function initCollection(scope: HTMLElement) {
 					const gb = groupOf(b);
 					if (ga !== gb) return compareGroups(ga, gb);
 				}
+				// 精选卡片（比如最新作品）始终排在最前
+				const fa = a.hasAttribute("data-featured");
+				if (fa !== b.hasAttribute("data-featured")) return fa ? -1 : 1;
 				return sortValue(a, b);
 			});
 
@@ -431,6 +447,20 @@ function initCollection(scope: HTMLElement) {
 			update({ view: b.dataset.view ?? "cards" }),
 		);
 	}
+	// 卡片上的标签：点一下只看这个标签，再点一下取消
+	grid.addEventListener("click", (ev) => {
+		const btn = (ev.target as HTMLElement).closest<HTMLElement>(
+			"[data-tag-filter]",
+		);
+		if (!btn) return;
+		ev.preventDefault();
+		const tag = btn.dataset.tagFilter ?? "";
+		update({ tag: state.tag === tag ? "" : tag });
+		scope.querySelector("[data-items]")?.scrollIntoView({
+			behavior: reduceMotion() ? "auto" : "smooth",
+			block: "nearest",
+		});
+	});
 
 	apply();
 }
@@ -453,6 +483,20 @@ function init() {
 	initImages(document);
 	initReveal(document);
 }
+
+// 不在卡片视图里的卡片（详情页、月记）：点标签跳到对应列表的筛选结果
+document.addEventListener("click", (ev) => {
+	const btn = (ev.target as HTMLElement).closest<HTMLElement>(
+		"[data-tag-href]",
+	);
+	if (!btn || btn.closest("[data-collection]")) return;
+	ev.preventDefault();
+	const href = btn.dataset.tagHref ?? "/";
+	const swup = (window as Window & { swup?: { navigate: (u: string) => void } })
+		.swup;
+	if (swup) swup.navigate(href);
+	else location.href = href;
+});
 
 if (document.readyState === "loading") {
 	document.addEventListener("DOMContentLoaded", init, { once: true });

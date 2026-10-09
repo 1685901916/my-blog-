@@ -1,9 +1,13 @@
 ---
 import { Icon } from "astro-icon/components";
 import Cover from "../../../components/kit/Cover.astro";
+import KitShell from "../../../components/kit/KitShell.astro";
 import LibraryCard from "../../../components/kit/LibraryCard.astro";
+import SideNav from "../../../components/kit/SideNav.astro";
+import SideTags from "../../../components/kit/SideTags.astro";
+import Markdown from "../../../components/misc/Markdown.astro";
 import MainGridLayout from "../../../layouts/MainGridLayout.astro";
-import { dayKey, getLibrary, type LibraryItem } from "../../../utils/kit/content";
+import { dayKey, getLibrary, getShelvesWithItems, type LibraryItem } from "../../../utils/kit/content";
 
 export async function getStaticPaths() {
 	const items = await getLibrary();
@@ -32,19 +36,51 @@ const dateText = item.date
 	? `${dayKey(item.date)}${item.date.getUTCHours() || item.date.getUTCMinutes() ? ` ${item.date.toISOString().slice(11, 16)}` : ""}`
 	: "";
 const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问";
+
+const all = await getShelvesWithItems();
+const navRows = [
+	{
+		label: "全部",
+		href: "/library/",
+		count: all.reduce((n, s) => n + s.items.length, 0),
+		icon: "material-symbols:collections-bookmark-outline-rounded",
+	},
+	...all.map((s) => ({
+		label: s.shelf.title,
+		href: `/library/${s.shelf.id}/`,
+		count: s.items.length,
+		icon: s.shelf.icon,
+		active: s.shelf.id === shelf.id,
+	})),
+];
+const tagCount = new Map<string, number>();
+for (const it of siblings) for (const t of it.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const shelfTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 ---
 
 <MainGridLayout title={item.title} description={`${shelf.title} · ${item.tags.join(" / ")}`}>
-	<div class="kit">
-		<article class:list={["kit-panel", "entry", wide && "is-wide"]}>
+	<KitShell>
+		<Fragment slot="side">
+			<SideNav id="kit-shelves" title="收藏库" rows={navRows} />
+			<SideTags
+				id="kit-tags"
+				title={`${shelf.title}的标签`}
+				tags={shelfTags}
+				mode="link"
+				href={(t) => `/library/${shelf.id}/?tag=${encodeURIComponent(t)}`}
+			/>
+		</Fragment>
+
+		<!-- data-pagefind-body：让站内搜索收录标题、评分和标签（没写短评的条目也能搜到） -->
+		<article class:list={["card-base", "entry", "onload-animation", wide && "is-wide"]} data-pagefind-body>
 			<div class="entry__cover" data-reveal>
 				<Cover src={item.cover} title={item.title} aspect={shelf.aspect} eager />
 			</div>
 			<div class="entry__info">
-				<a class="kit-eyebrow entry__crumb" href={`/library/${shelf.id}/`} data-reveal>
-					<Icon name="material-symbols:arrow-back-rounded" class="inline -translate-y-px" /> 收藏库 / {shelf.title}
-				</a>
-				<h1 class="kit-title entry__title">
+				<nav class="kit-crumb text-50" aria-label="面包屑">
+					<a href="/library/">收藏库</a><span class="opacity-50">/</span><a href={`/library/${shelf.id}/`}>{shelf.title}</a>
+				</nav>
+				<h1 class="kit-head__title text-90">
 					<span data-split>{item.title}</span>
 					{
 						item.marks.map((m) => (
@@ -54,11 +90,11 @@ const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问
 				</h1>
 
 				<!-- 仿 Obsidian 属性面板 -->
-				<dl class="props" data-reveal style="--i: 3">
+				<dl class="props" data-reveal style="--i: 2">
 					{
 						typeof item.rating === "number" && (
 							<div class="props__row">
-								<dt>
+								<dt class="text-50">
 									<Icon name="material-symbols:star-rounded" />评分
 								</dt>
 								<dd class="props__rating">
@@ -73,13 +109,13 @@ const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问
 					{
 						item.tags.length > 0 && (
 							<div class="props__row">
-								<dt>
-									<Icon name="material-symbols:bookmark-star-outline-rounded" />文件标签
+								<dt class="text-50">
+									<Icon name="material-symbols:tag-rounded" />文件标签
 								</dt>
-								<dd class="flex flex-wrap gap-1.5">
+								<dd class="flex flex-wrap gap-2">
 									{item.tags.map((t) => (
-										<a class="kit-chip" href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`}>
-											{t}
+										<a class="btn-regular h-6 text-xs px-2 rounded-lg" href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`}>
+											# {t}
 										</a>
 									))}
 								</dd>
@@ -89,20 +125,20 @@ const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问
 					{
 						dateText && (
 							<div class="props__row">
-								<dt>
-									<Icon name="material-symbols:calendar-month-outline-rounded" />date
+								<dt class="text-50">
+									<Icon name="material-symbols:calendar-today-outline-rounded" />date
 								</dt>
-								<dd>{dateText}</dd>
+								<dd class="text-75">{dateText}</dd>
 							</div>
 						)
 					}
 					{
 						item.year && (
 							<div class="props__row">
-								<dt>
+								<dt class="text-50">
 									<Icon name="material-symbols:event-note-outline-rounded" />年份
 								</dt>
-								<dd>{item.year}</dd>
+								<dd class="text-75">{item.year}</dd>
 							</div>
 						)
 					}
@@ -110,8 +146,8 @@ const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问
 
 				{
 					item.link && (
-						<div class="mt-5" data-reveal style="--i: 5">
-							<a class="kit-btn kit-btn--solid" href={item.link} target="_blank" rel="noopener noreferrer">
+						<div class="mt-5" data-reveal style="--i: 4">
+							<a class="kit-btn-solid" href={item.link} target="_blank" rel="noopener noreferrer">
 								{linkLabel} <Icon name="material-symbols:open-in-new-rounded" />
 							</a>
 						</div>
@@ -122,86 +158,77 @@ const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问
 
 		{
 			hasBody && (
-				<section class="kit-panel" data-reveal style="--i: 2">
-					<div class="kit-prose">
+				<section class="card-base kit-section" data-reveal>
+					<Markdown class="markdown-content">
 						<Content />
-					</div>
+					</Markdown>
 				</section>
 			)
 		}
 
 		{
 			related.length > 0 && (
-				<section class="kit-panel" data-reveal style="--i: 3">
-					<h2 class="kit-section-title">标签相近</h2>
+				<section data-reveal>
+					<h2 class="kit-section-title text-90">
+						标签相近 <small class="text-50">{related.length}</small>
+					</h2>
 					<div class:list={["kit-grid", wide && "kit-grid--wide"]}>
 						{related.map((r, i) => <LibraryCard item={r} index={i} />)}
 					</div>
 				</section>
 			)
 		}
-	</div>
+	</KitShell>
 </MainGridLayout>
 
 <style>
 	.entry {
 		display: grid;
 		gap: 1.75rem;
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
+		padding: 1.5rem;
 	}
 
 	@media (min-width: 640px) {
 		.entry {
 			grid-template-columns: 12rem minmax(0, 1fr);
+			padding: 1.75rem 2.25rem;
 		}
+
 		.entry.is-wide {
 			grid-template-columns: 18rem minmax(0, 1fr);
 		}
 	}
 
 	.entry__cover :global(.kit-cover) {
-		border-radius: 1rem;
+		border-radius: 0.75rem;
 		box-shadow: var(--kit-shadow);
 	}
 
-	.entry__crumb {
-		display: inline-block;
-	}
-
-	.entry__crumb:hover {
-		text-decoration: underline;
-	}
-
-	.entry__title {
-		font-size: clamp(1.75rem, 4.5vw, 2.5rem);
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.35rem;
-	}
-
 	.props {
-		margin-top: 1.5rem;
+		margin-top: 1.25rem;
 		display: flex;
 		flex-direction: column;
-		border-top: 1px solid var(--kit-line);
 	}
 
 	.props__row {
 		display: grid;
-		grid-template-columns: 7rem minmax(0, 1fr);
+		grid-template-columns: 6.5rem minmax(0, 1fr);
 		align-items: center;
 		gap: 1rem;
-		padding: 0.7rem 0;
-		border-bottom: 1px solid var(--kit-line);
+		padding: 0.65rem 0;
+		border-top: 1px dashed rgb(0 0 0 / 0.1);
 		font-size: 0.9375rem;
+	}
+
+	:global(:root.dark) .props__row {
+		border-color: rgb(255 255 255 / 0.15);
 	}
 
 	.props__row dt {
 		display: flex;
 		align-items: center;
 		gap: 0.4rem;
-		color: var(--kit-ink-3);
 		font-size: 0.875rem;
 	}
 

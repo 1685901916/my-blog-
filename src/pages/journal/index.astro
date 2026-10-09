@@ -1,6 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
-import PageHero from "../../components/kit/PageHero.astro";
+import JournalNav from "../../components/kit/JournalNav.astro";
+import KitHeader from "../../components/kit/KitHeader.astro";
+import KitShell from "../../components/kit/KitShell.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 import { getMonthDigests, monthKey } from "../../utils/kit/content";
 
@@ -8,13 +10,11 @@ const digests = await getMonthDigests();
 const byMonth = new Map(digests.map((d) => [d.month, d]));
 const now = new Date();
 const thisMonth = monthKey(now);
-const firstYear = Math.min(...digests.map((d) => d.year), now.getFullYear());
-const years = Array.from({ length: now.getFullYear() - firstYear + 1 }, (_, i) => now.getFullYear() - i);
+const thisYear = now.getUTCFullYear();
+const firstYear = Math.min(...digests.map((d) => d.year), thisYear);
+const years = Array.from({ length: thisYear - firstYear + 1 }, (_, i) => thisYear - i);
 const written = digests.filter((d) => d.note);
 const latest = written[0];
-
-const MONTHS_EN = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-const MONTHS_CN = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
 
 const activity = (d: (typeof digests)[number]) =>
 	[
@@ -27,29 +27,32 @@ const activity = (d: (typeof digests)[number]) =>
 ---
 
 <MainGridLayout title="月记" description="每个月一页，自动汇总加几句碎碎念">
-	<div class="kit">
-		<PageHero
-			eyebrow="JOURNAL · 月记"
+	<KitShell>
+		<JournalNav slot="side" digests={digests} />
+
+		<KitHeader
 			title="月记"
-			subtitle="每个月一页：这个月写的文章、做的作品、收进收藏库的东西会自动汇总进来，只需要再写几句碎碎念。"
-			kinetic={[MONTHS_EN, MONTHS_CN]}
-		>
-			<span><b>{written.length}</b>期手写</span>
-			<span><b>{digests.length}</b>个有记录的月份</span>
-		</PageHero>
+			desc="每个月一页：这个月写的文章、做的作品、收进收藏库的东西会自动汇总进来，再加几句碎碎念。"
+			meta={[
+				{ icon: "material-symbols:edit-note-outline-rounded", text: `${written.length} 期手写` },
+				{ icon: "material-symbols:calendar-month-outline-rounded", text: `${digests.length} 个月有记录` },
+			]}
+		/>
 
 		{
 			latest && (
-				<a href={`/journal/${latest.month}/`} class="kit-panel latest" data-reveal style="--i: 1">
+				<a href={`/journal/${latest.month}/`} class="card-base latest onload-animation">
 					{latest.cover && <img class="latest__bg" src={latest.cover} alt="" referrerpolicy="no-referrer" />}
 					<div class="latest__num">{String(latest.monthNumber).padStart(2, "0")}</div>
 					<div class="latest__info">
-						<div class="kit-eyebrow">最新一期 · {latest.year} 年 {latest.monthNumber} 月</div>
-						<div class="latest__title">{latest.title || `${latest.year} 年 ${latest.monthNumber} 月`}</div>
-						{latest.summary && <p class="kit-subtitle">{latest.summary}</p>}
+						<div class="text-50 text-sm">
+							最新一期 · {latest.year} 年 {latest.monthNumber} 月
+						</div>
+						<div class="latest__title text-90">{latest.title || `${latest.year} 年 ${latest.monthNumber} 月`}</div>
+						{latest.summary && <p class="text-75 mt-1">{latest.summary}</p>}
 						<div class="latest__meta">
-							<span class="kit-chip">{activity(latest) || "只有碎碎念"}</span>
-							<span class="kit-btn">
+							<span class="btn-regular h-7 text-xs px-2.5 rounded-lg">{activity(latest) || "只有碎碎念"}</span>
+							<span class="latest__go">
 								翻开 <Icon name="material-symbols:arrow-forward-rounded" />
 							</span>
 						</div>
@@ -59,35 +62,27 @@ const activity = (d: (typeof digests)[number]) =>
 		}
 
 		{
-			years.map((year, yi) => {
+			years.map((year) => {
 				const count = digests.filter((d) => d.year === year).length;
 				return (
-					<section class="kit-panel" data-reveal style={`--i: ${yi + 2}`}>
-						<div class="year-head">
-							<span class="year-head__num">{year}</span>
-							<span class="year-head__count">{count} 个月有记录</span>
-						</div>
+					<section class="card-base kit-section" data-reveal>
+						<h2 class="kit-section-title text-90">
+							{year} <small class="text-50">{count} 个月有记录</small>
+						</h2>
 						<div class="months">
 							{Array.from({ length: 12 }, (_, m) => {
 								const key = `${year}-${String(m + 1).padStart(2, "0")}`;
 								const d = byMonth.get(key);
-								const future = key > thisMonth;
 								const label = String(m + 1).padStart(2, "0");
 								if (!d) {
 									return (
-										<div class:list={["month", "is-empty", future && "is-future"]} data-reveal style={`--i: ${m}`}>
+										<div class:list={["month", "is-empty", key > thisMonth && "is-future"]}>
 											<span class="month__num">{label}</span>
 										</div>
 									);
 								}
 								return (
-									<a
-										href={`/journal/${key}/`}
-										class:list={["month", d.note ? "is-written" : "is-auto"]}
-										data-reveal
-										style={`--i: ${m}`}
-										title={d.title || activity(d)}
-									>
+									<a href={`/journal/${key}/`} class:list={["month", d.note ? "is-written" : "is-auto"]} title={d.title || activity(d)}>
 										{d.note && d.cover && <img src={d.cover} alt="" loading="lazy" referrerpolicy="no-referrer" />}
 										<span class="month__num">{label}</span>
 										<span class="month__sub">{d.note ? d.title || "月记" : activity(d)}</span>
@@ -100,21 +95,30 @@ const activity = (d: (typeof digests)[number]) =>
 			})
 		}
 
-		<p class="legend" data-reveal>
+		<p class="legend text-50">
 			<span><i class="dot is-written"></i>写了月记</span>
 			<span><i class="dot is-auto"></i>只有自动汇总</span>
 			<span><i class="dot is-empty"></i>没有记录</span>
 		</p>
-	</div>
+	</KitShell>
 </MainGridLayout>
 
 <style>
 	.latest {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 1.5rem;
-		color: inherit;
+		padding: 1.5rem 2.25rem;
 		isolation: isolate;
+		transition:
+			transform 0.5s var(--kit-spring),
+			box-shadow 0.4s;
+	}
+
+	.latest:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--kit-shadow);
 	}
 
 	.latest__bg {
@@ -123,15 +127,14 @@ const activity = (d: (typeof digests)[number]) =>
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		opacity: 0.14;
-		filter: blur(2px) saturate(1.2);
+		opacity: 0.12;
 		z-index: -1;
 	}
 
 	.latest__num {
 		font-family: var(--kit-num);
 		font-weight: 700;
-		font-size: clamp(4.5rem, 14vw, 8rem);
+		font-size: clamp(4rem, 12vw, 6.5rem);
 		line-height: 0.9;
 		color: var(--primary);
 		letter-spacing: -0.04em;
@@ -139,35 +142,24 @@ const activity = (d: (typeof digests)[number]) =>
 
 	.latest__title {
 		font-size: 1.5rem;
-		font-weight: 800;
-		color: var(--kit-ink);
+		font-weight: 700;
+		margin-top: 0.25rem;
 	}
 
 	.latest__meta {
-		margin-top: 1rem;
+		margin-top: 0.9rem;
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		flex-wrap: wrap;
 	}
 
-	.year-head {
-		display: flex;
-		align-items: baseline;
-		gap: 0.75rem;
-		margin-bottom: 1rem;
-	}
-
-	.year-head__num {
-		font-family: var(--kit-num);
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--kit-ink);
-	}
-
-	.year-head__count {
+	.latest__go {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
 		font-size: 0.875rem;
-		color: var(--kit-ink-3);
+		font-weight: 700;
+		color: var(--primary);
 	}
 
 	.months {
@@ -182,7 +174,7 @@ const activity = (d: (typeof digests)[number]) =>
 		}
 	}
 
-	@media (min-width: 1024px) {
+	@media (min-width: 1280px) {
 		.months {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
@@ -191,7 +183,7 @@ const activity = (d: (typeof digests)[number]) =>
 	.month {
 		position: relative;
 		aspect-ratio: 1;
-		border-radius: 0.9rem;
+		border-radius: 0.75rem;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
@@ -253,17 +245,22 @@ const activity = (d: (typeof digests)[number]) =>
 	}
 
 	.month.is-auto {
-		background: var(--kit-soft);
-		color: color-mix(in oklch, var(--primary) 75%, var(--kit-ink));
+		background: var(--btn-regular-bg);
+		color: var(--btn-content);
 	}
 
 	.month.is-empty {
-		border: 1.5px dashed var(--kit-line);
-		color: var(--kit-ink-3);
+		border: 1.5px dashed rgb(0 0 0 / 0.12);
+		color: rgb(0 0 0 / 0.3);
+	}
+
+	:global(:root.dark) .month.is-empty {
+		border-color: rgb(255 255 255 / 0.15);
+		color: rgb(255 255 255 / 0.3);
 	}
 
 	.month.is-future {
-		opacity: 0.4;
+		opacity: 0.45;
 	}
 
 	.legend {
@@ -272,8 +269,7 @@ const activity = (d: (typeof digests)[number]) =>
 		justify-content: center;
 		gap: 0.5rem 1.25rem;
 		font-size: 0.8125rem;
-		color: var(--kit-ink-3);
-		padding: 0.5rem 0 1rem;
+		padding: 0.25rem 0 0.5rem;
 	}
 
 	.legend span {
@@ -293,10 +289,11 @@ const activity = (d: (typeof digests)[number]) =>
 	}
 
 	.dot.is-auto {
-		background: var(--kit-soft-2);
+		background: var(--btn-regular-bg);
+		border: 1px solid var(--btn-content);
 	}
 
 	.dot.is-empty {
-		border: 1.5px dashed var(--kit-ink-3);
+		border: 1.5px dashed currentColor;
 	}
 </style>

@@ -215,14 +215,14 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
-		// 设计分支：「资源」「娱乐」合并成收藏库，旧页面先留在下拉里方便对比
+		// 「资源」「娱乐」合并成收藏库；实用工具 / 实用信息是文章分类页，保留在下拉里
 		{
 			name: "收藏库",
 			url: "/library/",
 			icon: "material-symbols:collections-bookmark-outline-rounded",
 			children: [
 				{
-					name: "全部书架",
+					name: "全部",
 					url: "/library/",
 					icon: "material-symbols:collections-bookmark-outline-rounded",
 				},
@@ -237,12 +237,12 @@ export const navBarConfig: NavBarConfig = {
 					icon: "material-symbols:bookmark-star-outline-rounded",
 				},
 				{
-					name: "实用工具（旧）",
+					name: "实用工具",
 					url: "/resources/utility/",
 					icon: "material-symbols:construction",
 				},
 				{
-					name: "实用信息（旧）",
+					name: "实用信息",
 					url: "/resources/info/",
 					icon: "material-symbols:menu-book",
 				},
@@ -253,27 +253,11 @@ export const navBarConfig: NavBarConfig = {
 			url: "/journal/",
 			icon: "material-symbols:calendar-month-outline-rounded",
 		},
+		// 正常系 / 程序系 变成作品墙左栏的分组筛选，旧地址会跳转过去
 		{
 			name: "作品",
 			url: "/works/",
 			icon: "material-symbols:work",
-			children: [
-				{
-					name: "作品墙",
-					url: "/works/",
-					icon: "material-symbols:auto-awesome-outline-rounded",
-				},
-				{
-					name: "正常系",
-					url: "/portfolio/normal/",
-					icon: "material-symbols:palette-outline",
-				},
-				{
-					name: "程序系",
-					url: "/portfolio/programming/",
-					icon: "material-symbols:code",
-				},
-			],
 		},
 		{
 			name: "赚钱",
@@ -293,7 +277,12 @@ export const navBarConfig: NavBarConfig = {
 			children: [
 				LinkPreset.Friends,
 				LinkPreset.About,
-				LinkPreset.Anime,
+				// 旧追番页是主题演示数据，改指向收藏库的动漫书架
+				{
+					name: "追番",
+					url: "/library/anime/",
+					icon: "material-symbols:movie",
+				},
 				LinkPreset.Diary,
 				{
 					name: "Gallery",

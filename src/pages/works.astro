@@ -1,61 +1,60 @@
 ---
-import CollectionView from "../components/kit/CollectionView.astro";
-import PageHero from "../components/kit/PageHero.astro";
+import KitHeader from "../components/kit/KitHeader.astro";
+import KitShell from "../components/kit/KitShell.astro";
+import SideTags from "../components/kit/SideTags.astro";
+import Toolbar from "../components/kit/Toolbar.astro";
 import WorkCard from "../components/kit/WorkCard.astro";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getWorks } from "../utils/kit/content";
 
 const works = await getWorks();
-const [featured] = works;
+const [featured, ...rest] = works;
 
-// 「程序系 / 正常系」放在最前，其余技术标签按出现次数
 const tagCount = new Map<string, number>();
 for (const w of works) for (const t of w.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
-const tags = [...tagCount.entries()]
-	.sort((a, b) => Number(b[0].endsWith("系")) - Number(a[0].endsWith("系")) || b[1] - a[1])
-	.slice(0, 14)
-	.map(([name, count]) => ({ name, count }));
-
-const stack = tags.filter((t) => !t.name.endsWith("系")).map((t) => t.name.toUpperCase());
-const groups = tags.filter((t) => t.name.endsWith("系"));
-const years = new Set(works.map((w) => w.date.getFullYear()));
+const sorted = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+// 「程序系 / 正常系」是作品分组，其余是技术栈
+const groups = sorted.filter((t) => t.name.endsWith("系"));
+const stack = sorted.filter((t) => !t.name.endsWith("系"));
+const years = new Set(works.map((w) => w.date.getUTCFullYear()));
 ---
 
 <MainGridLayout title="作品" description="写过的工具、做过的东西">
-	<div class="kit">
-		<PageHero
-			eyebrow="WORKS · 作品"
+	<KitShell collection={{ defaultSort: "date" }}>
+		<Fragment slot="side">
+			<SideTags id="kit-groups" title="分组" tags={groups} />
+			<SideTags id="kit-stack" title="技术栈" tags={stack} allLabel={false} />
+		</Fragment>
+
+		<KitHeader
 			title="作品"
-			subtitle="写过的工具、做过的东西。每个作品都有一篇完整的过程记录。"
-			kinetic={[["WORKS", "作品", ...groups.map((g) => g.name)], stack.slice(0, 6), stack.slice(6)]}
-		>
-			<span><b>{works.length}</b>个作品</span>
-			{groups.map((g) => <span><b>{g.count}</b>{g.name}</span>)}
-			<span><b>{years.size}</b>年</span>
-		</PageHero>
-
-		{
-			featured && (
-				<section data-reveal style="--i: 1">
-					<div class="kit-eyebrow" style="margin: 0 0 .6rem .25rem">最新作品</div>
-					<WorkCard work={featured} featured />
-				</section>
-			)
-		}
-
-		<CollectionView
-			total={works.length}
-			tags={tags}
-			sorts={[
-				{ value: "date", label: "日期" },
-				{ value: "title", label: "标题" },
+			desc="写过的工具、做过的东西。每个作品都有一篇完整的过程记录。"
+			meta={[
+				{ icon: "material-symbols:work", text: `${works.length} 个作品` },
+				...groups.map((g) => ({
+					icon: g.name === "程序系" ? "material-symbols:code" : "material-symbols:palette-outline",
+					text: `${g.name} ${g.count}`,
+				})),
+				{ icon: "material-symbols:calendar-today-outline-rounded", text: `${years.size} 年` },
 			]}
-			defaultSort="date"
-			groups={[{ value: "year", label: "年份" }]}
-			wide
-			searchPlaceholder="搜索作品或技术栈"
 		>
-			{works.map((w, i) => <WorkCard work={w} index={i} />)}
-		</CollectionView>
-	</div>
+			<Toolbar
+				slot="toolbar"
+				total={works.length}
+				sorts={[
+					{ value: "date", label: "日期" },
+					{ value: "title", label: "标题" },
+				]}
+				defaultSort="date"
+				groups={[{ value: "year", label: "年份" }]}
+				searchPlaceholder="搜索作品或技术栈"
+			/>
+		</KitHeader>
+
+		<!-- 最新作品带 data-featured：占满一行、排序时始终在最前，被筛掉时这一行自然消失 -->
+		<div class="kit-grid kit-grid--wide" data-items>
+			{featured && <WorkCard work={featured} featured />}
+			{rest.map((w, i) => <WorkCard work={w} index={i + 1} />)}
+		</div>
+	</KitShell>
 </MainGridLayout>

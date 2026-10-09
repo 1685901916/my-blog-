@@ -1,0 +1,94 @@
+---
+// 收藏库视图：/library/（全部，按书架分组）和 /library/<书架>/ 共用
+import { getShelvesWithItems, dayKey } from "../../utils/kit/content";
+import type { Shelf } from "../../data/shelves";
+import KitHeader from "./KitHeader.astro";
+import KitShell from "./KitShell.astro";
+import LibraryCard from "./LibraryCard.astro";
+import SideNav from "./SideNav.astro";
+import SideTags from "./SideTags.astro";
+import Toolbar from "./Toolbar.astro";
+
+interface Props {
+	shelf?: Shelf;
+}
+const { shelf } = Astro.props;
+const all = await getShelvesWithItems();
+const items = shelf ? (all.find((s) => s.shelf.id === shelf.id)?.items ?? []) : all.flatMap((s) => s.items);
+const total = all.reduce((n, s) => n + s.items.length, 0);
+
+const tagCount = new Map<string, number>();
+for (const it of items) for (const t of it.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+
+const rated = items.filter((i) => typeof i.rating === "number");
+const avg = rated.length ? rated.reduce((s, i) => s + (i.rating ?? 0), 0) / rated.length : 0;
+const latest = items
+	.map((i) => i.date)
+	.filter((d): d is Date => !!d)
+	.sort((a, b) => b.getTime() - a.getTime())[0];
+
+const sorts = [
+	...(rated.length ? [{ value: "rating", label: "评分" }] : []),
+	{ value: "date", label: "日期" },
+	{ value: "title", label: "标题" },
+];
+const groups = [
+	...(shelf ? [] : [{ value: "shelf", label: "书架" }]),
+	{ value: "year", label: "年份" },
+	{ value: "tag", label: "标签" },
+	...(rated.length ? [{ value: "rating", label: "评分段" }] : []),
+];
+const defaultSort = shelf?.sort ?? "rating";
+const defaultGroup = shelf ? "" : "shelf";
+
+const navRows = [
+	{
+		label: "全部",
+		href: "/library/",
+		count: total,
+		icon: "material-symbols:collections-bookmark-outline-rounded",
+		active: !shelf,
+	},
+	...all.map((s) => ({
+		label: s.shelf.title,
+		href: `/library/${s.shelf.id}/`,
+		count: s.items.length,
+		icon: s.shelf.icon,
+		active: shelf?.id === s.shelf.id,
+	})),
+];
+const meta = [
+	{ icon: "material-symbols:database-outline", text: `${items.length} 个条目` },
+	...(rated.length ? [{ icon: "material-symbols:star-rounded", text: `平均 ${avg.toFixed(2)} 分` }] : []),
+	...(latest ? [{ icon: "material-symbols:calendar-today-outline-rounded", text: `最近收录 ${dayKey(latest)}` }] : []),
+];
+const wide = shelf && shelf.aspect !== "3 / 4";
+---
+
+<KitShell collection={{ defaultSort, defaultGroup }}>
+	<Fragment slot="side">
+		<SideNav id="kit-shelves" title="收藏库" rows={navRows} />
+		<SideTags id="kit-tags" title="标签" tags={tags} />
+	</Fragment>
+
+	<KitHeader
+		crumbs={shelf ? [{ label: "收藏库", href: "/library/" }, { label: shelf.title }] : []}
+		title={shelf?.title ?? "收藏库"}
+		desc={shelf?.description ?? "看过的番、常用的站，一条笔记就是一张卡片，和 Obsidian 的数据库一样。"}
+		meta={meta}
+	>
+		<Toolbar
+			slot="toolbar"
+			total={items.length}
+			sorts={sorts}
+			defaultSort={defaultSort}
+			groups={groups}
+			defaultGroup={defaultGroup}
+		/>
+	</KitHeader>
+
+	<div class:list={["kit-grid", wide && "kit-grid--wide"]} data-items>
+		{items.map((item, i) => <LibraryCard item={item} index={i} mixed={!shelf} />)}
+	</div>
+</KitShell>

@@ -47,6 +47,12 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+
+// 归档和 RSS 统一链接 /posts/<slug>/，月记在这里跳到自己的页面
+if (entry.collection === "journal") {
+	return Astro.redirect(`/journal/${entry.slug}/`);
+}
+
 const { Content, headings } = await entry.render();
 
 const { remarkPluginFrontmatter } = await entry.render();

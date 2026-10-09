@@ -1,16 +1,20 @@
 ---
 import { Icon } from "astro-icon/components";
+import { shelves } from "../../data/shelves";
 import { dayKey, type LibraryItem } from "../../utils/kit/content";
 import Cover from "./Cover.astro";
 
 interface Props {
 	item: LibraryItem;
 	index?: number;
+	// 「全部」视图里截图类卡片占两列
+	mixed?: boolean;
 }
-const { item, index = 0 } = Astro.props;
+const { item, index = 0, mixed = false } = Astro.props;
 const { shelf } = item;
 const dateText = item.date ? dayKey(item.date) : "";
 const host = item.link ? new URL(item.link).hostname.replace(/^www\./, "") : "";
+const isPoster = shelf.aspect === "3 / 4";
 ---
 
 <div
@@ -20,9 +24,13 @@ const host = item.link ? new URL(item.link).hostname.replace(/^www\./, "") : "";
 	data-tags={item.tags.join("|")}
 	data-rating={item.rating ?? ""}
 	data-date={dateText}
-	style={`--i: ${Math.min(index, 12)}`}
+	data-shelf={shelf.title}
+	data-shelf-order={shelves.indexOf(shelf)}
+	data-wide={mixed && !isPoster ? "" : undefined}
+	style={`--i: ${Math.min(index, 10)}`}
 >
-	<a class="kit-card" href={item.url}>
+	<article class="card-base kit-card">
+		<a class="kit-card__link" href={item.url} aria-label={item.title}></a>
 		<Cover src={item.cover} title={item.title} aspect={shelf.aspect}>
 			{
 				shelf.show.includes("rating") && typeof item.rating === "number" && (
@@ -34,23 +42,34 @@ const host = item.link ? new URL(item.link).hostname.replace(/^www\./, "") : "";
 			}
 		</Cover>
 		<div class="kit-card__body">
-			<div class="kit-card__title">
+			<h3 class="kit-card__title text-90">
 				<span>{item.title}</span>
 				{item.marks.map((m) => (
 					<Icon class="kit-mark" name={m === "star" ? "material-symbols:star-rounded" : "material-symbols:favorite-rounded"} />
 				))}
-			</div>
+			</h3>
 			{
 				shelf.show.includes("tags") && item.tags.length > 0 && (
 					<div class="kit-card__tags">
-						{item.tags.slice(0, 4).map((t) => <span class="kit-chip">{t}</span>)}
+						{item.tags.slice(0, 4).map((t) => (
+							<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
+								# {t}
+							</button>
+						))}
 					</div>
 				)
 			}
-			<div class="kit-card__meta">
+			<div class="kit-card__meta text-50">
 				<span>{shelf.show.includes("link") ? host : dateText || "—"}</span>
 				{item.year && <span>{item.year}</span>}
 			</div>
 		</div>
-	</a>
+		{
+			item.link && (
+				<a class="kit-card__ext" href={item.link} target="_blank" rel="noopener noreferrer" aria-label={`打开 ${item.title} 的链接`} title={host}>
+					<Icon name="material-symbols:open-in-new-rounded" />
+				</a>
+			)
+		}
+	</article>
 </div>
