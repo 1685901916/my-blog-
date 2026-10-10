@@ -1,0 +1,246 @@
+/*
+ * 长文排版
+ * 作用于主题的 Markdown 组件（.custom-md）和文章页卡片（#post-container），
+ * 所以文章、作品、资源、月记、收藏库条目的正文一起生效。
+ * 只改排版节奏，颜色和链接样式沿用主题。
+ */
+
+/* ---------- 阅读栏 ----------
+   卡片宽度不变（和首页、侧边栏对齐），正文收成居中的一栏：
+   最宽 46rem，17px 字号下一行约 40 个汉字 */
+@media (min-width: 1024px) {
+	#post-container {
+		padding-left: max(2.25rem, calc((100% - 46rem) / 2)) !important;
+		padding-right: max(2.25rem, calc((100% - 46rem) / 2)) !important;
+	}
+}
+
+/* ---------- 正文 ---------- */
+
+.custom-md {
+	font-size: 1.0625rem;
+	line-height: 1.85;
+	letter-spacing: 0.02em;
+	overflow-wrap: break-word;
+}
+
+/* Obsidian 写的笔记常常一行一段，默认 1.25em 的段距会显得很碎 */
+.custom-md p {
+	margin-top: 0.85em;
+	margin-bottom: 0.85em;
+}
+
+/* ---------- 标题 ----------
+   正文里的一级标题不能和文章标题一样大：h1 / h2 都按「节标题」处理，
+   左侧加一条主题色竖条，和侧边栏小组件、首页卡片标题呼应 */
+.custom-md :is(h1, h2, h3, h4) {
+	position: relative;
+	line-height: 1.4;
+	letter-spacing: 0.03em;
+	scroll-margin-top: 6rem;
+}
+
+.custom-md h1 {
+	font-size: 1.5rem;
+	margin: 2.2em 0 0.8em;
+}
+
+.custom-md h2 {
+	font-size: 1.3rem;
+	margin: 2em 0 0.7em;
+}
+
+.custom-md h3 {
+	font-size: 1.125rem;
+	margin: 1.7em 0 0.5em;
+}
+
+.custom-md h4 {
+	font-size: 1rem;
+	margin: 1.5em 0 0.4em;
+}
+
+.custom-md :is(h1, h2)::before {
+	content: "";
+	position: absolute;
+	left: -0.9rem;
+	top: 0.32em;
+	width: 0.25rem;
+	height: 0.95em;
+	border-radius: 0.375rem;
+	background: var(--primary);
+}
+
+/* 文章开头紧跟的标题不需要大段上边距 */
+.custom-md > :first-child,
+.custom-md > section:first-child > :first-child {
+	margin-top: 0;
+}
+
+/* ---------- 列表 ---------- */
+
+.custom-md :is(ul, ol) {
+	margin-top: 0.6em;
+	margin-bottom: 0.6em;
+	padding-left: 1.4em;
+}
+
+.custom-md li {
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+
+.custom-md li > p {
+	margin: 0.25em 0;
+}
+
+/* ---------- 引用（admonition 用主题自己的样式） ---------- */
+
+.custom-md blockquote:not(.admonition) {
+	margin: 1.2em 0;
+	padding: 0.7em 1.1em 0.7em 1.25em;
+	border-radius: 0.75rem;
+	background: var(--btn-regular-bg);
+	color: inherit;
+}
+
+.custom-md blockquote:not(.admonition)::before {
+	left: 0.45rem !important;
+	top: 0.75em;
+	height: calc(100% - 1.5em) !important;
+	background: var(--primary) !important;
+	opacity: 0.5;
+}
+
+.custom-md blockquote:not(.admonition) > p {
+	margin: 0.3em 0;
+}
+
+/* ---------- 图片 ----------
+   插件会把图片从文字段落里拆出来：单张 p.md-figure，连着几张 p.md-gallery */
+
+.custom-md img {
+	border-radius: 0.75rem;
+	border: 1px solid var(--line-divider);
+	cursor: zoom-in;
+}
+
+.custom-md .md-figure {
+	margin: 1.5em 0;
+	text-align: center;
+}
+
+/* 长截图不再铺满一整屏：限制高度，保持比例，点开看大图 */
+.custom-md .md-figure img {
+	display: inline-block;
+	margin: 0;
+	max-width: 100%;
+	max-height: 34rem;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	box-shadow: 0 12px 30px -20px rgb(0 0 0 / 0.35);
+}
+
+.custom-md .md-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+	gap: 0.75rem;
+	margin: 1.5em 0;
+}
+
+.custom-md .md-gallery img {
+	width: 100%;
+	height: 13rem;
+	margin: 0;
+	object-fit: cover;
+	transition:
+		transform 0.5s var(--kit-spring, ease),
+		box-shadow 0.3s;
+}
+
+.custom-md .md-gallery img:hover {
+	transform: translateY(-3px);
+	box-shadow: var(--kit-shadow, 0 12px 30px -16px rgb(0 0 0 / 0.4));
+}
+
+/* ---------- 链接卡片 ----------
+   单独一行的外链（[站名](url)）→ 一张可点的卡片：标题 + 域名 + 外链图标 */
+
+.custom-md .md-link-card {
+	margin: 0.9em 0;
+}
+
+.custom-md .md-link-card > a {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	border-radius: 0.75rem;
+	background: var(--btn-regular-bg);
+	color: inherit;
+	font-weight: 400;
+	text-decoration: none;
+	transition:
+		background 0.15s,
+		transform 0.35s var(--kit-spring, ease);
+}
+
+.custom-md .md-link-card > a:hover {
+	background: var(--btn-regular-bg-hover);
+	transform: translateY(-2px);
+}
+
+/* 左侧链接图标（主题色） */
+.custom-md .md-link-card > a::before {
+	content: "";
+	flex: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	background: var(--primary);
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 -960 960 960%27%3E%3Cpath d=%27M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z%27/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 -960 960 960%27%3E%3Cpath d=%27M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z%27/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.custom-md .md-link-card__title {
+	flex: 1;
+	min-width: 0;
+	font-weight: 700;
+	color: var(--primary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.custom-md .md-link-card__host {
+	flex: none;
+	font-size: 0.8125rem;
+	opacity: 0.55;
+	max-width: 40%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ---------- 分隔线 ---------- */
+
+.custom-md hr {
+	margin: 2.5em auto;
+	width: 40%;
+	border: none;
+	border-top: 1px dashed var(--line-divider);
+}
+
+/* ---------- 表格 ---------- */
+
+.custom-md table {
+	font-size: 0.9375rem;
+}
+
+.custom-md thead th {
+	background: var(--btn-regular-bg);
+}
+
+.custom-md :is(th, td) {
+	padding: 0.55em 0.8em !important;
+}

@@ -21,6 +21,7 @@ import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badg
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { rehypeExternalLinks } from "./src/plugins/rehype-external-links.mjs";
+import { rehypeMdBlocks } from "./src/plugins/rehype-md-blocks.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
@@ -151,6 +152,7 @@ export default defineConfig({
 			rehypeMermaid,
 			rehypeFixWikiLinks,
 			rehypeExternalLinks,
+			rehypeMdBlocks,
 			[
 				rehypeComponents,
 				{

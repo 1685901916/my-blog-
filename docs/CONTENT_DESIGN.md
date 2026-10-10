@@ -112,6 +112,24 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 
 继续写在 `src/content/portfolio/` 里。建议加 `image:` 封面（没有就用正文第一张图，再没有就是字体封面），有仓库就写 `sourceLink:`。最新的作品会在作品墙上占满一整行。
 
+### 5. 长文排版（所有正文自动生效）
+
+文章、作品、资源、月记、收藏库条目的正文都走主题的 Markdown 组件，所以排版是一起改的，**写法不用变**：
+
+| 你在 Obsidian 里这样写 | 网站上变成 |
+|---|---|
+| 单独一行的链接 `[ESJ Zone](https://www.esjzone.cc/)` | 链接卡片：图标 + 标题 + 域名，整张可点 |
+| 一张图（哪怕紧跟在文字下一行） | 从文字里拆出来，居中显示，最高 34rem，点开看大图 |
+| 连着几行图片 | 排成网格 |
+| 正文里的 `# 一级标题` | 当作节标题，比文章标题小，左侧有主题色竖条 |
+
+另外：
+- 宽屏下正文收成居中的一栏，最宽 46rem，17px 字号下一行约 40 个汉字。卡片宽度不变，和首页对齐。
+- 段距收紧了，Obsidian 里一行一段的写法不再显得零碎。
+- 引用块加了浅色底；GitHub 风格的 `> [!NOTE]` 提示块沿用主题样式。
+
+想让某个链接保持普通文字链接，就别让它单独占一行（比如前面加几个字）。
+
 ---
 
 ## 代码结构
@@ -129,8 +147,10 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 | `src/components/kit/LibraryCard.astro`、`WorkCard.astro`、`Cover.astro`、`StatStrip.astro` | 卡片和小部件 |
 | `src/pages/library/`、`journal/`、`works.astro` | 页面 |
 | `src/styles/kit.css` | 主题里没有的样式和动效参数 |
+| `src/styles/article.css` | 长文排版：阅读栏宽度、段距、标题、图片、链接卡片 |
+| `src/plugins/rehype-md-blocks.mjs` | Markdown 插件：单独一行的外链 → 链接卡片；图片拆出成居中图 / 网格 |
 | `src/scripts/kit.ts` | 全站唯一的运行时脚本：入场动画、卡片筛选排序等 |
-| `src/layouts/Layout.astro` | 只加了两行：引入 `kit.css` 和 `kit.ts` |
+| `src/layouts/Layout.astro` | 只加了三行：引入 `kit.css`、`article.css` 和 `kit.ts` |
 
 为什么脚本是全站一个：站点用 swup 做无刷新换页，换页时不会重新执行页面自己的模块脚本。所以 `kit.ts` 在首次加载和每次 `swup:page:view` 时扫描页面，按 `data-*` 属性挂载功能。
 
@@ -165,7 +185,7 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 ## 已知问题和下一步
 
 - 控制台的 `Cannot use import statement outside a module` 来自主题原有的侧栏组件，不是这个分支引入的。
-- 长文页（`/posts/...`）的排版还没动；要改的话应该改主题的 `custom-md` 样式，这样文章、月记、条目详情一起变好。
+- Obsidian 里单个换行就会换行，网站上单个换行会被合并成一个空格（标准 Markdown 行为）。想完全一致可以加 `remark-breaks`，但会影响所有旧文章的排版，需要逐篇检查后再决定。
 - 旧追番页 `/anime/` 还在（主题演示数据），导航已经改指向 `/library/anime/`，可以删掉。
 - 封面目前外链 Bangumi 和你的 OSS 图床；想更稳可以下载到本地。
 - 以后可以在构建时直接解析 Obsidian 的 `.base` 文件，让网站视图和 Obsidian 里配的完全一致。
