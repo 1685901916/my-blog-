@@ -14,11 +14,13 @@ interface Props {
 }
 const { id, title, tags, mode = "filter", href, allLabel = "全部" } = Astro.props;
 const cls = "btn-regular h-8 text-sm px-3 rounded-lg whitespace-nowrap";
+// 标签多时先折叠，和主题「标签」小组件一样带「更多」按钮，免得左栏超出屏幕
+const collapse = tags.length > 14;
 ---
 
 {
 	tags.length > 0 && (
-		<WidgetLayout id={id} name={title}>
+		<WidgetLayout id={id} name={title} isCollapsed={collapse} collapsedHeight="7.75rem">
 			<div class="kit-side__tags">
 				{mode === "filter" ? (
 					<>

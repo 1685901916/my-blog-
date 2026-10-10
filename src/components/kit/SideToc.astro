@@ -1,0 +1,27 @@
+---
+// 左栏目录：构建时根据文章标题生成（不和主题导航栏里的目录面板抢 #toc），
+// 滚动时由 kit.ts 高亮当前小节。窄屏隐藏，导航栏的目录按钮仍然可用
+import type { MarkdownHeading } from "astro";
+import WidgetLayout from "../widget/WidgetLayout.astro";
+
+interface Props {
+	headings?: MarkdownHeading[];
+}
+const { headings = [] } = Astro.props;
+const minDepth = Math.min(...headings.map((h) => h.depth), 6);
+const items = headings.filter((h) => h.depth <= minDepth + 1);
+---
+
+{
+	items.length > 1 && (
+		<WidgetLayout id="kit-toc" name="本文目录" class="kit-side__toc">
+			<nav class="kit-toc" data-toc aria-label="本文目录">
+				{items.map((h) => (
+					<a href={`#${h.slug}`} class:list={["kit-toc__link", h.depth > minDepth && "is-sub"]} data-toc-target={h.slug}>
+						{h.text.replace(/#$/, "")}
+					</a>
+				))}
+			</nav>
+		</WidgetLayout>
+	)
+}

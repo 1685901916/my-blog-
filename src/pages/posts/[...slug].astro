@@ -7,6 +7,9 @@ import PasswordProtection from "@components/PasswordProtection.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import KitShell from "../../components/kit/KitShell.astro";
+import SideToc from "../../components/kit/SideToc.astro";
+import VaultNav from "../../components/kit/VaultNav.astro";
 import { getSortedPosts } from "@utils/content-utils";
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
@@ -21,26 +24,10 @@ import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
-	const { getCategorySlug } = await import("../../constants/category-slugs");
 
 	return blogEntries.map((entry) => {
-		let finalSlug = entry.slug;
-
-		// 如果是 entertainment-resources 集合，构建英文 slug
-		if (entry.collection === "entertainment-resources") {
-			const slugParts = entry.slug.split('/');
-			if (slugParts.length === 2) {
-				const [category, articleName] = slugParts;
-				const categorySlug = getCategorySlug(category);
-				const articleSlug = entry.data.customSlug || articleName;
-				finalSlug = `${categorySlug}/${articleSlug}`;
-			} else if (entry.data.customSlug) {
-				finalSlug = entry.data.customSlug;
-			}
-		}
-
 		return {
-			params: { slug: finalSlug },
+			params: { slug: entry.slug },
 			props: { entry },
 		};
 	});
@@ -127,6 +114,12 @@ const jsonLd = {
         type="application/ld+json"
         set:html={JSON.stringify(jsonLd)}
     />
+    <!-- 和全站一致的左栏：库导航 + 本文目录（替换主题原来的个人资料侧栏） -->
+    <KitShell>
+    <Fragment slot="side">
+        <VaultNav active="posts" />
+        <SideToc headings={headings} />
+    </Fragment>
     <div
         class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4"
     >
@@ -393,5 +386,6 @@ const jsonLd = {
             }
         </a>
     </div>
+    </KitShell>
 </MainGridLayout>
 

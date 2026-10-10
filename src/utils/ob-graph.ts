@@ -13,7 +13,7 @@ const collections = [
 	"manga",
 	"portfolio",
 	"manga-categories",
-	"entertainment-resources",
+	"journal",
 ] as const;
 
 const linkToken = /\[\[([^\]]+)\]\]/g;

@@ -35,6 +35,21 @@ export default defineConfig({
 
 	base: "/",
 	trailingSlash: "always",
+	// 结构整理后的旧地址：资源类文章并入「文章」，分类页变成文章库的筛选
+	// 目标地址直接写中文，Astro 生成跳转页时会自己编码
+	redirects: {
+		"/resources/": "/posts/",
+		"/resources/entertainment/": "/posts/",
+		"/resources/entertainment/novels/": "/posts/?cat=小说资源",
+		"/resources/entertainment/manga/": "/posts/?cat=漫画资源",
+		"/resources/entertainment/anime/": "/library/anime/",
+		"/resources/entertainment/games/": "/posts/",
+		"/resources/entertainment/novels/light-novel-resources/": "/posts/light-novel-resources/",
+		"/resources/entertainment/novels/korean-light-novels/": "/posts/korean-light-novels/",
+		"/resources/entertainment/manga/manga-software-guide/": "/posts/manga-software-guide/",
+		"/resources/utility/": "/posts/?cat=实用工具",
+		"/resources/info/": "/posts/?cat=实用信息",
+	},
 	server: {
 		port: 4322,
 		host: true,

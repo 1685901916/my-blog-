@@ -3,6 +3,7 @@ import KitHeader from "../components/kit/KitHeader.astro";
 import KitShell from "../components/kit/KitShell.astro";
 import SideTags from "../components/kit/SideTags.astro";
 import Toolbar from "../components/kit/Toolbar.astro";
+import VaultNav from "../components/kit/VaultNav.astro";
 import WorkCard from "../components/kit/WorkCard.astro";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getWorks } from "../utils/kit/content";
@@ -22,6 +23,7 @@ const years = new Set(works.map((w) => w.date.getUTCFullYear()));
 <MainGridLayout title="作品" description="写过的工具、做过的东西">
 	<KitShell collection={{ defaultSort: "date" }}>
 		<Fragment slot="side">
+			<VaultNav active="works" />
 			<SideTags id="kit-groups" title="分组" tags={groups} />
 			<SideTags id="kit-stack" title="技术栈" tags={stack} allLabel={false} />
 		</Fragment>

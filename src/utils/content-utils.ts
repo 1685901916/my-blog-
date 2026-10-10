@@ -11,7 +11,7 @@ let cachedRawSortedPosts:
 			| "manga"
 			| "manga-categories"
 			| "portfolio"
-			| "entertainment-resources"
+			| "journal"
 	  >[]
 	| null = null;
 
@@ -25,7 +25,6 @@ async function getRawSortedPosts() {
 	let allMangaPosts: CollectionEntry<"manga">[] = [];
 	let allMangaCategoriesPosts: CollectionEntry<"manga-categories">[] = [];
 	let allPortfolioPosts: CollectionEntry<"portfolio">[] = [];
-	let allEntertainmentPosts: CollectionEntry<"entertainment-resources">[] = [];
 	let allJournalPosts: CollectionEntry<"journal">[] = [];
 
 	// 根据配置获取博客内容
@@ -68,18 +67,6 @@ async function getRawSortedPosts() {
 		);
 	}
 
-	// 根据配置获取娱乐资源内容
-	if (siteConfig.homepageContent.showEntertainmentPosts) {
-		try {
-			allEntertainmentPosts = await getCollection(
-				"entertainment-resources",
-				({ data }) => data.draft !== true,
-			);
-		} catch (_e) {
-			console.log("Entertainment resources collection not found or empty");
-		}
-	}
-
 	// 手写的月记（src/content/journal/）也进入首页列表和归档，链接指向 /journal/YYYY-MM/
 	try {
 		allJournalPosts = await getCollection(
@@ -90,13 +77,12 @@ async function getRawSortedPosts() {
 		// Journal collection might not exist
 	}
 
-	// 合并博客文章、漫画文章、作品集文章、娱乐资源文章和月记
+	// 合并博客文章、漫画文章、作品集文章和月记
 	const allPosts = [
 		...allBlogPosts,
 		...allMangaPosts,
 		...allMangaCategoriesPosts,
 		...allPortfolioPosts,
-		...allEntertainmentPosts,
 		...allJournalPosts,
 	];
 

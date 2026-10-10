@@ -6,7 +6,8 @@ export const DEFAULT_THEME = LIGHT_MODE;
 
 // Banner height unit: vh
 export const BANNER_HEIGHT = 35;
-export const BANNER_HEIGHT_EXTEND = 30;
+// 主页横幅不再额外加高，和其他页面一样，首屏就能看到内容
+export const BANNER_HEIGHT_EXTEND = 0;
 export const BANNER_HEIGHT_HOME = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 
 // The height the main panel overlaps the banner, unit: rem

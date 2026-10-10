@@ -73,7 +73,8 @@
 		top: 5.5rem;
 		max-height: calc(100vh - 6.5rem);
 		overflow-y: auto;
-		scrollbar-width: none;
+		scrollbar-width: thin;
+		scrollbar-color: var(--btn-regular-bg) transparent;
 	}
 }
 
@@ -90,6 +91,11 @@
 
 	.kit-side .kit-side__list > * {
 		flex: none;
+	}
+
+	.kit-side .kit-side__row--sub,
+	.kit-side .kit-side__row--sub:hover {
+		padding-left: 0.5rem;
 	}
 
 	.kit-side .kit-side__tags > * {
@@ -163,10 +169,98 @@
 	background: var(--primary);
 }
 
+/* 书架等子项：缩进一级 */
+.kit-side__row--sub {
+	padding-left: 1.75rem;
+	height: 2.25rem;
+	font-size: 0.9375rem;
+}
+
+.kit-side__row--sub:hover {
+	padding-left: 2rem;
+}
+
+/* 分类筛选用 button 实现，外观和链接行一致 */
+button.kit-side__row {
+	width: 100%;
+	text-align: left;
+	font: inherit;
+	cursor: pointer;
+}
+
+.kit-side__row[aria-pressed="true"] {
+	background: var(--btn-plain-bg-hover);
+	color: var(--primary);
+	font-weight: 700;
+}
+
 .kit-side__tags {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
+}
+
+/* 本文目录 */
+.kit-toc {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	padding-bottom: 0.25rem;
+}
+
+.kit-toc__link {
+	position: relative;
+	display: block;
+	padding: 0.35rem 0.5rem 0.35rem 0.85rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	color: rgb(82 82 82);
+	transition:
+		background 0.15s,
+		color 0.15s;
+}
+
+:where(:root.dark) .kit-toc__link {
+	color: rgb(163 163 163);
+}
+
+.kit-toc__link.is-sub {
+	padding-left: 1.6rem;
+	font-size: 0.8125rem;
+}
+
+.kit-toc__link:hover {
+	background: var(--btn-plain-bg-hover);
+	color: var(--primary);
+}
+
+.kit-toc__link.is-active {
+	color: var(--primary);
+	font-weight: 700;
+}
+
+.kit-toc__link.is-active::before {
+	content: "";
+	position: absolute;
+	left: 0.2rem;
+	top: 0.5rem;
+	bottom: 0.5rem;
+	width: 0.2rem;
+	border-radius: 999px;
+	background: var(--primary);
+}
+
+/* 窄屏左栏在内容上方，目录隐藏（导航栏的目录按钮仍可用） */
+@media (max-width: 1023px) {
+	.kit-side__toc {
+		display: none;
+	}
+}
+
+/* 主区用 gap 控制间距，原来组件自带的下外边距去掉，避免双倍间距 */
+.kit-main > * {
+	margin-bottom: 0 !important;
 }
 
 /* 可按下的标签（筛选用），按下后变成主题色实心 */
@@ -635,6 +729,8 @@
 	aspect-ratio: var(--aspect, 3 / 4);
 	overflow: hidden;
 	background: var(--btn-regular-bg);
+	/* 字体封面里的 cqi 单位以封面宽度为准（放在封面自身上会退回成视口宽度） */
+	container-type: inline-size;
 }
 
 .kit-cover img {
@@ -668,7 +764,6 @@
 	background:
 		radial-gradient(circle at 85% 10%, var(--kit-soft), transparent 60%),
 		linear-gradient(160deg, var(--btn-regular-bg), color-mix(in oklch, var(--btn-regular-bg) 70%, var(--card-bg)));
-	container-type: inline-size;
 }
 
 /* 首字做成右上角的大水印 */

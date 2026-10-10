@@ -5,7 +5,7 @@
 //   data-tabs        分段标签的滑动指示条
 //   data-tilt        指针悬停时 3D 微倾斜
 //   data-count       数字从 0 滚动到目标值
-//   data-collection  Bases 式卡片视图：搜索 / 筛选 / 排序 / 分组 / 卡片-列表切换
+//   data-collection  Bases 式卡片视图：搜索 / 分类 + 标签筛选 / 排序 / 分组 / 卡片-列表切换
 
 const reduceMotion = () =>
 	window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -192,6 +192,7 @@ function initImages(root: ParentNode) {
 
 type State = {
 	q: string;
+	cat: string;
 	tag: string;
 	sort: string;
 	group: string;
@@ -241,6 +242,10 @@ function initCollection(scope: HTMLElement) {
 	const filterBtns = [
 		...scope.querySelectorAll<HTMLButtonElement>("[data-filter]"),
 	];
+	// 分类筛选（data-filter-cat）和标签筛选（data-filter）互相独立，可以叠加
+	const catBtns = [
+		...scope.querySelectorAll<HTMLButtonElement>("[data-filter-cat]"),
+	];
 	const viewBtns = [
 		...scope.querySelectorAll<HTMLButtonElement>("[data-view]"),
 	];
@@ -256,6 +261,7 @@ function initCollection(scope: HTMLElement) {
 	} catch {}
 	const state: State = {
 		q: params.get("q") ?? "",
+		cat: params.get("cat") ?? "",
 		tag: params.get("tag") ?? "",
 		sort: params.get("sort") ?? defaultSort,
 		group: params.has("group")
@@ -291,6 +297,7 @@ function initCollection(scope: HTMLElement) {
 
 	function groupOf(el: HTMLElement) {
 		if (state.group === "shelf") return key(el, "shelf");
+		if (state.group === "cat") return key(el, "cat") || "未分类";
 		if (state.group === "year") return key(el, "date").slice(0, 4) || "未记录";
 		if (state.group === "tag") return key(el, "tags").split("|")[0] || "无标签";
 		if (state.group === "rating") {
@@ -327,6 +334,9 @@ function initCollection(scope: HTMLElement) {
 		for (const b of filterBtns) {
 			b.setAttribute("aria-pressed", String(b.dataset.filter === state.tag));
 		}
+		for (const b of catBtns) {
+			b.setAttribute("aria-pressed", String(b.dataset.filterCat === state.cat));
+		}
 		for (const b of viewBtns) {
 			b.setAttribute("aria-pressed", String(b.dataset.view === state.view));
 		}
@@ -339,6 +349,7 @@ function initCollection(scope: HTMLElement) {
 		const set = (k: string, v: string, def: string) =>
 			v && v !== def ? p.set(k, v) : p.delete(k);
 		set("q", state.q, "");
+		set("cat", state.cat, "");
 		set("tag", state.tag, "");
 		set("sort", state.sort, defaultSort);
 		// 默认有分组时，「不分组」要显式写成 none，否则刷新会回到默认分组
@@ -359,9 +370,10 @@ function initCollection(scope: HTMLElement) {
 		const visible = items
 			.filter((el) => {
 				const tags = key(el, "tags").split("|");
+				if (state.cat && key(el, "cat") !== state.cat) return false;
 				if (state.tag && !tags.includes(state.tag)) return false;
 				if (!q) return true;
-				return `${key(el, "title")} ${tags.join(" ")}`
+				return `${key(el, "title")} ${key(el, "cat")} ${tags.join(" ")}`
 					.toLowerCase()
 					.includes(q);
 			})
@@ -442,6 +454,14 @@ function initCollection(scope: HTMLElement) {
 			}),
 		);
 	}
+	for (const b of catBtns) {
+		b.addEventListener("click", () =>
+			update({
+				cat:
+					state.cat === b.dataset.filterCat ? "" : (b.dataset.filterCat ?? ""),
+			}),
+		);
+	}
 	for (const b of viewBtns) {
 		b.addEventListener("click", () =>
 			update({ view: b.dataset.view ?? "cards" }),
@@ -473,6 +493,49 @@ function initCollections(root: ParentNode) {
 		.forEach(initCollection);
 }
 
+// ---------- 左栏目录：滚动时高亮当前小节 ----------
+
+let tocCleanup: (() => void) | null = null;
+
+function initToc(root: ParentNode) {
+	tocCleanup?.();
+	tocCleanup = null;
+	const nav = root.querySelector<HTMLElement>("[data-toc]");
+	if (!nav) return;
+	const links = [
+		...nav.querySelectorAll<HTMLAnchorElement>("[data-toc-target]"),
+	];
+	const targets = links
+		.map((a) => document.getElementById(a.dataset.tocTarget ?? ""))
+		.filter((el): el is HTMLElement => !!el);
+	if (!targets.length) return;
+
+	let frame = 0;
+	const update = () => {
+		frame = 0;
+		// 视口顶部往下 120px 以内最后一个标题算「当前」
+		let current = targets[0];
+		for (const t of targets) {
+			if (t.getBoundingClientRect().top - 120 <= 0) current = t;
+			else break;
+		}
+		for (const a of links) {
+			a.classList.toggle("is-active", a.dataset.tocTarget === current.id);
+		}
+	};
+	const onScroll = () => {
+		if (!frame) frame = requestAnimationFrame(update);
+	};
+	// 主题用 OverlayScrollbars，滚动事件不一定在 window 上，所以用捕获阶段统一监听
+	document.addEventListener("scroll", onScroll, {
+		capture: true,
+		passive: true,
+	});
+	update();
+	tocCleanup = () =>
+		document.removeEventListener("scroll", onScroll, { capture: true });
+}
+
 // ---------- 启动 ----------
 
 function init() {
@@ -482,6 +545,7 @@ function init() {
 	initTilt(document);
 	initImages(document);
 	initReveal(document);
+	initToc(document);
 }
 
 // 不在卡片视图里的卡片（详情页、月记）：点标签跳到对应列表的筛选结果

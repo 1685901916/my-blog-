@@ -10,12 +10,6 @@ interface Props {
 const { digests, current } = Astro.props;
 const total = (d: MonthDigest) => d.stats.writings + d.stats.works + d.stats.library;
 const rows = [
-	{
-		label: "全部月份",
-		href: "/journal/",
-		icon: "material-symbols:calendar-month-outline-rounded",
-		active: !current,
-	},
 	...digests.map((d) => ({
 		label: `${d.year} 年 ${d.monthNumber} 月`,
 		href: `/journal/${d.month}/`,
@@ -26,4 +20,4 @@ const rows = [
 ];
 ---
 
-<SideNav id="kit-months" title="月记" rows={rows} />
+<SideNav id="kit-months" title="月份" rows={rows} />

@@ -1,0 +1,56 @@
+---
+// 主页：全站「最近更新」的数据库视图（文章 + 作品 + 月记），左栏是个人卡片 + 库导航 + 类型筛选
+import ArticleCard from "../components/kit/ArticleCard.astro";
+import KitHeader from "../components/kit/KitHeader.astro";
+import KitShell from "../components/kit/KitShell.astro";
+import ProfileMini from "../components/kit/ProfileMini.astro";
+import SideCats from "../components/kit/SideCats.astro";
+import Toolbar from "../components/kit/Toolbar.astro";
+import VaultNav from "../components/kit/VaultNav.astro";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { dayKey, getEntries, KIND_LABEL } from "../utils/kit/content";
+
+const entries = await getEntries();
+const kinds = (["post", "work", "journal"] as const)
+	.map((k) => ({ name: KIND_LABEL[k], count: entries.filter((e) => e.kind === k).length }))
+	.filter((k) => k.count > 0);
+const latest = entries[0];
+---
+
+<MainGridLayout>
+	<KitShell collection={{ defaultSort: "date" }}>
+		<Fragment slot="side">
+			<ProfileMini />
+			<VaultNav active="home" />
+			<SideCats id="kit-kinds" title="类型" cats={kinds} total={entries.length} />
+		</Fragment>
+
+		<KitHeader
+			title="最近更新"
+			desc="文章、作品和月记都在这里，按时间排列。左边可以切到收藏库、只看某一类，或者直接搜索。"
+			meta={[
+				{ icon: "material-symbols:database-outline", text: `${entries.length} 篇` },
+				...(latest ? [{ icon: "material-symbols:calendar-today-outline-rounded", text: `最近更新 ${dayKey(latest.date)}` }] : []),
+			]}
+		>
+			<Toolbar
+				slot="toolbar"
+				total={entries.length}
+				sorts={[
+					{ value: "date", label: "日期" },
+					{ value: "title", label: "标题" },
+				]}
+				defaultSort="date"
+				groups={[
+					{ value: "cat", label: "类型" },
+					{ value: "year", label: "年份" },
+				]}
+				searchPlaceholder="搜索标题、分类或标签"
+			/>
+		</KitHeader>
+
+		<div class="kit-grid kit-grid--wide" data-items>
+			{entries.map((e, i) => <ArticleCard item={e} index={i} catBy="kind" />)}
+		</div>
+	</KitShell>
+</MainGridLayout>

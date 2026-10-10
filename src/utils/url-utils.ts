@@ -27,16 +27,13 @@ export function getPostUrlBySlug(slug: string, collection?: string): string {
 	if (collection === "journal") {
 		return url(`/journal/${slug}/`);
 	}
-	if (collection === "entertainment-resources") {
-		// entertainment-resources 的 slug 格式是 "分类/文章名"
-		return url(`/resources/entertainment/${slug}/`);
-	}
 	return url(`/posts/${slug}/`);
 }
 
+// 标签和分类都链接到「文章」数据库视图的筛选结果
 export function getTagUrl(tag: string): string {
-	if (!tag) return url("/archive/");
-	return url(`/archive/?tag=${encodeURIComponent(tag.trim())}`);
+	if (!tag) return url("/posts/");
+	return url(`/posts/?tag=${encodeURIComponent(tag.trim())}`);
 }
 
 export function getCategoryUrl(category: string | null): string {
@@ -45,8 +42,8 @@ export function getCategoryUrl(category: string | null): string {
 		category.trim() === "" ||
 		category.trim().toLowerCase() === i18n(I18nKey.uncategorized).toLowerCase()
 	)
-		return url("/archive/?uncategorized=true");
-	return url(`/archive/?category=${encodeURIComponent(category.trim())}`);
+		return url("/posts/");
+	return url(`/posts/?cat=${encodeURIComponent(category.trim())}`);
 }
 
 export function getDir(path: string): string {

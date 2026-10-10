@@ -68,15 +68,6 @@ const mangaCategoriesCollection = defineCollection({
 	}),
 });
 
-// 娱乐资源集合
-const entertainmentResourcesCollection = defineCollection({
-	schema: z.object({
-		...baseFields,
-		category: z.string().optional(),
-		collection: z.string().optional().default("entertainment-resources"),
-	}),
-});
-
 // Obsidian 里的日期可能是 "2024-08-28 12:17"、"2024-08-28T12:17" 或 YAML 日期
 // 一律按 UTC 解析（和 YAML 日期一致），避免构建机器时区不同导致跨月
 const looseDate = z
@@ -165,7 +156,6 @@ export const collections = {
 	manga: mangaCollection,
 	portfolio: portfolioCollection,
 	"manga-categories": mangaCategoriesCollection,
-	"entertainment-resources": entertainmentResourcesCollection,
 	library: libraryCollection,
 	journal: journalCollection,
 };

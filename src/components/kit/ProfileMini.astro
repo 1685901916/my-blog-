@@ -1,0 +1,77 @@
+---
+// 主页左栏顶部的个人卡片：头像 + 名字 + 简介 + 链接，比主题原来的大头像卡片紧凑
+import { Icon } from "astro-icon/components";
+import { profileConfig } from "../../config";
+import ImageWrapper from "../misc/ImageWrapper.astro";
+---
+
+<div class="card-base profile-mini">
+	<div class="profile-mini__head">
+		<a href="/about/" class="profile-mini__avatar" aria-label="关于我">
+			<ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" />
+		</a>
+		<div class="min-w-0">
+			<div class="profile-mini__name text-90">{profileConfig.name}</div>
+			<div class="profile-mini__links">
+				{
+					profileConfig.links.map((l) => (
+						<a href={l.url} target="_blank" rel="noopener noreferrer" class="btn-regular h-7 w-7 rounded-lg" aria-label={l.name} title={l.name}>
+							<Icon name={l.icon} />
+						</a>
+					))
+				}
+				<a href="/about/" class="btn-regular h-7 px-2 rounded-lg text-xs">关于</a>
+			</div>
+		</div>
+	</div>
+	<p class="profile-mini__bio text-50">{profileConfig.bio}</p>
+</div>
+
+<style>
+	.profile-mini {
+		padding: 1rem 1.1rem 1.1rem;
+	}
+
+	.profile-mini__head {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+	}
+
+	.profile-mini__avatar {
+		flex: none;
+		width: 3.5rem;
+		height: 3.5rem;
+		border-radius: 0.9rem;
+		overflow: hidden;
+		transition: transform 0.5s var(--kit-spring);
+	}
+
+	.profile-mini__avatar:hover {
+		transform: rotate(-4deg) scale(1.05);
+	}
+
+	.profile-mini__name {
+		font-weight: 800;
+		font-size: 1.125rem;
+	}
+
+	.profile-mini__links {
+		margin-top: 0.35rem;
+		display: flex;
+		gap: 0.35rem;
+	}
+
+	.profile-mini__bio {
+		margin-top: 0.75rem;
+		font-size: 0.8125rem;
+		line-height: 1.7;
+	}
+
+	/* 窄屏左栏在上方，个人卡片只留头部 */
+	@media (max-width: 1023px) {
+		.profile-mini__bio {
+			display: none;
+		}
+	}
+</style>

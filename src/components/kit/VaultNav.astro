@@ -1,0 +1,64 @@
+---
+// 全站统一的「库」导航：每个页面左栏的第一块，像 Obsidian 左边的文件 / 数据库列表
+import { Icon } from "astro-icon/components";
+import WidgetLayout from "../widget/WidgetLayout.astro";
+import { getFeed, getMonthDigests, getShelvesWithItems } from "../../utils/kit/content";
+
+interface Props {
+	// home | posts | works | journal | library | library:<书架 id>
+	active?: string;
+}
+const { active = "" } = Astro.props;
+
+const [feed, shelves, digests] = await Promise.all([getFeed(), getShelvesWithItems(), getMonthDigests()]);
+const posts = feed.filter((f) => f.kind === "post").length;
+const works = feed.filter((f) => f.kind === "work").length;
+const libraryTotal = shelves.reduce((n, s) => n + s.items.length, 0);
+
+type Row = { key: string; label: string; href: string; icon: string; count?: number; sub?: boolean };
+const rows: Row[] = [
+	{ key: "home", label: "最近更新", href: "/", icon: "material-symbols:home-outline-rounded" },
+	{ key: "posts", label: "文章", href: "/posts/", icon: "material-symbols:article-outline-rounded", count: posts },
+	{
+		key: "library",
+		label: "收藏库",
+		href: "/library/",
+		icon: "material-symbols:collections-bookmark-outline-rounded",
+		count: libraryTotal,
+	},
+	...shelves.map((s) => ({
+		key: `library:${s.shelf.id}`,
+		label: s.shelf.title,
+		href: `/library/${s.shelf.id}/`,
+		icon: s.shelf.icon,
+		count: s.items.length,
+		sub: true,
+	})),
+	{ key: "works", label: "作品", href: "/works/", icon: "material-symbols:work-outline", count: works },
+	{
+		key: "journal",
+		label: "月记",
+		href: "/journal/",
+		icon: "material-symbols:calendar-month-outline-rounded",
+		count: digests.length,
+	},
+];
+---
+
+<WidgetLayout id="kit-vault" name="库">
+	<nav class="kit-side__list" aria-label="站内导航">
+		{
+			rows.map((r) => (
+				<a
+					href={r.href}
+					class:list={["kit-side__row", r.sub && "kit-side__row--sub", r.key === active && "is-active"]}
+					aria-current={r.key === active ? "page" : undefined}
+				>
+					<Icon name={r.icon} class="text-lg flex-none" />
+					<span>{r.label}</span>
+					{r.count !== undefined && <span class="kit-side__badge">{r.count}</span>}
+				</a>
+			))
+		}
+	</nav>
+</WidgetLayout>

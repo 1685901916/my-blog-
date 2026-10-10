@@ -2,13 +2,14 @@
 import { Icon } from "astro-icon/components";
 import JournalNav from "../../components/kit/JournalNav.astro";
 import KitShell from "../../components/kit/KitShell.astro";
+import VaultNav from "../../components/kit/VaultNav.astro";
 import LibraryCard from "../../components/kit/LibraryCard.astro";
 import StatStrip from "../../components/kit/StatStrip.astro";
 import WorkCard from "../../components/kit/WorkCard.astro";
 import Markdown from "../../components/misc/Markdown.astro";
 import { shelves } from "../../data/shelves";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
-import { getMonthDigests, type MonthDigest } from "../../utils/kit/content";
+import { getMonthDigests, KIND_LABEL, type MonthDigest } from "../../utils/kit/content";
 
 export async function getStaticPaths() {
 	const digests = await getMonthDigests();
@@ -42,7 +43,6 @@ const libraryByShelf = shelves
 	.map((shelf) => ({ shelf, items: d.library.filter((i) => i.shelf.id === shelf.id) }))
 	.filter((g) => g.items.length > 0);
 
-const KIND_LABEL = { post: "文章", resource: "资源", work: "作品" } as const;
 const fmt = (date: Date) => date.toISOString().slice(5, 10);
 // 「自动 / 手写」标记和空月记提示只在本地开发时显示
 const isDev = import.meta.env.DEV;
@@ -50,7 +50,10 @@ const isDev = import.meta.env.DEV;
 
 <MainGridLayout title={`${heading} · 月记`} description={d.summary || `${d.year} 年 ${d.monthNumber} 月的记录`}>
 	<KitShell>
-		<JournalNav slot="side" digests={digests} current={d.month} />
+		<Fragment slot="side">
+			<VaultNav active="journal" />
+			<JournalNav digests={digests} current={d.month} />
+		</Fragment>
 
 		<header class="card-base kit-head mhead onload-animation">
 			<div class="mhead__num" data-split>{monthLabel}</div>

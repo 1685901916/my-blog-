@@ -1,8 +1,7 @@
 // 内容设计系统的数据层
-// 把 posts / portfolio / entertainment-resources / library 统一成「条目」，
-// 收藏库视图、月记汇总、作品墙都只读这里，不各自去扫文件夹。
+// 把 posts / portfolio / journal / library 统一成「条目」，
+// 主页、文章库、收藏库、月记汇总、作品墙都只读这里，不各自去扫文件夹。
 import { type CollectionEntry, getCollection } from "astro:content";
-import { getCategorySlug } from "../../constants/category-slugs";
 import { getShelf, type Shelf, shelves } from "../../data/shelves";
 import { getPostUrlBySlug } from "../url-utils";
 
@@ -93,7 +92,13 @@ export async function getShelvesWithItems() {
 
 // ---------- 文章 / 作品 ----------
 
-export type Kind = "post" | "work" | "resource";
+export type Kind = "post" | "work" | "journal";
+
+export const KIND_LABEL: Record<Kind, string> = {
+	post: "文章",
+	work: "作品",
+	journal: "月记",
+};
 
 export type FeedItem = {
 	kind: Kind;
@@ -107,19 +112,10 @@ export type FeedItem = {
 	sourceLink?: string;
 };
 
-function resourceSlug(entry: CollectionEntry<"entertainment-resources">) {
-	const parts = entry.slug.split("/");
-	if (parts.length === 2) {
-		return `${getCategorySlug(parts[0])}/${entry.data.customSlug || parts[1]}`;
-	}
-	return entry.data.customSlug || entry.slug;
-}
-
 export async function getFeed(): Promise<FeedItem[]> {
-	const [posts, works, resources] = await Promise.all([
+	const [posts, works] = await Promise.all([
 		getCollection("posts", visible),
 		getCollection("portfolio", visible),
-		getCollection("entertainment-resources", visible),
 	]);
 	const items: FeedItem[] = [
 		...posts.map((e) => ({
@@ -144,21 +140,29 @@ export async function getFeed(): Promise<FeedItem[]> {
 			cover: e.data.image || firstImage(e.body),
 			sourceLink: e.data.sourceLink || undefined,
 		})),
-		...resources
-			// 文件夹里的 sample.md 是模板占位，不算真实内容
-			.filter((e) => !e.id.endsWith("sample.md"))
-			.map((e) => ({
-				kind: "resource" as const,
-				title: e.data.title,
-				url: getPostUrlBySlug(resourceSlug(e), "entertainment-resources"),
-				date: e.data.published,
-				description: e.data.description,
-				category: e.data.category ?? "",
-				tags: e.data.tags,
-				cover: e.data.image || firstImage(e.body),
-			})),
 	];
 	return items.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+// 主页的「最近更新」：文章 + 作品 + 手写的月记
+export async function getEntries(): Promise<FeedItem[]> {
+	const [feed, notes] = await Promise.all([
+		getFeed(),
+		getCollection("journal", visible),
+	]);
+	const journal: FeedItem[] = notes.map((n) => ({
+		kind: "journal",
+		title: n.data.title,
+		url: `/journal/${n.data.month}/`,
+		date: n.data.published,
+		description: n.data.description,
+		category: "月记",
+		tags: n.data.tags,
+		cover: n.data.image,
+	}));
+	return [...feed, ...journal].sort(
+		(a, b) => b.date.getTime() - a.date.getTime(),
+	);
 }
 
 export async function getWorks() {
@@ -182,7 +186,7 @@ export type MonthDigest = {
 	title: string;
 	summary: string;
 	cover: string;
-	writings: FeedItem[]; // 文章 + 资源整理
+	writings: FeedItem[];
 	works: FeedItem[];
 	library: LibraryItem[];
 	stats: {

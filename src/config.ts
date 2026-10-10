@@ -214,8 +214,13 @@ export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
-		LinkPreset.Archive,
-		// 「资源」「娱乐」合并成收藏库；实用工具 / 实用信息是文章分类页，保留在下拉里
+		// 文章库代替原来的「归档」：按年份分组就是归档
+		{
+			name: "文章",
+			url: "/posts/",
+			icon: "material-symbols:article-outline-rounded",
+		},
+		// 「资源」「娱乐」合并成收藏库；实用工具 / 实用信息 / 小说资源等变成文章库的分类
 		{
 			name: "收藏库",
 			url: "/library/",
@@ -235,16 +240,6 @@ export const navBarConfig: NavBarConfig = {
 					name: "资源站",
 					url: "/library/sites/",
 					icon: "material-symbols:bookmark-star-outline-rounded",
-				},
-				{
-					name: "实用工具",
-					url: "/resources/utility/",
-					icon: "material-symbols:construction",
-				},
-				{
-					name: "实用信息",
-					url: "/resources/info/",
-					icon: "material-symbols:menu-book",
 				},
 			],
 		},

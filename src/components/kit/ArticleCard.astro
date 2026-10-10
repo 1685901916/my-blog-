@@ -1,0 +1,98 @@
+---
+// 文章 / 作品 / 月记共用的卡片：封面（没有就用字体封面）+ 分类 + 标题 + 简介 + 标签 + 日期
+import { dayKey, type FeedItem, KIND_LABEL } from "../../utils/kit/content";
+import Cover from "./Cover.astro";
+
+interface Props {
+	item: FeedItem;
+	index?: number;
+	// 主页上按类型（文章 / 作品 / 月记）筛选，文章库里按分类筛选
+	catBy?: "kind" | "category";
+}
+const { item, index = 0, catBy = "category" } = Astro.props;
+const date = dayKey(item.date);
+const cat = catBy === "kind" ? KIND_LABEL[item.kind] : item.category || "未分类";
+const label = catBy === "kind" ? KIND_LABEL[item.kind] : item.category || KIND_LABEL[item.kind];
+// 作品的「程序系 / 正常系」、和分类同名的标签不重复显示
+const tags = item.tags.filter((t) => t !== item.category && t !== label);
+// 不在卡片视图里时，点标签跳到对应数据库的筛选结果
+const tagBase = { post: "/posts/", work: "/works/", journal: "/journal/" }[item.kind];
+const tagHref = (t: string) => (item.kind === "journal" ? tagBase : `${tagBase}?tag=${encodeURIComponent(t)}`);
+---
+
+<div
+	data-item
+	data-reveal
+	data-title={item.title}
+	data-tags={item.tags.join("|")}
+	data-cat={cat}
+	data-date={date}
+	style={`--i: ${Math.min(index, 10)}`}
+>
+	<article class="card-base kit-card article">
+		<a class="kit-card__link" href={item.url} aria-label={item.title}></a>
+		<Cover src={item.cover} title={item.title} aspect="16 / 10" />
+		<div class="kit-card__body">
+			<div class="article__meta">
+				<span class="article__cat">{label}</span>
+				<span class="text-50">{date}</span>
+			</div>
+			<h3 class="kit-card__title article__title text-90">{item.title}</h3>
+			{item.description && <p class="article__desc text-75">{item.description}</p>}
+			{
+				tags.length > 0 && (
+					<div class="kit-card__tags">
+						{tags.slice(0, 3).map((t) => (
+							<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={tagHref(t)} title={`只看「${t}」`}>
+								# {t}
+							</button>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</article>
+</div>
+
+<style>
+	.article__meta {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.75rem;
+		font-family: var(--kit-num);
+	}
+
+	.article__cat {
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.article__title {
+		white-space: normal;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.article__desc {
+		font-size: 0.875rem;
+		line-height: 1.6;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* 列表视图下：缩略图 + 一行标题，简介只留一行 */
+	:global(.kit-grid.is-list) .article :global(.kit-cover) {
+		width: 7rem;
+		aspect-ratio: 16 / 10;
+	}
+
+	:global(.kit-grid.is-list) .article__desc {
+		-webkit-line-clamp: 1;
+		flex-basis: 100%;
+	}
+</style>

@@ -1,23 +1,16 @@
 ---
+// 主页改成了数据库视图（src/pages/index.astro），旧的分页地址 /2/、/3/… 跳到「文章」
 import type { GetStaticPaths } from "astro";
-import Pagination from "../components/control/Pagination.astro";
-import PostPage from "../components/PostPage.astro";
 import { PAGE_SIZE } from "../constants/constants";
-import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
 
-export const getStaticPaths = (async ({ paginate }) => {
-	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+export const getStaticPaths = (async () => {
+	const total = (await getSortedPosts()).length;
+	const pages = Math.ceil(total / PAGE_SIZE);
+	return Array.from({ length: Math.max(0, pages - 1) }, (_, i) => ({
+		params: { page: String(i + 2) },
+	}));
 }) satisfies GetStaticPaths;
-// https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
-const { page } = Astro.props;
-
-const len = page.data.length;
+return Astro.redirect("/posts/");
 ---
-
-<MainGridLayout>
-    <PostPage page={page}></PostPage>
-    <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
-</MainGridLayout>

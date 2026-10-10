@@ -2,14 +2,40 @@
 
 这个分支用来试做博客的新结构，**不影响 main**：main 推送才会触发部署，这个分支只在本地。
 
-核心思路：**按内容的「形态」排版，不按文件夹排版**，并且**长在现有主题里**，不另起一套风格。
+核心思路：**整个站点就是一个 Obsidian 库**。每个页面都是同一个骨架：左边是「库」导航（像 Obsidian 左侧的文件 / 数据库列表），右边是一个数据库视图（卡片 + 搜索 / 筛选 / 排序 / 分组）。外观长在现有主题里，不另起一套风格。
 
-| 形态 | 页面 | 内容放哪 |
+## 站点结构
+
+| 页面 | 是什么 | 内容放哪 |
 |---|---|---|
-| 收藏库（番、资源站…） | `/library/`（全部）、`/library/<书架>/`、`/library/<书架>/<条目>/` | `src/content/library/<书架>/*.md` |
-| 月记 | `/journal/`、`/journal/YYYY-MM/` | `src/content/journal/YYYY-MM.md`（可选） |
-| 作品 | `/works/` | 沿用 `src/content/portfolio/` |
-| 长文 | 沿用 `/posts/...` | 沿用 `src/content/posts/` |
+| `/` 最近更新 | 文章、作品、月记混在一起按时间排，左栏按类型筛选 | 自动汇总 |
+| `/posts/` 文章 | 所有长文，左栏按分类 / 标签筛选；按年份分组就是归档 | `src/content/posts/*.md` |
+| `/library/` 收藏库 | 番、资源站等，一条笔记一张卡片 | `src/content/library/<书架>/*.md` |
+| `/works/` 作品 | 作品墙，左栏按分组 / 技术栈筛选 | `src/content/portfolio/<normal|programming>/*.md` |
+| `/journal/` 月记 | 每月一页，自动汇总 + 可选的手写部分 | `src/content/journal/YYYY-MM.md`（可选） |
+
+文章、作品的详情页左栏是「库」导航 + 本文目录（窄屏时目录收进导航栏的目录按钮）。
+
+**内容文件夹就这四个**，写东西时只要想「它是哪种形态」：
+
+```
+src/content/
+  posts/      文章：教程、资源整理、记录……用 category 区分（实用工具 / 小说资源 / 赚钱……）
+  portfolio/  作品：normal（正常系）/ programming（程序系）
+  library/    收藏库：一个子文件夹一个书架（anime / sites / …）
+  journal/    月记：YYYY-MM.md
+```
+
+（`spec/` 是关于、友链页的内容；`manga/`、`manga-categories/` 是主题自带的漫画演示，没有接进导航。）
+
+以前的「资源」「娱乐」「实用工具」「实用信息」都变成了文章的分类，旧地址会自动跳转：
+
+| 旧地址 | 跳到 |
+|---|---|
+| `/resources/entertainment/<分类>/<文章>/` | `/posts/<文章>/` |
+| `/resources/utility/`、`/resources/info/` | `/posts/?cat=实用工具`、`/posts/?cat=实用信息` |
+| `/portfolio/programming/`、`/portfolio/normal/` | `/works/?tag=程序系`、`/works/?tag=正常系` |
+| `/2/`、`/3/`（旧主页分页） | `/posts/` |
 
 ---
 
@@ -20,11 +46,7 @@ pnpm install
 pnpm dev
 ```
 
-- http://localhost:4321/library/ 收藏库（全部条目，按书架分组）
-- http://localhost:4321/library/anime/ 动漫书架
-- http://localhost:4321/journal/ 月记归档
-- http://localhost:4321/journal/2026-04/ 一期示例月记
-- http://localhost:4321/works/ 作品墙
+然后打开 http://localhost:4321/ ，左栏的「库」可以走遍所有页面。
 
 ---
 
@@ -32,36 +54,57 @@ pnpm dev
 
 ### 侧边栏
 
-全站侧边栏（头像、公告、分类、标签）在 swup 的换页容器外面，没法按页面换内容。所以新页面用 `KitShell` 包一层：页面里出现 `data-kit-shell` 时，`kit.css` 用 `:has()` 隐藏全站侧边栏，换成页面自己的左栏。左栏外观直接用主题的 `WidgetLayout`，和「分类」「标签」小组件一模一样：
+全站侧边栏（头像、公告、分类、标签）在 swup 的换页容器外面，没法按页面换内容。所以页面用 `KitShell` 包一层：页面里出现 `data-kit-shell` 时，`kit.css` 用 `:has()` 隐藏全站侧边栏，换成页面自己的左栏。左栏外观直接用主题的 `WidgetLayout`，和原来的「分类」「标签」小组件一模一样。
 
 | 页面 | 左栏 |
 |---|---|
-| 收藏库 | 书架列表（带数量）+ 标签筛选，像 Obsidian 左边的数据库列表 |
-| 条目详情 | 书架列表 + 这个书架的标签 |
-| 月记 | 所有有记录的月份，写了月记的带笔的图标 |
-| 作品 | 分组（程序系 / 正常系）+ 技术栈筛选 |
+| 最近更新 | 个人卡片 + 库导航 + 类型（文章 / 作品 / 月记） |
+| 文章 | 库导航 + 分类 + 标签 |
+| 文章 / 作品详情 | 库导航 + 本文目录（滚动时高亮当前小节） |
+| 收藏库 / 条目详情 | 库导航（书架在里面）+ 标签 |
+| 作品 | 库导航 + 分组 + 技术栈 |
+| 月记 | 库导航 + 月份列表 |
 
-回到首页、文章页时，全站侧边栏自动恢复（换页后 `:has()` 重新计算，不需要脚本）。窄屏时左栏移到上方，变成可横滑的一行。
+还没改造的页面（关于、友链、相册等）继续用主题原来的侧边栏。窄屏时左栏移到上方，变成可横滑的一行。
 
 ### 样式
 
-新页面尽量用主题已有的类，而不是自己定义一套：
+尽量用主题已有的类，而不是自己定义一套：
 
 - 卡片外壳：`card-base`
-- 标题：粗体 + 左侧主题色竖条（和首页文章卡片、侧边栏小组件标题同款）
-- 元信息：`meta-icon` 方块图标 + `text-50` 文字（和文章卡片的日期、分类一样）
+- 标题：粗体 + 左侧主题色竖条（和侧边栏小组件标题同款）
+- 元信息：`meta-icon` 方块图标 + `text-50` 文字
 - 标签：`btn-regular h-6 text-xs px-2 rounded-lg` + `# 标签`
-- 正文：主题的 `Markdown` 组件，排版和文章页完全一致，也会被站内搜索收录
+- 正文：主题的 `Markdown` 组件，也会被站内搜索收录
+
+主页横幅也降到和其他页面一样高（35% 屏高），首屏就能看到内容。
 
 ### 数据
 
-- **手写的月记会进入首页列表、归档、分类（「月记」）和 RSS**，和普通文章一样排序。`journal` 集合的字段和文章兼容，链接指向 `/journal/YYYY-MM/`；归档和 RSS 用的 `/posts/YYYY-MM/` 会自动跳转过去。
-- 收藏库条目**不进首页列表**，不然十几部番会把文章挤下去。
-- 旧地址：`/portfolio/programming/`、`/portfolio/normal/` 跳到作品墙的对应筛选；作品详情页地址不变。
+- 文章里的分类、标签链接（`getCategoryUrl` / `getTagUrl`）都指向文章库的筛选：`/posts/?cat=…`、`/posts/?tag=…`。
+- **手写的月记会出现在最近更新、归档和 RSS 里**。`journal` 集合的字段和文章兼容，链接指向 `/journal/YYYY-MM/`；归档和 RSS 用的 `/posts/YYYY-MM/` 会自动跳转过去。
+- 收藏库条目不进「最近更新」，不然十几部番会把文章挤下去。
 
 ---
 
 ## 日常写内容
+
+### 0. 文章
+
+所有长文都放 `src/content/posts/`，**用 `category` 分类，不再建子文件夹**。文件名就是网址：`light-novel-resources.md` → `/posts/light-novel-resources/`。
+
+```yaml
+---
+title: 轻小说资源推荐
+published: 2026-04-01
+description: 一句话简介，显示在卡片上
+category: 小说资源        # 左栏「分类」里的一项；新写一个分类名就会自动多出一行
+tags: [轻小说, 机翻, 工具] # 左栏「标签」
+image: https://...        # 卡片封面；不写就用正文第一张图，再没有就是字体封面
+---
+```
+
+想让某篇在卡片上好看，最有用的就是加一张 `image`。
 
 ### 1. 收藏库条目
 
@@ -141,6 +184,10 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 | `src/utils/kit/content.ts` | 数据层：把文章、作品、资源、收藏库统一成「条目」，月记汇总也在这里 |
 | `src/utils/content-utils.ts`、`url-utils.ts` | 把手写月记接进首页列表 / 归档，链接指向 `/journal/` |
 | `src/components/kit/KitShell.astro` | 页面骨架：左栏 + 主区，替换全站侧边栏 |
+| `src/components/kit/VaultNav.astro` | 每页左栏第一块的「库」导航 |
+| `src/components/kit/SideCats.astro`、`SideToc.astro`、`ProfileMini.astro` | 分类筛选、本文目录、主页的个人卡片 |
+| `src/components/kit/ArticleCard.astro` | 文章 / 作品 / 月记共用的卡片 |
+| `src/pages/index.astro`、`src/pages/posts/index.astro` | 最近更新、文章库 |
 | `src/components/kit/SideNav.astro`、`SideTags.astro`、`JournalNav.astro` | 左栏小组件（基于主题的 `WidgetLayout`） |
 | `src/components/kit/KitHeader.astro`、`Toolbar.astro` | 头部卡片和 Bases 式工具栏 |
 | `src/components/kit/LibraryView.astro` | 收藏库视图（全部 / 单个书架共用） |
@@ -186,7 +233,8 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 
 - 控制台的 `Cannot use import statement outside a module` 来自主题原有的侧栏组件，不是这个分支引入的。
 - Obsidian 里单个换行就会换行，网站上单个换行会被合并成一个空格（标准 Markdown 行为）。想完全一致可以加 `remark-breaks`，但会影响所有旧文章的排版，需要逐篇检查后再决定。
-- 旧追番页 `/anime/` 还在（主题演示数据），导航已经改指向 `/library/anime/`，可以删掉。
+- 旧追番页 `/anime/` 和 `/archive/` 归档页还在，导航已经不再链接它们，确认不需要后可以删掉。
+- 分类里的「测试」是两篇双链测试文章，不需要可以删掉或设成 `draft: true`。
 - 封面目前外链 Bangumi 和你的 OSS 图床；想更稳可以下载到本地。
 - 以后可以在构建时直接解析 Obsidian 的 `.base` 文件，让网站视图和 Obsidian 里配的完全一致。
 - Mizuki 作者已宣布停更、推荐迁移到 Shirone。这套 kit 只依赖主题变量和 Astro，以后迁移可以整体带走。

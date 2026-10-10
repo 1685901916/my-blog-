@@ -4,7 +4,6 @@ published: 2026-04-01
 description: 常用轻小说站点、韩轻机翻站和阅读整理工具汇总。
 tags: [小说资源, 轻小说, 机翻, 工具]
 category: 小说资源
-customSlug: light-novel-resources
 image: ""
 draft: false
 ---

@@ -3,11 +3,11 @@ import { Icon } from "astro-icon/components";
 import Cover from "../../../components/kit/Cover.astro";
 import KitShell from "../../../components/kit/KitShell.astro";
 import LibraryCard from "../../../components/kit/LibraryCard.astro";
-import SideNav from "../../../components/kit/SideNav.astro";
+import VaultNav from "../../../components/kit/VaultNav.astro";
 import SideTags from "../../../components/kit/SideTags.astro";
 import Markdown from "../../../components/misc/Markdown.astro";
 import MainGridLayout from "../../../layouts/MainGridLayout.astro";
-import { dayKey, getLibrary, getShelvesWithItems, type LibraryItem } from "../../../utils/kit/content";
+import { dayKey, getLibrary, type LibraryItem } from "../../../utils/kit/content";
 
 export async function getStaticPaths() {
 	const items = await getLibrary();
@@ -37,22 +37,6 @@ const dateText = item.date
 	: "";
 const linkLabel = item.link?.includes("bgm.tv") ? "在 Bangumi 查看" : "访问";
 
-const all = await getShelvesWithItems();
-const navRows = [
-	{
-		label: "全部",
-		href: "/library/",
-		count: all.reduce((n, s) => n + s.items.length, 0),
-		icon: "material-symbols:collections-bookmark-outline-rounded",
-	},
-	...all.map((s) => ({
-		label: s.shelf.title,
-		href: `/library/${s.shelf.id}/`,
-		count: s.items.length,
-		icon: s.shelf.icon,
-		active: s.shelf.id === shelf.id,
-	})),
-];
 const tagCount = new Map<string, number>();
 for (const it of siblings) for (const t of it.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
 const shelfTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
@@ -61,7 +45,7 @@ const shelfTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name
 <MainGridLayout title={item.title} description={`${shelf.title} · ${item.tags.join(" / ")}`}>
 	<KitShell>
 		<Fragment slot="side">
-			<SideNav id="kit-shelves" title="收藏库" rows={navRows} />
+			<VaultNav active={`library:${shelf.id}`} />
 			<SideTags
 				id="kit-tags"
 				title={`${shelf.title}的标签`}

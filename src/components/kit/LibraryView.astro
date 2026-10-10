@@ -5,7 +5,7 @@ import type { Shelf } from "../../data/shelves";
 import KitHeader from "./KitHeader.astro";
 import KitShell from "./KitShell.astro";
 import LibraryCard from "./LibraryCard.astro";
-import SideNav from "./SideNav.astro";
+import VaultNav from "./VaultNav.astro";
 import SideTags from "./SideTags.astro";
 import Toolbar from "./Toolbar.astro";
 
@@ -42,22 +42,6 @@ const groups = [
 const defaultSort = shelf?.sort ?? "rating";
 const defaultGroup = shelf ? "" : "shelf";
 
-const navRows = [
-	{
-		label: "全部",
-		href: "/library/",
-		count: total,
-		icon: "material-symbols:collections-bookmark-outline-rounded",
-		active: !shelf,
-	},
-	...all.map((s) => ({
-		label: s.shelf.title,
-		href: `/library/${s.shelf.id}/`,
-		count: s.items.length,
-		icon: s.shelf.icon,
-		active: shelf?.id === s.shelf.id,
-	})),
-];
 const meta = [
 	{ icon: "material-symbols:database-outline", text: `${items.length} 个条目` },
 	...(rated.length ? [{ icon: "material-symbols:star-rounded", text: `平均 ${avg.toFixed(2)} 分` }] : []),
@@ -68,7 +52,7 @@ const wide = shelf && shelf.aspect !== "3 / 4";
 
 <KitShell collection={{ defaultSort, defaultGroup }}>
 	<Fragment slot="side">
-		<SideNav id="kit-shelves" title="收藏库" rows={navRows} />
+		<VaultNav active={shelf ? `library:${shelf.id}` : "library"} />
 		<SideTags id="kit-tags" title="标签" tags={tags} />
 	</Fragment>
 

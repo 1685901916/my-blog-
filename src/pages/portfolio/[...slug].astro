@@ -7,6 +7,9 @@ import PasswordProtection from "@components/PasswordProtection.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import KitShell from "../../components/kit/KitShell.astro";
+import SideToc from "../../components/kit/SideToc.astro";
+import VaultNav from "../../components/kit/VaultNav.astro";
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import bcryptjs from "bcryptjs";
@@ -97,6 +100,12 @@ const jsonLd = {
         type="application/ld+json"
         set:html={JSON.stringify(jsonLd)}
     />
+    <!-- 和全站一致的左栏：库导航 + 本文目录（替换主题原来的个人资料侧栏） -->
+    <KitShell>
+    <Fragment slot="side">
+        <VaultNav active="works" />
+        <SideToc headings={headings} />
+    </Fragment>
     <div
         class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4"
     >
@@ -365,6 +374,7 @@ const jsonLd = {
             }
         </a>
     </div>
+    </KitShell>
 </MainGridLayout>
 
 
