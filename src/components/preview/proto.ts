@@ -53,3 +53,80 @@ export async function getProtoArticlePaths(base: "b" | "c") {
 }
 
 export const cnDate = (d: Date) => `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`;
+
+// ---------- 数据库视图：所有笔记统一成一种「行」，每种类型有自己的属性列 ----------
+
+export type BaseProp = { k: string; v?: string; chips?: string[]; accent?: boolean };
+export type BaseRow = {
+	kind: string;
+	kindOrder: number;
+	title: string;
+	href: string;
+	cover?: string;
+	aspect: string;
+	wide: boolean;
+	cat: string;
+	tags: string[];
+	date: string;
+	rating?: number;
+	excerpt?: string;
+	props: BaseProp[];
+};
+
+export const BASE_KINDS = ["文章", "作品", "动漫", "月记"] as const;
+const order = (k: string) => BASE_KINDS.indexOf(k as (typeof BASE_KINDS)[number]) + 1;
+const ymd = (d?: Date) => (d ? d.toISOString().slice(0, 10) : "");
+const WORK_GROUP: Record<string, string> = { programming: "程序系", normal: "正常系" };
+
+export async function getProtoBase(base: "b" | "c"): Promise<BaseRow[]> {
+	const [notes, anime] = await Promise.all([getProtoNotes(base), getProtoAnime()]);
+	const rows: BaseRow[] = notes.map((n) => {
+		const kind = KIND_LABEL[n.kind];
+		const cat =
+			n.kind === "work"
+				? WORK_GROUP[n.url.split("/")[2]] ?? "作品"
+				: n.kind === "journal"
+					? "月记"
+					: n.category || "未分类";
+		const tags = n.tags.filter((t) => t !== n.category);
+		return {
+			kind,
+			kindOrder: order(kind),
+			title: n.title,
+			href: n.href,
+			cover: n.cover,
+			aspect: "16 / 10",
+			wide: true,
+			cat,
+			tags,
+			date: ymd(n.date),
+			excerpt: n.description,
+			props: [
+				...(n.kind === "journal" ? [] : [{ k: n.kind === "work" ? "类别" : "分类", v: cat }]),
+				{ k: "文件标签", chips: tags.slice(0, 3) },
+				{ k: "date", v: ymd(n.date) },
+			],
+		};
+	});
+	for (const a of anime) {
+		rows.push({
+			kind: "动漫",
+			kindOrder: order("动漫"),
+			title: a.title,
+			href: a.url,
+			cover: a.cover,
+			aspect: "3 / 4",
+			wide: false,
+			cat: a.status || "",
+			tags: a.tags,
+			date: ymd(a.date) || a.year || "",
+			rating: a.rating,
+			props: [
+				{ k: "评分", v: typeof a.rating === "number" ? a.rating.toFixed(1) : "", accent: true },
+				{ k: "文件标签", chips: a.tags.slice(0, 3) },
+				a.date ? { k: "date", v: ymd(a.date) } : { k: "年份", v: a.year },
+			],
+		});
+	}
+	return rows;
+}

@@ -1,0 +1,276 @@
+---
+// 原型里的 Bases 卡片：封面 + 标题 + 属性（照 Obsidian Bases 的样子，属性名在上、值在下）
+// 外层带 data-* 属性，交给 kit.ts 的卡片引擎做类型 / 分类 / 标签筛选、排序、分组
+import Cover from "../kit/Cover.astro";
+import type { BaseRow } from "./proto";
+
+interface Props {
+	row: BaseRow;
+	index?: number;
+}
+const { row, index = 0 } = Astro.props;
+---
+
+<div
+	data-item
+	data-reveal
+	data-title={row.title}
+	data-kind={row.kind}
+	data-kind-order={row.kindOrder}
+	data-tags={row.tags.join("|")}
+	data-cat={row.cat}
+	data-date={row.date}
+	data-rating={row.rating ?? ""}
+	data-wide={row.wide ? "" : undefined}
+	style={`--i: ${Math.min(index, 10)}`}
+>
+	<a href={row.href} class:list={["bcard", row.wide && "bcard--wide"]}>
+		<Cover src={row.cover} title={row.title} aspect={row.aspect}>
+			{typeof row.rating === "number" && <span class="bcard__badge is-rating">★ {row.rating.toFixed(1)}</span>}
+			{row.wide && <span class="bcard__badge">{row.kind}</span>}
+		</Cover>
+		<div class="bcard__body">
+			<div class="bcard__title">{row.title}</div>
+			{row.excerpt && <p class="bcard__excerpt">{row.excerpt}</p>}
+			<div class="bcard__props">
+				{
+					row.props.map((p) => (
+						<div class="bcard__prop">
+							<span class="bcard__k">{p.k}</span>
+							{p.chips ? (
+								<span class="bcard__chips">
+									{p.chips.length ? p.chips.map((c) => <span>{c}</span>) : <i>—</i>}
+								</span>
+							) : (
+								<span class:list={["bcard__v", p.accent && "is-accent"]}>{p.v || "—"}</span>
+							)}
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</a>
+</div>
+
+<style>
+	.bcard {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		border-radius: 0.8rem;
+		overflow: hidden;
+		background: var(--db-card, var(--card-bg));
+		border: 1px solid var(--db-line, rgb(0 0 0 / 0.08));
+		transition:
+			transform 0.45s var(--kit-spring),
+			box-shadow 0.3s,
+			border-color 0.2s;
+	}
+
+	.bcard:hover {
+		transform: translateY(-3px);
+		border-color: color-mix(in oklch, var(--db-line, #ddd) 50%, var(--primary));
+		box-shadow: 0 20px 40px -26px rgb(0 0 0 / 0.5);
+	}
+
+	.bcard :global(.kit-cover) {
+		border-radius: 0;
+		border-bottom: 1px solid var(--db-line, rgb(0 0 0 / 0.06));
+	}
+
+	.bcard :global(.kit-cover img) {
+		transition: transform 0.6s var(--kit-ease-out);
+	}
+
+	.bcard:hover :global(.kit-cover img) {
+		transform: scale(1.04);
+	}
+
+	.bcard__badge {
+		position: absolute;
+		z-index: 2;
+		top: 0.55rem;
+		left: 0.55rem;
+		padding: 0.12rem 0.5rem;
+		border-radius: 0.4rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: white;
+		background: rgb(0 0 0 / 0.5);
+		-webkit-backdrop-filter: blur(6px);
+		backdrop-filter: blur(6px);
+	}
+
+	.bcard__badge.is-rating {
+		left: auto;
+		right: 0.55rem;
+		font-family: var(--kit-num);
+	}
+
+	.bcard__body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+		padding: 0.8rem 0.9rem 0.95rem;
+	}
+
+	.bcard__title {
+		font-size: 0.95rem;
+		font-weight: 800;
+		line-height: 1.45;
+		color: var(--db-text, inherit);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.15s;
+	}
+
+	.bcard--wide .bcard__title {
+		font-size: 1.05rem;
+	}
+
+	.bcard:hover .bcard__title {
+		color: var(--primary);
+	}
+
+	.bcard__excerpt {
+		margin-top: -0.2rem;
+		font-size: 0.82rem;
+		line-height: 1.7;
+		color: var(--db-muted, rgb(130 130 130));
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* 属性：竖排；宽卡片里横排成三列，像 Bases 的属性栏 */
+	.bcard__props {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.bcard--wide .bcard__props {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		gap: 0.5rem 1.5rem;
+		padding-top: 0.6rem;
+		border-top: 1px dashed var(--db-line, rgb(0 0 0 / 0.08));
+	}
+
+	.bcard__prop {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		min-width: 0;
+	}
+
+	.bcard__k {
+		font-size: 0.68rem;
+		letter-spacing: 0.02em;
+		color: var(--db-muted, rgb(140 140 140));
+	}
+
+	.bcard__v {
+		font-size: 0.82rem;
+		font-family: var(--kit-num);
+		color: var(--db-soft, inherit);
+		white-space: nowrap;
+	}
+
+	.bcard__v.is-accent {
+		font-size: 0.95rem;
+		font-weight: 800;
+		color: var(--primary);
+	}
+
+	.bcard__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		min-width: 0;
+	}
+
+	.bcard__chips span {
+		font-size: 0.7rem;
+		line-height: 1.5;
+		padding: 0.05rem 0.45rem;
+		border-radius: 0.35rem;
+		color: color-mix(in oklch, var(--primary) 80%, var(--db-text, #333));
+		background: color-mix(in oklch, var(--db-card, var(--card-bg)) 86%, var(--primary));
+		white-space: nowrap;
+	}
+
+	.bcard__chips i {
+		font-style: normal;
+		font-size: 0.82rem;
+		color: var(--db-muted, #999);
+	}
+
+	/* 列表视图：一行一条，封面缩成缩略图，属性排在右边 */
+	:global(.kit-grid.is-list) .bcard {
+		flex-direction: row;
+		align-items: stretch;
+	}
+
+	:global(.kit-grid.is-list) .bcard:hover {
+		transform: translateX(3px);
+	}
+
+	:global(.kit-grid.is-list) .bcard :global(.kit-cover) {
+		--aspect: 4 / 3 !important;
+		width: 6.5rem;
+		flex: none;
+		border-bottom: none;
+		border-right: 1px solid var(--db-line, rgb(0 0 0 / 0.06));
+	}
+
+	:global(.kit-grid.is-list) .bcard__badge {
+		display: none;
+	}
+
+	/* 标题 + 一行摘要叠在左边，属性在右边对齐成列 */
+	:global(.kit-grid.is-list) .bcard__body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-areas: "title props" "excerpt props";
+		align-content: center;
+		align-items: center;
+		gap: 0.2rem 2rem;
+		padding: 0.6rem 1.25rem;
+	}
+
+	:global(.kit-grid.is-list) .bcard__title {
+		grid-area: title;
+		-webkit-line-clamp: 1;
+	}
+
+	:global(.kit-grid.is-list) .bcard__excerpt {
+		grid-area: excerpt;
+		margin: 0;
+		-webkit-line-clamp: 1;
+	}
+
+	:global(.kit-grid.is-list) .bcard__props {
+		grid-area: props;
+	}
+
+	:global(.kit-grid.is-list) .bcard__props {
+		margin: 0;
+		padding: 0;
+		border: none;
+		display: grid;
+		grid-template-columns: 6rem 13rem 5.5rem;
+		gap: 1.5rem;
+	}
+
+	@media (max-width: 760px) {
+		:global(.kit-grid.is-list) .bcard__props {
+			display: none;
+		}
+	}
+</style>

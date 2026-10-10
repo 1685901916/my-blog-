@@ -192,6 +192,7 @@ function initImages(root: ParentNode) {
 
 type State = {
 	q: string;
+	kind: string;
 	cat: string;
 	tag: string;
 	sort: string;
@@ -249,6 +250,12 @@ function initCollection(scope: HTMLElement) {
 	const viewBtns = [
 		...scope.querySelectorAll<HTMLButtonElement>("[data-view]"),
 	];
+	// 类型标签（data-filter-kind）：全部笔记里切文章 / 作品 / 动漫…；
+	// 分类和标签按钮带 data-scope 时，只在对应类型下出现（没选类型时显示带 data-scope-default 的那一组）
+	const kindBtns = [
+		...scope.querySelectorAll<HTMLButtonElement>("[data-filter-kind]"),
+	];
+	const scoped = [...scope.querySelectorAll<HTMLElement>("[data-scope]")];
 	const storeKey = `kit-view:${location.pathname}`;
 	const defaultSort = scope.dataset.defaultSort ?? "date";
 	const defaultGroup = scope.dataset.defaultGroup ?? "";
@@ -261,6 +268,7 @@ function initCollection(scope: HTMLElement) {
 	} catch {}
 	const state: State = {
 		q: params.get("q") ?? "",
+		kind: params.get("type") ?? "",
 		cat: params.get("cat") ?? "",
 		tag: params.get("tag") ?? "",
 		sort: params.get("sort") ?? defaultSort,
@@ -280,6 +288,9 @@ function initCollection(scope: HTMLElement) {
 		items
 			.filter((el) => el.dataset.catOrder)
 			.map((el) => [key(el, "cat"), Number(key(el, "catOrder"))]),
+	);
+	const kindOrder = new Map(
+		items.map((el) => [key(el, "kind"), Number(key(el, "kindOrder"))]),
 	);
 
 	function sortValue(a: HTMLElement, b: HTMLElement) {
@@ -302,6 +313,8 @@ function initCollection(scope: HTMLElement) {
 	const RATING_BANDS = ["神作 9.5+", "佳作 9+", "其他", "未评分"];
 
 	function groupOf(el: HTMLElement) {
+		// 已经选了某个类型时，按类型分组就没意义了，直接不分组
+		if (state.group === "kind") return state.kind ? "" : key(el, "kind");
 		if (state.group === "shelf") return key(el, "shelf");
 		if (state.group === "cat") return key(el, "cat") || "未分类";
 		if (state.group === "year") return key(el, "date").slice(0, 4) || "未记录";
@@ -326,6 +339,9 @@ function initCollection(scope: HTMLElement) {
 		if (state.group === "shelf") {
 			return (shelfOrder.get(ga) ?? 0) - (shelfOrder.get(gb) ?? 0);
 		}
+		if (state.group === "kind") {
+			return (kindOrder.get(ga) ?? 0) - (kindOrder.get(gb) ?? 0);
+		}
 		if (state.group === "cat" && catOrder.size > 0) {
 			return (catOrder.get(ga) ?? 99) - (catOrder.get(gb) ?? 99);
 		}
@@ -349,8 +365,21 @@ function initCollection(scope: HTMLElement) {
 		for (const b of viewBtns) {
 			b.setAttribute("aria-pressed", String(b.dataset.view === state.view));
 		}
-		const tabs = viewBtns[0]?.closest<HTMLElement>("[data-tabs]");
-		if (tabs) placeIndicator(tabs, activeTab(tabs));
+		for (const b of kindBtns) {
+			b.setAttribute(
+				"aria-pressed",
+				String((b.dataset.filterKind ?? "") === state.kind),
+			);
+		}
+		for (const el of scoped) {
+			el.hidden = state.kind
+				? el.dataset.scope !== state.kind
+				: !el.hasAttribute("data-scope-default");
+		}
+		for (const b of [viewBtns[0], kindBtns[0]]) {
+			const tabs = b?.closest<HTMLElement>("[data-tabs]");
+			if (tabs) placeIndicator(tabs, activeTab(tabs));
+		}
 	}
 
 	function writeUrl() {
@@ -358,6 +387,7 @@ function initCollection(scope: HTMLElement) {
 		const set = (k: string, v: string, def: string) =>
 			v && v !== def ? p.set(k, v) : p.delete(k);
 		set("q", state.q, "");
+		set("type", state.kind, "");
 		set("cat", state.cat, "");
 		set("tag", state.tag, "");
 		set("sort", state.sort, defaultSort);
@@ -379,6 +409,7 @@ function initCollection(scope: HTMLElement) {
 		const visible = items
 			.filter((el) => {
 				const tags = key(el, "tags").split("|");
+				if (state.kind && key(el, "kind") !== state.kind) return false;
 				if (state.cat && key(el, "cat") !== state.cat) return false;
 				if (state.tag && !tags.includes(state.tag)) return false;
 				if (!q) return true;
@@ -415,7 +446,7 @@ function initCollection(scope: HTMLElement) {
 		visible.forEach((el) => {
 			if (state.group) {
 				const g = groupOf(el);
-				if (g !== lastGroup) {
+				if (g && g !== lastGroup) {
 					const head = document.createElement("div");
 					head.className = "kit-group-head";
 					head.innerHTML = `<span></span><small>${counts.get(g)}</small>`;
@@ -477,6 +508,12 @@ function initCollection(scope: HTMLElement) {
 	for (const b of viewBtns) {
 		b.addEventListener("click", () =>
 			update({ view: b.dataset.view ?? "cards" }),
+		);
+	}
+	// 换类型时清掉分类和标签，它们只属于原来那个类型
+	for (const b of kindBtns) {
+		b.addEventListener("click", () =>
+			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" }),
 		);
 	}
 	// 卡片上的标签：点一下只看这个标签，再点一下取消
