@@ -1,0 +1,721 @@
+---
+// 方案 A · 应用式（像 Obsidian / Notion）：左侧整条侧栏贴边，右边整块是数据库视图，没有横幅
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../components/LightDarkSwitch.svelte";
+import Cover from "../../components/kit/Cover.astro";
+import ImageWrapper from "../../components/misc/ImageWrapper.astro";
+import PreviewSwitch from "../../components/preview/PreviewSwitch.astro";
+import { profileConfig, siteConfig } from "../../config";
+import Layout from "../../layouts/Layout.astro";
+import { dayKey, getFeed, getLibrary, getMonthDigests } from "../../utils/kit/content";
+
+const [feed, library, digests] = await Promise.all([getFeed(), getLibrary(), getMonthDigests()]);
+const posts = feed.filter((f) => f.kind === "post");
+const works = feed.filter((f) => f.kind === "work");
+const anime = library.filter((i) => i.shelf.id === "anime").sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+const sites = library.filter((i) => i.shelf.id === "sites");
+const cats = [...new Set(posts.map((p) => p.category))];
+const fmt = (d?: Date) => (d ? `${dayKey(d).replaceAll("-", "/")}${d.getUTCHours() || d.getUTCMinutes() ? ` ${d.toISOString().slice(11, 16)}` : ""}` : "—");
+const host = (u?: string) => (u ? new URL(u).hostname.replace(/^www\./, "") : "");
+
+const views = [
+	{ id: "anime", label: "动漫", path: ["收藏库", "动漫"], icon: "material-symbols:movie-outline-rounded", count: anime.length, sub: true },
+	{ id: "sites", label: "资源站", path: ["收藏库", "资源站"], icon: "material-symbols:bookmark-star-outline-rounded", count: sites.length, sub: true },
+	{ id: "posts", label: "文章", path: ["文章"], icon: "material-symbols:article-outline-rounded", count: posts.length },
+	{ id: "works", label: "作品", path: ["作品"], icon: "material-symbols:work-outline", count: works.length },
+	{ id: "journal", label: "月记", path: ["月记"], icon: "material-symbols:calendar-month-outline-rounded", count: digests.length },
+];
+---
+
+<Layout title="方案 A · 应用式">
+	<div class="app" data-no-swup>
+		<!-- 侧栏：个人卡片 + 文件树 + 底部工具 -->
+		<aside class="side">
+			<div class="side__profile">
+				<a href="/about/" class="side__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></a>
+				<div class="min-w-0">
+					<div class="side__name">{siteConfig.title}</div>
+					<div class="side__by">{profileConfig.name} 的库</div>
+				</div>
+			</div>
+			<p class="side__bio">{profileConfig.bio}</p>
+
+			<label class="side__search">
+				<Icon name="material-symbols:search-rounded" />
+				<input type="search" placeholder="搜索当前视图" data-a-search />
+			</label>
+
+			<nav class="tree" aria-label="库">
+				<div class="tree__head">库</div>
+				<button type="button" class="tree__row tree__folder" data-a-toggle>
+					<Icon name="material-symbols:keyboard-arrow-down-rounded" class="tree__chev" />
+					<Icon name="material-symbols:collections-bookmark-outline-rounded" />
+					<span>收藏库</span>
+				</button>
+				{
+					views.map((v) => (
+						<button type="button" class:list={["tree__row", v.sub && "is-sub", v.id === "anime" && "is-on"]} data-a-view={v.id} data-a-path={v.path.join("|")} data-a-count={v.count}>
+							<Icon name={v.icon} />
+							<span>{v.label}</span>
+							<em>{v.count}</em>
+						</button>
+					))
+				}
+				<div class="tree__head">文章分类</div>
+				{cats.map((c) => (
+					<a href={`/posts/?cat=${encodeURIComponent(c)}`} class="tree__row is-sub">
+						<span class="tree__dot" />
+						<span>{c}</span>
+						<em>{posts.filter((p) => p.category === c).length}</em>
+					</a>
+				))}
+			</nav>
+
+			<div class="side__foot">
+				<LightDarkSwitch client:only="svelte" />
+				<a href="/about/" class="side__link">关于</a>
+				{profileConfig.links.map((l) => (
+					<a href={l.url} target="_blank" rel="noopener noreferrer" class="side__link" aria-label={l.name}>
+						<Icon name={l.icon} />
+					</a>
+				))}
+			</div>
+		</aside>
+
+		<!-- 主区：面包屑 + 工具栏 + 视图 -->
+		<main class="main">
+			<header class="top">
+				<nav class="crumbs" data-a-crumbs><span>库</span><i>/</i><span>收藏库</span><i>/</i><b>动漫</b></nav>
+				<div class="top__tools">
+					<span class="top__count"><b data-a-count-out>{anime.length}</b> 个结果</span>
+					<span class="top__btn"><Icon name="material-symbols:swap-vert-rounded" />排序</span>
+					<span class="top__btn"><Icon name="material-symbols:filter-list-rounded" />筛选</span>
+					<span class="top__btn"><Icon name="material-symbols:grid-view-outline-rounded" />卡片</span>
+				</div>
+			</header>
+
+			<!-- 动漫：Bases 卡片（封面 + 属性） -->
+			<section class="view" data-a-panel="anime">
+				<div class="bases">
+					{anime.map((a) => (
+						<a href={a.url} class="bc" data-a-item={a.title}>
+							<Cover src={a.cover} title={a.title} aspect="4 / 5" />
+							<div class="bc__body">
+								<div class="bc__title">{a.marks.includes("heart") ? "♡" : ""}{a.marks.includes("star") ? "☆" : ""}{a.title}</div>
+								<div class="bc__k">评分</div>
+								<div class="bc__v">{a.rating?.toFixed(1) ?? "—"}</div>
+								<div class="bc__k">文件标签</div>
+								<div class="bc__chips">{a.tags.map((t) => <span>{t}</span>)}</div>
+								<div class="bc__k">date</div>
+								<div class="bc__v">{fmt(a.date)}</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 资源站：截图卡片 -->
+			<section class="view" data-a-panel="sites" hidden>
+				<div class="bases bases--wide">
+					{sites.map((s) => (
+						<a href={s.url} class="bc" data-a-item={s.title}>
+							<Cover src={s.cover} title={s.title} aspect="16 / 10" />
+							<div class="bc__body">
+								<div class="bc__title">{s.title}</div>
+								<div class="bc__k">文件标签</div>
+								<div class="bc__chips">{s.tags.map((t) => <span>{t}</span>)}</div>
+								<div class="bc__k">链接</div>
+								<div class="bc__v">{host(s.link)}</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 文章：表格视图 -->
+			<section class="view" data-a-panel="posts" hidden>
+				<div class="table">
+					<div class="table__head"><span>标题</span><span>分类</span><span>标签</span><span>日期</span></div>
+					{posts.map((p) => (
+						<a href={p.url} class="table__row" data-a-item={p.title}>
+							<span class="table__title">{p.title}</span>
+							<span><em class="pill">{p.category}</em></span>
+							<span class="table__tags">{p.tags.filter((t) => t !== p.category).slice(0, 3).join("、")}</span>
+							<span class="table__date">{dayKey(p.date)}</span>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 作品：卡片 -->
+			<section class="view" data-a-panel="works" hidden>
+				<div class="bases bases--wide">
+					{works.map((w) => (
+						<a href={w.url} class="bc" data-a-item={w.title}>
+							<Cover src={w.cover} title={w.title} aspect="16 / 10" />
+							<div class="bc__body">
+								<div class="bc__title">{w.title}</div>
+								<div class="bc__desc">{w.description}</div>
+								<div class="bc__k">技术栈</div>
+								<div class="bc__chips">{w.tags.slice(0, 4).map((t) => <span>{t}</span>)}</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 月记：月份卡片 -->
+			<section class="view" data-a-panel="journal" hidden>
+				<div class="months">
+					{digests.map((d) => (
+						<a href={`/journal/${d.month}/`} class:list={["month", d.note && "is-note"]} data-a-item={d.month}>
+							<span class="month__y">{d.year}</span>
+							<span class="month__n">{String(d.monthNumber).padStart(2, "0")} 月</span>
+							<span class="month__s">{d.note ? d.title : `${d.stats.writings + d.stats.works + d.stats.library} 条记录`}</span>
+						</a>
+					))}
+				</div>
+			</section>
+		</main>
+	</div>
+	<PreviewSwitch current="a" />
+</Layout>
+
+<script>
+	// 点树里的项，原地切换视图（原型演示用）
+	const app = document.querySelector<HTMLElement>(".app");
+	if (app) {
+		const rows = [...app.querySelectorAll<HTMLButtonElement>("[data-a-view]")];
+		const panels = [...app.querySelectorAll<HTMLElement>("[data-a-panel]")];
+		const crumbs = app.querySelector<HTMLElement>("[data-a-crumbs]");
+		const countOut = app.querySelector<HTMLElement>("[data-a-count-out]");
+		const search = app.querySelector<HTMLInputElement>("[data-a-search]");
+		const current = () => panels.find((p) => !p.hidden);
+		const filter = () => {
+			const q = (search?.value ?? "").trim().toLowerCase();
+			const panel = current();
+			if (!panel) return;
+			let n = 0;
+			for (const el of panel.querySelectorAll<HTMLElement>("[data-a-item]")) {
+				const show = !q || (el.dataset.aItem ?? "").toLowerCase().includes(q);
+				el.style.display = show ? "" : "none";
+				if (show) n++;
+			}
+			if (countOut) countOut.textContent = String(n);
+		};
+		for (const row of rows) {
+			row.addEventListener("click", () => {
+				for (const r of rows) r.classList.toggle("is-on", r === row);
+				for (const p of panels) p.hidden = p.dataset.aPanel !== row.dataset.aView;
+				const path = (row.dataset.aPath ?? "").split("|");
+				if (crumbs) {
+					crumbs.innerHTML = "<span>库</span>";
+					path.forEach((seg, i) => {
+						crumbs.insertAdjacentHTML("beforeend", "<i>/</i>");
+						const el = document.createElement(i === path.length - 1 ? "b" : "span");
+						el.textContent = seg;
+						crumbs.appendChild(el);
+					});
+				}
+				filter();
+			});
+		}
+		search?.addEventListener("input", filter);
+		app.querySelector("[data-a-toggle]")?.addEventListener("click", (e) => {
+			(e.currentTarget as HTMLElement).classList.toggle("is-closed");
+			for (const r of rows.filter((r) => r.classList.contains("is-sub"))) r.hidden = !r.hidden;
+		});
+	}
+</script>
+
+<style>
+	.app {
+		--a-side: color-mix(in oklch, var(--card-bg) 96%, var(--primary));
+		--a-line: color-mix(in oklch, var(--card-bg) 88%, black);
+		--a-text: rgb(38 38 38);
+		--a-muted: rgb(120 120 120);
+		display: grid;
+		grid-template-columns: 17rem minmax(0, 1fr);
+		min-height: 100vh;
+		background: var(--card-bg);
+		color: var(--a-text);
+	}
+
+	:global(:root.dark) .app {
+		--a-line: color-mix(in oklch, var(--card-bg) 85%, white);
+		--a-text: rgb(235 235 235);
+		--a-muted: rgb(150 150 150);
+	}
+
+	/* ---------- 侧栏 ---------- */
+	.side {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		padding: 1.25rem 0.9rem 1rem;
+		background: var(--a-side);
+		border-right: 1px solid var(--a-line);
+		scrollbar-width: thin;
+	}
+
+	.side__profile {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0 0.4rem;
+	}
+
+	.side__avatar {
+		flex: none;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 0.75rem;
+		overflow: hidden;
+	}
+
+	.side__name {
+		font-weight: 800;
+		font-size: 1.02rem;
+	}
+
+	.side__by {
+		font-size: 0.75rem;
+		color: var(--a-muted);
+	}
+
+	.side__bio {
+		padding: 0 0.4rem;
+		font-size: 0.78rem;
+		line-height: 1.7;
+		color: var(--a-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.side__search {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		height: 2.1rem;
+		padding: 0 0.7rem;
+		border-radius: 0.55rem;
+		background: var(--card-bg);
+		border: 1px solid var(--a-line);
+		color: var(--a-muted);
+		font-size: 0.85rem;
+	}
+
+	.side__search input {
+		flex: 1;
+		min-width: 0;
+		background: transparent;
+		outline: none;
+		color: var(--a-text);
+	}
+
+	.tree {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+	}
+
+	.tree__head {
+		margin: 0.6rem 0.5rem 0.3rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		color: var(--a-muted);
+	}
+
+	.tree__row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		height: 2rem;
+		padding: 0 0.55rem;
+		border-radius: 0.45rem;
+		font-size: 0.875rem;
+		text-align: left;
+		color: var(--a-text);
+		transition: background 0.12s;
+	}
+
+	.tree__row > span:not(.tree__dot) {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.tree__row em {
+		font-style: normal;
+		font-size: 0.75rem;
+		color: var(--a-muted);
+	}
+
+	.tree__row:hover {
+		background: color-mix(in oklch, var(--a-side) 85%, var(--a-text));
+	}
+
+	.tree__row.is-on {
+		background: color-mix(in oklch, var(--card-bg) 80%, var(--primary));
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.tree__row.is-sub {
+		padding-left: 1.75rem;
+	}
+
+	.tree__chev {
+		margin-left: -0.35rem;
+		transition: transform 0.2s;
+	}
+
+	.tree__folder.is-closed .tree__chev {
+		transform: rotate(-90deg);
+	}
+
+	.tree__dot {
+		width: 0.35rem;
+		height: 0.35rem;
+		border-radius: 999px;
+		background: var(--a-muted);
+		opacity: 0.5;
+		margin: 0 0.25rem;
+	}
+
+	.side__foot {
+		margin-top: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--a-line);
+	}
+
+	.side__link {
+		display: inline-flex;
+		align-items: center;
+		height: 2.25rem;
+		padding: 0 0.6rem;
+		border-radius: 0.5rem;
+		font-size: 0.85rem;
+		color: var(--a-muted);
+	}
+
+	.side__link:hover {
+		color: var(--primary);
+	}
+
+	/* ---------- 主区 ---------- */
+	.main {
+		min-width: 0;
+		padding: 0 2rem 3rem;
+	}
+
+	.top {
+		position: sticky;
+		top: 0;
+		z-index: 5;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 1rem 0;
+		margin-bottom: 1rem;
+		background: color-mix(in oklch, var(--card-bg) 88%, transparent);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border-bottom: 1px solid var(--a-line);
+	}
+
+	.crumbs {
+		display: flex;
+		align-items: baseline;
+		gap: 0.45rem;
+		font-size: 0.9rem;
+		color: var(--a-muted);
+	}
+
+	.crumbs :global(i) {
+		font-style: normal;
+		opacity: 0.5;
+	}
+
+	.crumbs :global(b) {
+		color: var(--a-text);
+		font-size: 1.05rem;
+		font-weight: 800;
+	}
+
+	.top__tools {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.85rem;
+		color: var(--a-muted);
+	}
+
+	.top__count {
+		margin-right: 0.6rem;
+	}
+
+	.top__count b {
+		color: var(--a-text);
+	}
+
+	.top__btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		height: 2rem;
+		padding: 0 0.6rem;
+		border-radius: 0.45rem;
+	}
+
+	.top__btn:hover {
+		background: color-mix(in oklch, var(--card-bg) 92%, var(--a-text));
+	}
+
+	/* Bases 卡片：封面 + 属性（照 Obsidian 的样子） */
+	.bases {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+		gap: 1rem;
+	}
+
+	.bases--wide {
+		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	}
+
+	.bc {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--a-line);
+		border-radius: 0.6rem;
+		overflow: hidden;
+		background: var(--card-bg);
+		transition:
+			border-color 0.15s,
+			box-shadow 0.25s,
+			transform 0.4s var(--kit-spring);
+	}
+
+	.bc:hover {
+		border-color: color-mix(in oklch, var(--a-line) 50%, var(--primary));
+		box-shadow: 0 12px 28px -18px rgb(0 0 0 / 0.35);
+		transform: translateY(-2px);
+	}
+
+	.bc__body {
+		display: flex;
+		flex-direction: column;
+		padding: 0.65rem 0.75rem 0.8rem;
+	}
+
+	.bc__title {
+		font-weight: 700;
+		font-size: 0.92rem;
+		margin-bottom: 0.35rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.bc__desc {
+		font-size: 0.8rem;
+		line-height: 1.6;
+		color: var(--a-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		margin-bottom: 0.2rem;
+	}
+
+	.bc__k {
+		margin-top: 0.45rem;
+		font-size: 0.72rem;
+		color: var(--a-muted);
+	}
+
+	.bc__v {
+		font-size: 0.85rem;
+		font-family: var(--kit-num);
+	}
+
+	.bc__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		margin-top: 0.15rem;
+	}
+
+	.bc__chips span,
+	.pill {
+		font-style: normal;
+		font-size: 0.72rem;
+		padding: 0.1rem 0.45rem;
+		border-radius: 0.35rem;
+		background: color-mix(in oklch, var(--card-bg) 86%, var(--primary));
+		color: color-mix(in oklch, var(--primary) 80%, var(--a-text));
+	}
+
+	/* 表格视图 */
+	.table {
+		border: 1px solid var(--a-line);
+		border-radius: 0.6rem;
+		overflow: hidden;
+	}
+
+	.table__head,
+	.table__row {
+		display: grid;
+		grid-template-columns: minmax(0, 2.2fr) 7rem minmax(0, 1.4fr) 6.5rem;
+		gap: 1rem;
+		align-items: center;
+		padding: 0.6rem 1rem;
+		font-size: 0.875rem;
+	}
+
+	.table__head {
+		font-size: 0.75rem;
+		color: var(--a-muted);
+		background: var(--a-side);
+		border-bottom: 1px solid var(--a-line);
+	}
+
+	.table__row + .table__row {
+		border-top: 1px solid var(--a-line);
+	}
+
+	.table__row:hover {
+		background: color-mix(in oklch, var(--card-bg) 95%, var(--primary));
+	}
+
+	.table__title {
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.table__tags {
+		color: var(--a-muted);
+		font-size: 0.8rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.table__date {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		color: var(--a-muted);
+	}
+
+	/* 月记 */
+	.months {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+		gap: 0.75rem;
+	}
+
+	.month {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--a-line);
+		border-radius: 0.6rem;
+	}
+
+	.month:hover {
+		border-color: var(--primary);
+	}
+
+	.month__y {
+		font-size: 0.72rem;
+		color: var(--a-muted);
+		font-family: var(--kit-num);
+	}
+
+	.month__n {
+		font-size: 1.3rem;
+		font-weight: 800;
+	}
+
+	.month.is-note .month__n {
+		color: var(--primary);
+	}
+
+	.month__s {
+		font-size: 0.75rem;
+		color: var(--a-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	/* 窄屏：侧栏变成顶部一块 */
+	@media (max-width: 900px) {
+		.app {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			position: static;
+			height: auto;
+			border-right: none;
+			border-bottom: 1px solid var(--a-line);
+		}
+
+		.side__bio,
+		.side__foot {
+			display: none;
+		}
+
+		.tree {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+
+		.tree__head {
+			display: none;
+		}
+
+		.tree__row {
+			width: auto;
+		}
+
+		.tree__row.is-sub {
+			padding-left: 0.55rem;
+		}
+
+		.main {
+			padding: 0 1rem 5rem;
+		}
+
+		.table__head,
+		.table__row {
+			grid-template-columns: minmax(0, 1fr) 6rem;
+		}
+
+		.table__head span:nth-child(3),
+		.table__head span:nth-child(4),
+		.table__tags,
+		.table__date {
+			display: none;
+		}
+	}
+</style>

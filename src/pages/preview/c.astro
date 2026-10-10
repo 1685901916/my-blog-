@@ -1,0 +1,765 @@
+---
+// 方案 C · B站空间式：细顶栏 + 窄横幅压头像的空间头部 + 带数量的分类标签，
+// 内容区左边主栏、右边窄栏（公告 / 标签），底色浅灰、卡片纯白
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../components/LightDarkSwitch.svelte";
+import Cover from "../../components/kit/Cover.astro";
+import ImageWrapper from "../../components/misc/ImageWrapper.astro";
+import PreviewSwitch from "../../components/preview/PreviewSwitch.astro";
+import { announcementConfig, profileConfig, siteConfig } from "../../config";
+import Layout from "../../layouts/Layout.astro";
+import { dayKey, getFeed, getLibrary, getMonthDigests } from "../../utils/kit/content";
+
+const [feed, library, digests] = await Promise.all([getFeed(), getLibrary(), getMonthDigests()]);
+const posts = feed.filter((f) => f.kind === "post");
+const works = feed.filter((f) => f.kind === "work");
+const anime = library.filter((i) => i.shelf.id === "anime").sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+const sites = library.filter((i) => i.shelf.id === "sites");
+const banner = "/assets/desktop-banner/custom-bg.jpg";
+const host = (u?: string) => (u ? new URL(u).hostname.replace(/^www\./, "") : "");
+const tagCount = new Map<string, number>();
+for (const t of [...posts, ...works].flatMap((p) => p.tags)) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 18);
+const tabs = [
+	{ id: "home", label: "主页" },
+	{ id: "posts", label: "文章", count: posts.length },
+	{ id: "anime", label: "追番", count: anime.length },
+	{ id: "works", label: "作品", count: works.length },
+	{ id: "sites", label: "资源站", count: sites.length },
+	{ id: "journal", label: "月记", count: digests.length },
+];
+---
+
+<Layout title="方案 C · B站空间式">
+	<div class="pc" data-no-swup>
+		<!-- 细顶栏 -->
+		<header class="bar">
+			<div class="bar__inner">
+				<a href="/preview/c/" class="bar__logo">
+					<span class="bar__mark">文</span>{siteConfig.title}
+				</a>
+				<nav class="bar__links">
+					<a href="/preview/c/" class="is-on">首页</a>
+					<a href="/posts/">文章</a>
+					<a href="/library/">收藏库</a>
+					<a href="/works/">作品</a>
+					<a href="/journal/">月记</a>
+				</nav>
+				<label class="bar__search"><Icon name="material-symbols:search-rounded" /><input placeholder="搜索" /></label>
+				<LightDarkSwitch client:only="svelte" />
+				<a href="/about/" class="bar__avatar" aria-label="关于我"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></a>
+			</div>
+		</header>
+
+		<div class="wrap">
+			<!-- 空间头部：窄横幅 + 头像 + 名字 + 介绍 + 数据 -->
+			<section class="space">
+				<div class="space__banner"><img src={banner} alt="" /></div>
+				<div class="space__info">
+					<div class="space__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></div>
+					<div class="space__text">
+						<h1 class="space__name">{siteConfig.title}<span class="space__badge">{profileConfig.name}</span></h1>
+						<p class="space__bio">{profileConfig.bio}</p>
+					</div>
+					<dl class="space__stats">
+						<div><dt>文章</dt><dd>{posts.length}</dd></div>
+						<div><dt>追番</dt><dd>{anime.length}</dd></div>
+						<div><dt>作品</dt><dd>{works.length}</dd></div>
+						<div><dt>月记</dt><dd>{digests.filter((d) => d.note).length}</dd></div>
+					</dl>
+				</div>
+				<nav class="space__tabs" aria-label="分类">
+					{tabs.map((t, i) => (
+						<button type="button" class:list={["space__tab", i === 0 && "is-on"]} data-c-tab={t.id}>
+							{t.label}
+							{t.count !== undefined && <small>{t.count}</small>}
+						</button>
+					))}
+					<div class="space__links">
+						{profileConfig.links.map((l) => (
+							<a href={l.url} target="_blank" rel="noopener noreferrer"><Icon name={l.icon} />{l.name}</a>
+						))}
+						<a href="/about/"><Icon name="material-symbols:person-outline-rounded" />关于</a>
+					</div>
+				</nav>
+			</section>
+
+			<div class="body">
+				<main class="col">
+					<section class="panel" data-c-block="posts">
+						<h2 class="panel__title">文章 <small>{posts.length}</small><a href="/posts/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h2>
+						<div class="posts">
+							{posts.slice(0, 8).map((p) => (
+								<a href={p.url} class="post">
+									<div class="post__thumb">{p.cover ? <img src={p.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span>{[...p.title][0]}</span>}</div>
+									<div class="post__title">{p.title}</div>
+									<div class="post__meta"><span>{p.category}</span><span>{dayKey(p.date)}</span></div>
+								</a>
+							))}
+						</div>
+					</section>
+
+					<section class="panel" data-c-block="anime">
+						<h2 class="panel__title">追番 <small>{anime.length}</small><a href="/library/anime/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h2>
+						<div class="posters">
+							{anime.map((a) => (
+								<a href={a.url} class="poster">
+									<Cover src={a.cover} title={a.title} aspect="3 / 4">
+										{typeof a.rating === "number" && <span class="kit-rating"><Icon name="material-symbols:star-rounded" />{a.rating.toFixed(1)}</span>}
+									</Cover>
+									<span class="poster__title">{a.title}</span>
+								</a>
+							))}
+						</div>
+					</section>
+
+					<section class="panel" data-c-block="works">
+						<h2 class="panel__title">作品 <small>{works.length}</small><a href="/works/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h2>
+						<div class="works">
+							{works.map((w) => (
+								<a href={w.url} class="work">
+									<Cover src={w.cover} title={w.title} aspect="16 / 10" />
+									<div class="work__title">{w.title}</div>
+									<div class="work__meta">{w.tags.filter((t) => !t.endsWith("系")).slice(0, 3).join(" · ")}</div>
+								</a>
+							))}
+						</div>
+					</section>
+
+					<section class="panel" data-c-block="sites">
+						<h2 class="panel__title">资源站 <small>{sites.length}</small><a href="/library/sites/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h2>
+						<div class="sites">
+							{sites.map((s) => (
+								<a href={s.url} class="site"><span class="site__mark">{[...s.title][0]}</span><span class="site__name">{s.title}</span><span class="site__host">{host(s.link)}</span></a>
+							))}
+						</div>
+					</section>
+
+					<section class="panel" data-c-block="journal">
+						<h2 class="panel__title">月记 <small>{digests.length}</small><a href="/journal/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h2>
+						<div class="months">
+							{digests.map((d) => (
+								<a href={`/journal/${d.month}/`} class:list={["month", d.note && "is-note"]}>
+									<span class="month__n">{String(d.monthNumber).padStart(2, "0")}<small>月</small></span>
+									<span class="month__y">{d.year}{d.note ? " · 写了月记" : ""}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				</main>
+
+				<!-- 右侧窄栏 -->
+				<aside class="aside">
+					<section class="panel">
+						<h2 class="panel__title">公告</h2>
+						<p class="aside__text">{announcementConfig.content}</p>
+					</section>
+					<section class="panel">
+						<h2 class="panel__title">标签</h2>
+						<div class="aside__tags">
+							{tags.map(([t, n]) => <a href={`/posts/?tag=${encodeURIComponent(t)}`}>{t}<small>{n}</small></a>)}
+						</div>
+					</section>
+				</aside>
+			</div>
+		</div>
+	</div>
+	<PreviewSwitch current="c" />
+</Layout>
+
+<script>
+	// 分类标签：「主页」显示所有分区，其余只显示对应分区（原型演示用）
+	const root = document.querySelector<HTMLElement>(".pc");
+	if (root) {
+		const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-c-tab]")];
+		const blocks = [...root.querySelectorAll<HTMLElement>("[data-c-block]")];
+		for (const t of tabs) {
+			t.addEventListener("click", () => {
+				for (const x of tabs) x.classList.toggle("is-on", x === t);
+				const id = t.dataset.cTab;
+				for (const b of blocks) b.hidden = id !== "home" && b.dataset.cBlock !== id;
+			});
+		}
+	}
+</script>
+
+<style>
+	.pc {
+		--c-bg: color-mix(in oklch, var(--card-bg) 95%, black);
+		--c-card: var(--card-bg);
+		--c-text: rgb(24 25 28);
+		--c-muted: rgb(148 153 160);
+		--c-line: color-mix(in oklch, var(--card-bg) 90%, black);
+		--c-pink: var(--primary);
+		min-height: 100vh;
+		background: var(--c-bg);
+		color: var(--c-text);
+	}
+
+	:global(:root.dark) .pc {
+		--c-bg: color-mix(in oklch, var(--card-bg) 80%, black);
+		--c-text: rgb(232 232 232);
+		--c-muted: rgb(150 150 150);
+		--c-line: color-mix(in oklch, var(--card-bg) 86%, white);
+	}
+
+	/* 顶栏 */
+	.bar {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		background: var(--c-card);
+		box-shadow: 0 1px 0 var(--c-line);
+	}
+
+	.bar__inner {
+		max-width: 80rem;
+		margin: 0 auto;
+		height: 3.5rem;
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 0 1.5rem;
+	}
+
+	.bar__logo {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 800;
+		font-size: 1rem;
+	}
+
+	.bar__mark {
+		width: 1.9rem;
+		height: 1.9rem;
+		border-radius: 0.55rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--c-pink);
+		color: white;
+		font-size: 0.95rem;
+	}
+
+	.bar__links {
+		display: flex;
+		gap: 0.25rem;
+		margin-left: 1rem;
+	}
+
+	.bar__links a {
+		padding: 0.4rem 0.75rem;
+		border-radius: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--c-text);
+	}
+
+	.bar__links a:hover {
+		background: var(--c-bg);
+	}
+
+	.bar__links a.is-on {
+		color: var(--c-pink);
+		font-weight: 700;
+	}
+
+	.bar__search {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		width: 15rem;
+		height: 2.2rem;
+		padding: 0 0.8rem;
+		border-radius: 0.6rem;
+		background: var(--c-bg);
+		color: var(--c-muted);
+	}
+
+	.bar__search input {
+		flex: 1;
+		min-width: 0;
+		background: transparent;
+		outline: none;
+		font-size: 0.85rem;
+	}
+
+	.bar__avatar {
+		width: 2.2rem;
+		height: 2.2rem;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.wrap {
+		max-width: 80rem;
+		margin: 0 auto;
+		padding: 1.25rem 1.5rem 5rem;
+	}
+
+	/* 空间头部 */
+	.space {
+		background: var(--c-card);
+		border-radius: 0.75rem;
+		overflow: hidden;
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+	}
+
+	.space__banner {
+		height: 11rem;
+		overflow: hidden;
+	}
+
+	.space__banner img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 35%;
+	}
+
+	.space__info {
+		display: flex;
+		align-items: flex-end;
+		gap: 1.25rem;
+		padding: 0 1.75rem 1rem;
+	}
+
+	.space__avatar {
+		flex: none;
+		width: 6rem;
+		height: 6rem;
+		margin-top: -2.5rem;
+		border-radius: 999px;
+		overflow: hidden;
+		border: 4px solid var(--c-card);
+		box-shadow: 0 6px 18px -8px rgb(0 0 0 / 0.35);
+	}
+
+	.space__text {
+		flex: 1;
+		min-width: 0;
+		padding-top: 0.75rem;
+	}
+
+	.space__name {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 1.4rem;
+		font-weight: 800;
+	}
+
+	.space__badge {
+		font-size: 0.72rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
+		border-radius: 0.35rem;
+		color: var(--c-pink);
+		background: color-mix(in oklch, var(--card-bg) 85%, var(--primary));
+	}
+
+	.space__bio {
+		margin-top: 0.3rem;
+		font-size: 0.85rem;
+		line-height: 1.7;
+		color: var(--c-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.space__stats {
+		display: flex;
+		gap: 1.75rem;
+		padding-bottom: 0.25rem;
+	}
+
+	.space__stats div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.space__stats dt {
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.space__stats dd {
+		font-family: var(--kit-num);
+		font-size: 1.2rem;
+		font-weight: 700;
+	}
+
+	.space__tabs {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0 1.25rem;
+		border-top: 1px solid var(--c-line);
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.space__tab {
+		position: relative;
+		flex: none;
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.3rem;
+		padding: 0.95rem 0.75rem;
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--c-text);
+	}
+
+	.space__tab small {
+		font-family: var(--kit-num);
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.space__tab.is-on {
+		color: var(--c-pink);
+	}
+
+	.space__tab.is-on::after {
+		content: "";
+		position: absolute;
+		left: 0.75rem;
+		right: 0.75rem;
+		bottom: 0;
+		height: 3px;
+		border-radius: 3px;
+		background: var(--c-pink);
+	}
+
+	.space__links {
+		margin-left: auto;
+		display: flex;
+		gap: 1rem;
+		font-size: 0.85rem;
+		color: var(--c-muted);
+		white-space: nowrap;
+	}
+
+	.space__links a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.space__links a:hover {
+		color: var(--c-pink);
+	}
+
+	/* 内容区 */
+	.body {
+		margin-top: 1rem;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 18rem;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.col,
+	.aside {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.aside {
+		position: sticky;
+		top: 4.5rem;
+	}
+
+	.panel {
+		background: var(--c-card);
+		border-radius: 0.75rem;
+		padding: 1.1rem 1.25rem 1.25rem;
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+	}
+
+	.panel__title {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+		margin-bottom: 0.9rem;
+		font-size: 1.05rem;
+		font-weight: 800;
+	}
+
+	.panel__title small {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--c-muted);
+	}
+
+	.panel__title a {
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--c-muted);
+	}
+
+	.panel__title a:hover {
+		color: var(--c-pink);
+	}
+
+	.posts {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+		gap: 1.25rem 1rem;
+	}
+
+	.post__thumb {
+		aspect-ratio: 16 / 10;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		background: var(--c-bg);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.75rem;
+		font-weight: 900;
+		color: var(--c-muted);
+	}
+
+	.post__thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.4s;
+	}
+
+	.post:hover .post__thumb img {
+		transform: scale(1.05);
+	}
+
+	.post__title {
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		font-weight: 700;
+		line-height: 1.45;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.15s;
+	}
+
+	.post:hover .post__title {
+		color: var(--c-pink);
+	}
+
+	.post__meta {
+		margin-top: 0.3rem;
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.posters {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+		gap: 1.1rem 0.9rem;
+	}
+
+	.poster {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+	}
+
+	.poster :global(.kit-cover) {
+		border-radius: 0.5rem;
+	}
+
+	.poster__title {
+		font-size: 0.85rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.poster:hover .poster__title {
+		color: var(--c-pink);
+	}
+
+	.works {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: 1.25rem 1rem;
+	}
+
+	.work :global(.kit-cover) {
+		border-radius: 0.5rem;
+	}
+
+	.work__title {
+		margin-top: 0.5rem;
+		font-size: 0.92rem;
+		font-weight: 700;
+	}
+
+	.work:hover .work__title {
+		color: var(--c-pink);
+	}
+
+	.work__meta {
+		margin-top: 0.2rem;
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.sites {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: 0.5rem 1rem;
+	}
+
+	.site {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+	}
+
+	.site:hover {
+		background: var(--c-bg);
+	}
+
+	.site__mark {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 800;
+		color: white;
+		background: var(--c-pink);
+	}
+
+	.site__name {
+		font-size: 0.875rem;
+		font-weight: 700;
+	}
+
+	.site__host {
+		margin-left: auto;
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.months {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+		gap: 0.75rem;
+	}
+
+	.month {
+		display: flex;
+		flex-direction: column;
+		padding: 0.8rem 1rem;
+		border-radius: 0.6rem;
+		background: var(--c-bg);
+	}
+
+	.month__n {
+		font-family: var(--kit-num);
+		font-size: 1.5rem;
+		font-weight: 800;
+	}
+
+	.month__n small {
+		font-size: 0.75rem;
+		margin-left: 0.15rem;
+	}
+
+	.month.is-note .month__n {
+		color: var(--c-pink);
+	}
+
+	.month__y {
+		font-size: 0.72rem;
+		color: var(--c-muted);
+	}
+
+	.aside__text {
+		font-size: 0.85rem;
+		line-height: 1.75;
+		color: var(--c-muted);
+	}
+
+	.aside__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.aside__tags a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.25rem;
+		padding: 0.25rem 0.6rem;
+		border-radius: 0.4rem;
+		font-size: 0.8rem;
+		background: var(--c-bg);
+		color: var(--c-text);
+	}
+
+	.aside__tags a small {
+		font-size: 0.7rem;
+		color: var(--c-muted);
+	}
+
+	.aside__tags a:hover {
+		color: var(--c-pink);
+	}
+
+	@media (max-width: 1024px) {
+		.body {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.aside {
+			position: static;
+		}
+
+		.bar__links,
+		.bar__search,
+		.space__links {
+			display: none;
+		}
+
+		.bar__inner > :global(:nth-last-child(2)) {
+			margin-left: auto;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.space__info {
+			flex-wrap: wrap;
+			padding: 0 1rem 1rem;
+		}
+
+		.space__stats {
+			width: 100%;
+			justify-content: space-around;
+		}
+
+		.wrap {
+			padding: 0.75rem 0.75rem 5rem;
+		}
+	}
+</style>
