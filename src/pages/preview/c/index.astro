@@ -1,0 +1,669 @@
+---
+// 方案 C · B站空间式（博客优先）：空间头部 + 左边专栏式文章列表 + 右边窄栏（关于我 / 追番 / 标签 / 公告）
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
+import Cover from "../../../components/kit/Cover.astro";
+import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
+import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
+import { cnDate, getProtoAnime, getProtoNotes } from "../../../components/preview/proto";
+import { announcementConfig, profileConfig, siteConfig } from "../../../config";
+import Layout from "../../../layouts/Layout.astro";
+
+const [notes, anime] = await Promise.all([getProtoNotes("c"), getProtoAnime()]);
+const count = (k: string) => notes.filter((n) => n.kind === k).length;
+const tabs = [
+	{ id: "", label: "主页", count: notes.length },
+	{ id: "post", label: "文章", count: count("post") },
+	{ id: "work", label: "作品", count: count("work") },
+	{ id: "journal", label: "月记", count: count("journal") },
+	{ id: "anime", label: "追番", count: anime.length },
+];
+const tagCount = new Map<string, number>();
+for (const n of notes) for (const t of n.tags) if (t !== n.category) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16);
+const banner = "/assets/desktop-banner/custom-bg.jpg";
+---
+
+<Layout title="方案 C · B站空间式">
+	<div class="pc" data-no-swup>
+		<header class="bar">
+			<div class="bar__inner">
+				<a href="/preview/c/" class="bar__logo"><span class="bar__mark">文</span>{siteConfig.title}</a>
+				<label class="bar__search"><Icon name="material-symbols:search-rounded" /><input placeholder="搜索笔记" /></label>
+				<LightDarkSwitch client:only="svelte" />
+				<a href="/about/" class="bar__avatar" aria-label="关于我"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></a>
+			</div>
+		</header>
+
+		<div class="wrap">
+			<!-- 空间头部 -->
+			<section class="space">
+				<div class="space__banner"><img src={banner} alt="" /></div>
+				<div class="space__info">
+					<div class="space__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></div>
+					<div class="space__text">
+						<h1 class="space__name">{siteConfig.title}</h1>
+						<p class="space__sub">{profileConfig.name} · {siteConfig.subtitle}</p>
+					</div>
+					<dl class="space__stats">
+						<div><dd>{count("post")}</dd><dt>文章</dt></div>
+						<div><dd>{count("work")}</dd><dt>作品</dt></div>
+						<div><dd>{anime.length}</dd><dt>追番</dt></div>
+					</dl>
+				</div>
+				<nav class="space__tabs" aria-label="分类">
+					{tabs.map((t, i) => (
+						<button type="button" class:list={["space__tab", i === 0 && "is-on"]} data-c-tab={t.id}>
+							{t.label}<small>{t.count}</small>
+						</button>
+					))}
+				</nav>
+			</section>
+
+			<div class="body">
+				<main class="col">
+					<!-- 专栏式列表 -->
+					<section class="panel" data-c-list>
+						{notes.map((n) => (
+							<a href={n.href} class="item" data-kind={n.kind}>
+								<div class="item__body">
+									<h2 class="item__title">{n.title}</h2>
+									{n.description && <p class="item__desc">{n.description}</p>}
+									<div class="item__meta">
+										<span class="item__type">{n.type}</span>
+										<time>{cnDate(n.date)}</time>
+									</div>
+								</div>
+								{n.cover && (
+									<div class="item__thumb">
+										<img src={n.cover} alt="" loading="lazy" referrerpolicy="no-referrer" />
+									</div>
+								)}
+							</a>
+						))}
+					</section>
+
+					<!-- 追番：点「追番」标签时显示 -->
+					<section class="panel" data-c-anime hidden>
+						<div class="posters">
+							{anime.map((a) => (
+								<a href={a.url} class="poster">
+									<Cover src={a.cover} title={a.title} aspect="3 / 4">
+										{typeof a.rating === "number" && <span class="kit-rating"><Icon name="material-symbols:star-rounded" />{a.rating.toFixed(1)}</span>}
+									</Cover>
+									<span class="poster__title">{a.title}</span>
+									<span class="poster__tags">{a.tags.slice(0, 2).join(" · ")}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				</main>
+
+				<aside class="aside">
+					<section class="panel me">
+						<div class="me__head">
+							<span class="me__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></span>
+							<div>
+								<div class="me__name">{profileConfig.name}</div>
+								<div class="me__sub">{siteConfig.title}</div>
+							</div>
+						</div>
+						<p class="me__bio">{profileConfig.bio}</p>
+						<div class="me__links">
+							{profileConfig.links.map((l) => (
+								<a href={l.url} target="_blank" rel="noopener noreferrer"><Icon name={l.icon} />{l.name}</a>
+							))}
+							<a href="/about/"><Icon name="material-symbols:person-outline-rounded" />关于</a>
+						</div>
+					</section>
+
+					<section class="panel">
+						<h3 class="panel__title">在看<a href="/library/anime/">更多 <Icon name="material-symbols:chevron-right-rounded" /></a></h3>
+						<div class="mini">
+							{anime.slice(0, 6).map((a) => (
+								<a href={a.url} title={a.title}><Cover src={a.cover} title={a.title} aspect="3 / 4" /></a>
+							))}
+						</div>
+					</section>
+
+					<section class="panel">
+						<h3 class="panel__title">标签</h3>
+						<div class="tags">
+							{tags.map(([t, n]) => <a href={`/posts/?tag=${encodeURIComponent(t)}`}>{t}<small>{n}</small></a>)}
+						</div>
+					</section>
+
+					<section class="panel">
+						<h3 class="panel__title">公告</h3>
+						<p class="notice">{announcementConfig.content}</p>
+					</section>
+				</aside>
+			</div>
+		</div>
+	</div>
+	<PreviewSwitch current="c" />
+</Layout>
+
+<script>
+	// 分类标签：主页 = 全部笔记；文章 / 作品 / 月记 = 筛列表；追番 = 海报墙（原型演示用）
+	const root = document.querySelector<HTMLElement>(".pc");
+	if (root) {
+		const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-c-tab]")];
+		const list = root.querySelector<HTMLElement>("[data-c-list]");
+		const animePanel = root.querySelector<HTMLElement>("[data-c-anime]");
+		const items = [...root.querySelectorAll<HTMLElement>(".item")];
+		for (const t of tabs) {
+			t.addEventListener("click", () => {
+				for (const x of tabs) x.classList.toggle("is-on", x === t);
+				const id = t.dataset.cTab ?? "";
+				const isAnime = id === "anime";
+				if (list) list.hidden = isAnime;
+				if (animePanel) animePanel.hidden = !isAnime;
+				for (const it of items) it.hidden = !!id && !isAnime && it.dataset.kind !== id;
+			});
+		}
+	}
+</script>
+
+<style>
+	.pc {
+		--c-bg: color-mix(in oklch, var(--card-bg) 95%, black);
+		--c-card: var(--card-bg);
+		--c-text: rgb(24 25 28);
+		--c-soft: rgb(97 102 109);
+		--c-muted: rgb(148 153 160);
+		--c-line: color-mix(in oklch, var(--card-bg) 92%, black);
+		min-height: 100vh;
+		background: var(--c-bg);
+		color: var(--c-text);
+	}
+
+	:global(:root.dark) .pc {
+		--c-bg: color-mix(in oklch, var(--card-bg) 80%, black);
+		--c-text: rgb(232 232 232);
+		--c-soft: rgb(190 190 195);
+		--c-muted: rgb(150 150 150);
+		--c-line: color-mix(in oklch, var(--card-bg) 88%, white);
+	}
+
+	.bar {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		background: var(--c-card);
+		box-shadow: 0 1px 0 var(--c-line);
+	}
+
+	.bar__inner {
+		max-width: 72rem;
+		margin: 0 auto;
+		height: 3.5rem;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 0 1.5rem;
+	}
+
+	.bar__logo {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		font-weight: 800;
+	}
+
+	.bar__mark {
+		width: 1.85rem;
+		height: 1.85rem;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.9rem;
+		color: white;
+		background: var(--primary);
+	}
+
+	.bar__search {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		width: 16rem;
+		height: 2.2rem;
+		padding: 0 0.8rem;
+		border-radius: 0.6rem;
+		background: var(--c-bg);
+		color: var(--c-muted);
+	}
+
+	.bar__search input {
+		flex: 1;
+		min-width: 0;
+		background: transparent;
+		outline: none;
+		font-size: 0.85rem;
+	}
+
+	.bar__avatar {
+		width: 2.1rem;
+		height: 2.1rem;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.wrap {
+		max-width: 72rem;
+		margin: 0 auto;
+		padding: 1.25rem 1.5rem 5rem;
+	}
+
+	/* 空间头部 */
+	.space {
+		background: var(--c-card);
+		border-radius: 0.9rem;
+		overflow: hidden;
+	}
+
+	.space__banner {
+		height: 10rem;
+	}
+
+	.space__banner img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 35%;
+	}
+
+	.space__info {
+		display: flex;
+		align-items: flex-end;
+		gap: 1.1rem;
+		padding: 0 1.75rem 1.1rem;
+	}
+
+	.space__avatar {
+		flex: none;
+		width: 5.5rem;
+		height: 5.5rem;
+		margin-top: -2.25rem;
+		border-radius: 999px;
+		overflow: hidden;
+		border: 4px solid var(--c-card);
+	}
+
+	.space__text {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.space__name {
+		font-size: 1.35rem;
+		font-weight: 800;
+	}
+
+	.space__sub {
+		margin-top: 0.15rem;
+		font-size: 0.85rem;
+		color: var(--c-muted);
+	}
+
+	.space__stats {
+		display: flex;
+		gap: 2rem;
+	}
+
+	.space__stats div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.space__stats dd {
+		font-family: var(--kit-num);
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.space__stats dt {
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.space__tabs {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0 1.25rem;
+		border-top: 1px solid var(--c-line);
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.space__tab {
+		position: relative;
+		flex: none;
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.3rem;
+		padding: 0.95rem 0.6rem;
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--c-soft);
+	}
+
+	.space__tab small {
+		font-family: var(--kit-num);
+		font-size: 0.75rem;
+		color: var(--c-muted);
+	}
+
+	.space__tab.is-on {
+		color: var(--primary);
+	}
+
+	.space__tab.is-on::after {
+		content: "";
+		position: absolute;
+		left: 0.6rem;
+		right: 0.6rem;
+		bottom: 0;
+		height: 3px;
+		border-radius: 3px;
+		background: var(--primary);
+	}
+
+	/* 内容区 */
+	.body {
+		margin-top: 1rem;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 19rem;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.col,
+	.aside {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.aside {
+		position: sticky;
+		top: 4.5rem;
+	}
+
+	.panel {
+		background: var(--c-card);
+		border-radius: 0.9rem;
+		padding: 1.1rem 1.25rem;
+	}
+
+	.panel__title {
+		display: flex;
+		align-items: baseline;
+		margin-bottom: 0.8rem;
+		font-size: 0.95rem;
+		font-weight: 800;
+	}
+
+	.panel__title a {
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		font-size: 0.78rem;
+		font-weight: 500;
+		color: var(--c-muted);
+	}
+
+	.panel__title a:hover {
+		color: var(--primary);
+	}
+
+	/* 专栏式列表 */
+	[data-c-list] {
+		padding: 0.25rem 1.5rem;
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 1.35rem 0;
+	}
+
+	.item + .item {
+		border-top: 1px solid var(--c-line);
+	}
+
+	.item__body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.item__title {
+		font-size: 1.12rem;
+		font-weight: 800;
+		line-height: 1.45;
+		transition: color 0.15s;
+	}
+
+	.item:hover .item__title {
+		color: var(--primary);
+	}
+
+	.item__desc {
+		margin-top: 0.4rem;
+		font-size: 0.9rem;
+		line-height: 1.7;
+		color: var(--c-soft);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.item__meta {
+		margin-top: 0.6rem;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.78rem;
+		color: var(--c-muted);
+	}
+
+	.item__type {
+		padding: 0.1rem 0.45rem;
+		border-radius: 0.3rem;
+		color: var(--primary);
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+	}
+
+	.item__thumb {
+		flex: none;
+		width: 10rem;
+		aspect-ratio: 16 / 10;
+		border-radius: 0.6rem;
+		overflow: hidden;
+	}
+
+	.item__thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.4s;
+	}
+
+	.item:hover .item__thumb img {
+		transform: scale(1.05);
+	}
+
+	/* 追番 */
+	.posters {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+		gap: 1.25rem 1rem;
+	}
+
+	.poster {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		min-width: 0;
+	}
+
+	.poster :global(.kit-cover) {
+		border-radius: 0.5rem;
+	}
+
+	.poster__title {
+		margin-top: 0.2rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.poster__tags {
+		font-size: 0.72rem;
+		color: var(--c-muted);
+	}
+
+	/* 右侧：关于我 */
+	.me__head {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.me__avatar {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.me__name {
+		font-weight: 800;
+	}
+
+	.me__sub {
+		font-size: 0.78rem;
+		color: var(--c-muted);
+	}
+
+	.me__bio {
+		margin-top: 0.8rem;
+		font-size: 0.85rem;
+		line-height: 1.75;
+		color: var(--c-soft);
+	}
+
+	.me__links {
+		margin-top: 0.8rem;
+		display: flex;
+		gap: 1rem;
+		font-size: 0.82rem;
+		color: var(--c-muted);
+	}
+
+	.me__links a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.me__links a:hover {
+		color: var(--primary);
+	}
+
+	.mini {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5rem;
+	}
+
+	.mini :global(.kit-cover) {
+		border-radius: 0.4rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.tags a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.2rem;
+		padding: 0.25rem 0.6rem;
+		border-radius: 0.4rem;
+		font-size: 0.8rem;
+		background: var(--c-bg);
+	}
+
+	.tags a small {
+		font-size: 0.7rem;
+		color: var(--c-muted);
+	}
+
+	.tags a:hover {
+		color: var(--primary);
+	}
+
+	.notice {
+		font-size: 0.85rem;
+		line-height: 1.75;
+		color: var(--c-soft);
+	}
+
+	@media (max-width: 1024px) {
+		.body {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.aside {
+			position: static;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.bar__search {
+			display: none;
+		}
+
+		.bar__inner > :global(:nth-last-child(2)) {
+			margin-left: auto;
+		}
+
+		.wrap {
+			padding: 0.75rem 0.75rem 5rem;
+		}
+
+		.space__info {
+			padding: 0 1rem 1rem;
+		}
+
+		.space__stats {
+			gap: 1rem;
+		}
+
+		[data-c-list] {
+			padding: 0.25rem 1rem;
+		}
+
+		.item {
+			gap: 1rem;
+		}
+
+		.item__title {
+			font-size: 1rem;
+		}
+
+		.item__thumb {
+			width: 6.5rem;
+		}
+	}
+</style>

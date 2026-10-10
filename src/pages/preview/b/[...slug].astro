@@ -1,0 +1,320 @@
+---
+// 方案 B 的文章阅读页：细顶栏 + 居中单栏正文，宽屏右侧浮动目录
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
+import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
+import Markdown from "../../../components/misc/Markdown.astro";
+import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
+import { cnDate, getProtoArticlePaths, type ProtoArticle } from "../../../components/preview/proto";
+import { profileConfig, siteConfig } from "../../../config";
+import Layout from "../../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+	return getProtoArticlePaths("b");
+}
+
+const { entry, kind, prev, next } = Astro.props as ProtoArticle;
+const { Content, headings, remarkPluginFrontmatter } = await entry.render();
+const toc = headings.filter((h) => h.depth <= Math.min(...headings.map((x) => x.depth)) + 1);
+const category = kind === "work" ? "作品" : entry.data.category || "文章";
+const minutes = remarkPluginFrontmatter?.minutes as number | undefined;
+const words = remarkPluginFrontmatter?.words as number | undefined;
+const tags = entry.data.tags.filter((t) => t !== entry.data.category);
+---
+
+<Layout title={entry.data.title} description={entry.data.description}>
+	<div class="rb" data-no-swup>
+		<header class="bar">
+			<a href="/preview/b/" class="bar__logo">{siteConfig.title}</a>
+			<nav class="bar__links">
+				<a href="/preview/b/#notes">笔记</a>
+				<a href="/preview/b/#about">关于</a>
+			</nav>
+			<LightDarkSwitch client:only="svelte" />
+		</header>
+
+		<div class="layout">
+			<article class="article">
+				<a href="/preview/b/#notes" class="back"><Icon name="material-symbols:arrow-back-rounded" />返回笔记</a>
+				<div class="meta">
+					<span class="meta__cat">{category}</span>
+					<time>{cnDate(entry.data.published)}</time>
+					{words && <span>{words} 字</span>}
+					{minutes && <span>约 {minutes} 分钟</span>}
+				</div>
+				<h1 class="title">{entry.data.title}</h1>
+				{entry.data.description && <p class="lead">{entry.data.description}</p>}
+				<div class="author">
+					<span class="author__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></span>
+					<span>{profileConfig.name}</span>
+				</div>
+				{entry.data.image && <img class="cover" src={entry.data.image} alt="" referrerpolicy="no-referrer" />}
+
+				<Markdown class="markdown-content body">
+					<Content />
+				</Markdown>
+
+				{
+					tags.length > 0 && (
+						<div class="tags">
+							{tags.map((t) => (
+								<a href={`/posts/?tag=${encodeURIComponent(t)}`}># {t}</a>
+							))}
+						</div>
+					)
+				}
+
+				<nav class="pager">
+					{prev ? (
+						<a href={prev.href} class="pager__item"><small>上一篇</small><span>{prev.title}</span></a>
+					) : (
+						<span />
+					)}
+					{next && (
+						<a href={next.href} class="pager__item is-next"><small>下一篇</small><span>{next.title}</span></a>
+					)}
+				</nav>
+			</article>
+
+			{
+				toc.length > 1 && (
+					<aside class="toc">
+						<div class="toc__head">目录</div>
+						<nav data-toc>
+							{toc.map((h) => (
+								<a href={`#${h.slug}`} class:list={["kit-toc__link", h.depth > toc[0].depth && "is-sub"]} data-toc-target={h.slug}>
+									{h.text.replace(/#$/, "")}
+								</a>
+							))}
+						</nav>
+					</aside>
+				)
+			}
+		</div>
+	</div>
+	<PreviewSwitch current="b" />
+</Layout>
+
+<style>
+	.rb {
+		--b-text: rgb(28 28 30);
+		--b-muted: rgb(140 140 148);
+		--b-line: color-mix(in oklch, var(--card-bg) 90%, black);
+		background: var(--card-bg);
+		color: var(--b-text);
+		min-height: 100vh;
+	}
+
+	:global(:root.dark) .rb {
+		--b-text: rgb(238 238 240);
+		--b-muted: rgb(150 150 158);
+		--b-line: color-mix(in oklch, var(--card-bg) 85%, white);
+	}
+
+	.bar {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		height: 3.5rem;
+		padding: 0 clamp(1.25rem, 4vw, 3rem);
+		background: color-mix(in oklch, var(--card-bg) 88%, transparent);
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--b-line);
+	}
+
+	.bar__logo {
+		font-weight: 800;
+		letter-spacing: 0.04em;
+	}
+
+	.bar__links {
+		margin-left: auto;
+		display: flex;
+		gap: 1.5rem;
+		font-size: 0.9rem;
+		color: var(--b-muted);
+	}
+
+	.bar__links a:hover {
+		color: var(--primary);
+	}
+
+	/* 中间一栏正文，两边留白；宽屏右边放目录 */
+	.layout {
+		display: grid;
+		grid-template-columns: minmax(1.25rem, 1fr) minmax(0, 44rem) minmax(1.25rem, 1fr);
+	}
+
+	.article {
+		grid-column: 2;
+		padding: 2.5rem 0 4rem;
+		min-width: 0;
+	}
+
+	.back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: 0.85rem;
+		color: var(--b-muted);
+	}
+
+	.back:hover {
+		color: var(--primary);
+	}
+
+	.meta {
+		margin-top: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1rem;
+		font-size: 0.85rem;
+		color: var(--b-muted);
+	}
+
+	.meta__cat {
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.title {
+		margin-top: 0.75rem;
+		font-size: clamp(1.9rem, 4vw, 2.6rem);
+		font-weight: 900;
+		line-height: 1.3;
+		letter-spacing: 0.02em;
+	}
+
+	.lead {
+		margin-top: 1rem;
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--b-muted);
+	}
+
+	.author {
+		margin-top: 1.5rem;
+		padding-bottom: 1.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+		border-bottom: 1px solid var(--b-line);
+	}
+
+	.author__avatar {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.cover {
+		margin-top: 2rem;
+		width: 100%;
+		max-height: 26rem;
+		object-fit: cover;
+		border-radius: 1rem;
+	}
+
+	.article :global(.body) {
+		margin-top: 2rem;
+	}
+
+	.tags {
+		margin-top: 2.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.tags a {
+		padding: 0.3rem 0.75rem;
+		border-radius: 999px;
+		font-size: 0.82rem;
+		color: var(--b-muted);
+		border: 1px solid var(--b-line);
+	}
+
+	.tags a:hover {
+		color: var(--primary);
+		border-color: var(--primary);
+	}
+
+	.pager {
+		margin-top: 3rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	.pager__item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		padding: 1rem 1.25rem;
+		border-radius: 1rem;
+		border: 1px solid var(--b-line);
+		transition: border-color 0.15s;
+	}
+
+	.pager__item:hover {
+		border-color: var(--primary);
+	}
+
+	.pager__item small {
+		font-size: 0.75rem;
+		color: var(--b-muted);
+	}
+
+	.pager__item span {
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.pager__item.is-next {
+		grid-column: 2;
+		text-align: right;
+	}
+
+	.toc {
+		display: none;
+	}
+
+	@media (min-width: 1280px) {
+		.toc {
+			display: block;
+			grid-column: 3;
+			position: sticky;
+			top: 5rem;
+			align-self: start;
+			max-width: 15rem;
+			margin: 6rem 0 0 2.5rem;
+		}
+
+		.toc__head {
+			margin-bottom: 0.5rem;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			color: var(--b-muted);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.bar__links {
+			display: none;
+		}
+
+		.bar > :global(:last-child) {
+			margin-left: auto;
+		}
+	}
+</style>
