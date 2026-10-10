@@ -12,7 +12,11 @@ const initial = [...title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 ---
 
 <div class:list={["kit-cover", className]} style={`--aspect: ${aspect}`}>
-	<div class="kit-cover__fallback" aria-hidden="true">{initial}</div>
+	<!-- 字体封面：标题文字 + 首字大水印，没封面或图片加载失败时露出来 -->
+	<div class="kit-cover__fallback" aria-hidden="true">
+		<span class="kit-cover__mark">{initial}</span>
+		<span class="kit-cover__title">{title}</span>
+	</div>
 	{
 		src && (
 			<img

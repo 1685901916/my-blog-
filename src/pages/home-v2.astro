@@ -1,0 +1,695 @@
+---
+// 新主页原型（/home-v2/）：和现有主页对比用，确认方向后再替换 /
+// 思路：不要左侧通用侧栏，按内容形态分区；粉色只做强调，元信息一律灰色文字
+import { Icon } from "astro-icon/components";
+import Cover from "../components/kit/Cover.astro";
+import WorkCard from "../components/kit/WorkCard.astro";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import { profileConfig } from "../config";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { dayKey, getFeed, getLibrary, getMonthDigests, monthKey } from "../utils/kit/content";
+
+const [feed, library, digests] = await Promise.all([getFeed(), getLibrary(), getMonthDigests()]);
+
+// 最近更新：文章 / 资源 / 作品 + 手写的月记，按时间倒序
+type Latest = { kind: string; title: string; url: string; date: Date; description: string; cover: string };
+const KIND = { post: "文章", resource: "资源", work: "作品" } as const;
+const recent: Latest[] = [
+	...feed.map((f) => ({ ...f, kind: KIND[f.kind] })),
+	...digests
+		.filter((d) => d.note)
+		.map((d) => ({
+			kind: "月记",
+			title: d.title,
+			url: `/journal/${d.month}/`,
+			date: d.note?.data.published ?? new Date(),
+			description: d.summary,
+			// 只用月记自己的封面，不借本月作品的图，免得和旁边的卡片重复
+			cover: d.note?.data.cover ?? "",
+		})),
+]
+	.sort((a, b) => b.date.getTime() - a.date.getTime())
+	.slice(0, 5);
+// 大卡片放最近一条有封面的，没有大图的大卡片只剩一个字，很空
+const featured = recent.find((r) => r.cover) ?? recent[0];
+const latest = featured ? [featured, ...recent.filter((r) => r !== featured)] : [];
+
+const anime = library
+	.filter((i) => i.shelf.id === "anime")
+	.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+const works = feed.filter((f) => f.kind === "work").slice(0, 2);
+const writings = feed.filter((f) => f.kind !== "work");
+const notes = digests.filter((d) => d.note);
+const latestNote = notes[0];
+
+const now = new Date();
+const year = now.getUTCFullYear();
+const thisMonth = monthKey(now);
+const byMonth = new Map(digests.map((d) => [d.month, d]));
+const months = Array.from({ length: 12 }, (_, m) => {
+	const key = `${year}-${String(m + 1).padStart(2, "0")}`;
+	const d = byMonth.get(key);
+	return { key, label: m + 1, state: d?.note ? "written" : d ? "auto" : key > thisMonth ? "future" : "empty" };
+});
+
+const stats = [
+	{ label: "篇文章", value: writings.length },
+	{ label: "个作品", value: feed.length - writings.length },
+	{ label: "条收藏", value: library.length },
+	{ label: "期月记", value: notes.length },
+];
+const md = (d: Date) => dayKey(d).slice(5).replace("-", "/");
+---
+
+<MainGridLayout title="主页（新版原型）">
+	<div class="home" data-kit-shell>
+		<!-- 1. 自我介绍：原来侧栏里的个人资料搬到这里 -->
+		<section class="card-base intro onload-animation">
+			<a href="/about/" class="intro__avatar" aria-label="关于我">
+				<ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" />
+			</a>
+			<div class="intro__text">
+				<h1 class="intro__name text-90"><span data-split>文乃的小站</span></h1>
+				<p class="intro__bio text-75">{profileConfig.bio}</p>
+				<div class="intro__links">
+					{
+						profileConfig.links.map((l) => (
+							<a href={l.url} target="_blank" rel="noopener noreferrer" class="btn-regular h-9 px-3 rounded-lg gap-1.5 text-sm font-bold">
+								<Icon name={l.icon} />
+								{l.name}
+							</a>
+						))
+					}
+					<a href="/about/" class="btn-plain h-9 px-3 rounded-lg text-sm font-bold">关于我</a>
+				</div>
+			</div>
+			<dl class="intro__stats">
+				{
+					stats.map((s, i) => (
+						<div data-reveal data-count={s.value} style={`--i: ${i + 2}`}>
+							<dt class="text-50">{s.label}</dt>
+							<dd class="text-90" data-count-value>{s.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</section>
+
+		<!-- 2. 最近更新：一张大卡 + 小卡，有封面就用封面 -->
+		<section data-reveal>
+			<div class="sec-head">
+				<h2 class="kit-section-title text-90">最近更新</h2>
+				<a href="/archive/" class="text-50">全部 <Icon name="material-symbols:arrow-forward-rounded" class="inline" /></a>
+			</div>
+			<div class="bento">
+				{
+					latest.map((it, i) => (
+						<a href={it.url} class:list={["card-base", "kit-card", "entry", i === 0 && "entry--big", !it.cover && "entry--text"]}>
+							{(it.cover || i === 0) && <Cover src={it.cover} title={it.title} aspect={i === 0 ? "16 / 9" : "16 / 10"} eager={i === 0} />}
+							<div class="entry__body">
+								<div class="entry__meta text-50">
+									<span class="entry__kind">{it.kind}</span>
+									<span>{md(it.date)}</span>
+								</div>
+								<h3 class="entry__title text-90">{it.title}</h3>
+								{it.description && <p class="entry__desc text-75">{it.description}</p>}
+							</div>
+						</a>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- 3. 收藏库：一排番剧海报 -->
+		{
+			anime.length > 0 && (
+				<section data-reveal>
+					<div class="sec-head">
+						<h2 class="kit-section-title text-90">
+							收藏库 · 动漫 <small class="text-50">{anime.length}</small>
+						</h2>
+						<a href="/library/anime/" class="text-50">
+							打开书架 <Icon name="material-symbols:arrow-forward-rounded" class="inline" />
+						</a>
+					</div>
+					<div class="posters">
+						{anime.slice(0, 10).map((a) => (
+							<a href={a.url} class="poster">
+								<Cover src={a.cover} title={a.title} aspect="3 / 4">
+									{typeof a.rating === "number" && (
+										<span class="kit-rating">
+											<Icon name="material-symbols:star-rounded" />
+											{a.rating.toFixed(1)}
+										</span>
+									)}
+								</Cover>
+								<span class="poster__title text-90">{a.title}</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<!-- 4. 月记 + 作品 -->
+		<div class="duo">
+			<section data-reveal>
+				<div class="sec-head">
+					<h2 class="kit-section-title text-90">月记</h2>
+					<a href="/journal/" class="text-50">全部 <Icon name="material-symbols:arrow-forward-rounded" class="inline" /></a>
+				</div>
+				<a href={latestNote ? `/journal/${latestNote.month}/` : "/journal/"} class="card-base kit-card note">
+					<div class="note__num">{latestNote ? String(latestNote.monthNumber).padStart(2, "0") : "--"}</div>
+					<div class="note__title text-90">{latestNote ? latestNote.title : "还没有月记"}</div>
+					{latestNote?.summary && <p class="note__summary text-75">{latestNote.summary}</p>}
+					{
+						latestNote && (
+							<dl class="note__stats">
+								<div><dt class="text-50">写了</dt><dd class="text-90">{latestNote.stats.writings}</dd></div>
+								<div><dt class="text-50">作品</dt><dd class="text-90">{latestNote.stats.works}</dd></div>
+								<div><dt class="text-50">收录</dt><dd class="text-90">{latestNote.stats.library}</dd></div>
+							</dl>
+						)
+					}
+					<div class="note__year">
+						<span class="text-50">{year}</span>
+						<div class="note__dots">
+							{months.map((m) => <i class:list={["dot", `is-${m.state}`]} title={`${m.label} 月`} />)}
+						</div>
+					</div>
+				</a>
+			</section>
+
+			<section data-reveal>
+				<div class="sec-head">
+					<h2 class="kit-section-title text-90">作品</h2>
+					<a href="/works/" class="text-50">全部 <Icon name="material-symbols:arrow-forward-rounded" class="inline" /></a>
+				</div>
+				<div class="kit-grid kit-grid--wide works">
+					{works.map((w, i) => <WorkCard work={w} index={i} />)}
+				</div>
+			</section>
+		</div>
+
+		<!-- 5. 全部文章：紧凑目录，代替一摞大卡片 -->
+		<section class="card-base kit-section" data-reveal>
+			<div class="sec-head sec-head--inside">
+				<h2 class="kit-section-title text-90">文章</h2>
+				<a href="/archive/" class="text-50">归档 <Icon name="material-symbols:arrow-forward-rounded" class="inline" /></a>
+			</div>
+			<div class="index">
+				{
+					writings.slice(0, 10).map((w) => (
+						<a href={w.url} class="index__row">
+							<span class="index__date text-50">{dayKey(w.date)}</span>
+							<span class="index__title text-90">{w.title}</span>
+							<span class="index__cat text-50">{w.category}</span>
+						</a>
+					))
+				}
+			</div>
+		</section>
+	</div>
+</MainGridLayout>
+
+<style>
+	.home {
+		display: flex;
+		flex-direction: column;
+		gap: 1.75rem;
+		margin-bottom: 1rem;
+	}
+
+	/* ---------- 自我介绍 ---------- */
+	.intro {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 1.25rem 1.75rem;
+		align-items: center;
+		padding: 1.75rem;
+	}
+
+	@media (min-width: 1024px) {
+		.intro {
+			grid-template-columns: auto minmax(0, 1fr) auto;
+			padding: 2rem 2.5rem;
+		}
+	}
+
+	.intro__avatar {
+		display: block;
+		width: 5.5rem;
+		height: 5.5rem;
+		border-radius: 1.25rem;
+		overflow: hidden;
+		transition: transform 0.5s var(--kit-spring);
+	}
+
+	@media (min-width: 768px) {
+		.intro__avatar {
+			width: 7rem;
+			height: 7rem;
+		}
+	}
+
+	.intro__avatar:hover {
+		transform: rotate(-3deg) scale(1.04);
+	}
+
+	.intro__name {
+		font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: 0.02em;
+	}
+
+	.intro__bio {
+		margin-top: 0.5rem;
+		max-width: 40em;
+		line-height: 1.75;
+	}
+
+	.intro__links {
+		margin-top: 0.9rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.intro__stats {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	@media (min-width: 1024px) {
+		.intro__stats {
+			grid-column: auto;
+			grid-template-columns: repeat(2, 5.5rem);
+			gap: 1rem 1.5rem;
+			padding-left: 2rem;
+			border-left: 1px dashed var(--line-divider);
+		}
+	}
+
+	.intro__stats div {
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	.intro__stats dd {
+		font-family: var(--kit-num);
+		font-size: 1.75rem;
+		font-weight: 700;
+		line-height: 1.1;
+	}
+
+	.intro__stats dt {
+		font-size: 0.8125rem;
+	}
+
+	/* ---------- 分区标题 ---------- */
+	.sec-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 0.25rem;
+	}
+
+	.sec-head :global(.kit-section-title) {
+		margin-bottom: 0.75rem;
+	}
+
+	.sec-head > a {
+		font-size: 0.875rem;
+		transition: color 0.15s;
+	}
+
+	.sec-head > a:hover {
+		color: var(--primary);
+	}
+
+	/* ---------- 最近更新 bento ---------- */
+	.bento {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	@media (min-width: 640px) {
+		.bento {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.entry--big {
+			grid-column: span 2;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.bento {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+		.entry--big {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+	}
+
+	.entry {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.entry__body {
+		padding: 0.85rem 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.entry--big .entry__body {
+		padding: 1.25rem 1.5rem 1.5rem;
+		gap: 0.5rem;
+	}
+
+	.entry__meta {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.75rem;
+		font-family: var(--kit-num);
+	}
+
+	.entry__kind {
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.entry__title {
+		font-weight: 700;
+		font-size: 1rem;
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.15s;
+	}
+
+	.entry:hover .entry__title {
+		color: var(--primary);
+	}
+
+	.entry--big .entry__title {
+		font-size: 1.5rem;
+	}
+
+	.entry__desc {
+		font-size: 0.875rem;
+		line-height: 1.65;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* 小卡片有封面时只留标题；没封面就是纯文字卡，多显示几行简介 */
+	.entry:not(.entry--big):not(.entry--text) .entry__desc {
+		display: none;
+	}
+
+	/* 手机上小卡片改成横排：左边缩略图，右边文字 */
+	@media (max-width: 639px) {
+		.entry:not(.entry--big) {
+			flex-direction: row;
+			align-items: stretch;
+		}
+
+		.entry:not(.entry--big) :global(.kit-cover) {
+			flex: 0 0 6.5rem;
+			aspect-ratio: auto;
+		}
+	}
+
+	.entry--text .entry__body {
+		flex: 1;
+		justify-content: flex-start;
+		padding: 1.1rem 1.15rem 1.2rem;
+		gap: 0.5rem;
+	}
+
+	.entry--text .entry__title {
+		font-size: 1.05rem;
+	}
+
+	.entry--text .entry__desc {
+		-webkit-line-clamp: 4;
+	}
+
+	@media (min-width: 1024px) {
+		.entry--big .entry__desc {
+			-webkit-line-clamp: 3;
+			font-size: 0.95rem;
+		}
+	}
+
+	/* ---------- 海报横排 ---------- */
+	.posters {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 9rem;
+		gap: 1rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		padding: 0.25rem 0.25rem 0.75rem;
+		margin: -0.25rem;
+		scrollbar-width: thin;
+	}
+
+	/* 宽屏一行正好排满（最多 10 张，评分高的在前），窄屏横向滑动 */
+	@media (min-width: 1024px) {
+		.posters {
+			grid-auto-flow: row;
+			grid-template-columns: repeat(8, minmax(0, 1fr));
+			grid-auto-columns: auto;
+			overflow: visible;
+		}
+
+		.poster:nth-child(n + 9) {
+			display: none;
+		}
+	}
+
+	@media (min-width: 1440px) {
+		.posters {
+			grid-template-columns: repeat(10, minmax(0, 1fr));
+		}
+
+		.poster:nth-child(n + 9) {
+			display: flex;
+		}
+	}
+
+	.poster {
+		scroll-snap-align: start;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.poster :global(.kit-cover) {
+		border-radius: 0.75rem;
+		transition:
+			transform 0.5s var(--kit-spring),
+			box-shadow 0.4s;
+	}
+
+	.poster:hover :global(.kit-cover) {
+		transform: translateY(-4px);
+		box-shadow: var(--kit-shadow);
+	}
+
+	.poster__title {
+		font-size: 0.875rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.poster:hover .poster__title {
+		color: var(--primary);
+	}
+
+	/* ---------- 月记 + 作品 ---------- */
+	.duo {
+		display: grid;
+		gap: 1.75rem 1rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	@media (min-width: 1024px) {
+		.duo {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		}
+	}
+
+	.note {
+		position: relative;
+		padding: 1.5rem;
+		isolation: isolate;
+		min-height: 15rem;
+	}
+
+	.note__num {
+		font-family: var(--kit-num);
+		font-size: 4.5rem;
+		font-weight: 700;
+		line-height: 0.9;
+		letter-spacing: -0.04em;
+		color: var(--primary);
+	}
+
+	.note__title {
+		margin-top: 0.75rem;
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.note__summary {
+		margin-top: 0.25rem;
+		font-size: 0.875rem;
+		line-height: 1.6;
+	}
+
+	.note__stats {
+		margin-top: 1.25rem;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5rem;
+	}
+
+	.note__stats div {
+		display: flex;
+		flex-direction: column-reverse;
+		padding: 0.6rem 0.75rem;
+		border-radius: 0.6rem;
+		background: var(--btn-regular-bg);
+	}
+
+	.note__stats dd {
+		font-family: var(--kit-num);
+		font-size: 1.35rem;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	.note__stats dt {
+		font-size: 0.75rem;
+	}
+
+	.note__year {
+		margin-top: auto;
+		padding-top: 1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--kit-num);
+		font-size: 0.8125rem;
+	}
+
+	.note__dots {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: 0.3rem;
+		flex: 1;
+	}
+
+	.dot {
+		aspect-ratio: 1;
+		border-radius: 0.25rem;
+	}
+
+	.dot.is-written {
+		background: var(--primary);
+	}
+
+	.dot.is-auto {
+		background: var(--btn-regular-bg);
+		box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 35%, transparent);
+	}
+
+	.dot.is-empty {
+		box-shadow: inset 0 0 0 1px var(--line-divider);
+	}
+
+	.dot.is-future {
+		opacity: 0.35;
+		box-shadow: inset 0 0 0 1px var(--line-divider);
+	}
+
+	.works {
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+	}
+
+	/* ---------- 文章目录 ---------- */
+	.sec-head--inside {
+		margin-bottom: 0;
+	}
+
+	.index {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.index__row {
+		display: grid;
+		grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 1rem;
+		padding: 0.7rem 0.5rem;
+		margin: 0 -0.5rem;
+		border-radius: 0.5rem;
+		transition: background 0.15s;
+	}
+
+	.index__row + .index__row {
+		border-top: 1px dashed var(--line-divider);
+	}
+
+	.index__row:hover {
+		background: var(--btn-plain-bg-hover);
+	}
+
+	.index__row:hover .index__title {
+		color: var(--primary);
+	}
+
+	.index__date {
+		font-family: var(--kit-num);
+		font-size: 0.8125rem;
+	}
+
+	.index__title {
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.index__cat {
+		font-size: 0.8125rem;
+	}
+
+	@media (max-width: 640px) {
+		.index__row {
+			grid-template-columns: minmax(0, 1fr) auto;
+		}
+		.index__date {
+			display: none;
+		}
+	}
+</style>
