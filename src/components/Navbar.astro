@@ -4,13 +4,10 @@ import { navBarConfig, siteConfig } from "../config";
 import { LinkPresets } from "../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../types/config";
 import { url } from "../utils/url-utils";
-import LayoutSwitchButton from "./LayoutSwitchButton.svelte";
 import LightDarkSwitch from "./LightDarkSwitch.svelte";
 import MobileTOC from "./MobileTOC.svelte";
 import Search from "./Search.svelte";
-import WallpaperSwitch from "./WallpaperSwitch.svelte";
 import DisplaySettings from "./widget/DisplaySettings.svelte";
-import DropdownMenu from "./widget/DropdownMenu.astro";
 import NavMenuPanel from "./widget/NavMenuPanel.astro";
 
 const className = Astro.props.class;
@@ -54,31 +51,16 @@ let links: NavBarLink[] = navBarConfig.links.map(
                 )}
             </div>
         </a>
-        <div class="hidden xl:flex items-center space-x-1">
-            {links.map((l) => {
-                return <DropdownMenu link={l} />;
-            })}
-        </div>
-        <div class="flex">
+        <!-- 顶栏只留站名、搜索、深浅色和菜单：导航交给每页左栏的「库」，所有链接都在菜单里 -->
+        <div class="flex items-center">
             <!--<SearchPanel client:load>-->
             <Search client:only="svelte"></Search>
-            <MobileTOC client:only="svelte"></MobileTOC>
-            {!siteConfig.themeColor.fixed && (
-                <div class="hidden md:block">
-                    <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
-                        <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
-                    </button>
-                </div>
-            )}
-            <LayoutSwitchButton client:only="svelte" currentLayout={siteConfig.postListLayout.defaultMode}></LayoutSwitchButton>
-            <!-- 整体布局方案切换按钮：仅桌面显示 -->
-            <div class="hidden md:block">
-                <WallpaperSwitch client:only="svelte"></WallpaperSwitch>
+            <!-- 宽屏文章页左栏已有目录，导航栏的目录按钮只在窄屏显示 -->
+            <div class="lg:hidden">
+                <MobileTOC client:only="svelte"></MobileTOC>
             </div>
-            <div class="hidden md:block">
-                <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
-            </div>
-            <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 xl:!hidden" id="nav-menu-switch">
+            <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
+            <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90" id="nav-menu-switch">
                 <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
             </button>
         </div>

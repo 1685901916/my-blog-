@@ -9,6 +9,7 @@ import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import KitShell from "../../components/kit/KitShell.astro";
 import SideToc from "../../components/kit/SideToc.astro";
+import VaultHeader from "../../components/kit/VaultHeader.astro";
 import VaultNav from "../../components/kit/VaultNav.astro";
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
@@ -103,6 +104,7 @@ const jsonLd = {
     <!-- 和全站一致的左栏：库导航 + 本文目录（替换主题原来的个人资料侧栏） -->
     <KitShell>
     <Fragment slot="side">
+        <VaultHeader />
         <VaultNav active="works" />
         <SideToc headings={headings} />
     </Fragment>

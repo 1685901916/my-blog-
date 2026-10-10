@@ -9,8 +9,11 @@ interface Props {
 	index?: number;
 	// 「全部」视图里截图类卡片占两列
 	mixed?: boolean;
+	// 全部笔记视图里按类型分组用
+	cat?: string;
+	catOrder?: number;
 }
-const { item, index = 0, mixed = false } = Astro.props;
+const { item, index = 0, mixed = false, cat, catOrder } = Astro.props;
 const { shelf } = item;
 const dateText = item.date ? dayKey(item.date) : "";
 const host = item.link ? new URL(item.link).hostname.replace(/^www\./, "") : "";
@@ -25,6 +28,8 @@ const isPoster = shelf.aspect === "3 / 4";
 	data-rating={item.rating ?? ""}
 	data-date={dateText}
 	data-shelf={shelf.title}
+	data-cat={cat}
+	data-cat-order={catOrder}
 	data-shelf-order={shelves.indexOf(shelf)}
 	data-wide={mixed && !isPoster ? "" : undefined}
 	style={`--i: ${Math.min(index, 10)}`}
@@ -52,7 +57,7 @@ const isPoster = shelf.aspect === "3 / 4";
 				shelf.show.includes("tags") && item.tags.length > 0 && (
 					<div class="kit-card__tags">
 						{item.tags.slice(0, 4).map((t) => (
-							<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
+							<button type="button" class="kit-tag" data-tag-filter={t} data-tag-href={`/library/${shelf.id}/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
 								# {t}
 							</button>
 						))}

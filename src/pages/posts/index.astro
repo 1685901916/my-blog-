@@ -1,44 +1,31 @@
 ---
-// 文章库：所有长文的数据库视图，左栏按分类 / 标签筛选（原来的「资源」「实用工具」「实用信息」都是这里的分类）
+// 文章库：所有长文。分类在左栏的「库」树里（文章下面那一串），点了原地筛选；标签在下面
 import ArticleCard from "../../components/kit/ArticleCard.astro";
 import KitHeader from "../../components/kit/KitHeader.astro";
 import KitShell from "../../components/kit/KitShell.astro";
-import SideCats from "../../components/kit/SideCats.astro";
 import SideTags from "../../components/kit/SideTags.astro";
 import Toolbar from "../../components/kit/Toolbar.astro";
+import VaultHeader from "../../components/kit/VaultHeader.astro";
 import VaultNav from "../../components/kit/VaultNav.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
-import { dayKey, getFeed } from "../../utils/kit/content";
+import { getFeed } from "../../utils/kit/content";
 
 const posts = (await getFeed()).filter((f) => f.kind === "post");
 
-const count = (values: string[]) => {
-	const m = new Map<string, number>();
-	for (const v of values) m.set(v, (m.get(v) ?? 0) + 1);
-	return [...m.entries()].sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, count: n }));
-};
-const cats = count(posts.map((p) => p.category || "未分类"));
-const tags = count(posts.flatMap((p) => p.tags.filter((t) => t !== p.category)));
-const latest = posts[0];
+const tagCount = new Map<string, number>();
+for (const p of posts) for (const t of p.tags.filter((t) => t !== p.category)) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 ---
 
 <MainGridLayout title="文章" description="所有文章，按分类和标签筛选">
-	<KitShell collection={{ defaultSort: "date" }}>
+	<KitShell collection={{ defaultSort: "date", defaultView: "list" }}>
 		<Fragment slot="side">
+			<VaultHeader />
 			<VaultNav active="posts" />
-			<SideCats id="kit-cats" title="分类" cats={cats} total={posts.length} />
 			<SideTags id="kit-tags" title="标签" tags={tags} />
 		</Fragment>
 
-		<KitHeader
-			title="文章"
-			desc="教程、资源整理和各种记录。左边按分类或标签筛选，也可以按年份分组当归档看。"
-			meta={[
-				{ icon: "material-symbols:article-outline-rounded", text: `${posts.length} 篇` },
-				{ icon: "material-symbols:category-outline-rounded", text: `${cats.length} 个分类` },
-				...(latest ? [{ icon: "material-symbols:calendar-today-outline-rounded", text: `最近更新 ${dayKey(latest.date)}` }] : []),
-			]}
-		>
+		<KitHeader title="文章">
 			<Toolbar
 				slot="toolbar"
 				total={posts.length}
@@ -52,7 +39,7 @@ const latest = posts[0];
 					{ value: "year", label: "年份" },
 					{ value: "tag", label: "标签" },
 				]}
-				searchPlaceholder="搜索标题、分类或标签"
+				searchPlaceholder="搜索文章"
 			/>
 		</KitHeader>
 

@@ -1,51 +1,33 @@
 ---
-// 页面头部卡片：面包屑 + 标题（和首页文章卡片同款的粗体 + 左侧竖条）+ 简介 + 元信息
-// toolbar 插槽放 Bases 式工具栏，用虚线和上面隔开
-import { Icon } from "astro-icon/components";
-
+// 数据库视图顶部的工具条，照 Obsidian Bases 的样子：
+// 第一行面包屑（最后一项就是页面标题 h1），第二行放工具栏（toolbar 插槽）
 interface Props {
 	crumbs?: Array<{ label: string; href?: string }>;
 	title: string;
-	desc?: string;
-	meta?: Array<{ icon: string; text: string }>;
 }
-const { crumbs = [], title, desc, meta = [] } = Astro.props;
+const { crumbs = [], title } = Astro.props;
 ---
 
-<header class="card-base kit-head onload-animation">
-	<div class="kit-head__inner">
+<header class="card-base kit-bar onload-animation">
+	<nav class="kit-bar__crumbs" aria-label="位置">
+		<a href="/" class="text-50">库</a>
 		{
-			crumbs.length > 0 && (
-				<nav class="kit-crumb text-50" aria-label="面包屑">
-					{crumbs.map((c, i) => (
-						<>
-							{i > 0 && <span class="opacity-50">/</span>}
-							{c.href ? <a href={c.href}>{c.label}</a> : <span>{c.label}</span>}
-						</>
-					))}
-				</nav>
-			)
+			crumbs.map((c) => (
+				<>
+					<span class="kit-bar__sep" aria-hidden="true">/</span>
+					{c.href ? (
+						<a href={c.href} class="text-50">
+							{c.label}
+						</a>
+					) : (
+						<span class="text-50">{c.label}</span>
+					)}
+				</>
+			))
 		}
-		<h1 class="kit-head__title text-90">
-			<span data-split>{title}</span>
-			<slot name="title-after" />
-		</h1>
-		{desc && <p class="kit-head__desc text-75">{desc}</p>}
-		{
-			meta.length > 0 && (
-				<div class="kit-head__meta">
-					{meta.map((m) => (
-						<div>
-							<div class="meta-icon">
-								<Icon name={m.icon} class="text-xl" />
-							</div>
-							<span class="text-50 text-sm font-medium">{m.text}</span>
-						</div>
-					))}
-				</div>
-			)
-		}
-		<slot />
-		{Astro.slots.has("toolbar") && <div class="kit-head__toolbar"><slot name="toolbar" /></div>}
-	</div>
+		<span class="kit-bar__sep" aria-hidden="true">/</span>
+		<h1 class="kit-bar__title text-90">{title}</h1>
+	</nav>
+	{Astro.slots.has("toolbar") && <div class="kit-bar__tools"><slot name="toolbar" /></div>}
+	<slot />
 </header>

@@ -8,8 +8,11 @@ interface Props {
 	index?: number;
 	// 主页上按类型（文章 / 作品 / 月记）筛选，文章库里按分类筛选
 	catBy?: "kind" | "category";
+	// 全部笔记视图：分组顺序；和海报卡片混排时占两列
+	catOrder?: number;
+	mixed?: boolean;
 }
-const { item, index = 0, catBy = "category" } = Astro.props;
+const { item, index = 0, catBy = "category", catOrder, mixed = false } = Astro.props;
 const date = dayKey(item.date);
 const cat = catBy === "kind" ? KIND_LABEL[item.kind] : item.category || "未分类";
 const label = catBy === "kind" ? KIND_LABEL[item.kind] : item.category || KIND_LABEL[item.kind];
@@ -26,6 +29,8 @@ const tagHref = (t: string) => (item.kind === "journal" ? tagBase : `${tagBase}?
 	data-title={item.title}
 	data-tags={item.tags.join("|")}
 	data-cat={cat}
+	data-cat-order={catOrder}
+	data-wide={mixed ? "" : undefined}
 	data-date={date}
 	style={`--i: ${Math.min(index, 10)}`}
 >
@@ -33,41 +38,25 @@ const tagHref = (t: string) => (item.kind === "journal" ? tagBase : `${tagBase}?
 		<a class="kit-card__link" href={item.url} aria-label={item.title}></a>
 		<Cover src={item.cover} title={item.title} aspect="16 / 10" />
 		<div class="kit-card__body">
-			<div class="article__meta">
-				<span class="article__cat">{label}</span>
-				<span class="text-50">{date}</span>
-			</div>
 			<h3 class="kit-card__title article__title text-90">{item.title}</h3>
 			{item.description && <p class="article__desc text-75">{item.description}</p>}
-			{
-				tags.length > 0 && (
-					<div class="kit-card__tags">
-						{tags.slice(0, 3).map((t) => (
-							<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={tagHref(t)} title={`只看「${t}」`}>
-								# {t}
-							</button>
-						))}
-					</div>
-				)
-			}
+			<!-- 最后一行：分类 · 日期 · 标签 -->
+			<div class="article__foot">
+				<span class="article__cat">{label}</span>
+				<span class="article__date text-50">{date}</span>
+				{
+					tags.slice(0, 3).map((t) => (
+						<button type="button" class="kit-tag" data-tag-filter={t} data-tag-href={tagHref(t)} title={`只看「${t}」`}>
+							# {t}
+						</button>
+					))
+				}
+			</div>
 		</div>
 	</article>
 </div>
 
 <style>
-	.article__meta {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.75rem;
-		font-family: var(--kit-num);
-	}
-
-	.article__cat {
-		color: var(--primary);
-		font-weight: 700;
-	}
-
 	.article__title {
 		white-space: normal;
 		display: -webkit-box;
@@ -85,14 +74,45 @@ const tagHref = (t: string) => (item.kind === "journal" ? tagBase : `${tagBase}?
 		overflow: hidden;
 	}
 
-	/* 列表视图下：缩略图 + 一行标题，简介只留一行 */
+	.article__foot {
+		position: relative;
+		z-index: 2;
+		margin-top: auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.15rem 0.65rem;
+		font-size: 0.75rem;
+	}
+
+	.article__cat {
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.article__date {
+		font-family: var(--kit-num);
+	}
+
+	/* 列表视图：左边小缩略图，右边「标题 / 简介 / 分类·日期·标签」三行 */
 	:global(.kit-grid.is-list) .article :global(.kit-cover) {
 		width: 7rem;
 		aspect-ratio: 16 / 10;
 	}
 
+	:global(.kit-grid.is-list) .article :global(.kit-card__body) {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.3rem;
+		padding: 0.8rem 1.1rem;
+	}
+
+	/* 通用列表规则给标题设了 flex-basis（横排用），竖排时会变成高度，这里取消 */
+	:global(.kit-grid.is-list) .article :global(.kit-card__title) {
+		flex: none;
+	}
+
 	:global(.kit-grid.is-list) .article__desc {
 		-webkit-line-clamp: 1;
-		flex-basis: 100%;
 	}
 </style>

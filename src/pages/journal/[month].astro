@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import JournalNav from "../../components/kit/JournalNav.astro";
 import KitShell from "../../components/kit/KitShell.astro";
+import VaultHeader from "../../components/kit/VaultHeader.astro";
 import VaultNav from "../../components/kit/VaultNav.astro";
 import LibraryCard from "../../components/kit/LibraryCard.astro";
 import StatStrip from "../../components/kit/StatStrip.astro";
@@ -51,6 +52,7 @@ const isDev = import.meta.env.DEV;
 <MainGridLayout title={`${heading} · 月记`} description={d.summary || `${d.year} 年 ${d.monthNumber} 月的记录`}>
 	<KitShell>
 		<Fragment slot="side">
+			<VaultHeader />
 			<VaultNav active="journal" />
 			<JournalNav digests={digests} current={d.month} />
 		</Fragment>

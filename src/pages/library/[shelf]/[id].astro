@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import Cover from "../../../components/kit/Cover.astro";
 import KitShell from "../../../components/kit/KitShell.astro";
 import LibraryCard from "../../../components/kit/LibraryCard.astro";
+import VaultHeader from "../../../components/kit/VaultHeader.astro";
 import VaultNav from "../../../components/kit/VaultNav.astro";
 import SideTags from "../../../components/kit/SideTags.astro";
 import Markdown from "../../../components/misc/Markdown.astro";
@@ -45,6 +46,7 @@ const shelfTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name
 <MainGridLayout title={item.title} description={`${shelf.title} · ${item.tags.join(" / ")}`}>
 	<KitShell>
 		<Fragment slot="side">
+			<VaultHeader />
 			<VaultNav active={`library:${shelf.id}`} />
 			<SideTags
 				id="kit-tags"

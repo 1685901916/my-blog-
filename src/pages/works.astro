@@ -3,6 +3,7 @@ import KitHeader from "../components/kit/KitHeader.astro";
 import KitShell from "../components/kit/KitShell.astro";
 import SideTags from "../components/kit/SideTags.astro";
 import Toolbar from "../components/kit/Toolbar.astro";
+import VaultHeader from "../components/kit/VaultHeader.astro";
 import VaultNav from "../components/kit/VaultNav.astro";
 import WorkCard from "../components/kit/WorkCard.astro";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -15,30 +16,19 @@ const tagCount = new Map<string, number>();
 for (const w of works) for (const t of w.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
 const sorted = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 // 「程序系 / 正常系」是作品分组，其余是技术栈
-const groups = sorted.filter((t) => t.name.endsWith("系"));
 const stack = sorted.filter((t) => !t.name.endsWith("系"));
-const years = new Set(works.map((w) => w.date.getUTCFullYear()));
 ---
 
 <MainGridLayout title="作品" description="写过的工具、做过的东西">
 	<KitShell collection={{ defaultSort: "date" }}>
 		<Fragment slot="side">
+			<VaultHeader />
 			<VaultNav active="works" />
-			<SideTags id="kit-groups" title="分组" tags={groups} />
 			<SideTags id="kit-stack" title="技术栈" tags={stack} allLabel={false} />
 		</Fragment>
 
 		<KitHeader
 			title="作品"
-			desc="写过的工具、做过的东西。每个作品都有一篇完整的过程记录。"
-			meta={[
-				{ icon: "material-symbols:work", text: `${works.length} 个作品` },
-				...groups.map((g) => ({
-					icon: g.name === "程序系" ? "material-symbols:code" : "material-symbols:palette-outline",
-					text: `${g.name} ${g.count}`,
-				})),
-				{ icon: "material-symbols:calendar-today-outline-rounded", text: `${years.size} 年` },
-			]}
 		>
 			<Toolbar
 				slot="toolbar"

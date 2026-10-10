@@ -1,5 +1,5 @@
 ---
-// Bases 式工具栏：结果数 / 搜索 / 排序 / 分组 / 卡片-列表切换
+// Bases 式工具栏：左边结果数，右边搜索 / 排序 / 分组 / 卡片-列表切换
 // 需要放在 KitShell collection 作用域里，由 kit.ts 接管
 import { Icon } from "astro-icon/components";
 
@@ -20,42 +20,51 @@ const {
 	groups,
 	defaultGroup = "",
 	views = true,
-	searchPlaceholder = "搜索标题或标签",
+	searchPlaceholder = "搜索",
 } = Astro.props;
 ---
 
 <div class="kit-toolbar">
-	<div class="kit-toolbar__count text-50">
-		<b data-count-out>{total}</b> 个结果
+	<div class="kit-toolbar__left">
+		<span class="kit-toolbar__count text-50"><b data-count-out>{total}</b> 个结果</span>
 	</div>
-	<input class="kit-input" type="search" data-search placeholder={searchPlaceholder} aria-label="搜索" />
-	<select class="kit-select" data-sort aria-label="排序">
-		{sorts.map((s) => <option value={s.value} selected={s.value === defaultSort}>按{s.label}</option>)}
-	</select>
-	{
-		groups && (
-			<select class="kit-select" data-group aria-label="分组">
-				<option value="" selected={!defaultGroup}>不分组</option>
-				{groups.map((g) => (
-					<option value={g.value} selected={g.value === defaultGroup}>
-						按{g.label}分组
-					</option>
-				))}
+	<div class="kit-toolbar__right">
+		<label class="kit-search">
+			<Icon name="material-symbols:search-rounded" class="kit-search__icon" />
+			<input class="kit-input" type="search" data-search placeholder={searchPlaceholder} aria-label="搜索" />
+		</label>
+		<label class="kit-select-wrap">
+			<Icon name="material-symbols:swap-vert-rounded" />
+			<select class="kit-select" data-sort aria-label="排序">
+				{sorts.map((s) => <option value={s.value} selected={s.value === defaultSort}>{s.label}</option>)}
 			</select>
-		)
-	}
-	{
-		views && (
-			<div class="kit-tabs" data-tabs role="group" aria-label="视图">
-				<button type="button" class="kit-tabs__item" data-view="cards" aria-pressed="true">
-					<Icon name="material-symbols:grid-view-outline-rounded" />
-					卡片
-				</button>
-				<button type="button" class="kit-tabs__item" data-view="list" aria-pressed="false">
-					<Icon name="material-symbols:view-list-outline-rounded" />
-					列表
-				</button>
-			</div>
-		)
-	}
+		</label>
+		{
+			groups && (
+				<label class="kit-select-wrap">
+					<Icon name="material-symbols:segment-rounded" />
+					<select class="kit-select" data-group aria-label="分组">
+						<option value="" selected={!defaultGroup}>不分组</option>
+						{groups.map((g) => (
+							<option value={g.value} selected={g.value === defaultGroup}>
+								按{g.label}
+							</option>
+						))}
+					</select>
+				</label>
+			)
+		}
+		{
+			views && (
+				<div class="kit-tabs" data-tabs role="group" aria-label="视图">
+					<button type="button" class="kit-tabs__item" data-view="cards" aria-pressed="true" title="卡片">
+						<Icon name="material-symbols:grid-view-outline-rounded" />
+					</button>
+					<button type="button" class="kit-tabs__item" data-view="list" aria-pressed="false" title="列表">
+						<Icon name="material-symbols:view-list-outline-rounded" />
+					</button>
+				</div>
+			)
+		}
+	</div>
 </div>

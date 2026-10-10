@@ -8,13 +8,24 @@
 
 | 页面 | 是什么 | 内容放哪 |
 |---|---|---|
-| `/` 最近更新 | 文章、作品、月记混在一起按时间排，左栏按类型筛选 | 自动汇总 |
+| `/` 总览 | 库的总览：文章列表、动漫海报墙、作品卡片、资源站链接、月记格子，每块都能点进对应的数据库 | 自动汇总 |
 | `/posts/` 文章 | 所有长文，左栏按分类 / 标签筛选；按年份分组就是归档 | `src/content/posts/*.md` |
 | `/library/` 收藏库 | 番、资源站等，一条笔记一张卡片 | `src/content/library/<书架>/*.md` |
 | `/works/` 作品 | 作品墙，左栏按分组 / 技术栈筛选 | `src/content/portfolio/<normal|programming>/*.md` |
 | `/journal/` 月记 | 每月一页，自动汇总 + 可选的手写部分 | `src/content/journal/YYYY-MM.md`（可选） |
 
 文章、作品的详情页左栏是「库」导航 + 本文目录（窄屏时目录收进导航栏的目录按钮）。
+
+左栏最上面是个人卡片，下面是「库」分类树：文章下面是各分类，收藏库下面是各书架，作品下面是程序系 / 正常系。只展开当前所在的分组；在文章库、作品墙里点子项是原地筛选。
+
+顶栏只留站名、搜索、深浅色切换和菜单按钮（所有页面链接、赚钱、赞助、友链都在菜单里），导航交给左栏。
+
+### 审美规则
+
+- 图片只给真正好看的素材：番剧海报做海报墙；文章、资源站以文字为主，截图只做小缩略图。
+- 底色白和浅灰，粉色只用在当前选中项、分类名和少量强调上；数量、标签都是灰色文字。
+- 没有封面时用素净的字体封面（标题 + 很淡的首字水印），不用大色块。
+- 文章库默认列表视图，收藏库、作品默认卡片视图。
 
 **内容文件夹就这四个**，写东西时只要想「它是哪种形态」：
 
@@ -58,8 +69,8 @@ pnpm dev
 
 | 页面 | 左栏 |
 |---|---|
-| 最近更新 | 个人卡片 + 库导航 + 类型（文章 / 作品 / 月记） |
-| 文章 | 库导航 + 分类 + 标签 |
+| 总览 | 个人卡片 + 库导航 |
+| 文章 | 个人卡片 + 库导航（分类在树里）+ 标签 |
 | 文章 / 作品详情 | 库导航 + 本文目录（滚动时高亮当前小节） |
 | 收藏库 / 条目详情 | 库导航（书架在里面）+ 标签 |
 | 作品 | 库导航 + 分组 + 技术栈 |
@@ -185,9 +196,9 @@ cover: https://...           # 可选，不写就用本月作品或收录的封�
 | `src/utils/content-utils.ts`、`url-utils.ts` | 把手写月记接进首页列表 / 归档，链接指向 `/journal/` |
 | `src/components/kit/KitShell.astro` | 页面骨架：左栏 + 主区，替换全站侧边栏 |
 | `src/components/kit/VaultNav.astro` | 每页左栏第一块的「库」导航 |
-| `src/components/kit/SideCats.astro`、`SideToc.astro`、`ProfileMini.astro` | 分类筛选、本文目录、主页的个人卡片 |
+| `src/components/kit/VaultHeader.astro`、`SideToc.astro` | 左栏的个人卡片、本文目录 |
 | `src/components/kit/ArticleCard.astro` | 文章 / 作品 / 月记共用的卡片 |
-| `src/pages/index.astro`、`src/pages/posts/index.astro` | 最近更新、文章库 |
+| `src/pages/index.astro`、`src/pages/posts/index.astro` | 总览、文章库 |
 | `src/components/kit/SideNav.astro`、`SideTags.astro`、`JournalNav.astro` | 左栏小组件（基于主题的 `WidgetLayout`） |
 | `src/components/kit/KitHeader.astro`、`Toolbar.astro` | 头部卡片和 Bases 式工具栏 |
 | `src/components/kit/LibraryView.astro` | 收藏库视图（全部 / 单个书架共用） |

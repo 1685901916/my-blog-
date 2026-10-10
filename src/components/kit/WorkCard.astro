@@ -41,7 +41,7 @@ const date = dayKey(work.date);
 			<div class="kit-card__tags">
 				{
 					stack.slice(0, featured ? 8 : 4).map((t) => (
-						<button type="button" class="btn-regular h-6 text-xs px-2 rounded-lg" data-tag-filter={t} data-tag-href={`/works/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
+						<button type="button" class="kit-tag" data-tag-filter={t} data-tag-href={`/works/?tag=${encodeURIComponent(t)}`} title={`只看「${t}」`}>
 							# {t}
 						</button>
 					))

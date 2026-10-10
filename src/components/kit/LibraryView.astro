@@ -1,10 +1,11 @@
 ---
 // 收藏库视图：/library/（全部，按书架分组）和 /library/<书架>/ 共用
-import { getShelvesWithItems, dayKey } from "../../utils/kit/content";
+import { getShelvesWithItems } from "../../utils/kit/content";
 import type { Shelf } from "../../data/shelves";
 import KitHeader from "./KitHeader.astro";
 import KitShell from "./KitShell.astro";
 import LibraryCard from "./LibraryCard.astro";
+import VaultHeader from "./VaultHeader.astro";
 import VaultNav from "./VaultNav.astro";
 import SideTags from "./SideTags.astro";
 import Toolbar from "./Toolbar.astro";
@@ -22,11 +23,6 @@ for (const it of items) for (const t of it.tags) tagCount.set(t, (tagCount.get(t
 const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 
 const rated = items.filter((i) => typeof i.rating === "number");
-const avg = rated.length ? rated.reduce((s, i) => s + (i.rating ?? 0), 0) / rated.length : 0;
-const latest = items
-	.map((i) => i.date)
-	.filter((d): d is Date => !!d)
-	.sort((a, b) => b.getTime() - a.getTime())[0];
 
 const sorts = [
 	...(rated.length ? [{ value: "rating", label: "评分" }] : []),
@@ -42,25 +38,19 @@ const groups = [
 const defaultSort = shelf?.sort ?? "rating";
 const defaultGroup = shelf ? "" : "shelf";
 
-const meta = [
-	{ icon: "material-symbols:database-outline", text: `${items.length} 个条目` },
-	...(rated.length ? [{ icon: "material-symbols:star-rounded", text: `平均 ${avg.toFixed(2)} 分` }] : []),
-	...(latest ? [{ icon: "material-symbols:calendar-today-outline-rounded", text: `最近收录 ${dayKey(latest)}` }] : []),
-];
 const wide = shelf && shelf.aspect !== "3 / 4";
 ---
 
 <KitShell collection={{ defaultSort, defaultGroup }}>
 	<Fragment slot="side">
+		<VaultHeader />
 		<VaultNav active={shelf ? `library:${shelf.id}` : "library"} />
 		<SideTags id="kit-tags" title="标签" tags={tags} />
 	</Fragment>
 
 	<KitHeader
-		crumbs={shelf ? [{ label: "收藏库", href: "/library/" }, { label: shelf.title }] : []}
+		crumbs={shelf ? [{ label: "收藏库", href: "/library/" }] : []}
 		title={shelf?.title ?? "收藏库"}
-		desc={shelf?.description ?? "看过的番、常用的站，一条笔记就是一张卡片，和 Obsidian 的数据库一样。"}
-		meta={meta}
 	>
 		<Toolbar
 			slot="toolbar"

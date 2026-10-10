@@ -267,13 +267,19 @@ function initCollection(scope: HTMLElement) {
 		group: params.has("group")
 			? (params.get("group") ?? "").replace(/^none$/, "")
 			: defaultGroup,
-		view: params.get("view") ?? (savedView || "cards"),
+		view: params.get("view") ?? (savedView || scope.dataset.defaultView || "cards"),
 	};
 
 	const key = (el: HTMLElement, k: string) => el.dataset[k] ?? "";
 	// 书架分组按书架配置里的顺序排
 	const shelfOrder = new Map(
 		items.map((el) => [key(el, "shelf"), Number(key(el, "shelfOrder"))]),
+	);
+	// 按分类分组时，卡片带 data-cat-order 就按它排（比如全部笔记里：文章、作品、动漫…）
+	const catOrder = new Map(
+		items
+			.filter((el) => el.dataset.catOrder)
+			.map((el) => [key(el, "cat"), Number(key(el, "catOrder"))]),
 	);
 
 	function sortValue(a: HTMLElement, b: HTMLElement) {
@@ -319,6 +325,9 @@ function initCollection(scope: HTMLElement) {
 		}
 		if (state.group === "shelf") {
 			return (shelfOrder.get(ga) ?? 0) - (shelfOrder.get(gb) ?? 0);
+		}
+		if (state.group === "cat" && catOrder.size > 0) {
+			return (catOrder.get(ga) ?? 99) - (catOrder.get(gb) ?? 99);
 		}
 		const tail = /^(未|无)/;
 		if (tail.test(ga) !== tail.test(gb)) return tail.test(ga) ? 1 : -1;
@@ -447,20 +456,23 @@ function initCollection(scope: HTMLElement) {
 	});
 	sortSel?.addEventListener("change", () => update({ sort: sortSel.value }));
 	groupSel?.addEventListener("change", () => update({ group: groupSel.value }));
+	// 左栏树里的筛选项是链接（没有脚本时也能跳转），这里拦下来原地筛选
 	for (const b of filterBtns) {
-		b.addEventListener("click", () =>
+		b.addEventListener("click", (ev) => {
+			ev.preventDefault();
 			update({
 				tag: state.tag === b.dataset.filter ? "" : (b.dataset.filter ?? ""),
-			}),
-		);
+			});
+		});
 	}
 	for (const b of catBtns) {
-		b.addEventListener("click", () =>
+		b.addEventListener("click", (ev) => {
+			ev.preventDefault();
 			update({
 				cat:
 					state.cat === b.dataset.filterCat ? "" : (b.dataset.filterCat ?? ""),
-			}),
-		);
+			});
+		});
 	}
 	for (const b of viewBtns) {
 		b.addEventListener("click", () =>

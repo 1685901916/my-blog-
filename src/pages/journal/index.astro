@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import JournalNav from "../../components/kit/JournalNav.astro";
 import KitHeader from "../../components/kit/KitHeader.astro";
 import KitShell from "../../components/kit/KitShell.astro";
+import VaultHeader from "../../components/kit/VaultHeader.astro";
 import VaultNav from "../../components/kit/VaultNav.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 import { getMonthDigests, monthKey } from "../../utils/kit/content";
@@ -30,18 +31,12 @@ const activity = (d: (typeof digests)[number]) =>
 <MainGridLayout title="月记" description="每个月一页，自动汇总加几句碎碎念">
 	<KitShell>
 		<Fragment slot="side">
+			<VaultHeader />
 			<VaultNav active="journal" />
 			<JournalNav digests={digests} />
 		</Fragment>
 
-		<KitHeader
-			title="月记"
-			desc="每个月一页：这个月写的文章、做的作品、收进收藏库的东西会自动汇总进来，再加几句碎碎念。"
-			meta={[
-				{ icon: "material-symbols:edit-note-outline-rounded", text: `${written.length} 期手写` },
-				{ icon: "material-symbols:calendar-month-outline-rounded", text: `${digests.length} 个月有记录` },
-			]}
-		/>
+		<KitHeader title="月记" />
 
 		{
 			latest && (

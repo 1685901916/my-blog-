@@ -143,7 +143,7 @@ export const siteConfig: SiteConfig = {
 		// 请自行搭建API
 
 		homeText: {
-			enable: true, // 在主页显示自定义文本
+			enable: false, // 不在横幅上压大标题：站名已经在顶栏和左栏的个人卡片里
 			title: "文乃的小站", // 主页横幅主标题
 
 			subtitle: [
@@ -212,77 +212,56 @@ export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 };
 
 export const navBarConfig: NavBarConfig = {
+	// 导航只放库里的几个入口，和每页左栏的「库」一致；其余收进「更多」
 	links: [
-		LinkPreset.Home,
-		// 文章库代替原来的「归档」：按年份分组就是归档
+		{
+			name: "库",
+			url: "/",
+			icon: "material-symbols:folder-open-outline-rounded",
+		},
 		{
 			name: "文章",
 			url: "/posts/",
 			icon: "material-symbols:article-outline-rounded",
 		},
-		// 「资源」「娱乐」合并成收藏库；实用工具 / 实用信息 / 小说资源等变成文章库的分类
 		{
 			name: "收藏库",
 			url: "/library/",
 			icon: "material-symbols:collections-bookmark-outline-rounded",
-			children: [
-				{
-					name: "全部",
-					url: "/library/",
-					icon: "material-symbols:collections-bookmark-outline-rounded",
-				},
-				{
-					name: "动漫",
-					url: "/library/anime/",
-					icon: "material-symbols:movie-outline-rounded",
-				},
-				{
-					name: "资源站",
-					url: "/library/sites/",
-					icon: "material-symbols:bookmark-star-outline-rounded",
-				},
-			],
+		},
+		{
+			name: "作品",
+			url: "/works/",
+			icon: "material-symbols:work-outline",
 		},
 		{
 			name: "月记",
 			url: "/journal/",
 			icon: "material-symbols:calendar-month-outline-rounded",
 		},
-		// 正常系 / 程序系 变成作品墙左栏的分组筛选，旧地址会跳转过去
 		{
-			name: "作品",
-			url: "/works/",
-			icon: "material-symbols:work",
-		},
-		{
-			name: "赚钱",
-			url: "/money/",
-			icon: "material-symbols:account-balance-wallet",
-		},
-		{
-			name: "赞助",
-			url: "https://top.ayano29.cn/",
-			icon: "material-symbols:favorite",
-			external: true,
-		},
-		{
-			name: "My",
-			url: "/content/",
-			icon: "material-symbols:person",
+			name: "更多",
+			url: "/about/",
+			icon: "material-symbols:more-horiz",
 			children: [
-				LinkPreset.Friends,
 				LinkPreset.About,
-				// 旧追番页是主题演示数据，改指向收藏库的动漫书架
-				{
-					name: "追番",
-					url: "/library/anime/",
-					icon: "material-symbols:movie",
-				},
+				LinkPreset.Friends,
 				LinkPreset.Diary,
 				{
-					name: "Gallery",
+					name: "相册",
 					url: "/albums/",
 					icon: "material-symbols:photo-library",
+				},
+				{
+					name: "赚钱",
+					url: "/money/",
+					icon: "material-symbols:account-balance-wallet",
+				},
+				{
+					name: "赞助",
+					url: "https://top.ayano29.cn/",
+					icon: "material-symbols:favorite",
+					external: true,
 				},
 			],
 		},

@@ -143,7 +143,7 @@
 	font-weight: 700;
 }
 
-.kit-side__row > span:not(.kit-side__badge) {
+.kit-side__row > span:not(.kit-side__badge):not(.kit-tree__dot) {
 	flex: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -151,29 +151,28 @@
 
 .kit-side__badge {
 	flex: none;
-	min-width: 2rem;
-	height: 1.75rem;
-	padding: 0 0.5rem;
-	border-radius: 0.5rem;
-	font-size: 0.875rem;
-	font-weight: 700;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--btn-content);
-	background: oklch(0.95 0.025 var(--hue));
+	min-width: 1.5rem;
+	text-align: right;
+	font-family: var(--kit-num);
+	font-size: 0.8125rem;
+	font-weight: 500;
+	opacity: 0.45;
 }
 
-:root.dark .kit-side__badge {
-	color: var(--deep-text);
-	background: var(--primary);
+.kit-side__row.is-active .kit-side__badge,
+.kit-side__row[aria-pressed="true"] .kit-side__badge {
+	opacity: 0.9;
 }
 
 /* 书架等子项：缩进一级 */
 .kit-side__row--sub {
-	padding-left: 1.75rem;
-	height: 2.25rem;
-	font-size: 0.9375rem;
+	padding-left: 1.5rem;
+	height: 2rem;
+	font-size: 0.875rem;
+}
+
+.kit-side__row--sub .kit-side__badge {
+	font-size: 0.75rem;
 }
 
 .kit-side__row--sub:hover {
@@ -263,14 +262,72 @@ button.kit-side__row {
 	margin-bottom: 0 !important;
 }
 
-/* 可按下的标签（筛选用），按下后变成主题色实心 */
-[data-filter][aria-pressed="true"],
+/* 可按下的标签（筛选用），按下后变成主题色实心；左栏树里的行用自己的高亮样式 */
+.btn-regular[data-filter][aria-pressed="true"],
 .kit-filter[aria-pressed="true"] {
 	background: var(--primary) !important;
 	color: white !important;
 }
 
-/* ---------- 页面头部卡片 ---------- */
+/* 树里没有图标的子项：用一个小圆点 */
+.kit-tree__dot {
+	flex: none;
+	width: 0.4rem;
+	height: 0.4rem;
+	margin: 0 0.3rem 0 0.25rem;
+	border-radius: 999px;
+	background: currentColor;
+	opacity: 0.35;
+}
+
+.kit-side__row[aria-pressed="true"] .kit-tree__dot,
+.kit-side__row.is-active .kit-tree__dot {
+	opacity: 1;
+	background: var(--primary);
+}
+
+/* ---------- 数据库顶部工具条（照 Obsidian Bases） ---------- */
+
+.kit-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6rem 1rem;
+	padding: 0.7rem 0.9rem 0.7rem 1.25rem;
+}
+
+.kit-bar__crumbs {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 0.15rem 0.5rem;
+	font-size: 0.875rem;
+}
+
+.kit-bar__crumbs a {
+	transition: color 0.15s;
+}
+
+.kit-bar__crumbs a:hover {
+	color: var(--primary);
+}
+
+.kit-bar__sep {
+	opacity: 0.35;
+}
+
+.kit-bar__title {
+	font-size: 1.05rem;
+	font-weight: 800;
+	letter-spacing: 0.02em;
+}
+
+.kit-bar__tools {
+	flex: 1;
+	min-width: 0;
+}
+
+/* ---------- 页面头部卡片（月记、条目详情仍在用） ---------- */
 
 .kit-head {
 	position: relative;
@@ -399,12 +456,45 @@ button.kit-side__row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem 0.75rem;
+}
+
+.kit-toolbar__left,
+.kit-toolbar__right {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 	gap: 0.5rem 0.75rem;
 }
 
 .kit-toolbar__count {
 	font-size: 0.875rem;
-	margin-right: auto;
+}
+
+/* 搜索框和下拉框前面带图标，像 Obsidian 工具栏的按钮 */
+.kit-search,
+.kit-select-wrap {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+}
+
+.kit-search__icon,
+.kit-select-wrap > svg {
+	position: absolute;
+	left: 0.6rem;
+	font-size: 1rem;
+	color: var(--btn-content);
+	pointer-events: none;
+}
+
+.kit-search .kit-input {
+	padding-left: 2rem;
+}
+
+.kit-select-wrap .kit-select {
+	padding-left: 1.9rem;
 }
 
 .kit-toolbar__count b {
@@ -415,7 +505,7 @@ button.kit-side__row {
 
 .kit-input,
 .kit-select {
-	height: 2.25rem;
+	height: 2rem;
 	border-radius: 0.5rem;
 	background: var(--btn-regular-bg);
 	color: inherit;
@@ -439,9 +529,18 @@ button.kit-side__row {
 }
 
 @media (max-width: 640px) {
+	.kit-toolbar__right,
+	.kit-search,
 	.kit-input {
 		width: 100%;
-		order: -1;
+	}
+
+	.kit-toolbar__right .kit-select-wrap {
+		flex: 1;
+	}
+
+	.kit-toolbar__right .kit-select {
+		width: 100%;
 	}
 }
 
@@ -619,7 +718,22 @@ button.kit-side__row {
 	z-index: 2;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.35rem;
+	gap: 0.15rem 0.6rem;
+}
+
+.kit-tag {
+	font-size: 0.75rem;
+	color: rgb(115 115 115);
+	transition: color 0.15s;
+	cursor: pointer;
+}
+
+:where(:root.dark) .kit-tag {
+	color: rgb(163 163 163);
+}
+
+.kit-tag:hover {
+	color: var(--primary);
 }
 
 .kit-card__meta {
@@ -681,6 +795,16 @@ button.kit-side__row {
 .kit-grid.is-list .kit-card {
 	flex-direction: row;
 	align-items: center;
+}
+
+.kit-grid.is-list .kit-card:hover {
+	transform: none;
+	box-shadow: none;
+	background: color-mix(in oklch, var(--card-bg) 92%, var(--primary));
+}
+
+.kit-grid.is-list .kit-cover:not(:has(img)) {
+	display: none;
 }
 
 .kit-grid.is-list .kit-cover {
@@ -761,30 +885,28 @@ button.kit-side__row {
 	display: flex;
 	align-items: flex-end;
 	padding: 8cqi 9cqi;
-	background:
-		radial-gradient(circle at 85% 10%, var(--kit-soft), transparent 60%),
-		linear-gradient(160deg, var(--btn-regular-bg), color-mix(in oklch, var(--btn-regular-bg) 70%, var(--card-bg)));
+	background: linear-gradient(150deg, color-mix(in oklch, var(--page-bg) 80%, var(--card-bg)), var(--card-bg));
 }
 
-/* 首字做成右上角的大水印 */
+/* 首字做成右上角很淡的水印 */
 .kit-cover__mark {
 	position: absolute;
-	right: -4cqi;
-	top: -10cqi;
-	font-size: 70cqi;
+	right: -3cqi;
+	top: -12cqi;
+	font-size: 64cqi;
 	line-height: 1;
 	font-weight: 900;
-	color: color-mix(in oklch, var(--primary) 14%, transparent);
+	color: color-mix(in oklch, var(--primary) 7%, transparent);
 	pointer-events: none;
 }
 
-/* 标题压在左下角，像一张设计过的书封 */
+/* 标题压在左下角，像一张素净的书封 */
 .kit-cover__title {
 	position: relative;
-	font-size: clamp(0.9rem, 9cqi, 1.75rem);
-	line-height: 1.3;
+	font-size: clamp(0.85rem, 8cqi, 1.5rem);
+	line-height: 1.35;
 	font-weight: 800;
-	color: color-mix(in oklch, var(--primary) 80%, black);
+	color: rgb(64 64 64 / 0.85);
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
@@ -792,7 +914,7 @@ button.kit-side__row {
 }
 
 :root.dark .kit-cover__title {
-	color: color-mix(in oklch, var(--primary) 70%, white);
+	color: rgb(229 229 229 / 0.85);
 }
 
 .kit-rating {

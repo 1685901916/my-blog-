@@ -1,56 +1,458 @@
 ---
-// 主页：全站「最近更新」的数据库视图（文章 + 作品 + 月记），左栏是个人卡片 + 库导航 + 类型筛选
-import ArticleCard from "../components/kit/ArticleCard.astro";
+// 主页 = 库的总览：每种笔记一个分区，用最适合它的形式展示
+//   文章 → 文字列表（截图做缩略图）  动漫 → 海报墙  作品 → 卡片
+//   资源站 → 紧凑链接  月记 → 月份格子
+// 不是按时间混排的「最近更新」；每个分区都能点进对应的数据库
+import { Icon } from "astro-icon/components";
+import Cover from "../components/kit/Cover.astro";
 import KitHeader from "../components/kit/KitHeader.astro";
 import KitShell from "../components/kit/KitShell.astro";
-import ProfileMini from "../components/kit/ProfileMini.astro";
-import SideCats from "../components/kit/SideCats.astro";
-import Toolbar from "../components/kit/Toolbar.astro";
+import VaultHeader from "../components/kit/VaultHeader.astro";
 import VaultNav from "../components/kit/VaultNav.astro";
+import WorkCard from "../components/kit/WorkCard.astro";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import { dayKey, getEntries, KIND_LABEL } from "../utils/kit/content";
+import { dayKey, getFeed, getLibrary, getMonthDigests } from "../utils/kit/content";
 
-const entries = await getEntries();
-const kinds = (["post", "work", "journal"] as const)
-	.map((k) => ({ name: KIND_LABEL[k], count: entries.filter((e) => e.kind === k).length }))
-	.filter((k) => k.count > 0);
-const latest = entries[0];
+const [feed, library, digests] = await Promise.all([getFeed(), getLibrary(), getMonthDigests()]);
+const posts = feed.filter((f) => f.kind === "post");
+const works = feed.filter((f) => f.kind === "work");
+const anime = library.filter((i) => i.shelf.id === "anime").sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+const sites = library.filter((i) => i.shelf.id === "sites");
+const months = digests.slice(0, 6);
+const total = posts.length + works.length + library.length + digests.filter((d) => d.note).length;
+const host = (u?: string) => (u ? new URL(u).hostname.replace(/^www\./, "") : "");
 ---
 
 <MainGridLayout>
-	<KitShell collection={{ defaultSort: "date" }}>
+	<KitShell>
 		<Fragment slot="side">
-			<ProfileMini />
-			<VaultNav active="home" />
-			<SideCats id="kit-kinds" title="类型" cats={kinds} total={entries.length} />
+			<VaultHeader />
+			<VaultNav active="all" />
 		</Fragment>
 
-		<KitHeader
-			title="最近更新"
-			desc="文章、作品和月记都在这里，按时间排列。左边可以切到收藏库、只看某一类，或者直接搜索。"
-			meta={[
-				{ icon: "material-symbols:database-outline", text: `${entries.length} 篇` },
-				...(latest ? [{ icon: "material-symbols:calendar-today-outline-rounded", text: `最近更新 ${dayKey(latest.date)}` }] : []),
-			]}
-		>
-			<Toolbar
-				slot="toolbar"
-				total={entries.length}
-				sorts={[
-					{ value: "date", label: "日期" },
-					{ value: "title", label: "标题" },
-				]}
-				defaultSort="date"
-				groups={[
-					{ value: "cat", label: "类型" },
-					{ value: "year", label: "年份" },
-				]}
-				searchPlaceholder="搜索标题、分类或标签"
-			/>
+		<KitHeader title="总览">
+			<span class="home-sum text-50">{total} 条笔记 · 按类型整理</span>
 		</KitHeader>
 
-		<div class="kit-grid kit-grid--wide" data-items>
-			{entries.map((e, i) => <ArticleCard item={e} index={i} catBy="kind" />)}
+		<!-- 文章：文字列表 -->
+		<section class="card-base home-panel" data-reveal>
+			<div class="home-head">
+				<h2 class="kit-section-title text-90">文章 <small class="text-50">{posts.length}</small></h2>
+				<a href="/posts/" class="home-more">全部文章 <Icon name="material-symbols:arrow-forward-rounded" /></a>
+			</div>
+			<div class="post-list">
+				{
+					posts.slice(0, 6).map((p) => (
+						<a href={p.url} class="post-row">
+							<div class="post-row__text">
+								<div class="post-row__title text-90">{p.title}</div>
+								{p.description && <div class="post-row__desc text-50">{p.description}</div>}
+							</div>
+							<span class="post-row__cat">{p.category}</span>
+							<span class="post-row__date text-50">{dayKey(p.date)}</span>
+						</a>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- 动漫：海报墙 -->
+		{
+			anime.length > 0 && (
+				<section data-reveal>
+					<div class="home-head">
+						<h2 class="kit-section-title text-90">
+							动漫 <small class="text-50">{anime.length}</small>
+						</h2>
+						<a href="/library/anime/" class="home-more">
+							打开书架 <Icon name="material-symbols:arrow-forward-rounded" />
+						</a>
+					</div>
+					<div class="posters">
+						{anime.slice(0, 10).map((a) => (
+							<a href={a.url} class="poster">
+								<Cover src={a.cover} title={a.title} aspect="3 / 4">
+									{typeof a.rating === "number" && (
+										<span class="kit-rating">
+											<Icon name="material-symbols:star-rounded" />
+											{a.rating.toFixed(1)}
+										</span>
+									)}
+								</Cover>
+								<span class="poster__title text-90">{a.title}</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<!-- 作品：卡片 -->
+		{
+			works.length > 0 && (
+				<section data-reveal>
+					<div class="home-head">
+						<h2 class="kit-section-title text-90">
+							作品 <small class="text-50">{works.length}</small>
+						</h2>
+						<a href="/works/" class="home-more">
+							作品墙 <Icon name="material-symbols:arrow-forward-rounded" />
+						</a>
+					</div>
+					<div class="kit-grid kit-grid--wide works">
+						{works.slice(0, 3).map((w, i) => <WorkCard work={w} index={i} />)}
+					</div>
+				</section>
+			)
+		}
+
+		<div class="home-duo">
+			<!-- 资源站：紧凑链接 -->
+			{
+				sites.length > 0 && (
+					<section class="card-base home-panel" data-reveal>
+						<div class="home-head">
+							<h2 class="kit-section-title text-90">
+								资源站 <small class="text-50">{sites.length}</small>
+							</h2>
+							<a href="/library/sites/" class="home-more">
+								全部 <Icon name="material-symbols:arrow-forward-rounded" />
+							</a>
+						</div>
+						<div class="site-list">
+							{sites.slice(0, 6).map((s) => (
+								<a href={s.url} class="site-row">
+									<span class="site-row__mark" aria-hidden="true">
+										{[...s.title][0]}
+									</span>
+									<span class="site-row__name text-90">{s.title}</span>
+									<span class="site-row__host text-50">{host(s.link)}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				)
+			}
+
+			<!-- 月记：月份格子 -->
+			<section class="card-base home-panel" data-reveal>
+				<div class="home-head">
+					<h2 class="kit-section-title text-90">月记</h2>
+					<a href="/journal/" class="home-more">
+						全部月份 <Icon name="material-symbols:arrow-forward-rounded" />
+					</a>
+				</div>
+				<div class="months">
+					{
+						months.map((d) => (
+							<a href={`/journal/${d.month}/`} class:list={["month", d.note && "is-written"]} title={d.title || `${d.year} 年 ${d.monthNumber} 月`}>
+								<span class="month__year text-50">{d.year}</span>
+								<span class="month__num">{String(d.monthNumber).padStart(2, "0")}</span>
+								<span class="month__sub text-50">
+									{d.note ? "写了月记" : `${d.stats.writings + d.stats.works + d.stats.library} 条记录`}
+								</span>
+							</a>
+						))
+					}
+				</div>
+			</section>
 		</div>
 	</KitShell>
 </MainGridLayout>
+
+<style>
+	.home-sum {
+		margin-left: auto;
+		font-size: 0.8125rem;
+	}
+
+	.home-panel {
+		padding: 1.15rem 1.4rem 1.25rem;
+	}
+
+	.home-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.home-head :global(.kit-section-title) {
+		margin-bottom: 0.75rem;
+	}
+
+	section:not(.home-panel) > .home-head {
+		padding: 0 0.25rem;
+	}
+
+	.home-more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		font-size: 0.8125rem;
+		color: rgb(115 115 115);
+		transition: color 0.15s;
+		white-space: nowrap;
+	}
+
+	.home-more:hover {
+		color: var(--primary);
+	}
+
+	/* ---------- 文章列表 ---------- */
+	.post-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.post-row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto 6.5rem;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 0.7rem 0.6rem;
+		margin: 0 -0.6rem;
+		border-radius: 0.6rem;
+		transition: background 0.15s;
+	}
+
+	.post-row + .post-row {
+		border-top: 1px dashed var(--line-divider);
+	}
+
+	.post-row:hover {
+		background: var(--btn-plain-bg-hover);
+	}
+
+	.post-row:hover .post-row__title {
+		color: var(--primary);
+	}
+
+	.post-row__title {
+		font-weight: 700;
+		font-size: 0.975rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.post-row__desc {
+		margin-top: 0.15rem;
+		font-size: 0.8125rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.post-row__cat {
+		font-size: 0.75rem;
+		color: var(--primary);
+		white-space: nowrap;
+	}
+
+	.post-row__date {
+		font-family: var(--kit-num);
+		font-size: 0.8125rem;
+		text-align: right;
+	}
+
+	@media (max-width: 640px) {
+		.post-row {
+			grid-template-columns: minmax(0, 1fr) auto;
+		}
+		.post-row__date {
+			display: none;
+		}
+	}
+
+	/* ---------- 海报墙 ---------- */
+	.posters {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 8.5rem;
+		gap: 1rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		padding: 0.25rem 0.25rem 0.5rem;
+		margin: -0.25rem;
+		scrollbar-width: thin;
+	}
+
+	@media (min-width: 1024px) {
+		.posters {
+			grid-auto-flow: row;
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			grid-auto-columns: auto;
+			overflow: visible;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.posters {
+			grid-template-columns: repeat(10, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1024px) and (max-width: 1279px) {
+		.poster:nth-child(n + 6) {
+			display: none;
+		}
+	}
+
+	.poster {
+		scroll-snap-align: start;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		min-width: 0;
+	}
+
+	.poster :global(.kit-cover) {
+		border-radius: 0.75rem;
+		transition:
+			transform 0.5s var(--kit-spring),
+			box-shadow 0.4s;
+	}
+
+	.poster:hover :global(.kit-cover) {
+		transform: translateY(-4px);
+		box-shadow: var(--kit-shadow);
+	}
+
+	.poster__title {
+		font-size: 0.8125rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.poster:hover .poster__title {
+		color: var(--primary);
+	}
+
+	.works {
+		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	}
+
+	/* ---------- 资源站 + 月记 ---------- */
+	.home-duo {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	@media (min-width: 1280px) {
+		.home-duo {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+	}
+
+	.site-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.25rem 1rem;
+	}
+
+	@media (max-width: 640px) {
+		.site-list {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.site-row {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.45rem 0.5rem;
+		margin: 0 -0.5rem;
+		border-radius: 0.6rem;
+		min-width: 0;
+		transition: background 0.15s;
+	}
+
+	.site-row:hover {
+		background: var(--btn-plain-bg-hover);
+	}
+
+	.site-row__mark {
+		flex: none;
+		width: 1.9rem;
+		height: 1.9rem;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.875rem;
+		font-weight: 800;
+		color: var(--primary);
+		background: var(--btn-regular-bg);
+	}
+
+	.site-row__name {
+		font-weight: 700;
+		font-size: 0.875rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.site-row__host {
+		margin-left: auto;
+		font-size: 0.75rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		min-width: 0;
+	}
+
+	.months {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.6rem;
+	}
+
+	.month {
+		display: flex;
+		flex-direction: column;
+		padding: 0.7rem 0.8rem;
+		border-radius: 0.75rem;
+		border: 1px solid var(--line-divider);
+		transition:
+			transform 0.45s var(--kit-spring),
+			border-color 0.2s;
+	}
+
+	.month:hover {
+		transform: translateY(-3px);
+		border-color: var(--primary);
+	}
+
+	.month__year {
+		font-family: var(--kit-num);
+		font-size: 0.6875rem;
+	}
+
+	.month__num {
+		font-family: var(--kit-num);
+		font-size: 1.6rem;
+		font-weight: 700;
+		line-height: 1.1;
+		color: rgb(64 64 64);
+	}
+
+	:global(:root.dark) .month__num {
+		color: rgb(229 229 229);
+	}
+
+	.month.is-written .month__num {
+		color: var(--primary);
+	}
+
+	.month__sub {
+		margin-top: 0.15rem;
+		font-size: 0.6875rem;
+	}
+</style>
