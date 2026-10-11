@@ -31,8 +31,9 @@ const minutes = remarkPluginFrontmatter?.minutes as number | undefined;
 const words = remarkPluginFrontmatter?.words as number | undefined;
 const isPoster = row.variant === "poster" || row.variant === "person";
 const isPerson = row.variant === "person";
-// 页头大图只用文章里明确写的封面；Obsidian 笔记的图已经在正文里，不重复放
-const headerImage = row.entry.collection !== "acg" && "image" in row.entry.data ? row.entry.data.image : "";
+// 页头大图：文章的配图（src/data/covers.ts 或 frontmatter 的 image）；正文里已经有的图不重复放
+const body = row.entry.body ?? "";
+const headerImage = row.kind === "文章" && row.cover && !body.includes(row.cover) ? row.cover : "";
 
 // 回到数据库并筛好
 const db = (q: Record<string, string> = {}) => `/preview/b/?${new URLSearchParams({ type: row.kind, ...q })}#notes`;

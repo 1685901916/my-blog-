@@ -1,14 +1,14 @@
 ---
 // 方案 B · 个人主页 + 数据库
 // 首屏：电影感横幅，站名 / 头像 / 统计压在左下角
-// 「全部」是杂志式总览：精选（最近热衷的番 + 最近写的）→ 动画书架 → 漫画 | 小说 → 人物 → 游戏 | 月记 → 作品 → 收集
+// 「全部」是杂志式总览：全部文章（带配图）→ 动画书架 → 漫画 | 小说 → 人物 → 游戏 | 月记 → 作品 → 收集
 // 选了某个类型：这个类型的完整数据库网格，第二排是它自己的分类；搜索 / 排序 / 视图交给 kit.ts
 import { Icon } from "astro-icon/components";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
 import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import BaseCard from "../../../components/preview/BaseCard.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
-import { BASE_KINDS, type BaseRow, getProtoBase, type Kind, KIND_META } from "../../../components/preview/proto";
+import { BASE_KINDS, getProtoBase, type Kind, KIND_META } from "../../../components/preview/proto";
 import { profileConfig, siteConfig } from "../../../config";
 import Layout from "../../../layouts/Layout.astro";
 
@@ -24,16 +24,11 @@ const facets = kinds
 	})
 	.filter((f) => f.values.length > 1);
 
-// 精选：动画里排第一的（喜欢 + 评分最高）；旁边是最近写的文字
-const featured = ofKind("动画")[0];
-const recent = rows
-	.filter((r) => r.kind === "文章" || r.kind === "月记")
-	.sort((a, b) => b.date.localeCompare(a.date))
-	.slice(0, 5);
-
 // 总览的版式：每一排放哪些类型、各占几栏（12 栏）、放几个、内部几列
 type Block = { k: Kind; span: number; n: number; cols: number; desc: string };
 const LAYOUT: Block[][] = [
+	// 最上面放全部文章（配图卡片，一排 3 篇，和作品一样）
+	[{ k: "文章", span: 12, n: 99, cols: 3, desc: "教程、资源整理和随笔" }],
 	[{ k: "动画", span: 12, n: 8, cols: 8, desc: "看过的番，和看完写下的感想" }],
 	[
 		{ k: "漫画", span: 6, n: 4, cols: 4, desc: "最近在追的漫画" },
@@ -50,7 +45,6 @@ const LAYOUT: Block[][] = [
 const layout = LAYOUT.map((row) => row.filter((b) => ofKind(b.k).length > 0)).filter((row) => row.length);
 const stat = (k: Kind) => ofKind(k).length;
 const banner = "/assets/desktop-banner/custom-bg.jpg";
-const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 ---
 
 <Layout title="方案 B · 主页 + 数据库">
@@ -165,58 +159,6 @@ const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 
 				<!-- ========== 总览 ========== -->
 				<div class="mag" data-overview>
-					<!-- 精选 + 最近写的 -->
-					<section class="feature">
-						{
-							featured && (
-								<a href={featured.href} class="hl" data-reveal>
-									{featured.cover && <div class="hl__bg" style={`background-image: url("${featured.cover}")`} />}
-									<div class="hl__poster">{featured.cover && <img src={featured.cover} alt="" referrerpolicy="no-referrer" />}</div>
-									<div class="hl__text">
-										<span class="hl__eyebrow">最近热衷 · {featured.kind}</span>
-										<h2 class="hl__title">{featured.title}</h2>
-										<div class="hl__meta">
-											{typeof featured.rating === "number" && (
-												<span class="hl__score">
-													<Icon name="material-symbols:star-rounded" />
-													{featured.rating.toFixed(1)}
-												</span>
-											)}
-											{featured.cat && <span>{featured.cat}</span>}
-											{featured.tags.slice(0, 3).map((t) => (
-												<span>#{t}</span>
-											))}
-										</div>
-										{featured.excerpt && <p class="hl__quote">「{featured.excerpt}」</p>}
-										<span class="hl__cta">
-											读我的感想
-											<Icon name="material-symbols:arrow-forward-rounded" />
-										</span>
-									</div>
-								</a>
-							)
-						}
-						<aside class="recent" data-reveal>
-							<div class="recent__head">
-								<h3>最近写的</h3>
-								<button type="button" data-filter-kind="文章">
-									全部文章
-									<Icon name="material-symbols:arrow-forward-rounded" />
-								</button>
-							</div>
-							<ol>
-								{recent.map((r) => (
-									<li>
-										<a href={r.href}>
-											<span class="recent__label">{label(r)}</span>
-											<span class="recent__title">{r.title}</span>
-											<time>{r.date.slice(5)}</time>
-										</a>
-									</li>
-								))}
-							</ol>
-						</aside>
-					</section>
 
 					{
 						layout.map((row) => (
@@ -618,228 +560,16 @@ const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 		padding: 2.5rem 0 1rem;
 	}
 
-	/* 精选：左大卡（海报 + 感想），右边最近写的 */
-	.feature {
-		display: grid;
-		grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-		gap: 1.5rem;
-	}
-
-	.hl {
-		position: relative;
-		overflow: hidden;
-		isolation: isolate;
-		display: flex;
-		gap: 2rem;
-		padding: 2rem;
-		border-radius: 1.25rem;
-		color: white;
-		background: #1c1a22;
-	}
-
-	.hl__bg {
-		position: absolute;
-		inset: -2rem;
-		z-index: -1;
-		background-size: cover;
-		background-position: center 30%;
-		filter: blur(40px) saturate(1.2) brightness(0.55);
-		transform: scale(1.1);
-		transition: transform 1.2s var(--kit-ease-out);
-	}
-
-	.hl:hover .hl__bg {
-		transform: scale(1.18);
-	}
-
-	.hl__poster {
-		width: 11rem;
-		flex: none;
-		aspect-ratio: 2 / 3;
-		overflow: hidden;
-		border-radius: 0.6rem;
-		box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.7);
-		transition: transform 0.6s var(--kit-spring);
-	}
-
-	.hl:hover .hl__poster {
-		transform: translateY(-4px) rotate(-1deg);
-	}
-
-	.hl__poster img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.hl__text {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 0.7rem;
-		min-width: 0;
-	}
-
-	.hl__eyebrow {
-		font-size: 0.75rem;
-		font-weight: 700;
-		letter-spacing: 0.25em;
-		opacity: 0.7;
-	}
-
-	.hl__title {
-		font-family: var(--serif);
-		font-size: clamp(1.8rem, 3vw, 2.6rem);
-		font-weight: 900;
-		line-height: 1.25;
-	}
-
-	.hl__meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.4rem 1rem;
-		font-size: 0.82rem;
-		opacity: 0.85;
-	}
-
-	.hl__score {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.15rem;
-		font-family: var(--kit-num);
-		font-size: 1rem;
-		font-weight: 800;
-	}
-
-	.hl__score :global(svg) {
-		color: #ffc94a;
-	}
-
-	.hl__quote {
-		max-width: 34rem;
-		font-family: var(--serif);
-		font-size: 1rem;
-		line-height: 1.9;
-		opacity: 0.92;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-
-	.hl__cta {
-		align-self: flex-start;
-		margin-top: 0.4rem;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.3rem;
-		padding: 0.5rem 1rem;
-		border-radius: 999px;
-		font-size: 0.85rem;
-		font-weight: 700;
-		color: #1c1a22;
-		background: white;
-		transition: gap 0.3s var(--kit-spring);
-	}
-
-	.hl:hover .hl__cta {
-		gap: 0.6rem;
-	}
-
-	.recent {
-		display: flex;
-		flex-direction: column;
-		padding: 1.5rem 1.5rem 1rem;
-		border-radius: 1.25rem;
-		background: var(--db-card);
-		box-shadow: 0 0 0 1px var(--db-line);
-	}
-
-	.recent__head {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		margin-bottom: 0.5rem;
-	}
-
-	.recent__head h3 {
-		font-family: var(--serif);
-		font-size: 1.25rem;
-		font-weight: 700;
-	}
-
-	.recent__head button,
-	.sec__more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.2rem;
-		font-size: 0.8rem;
-		font-weight: 700;
-		color: var(--db-muted);
-		transition:
-			color 0.15s,
-			gap 0.3s var(--kit-spring);
-	}
-
-	.recent__head button:hover,
-	.sec__more:hover {
-		color: var(--db-text);
-		gap: 0.4rem;
-	}
-
-	.recent ol {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.recent li + li {
-		border-top: 1px solid var(--db-line);
-	}
-
-	.recent a {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		grid-template-areas: "label time" "title title";
-		gap: 0.2rem 0.75rem;
-		padding: 0.8rem 0;
-	}
-
-	.recent__label {
-		grid-area: label;
-		font-size: 0.72rem;
-		font-weight: 700;
-		color: var(--db-muted);
-	}
-
-	.recent__title {
-		grid-area: title;
-		font-size: 0.95rem;
-		font-weight: 700;
-		line-height: 1.5;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		transition: color 0.15s;
-	}
-
-	.recent a:hover .recent__title {
-		color: var(--primary);
-	}
-
-	.recent time {
-		grid-area: time;
-		font-family: var(--kit-num);
-		font-size: 0.72rem;
-		color: var(--db-muted);
-	}
-
 	/* 每一排：12 栏，类型块按 --span 占位 */
 	.mag__row {
 		display: grid;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
 		gap: 1.5rem 3rem;
 		margin-top: 3.5rem;
+	}
+
+	.mag__row:first-child {
+		margin-top: 0;
 	}
 
 	.sec {
@@ -877,6 +607,25 @@ const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 		margin-top: 0.3rem;
 		font-size: 0.82rem;
 		color: var(--db-muted);
+	}
+
+	.sec__more {
+		flex: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		white-space: nowrap;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: var(--db-muted);
+		transition:
+			color 0.15s,
+			gap 0.3s var(--kit-spring);
+	}
+
+	.sec__more:hover {
+		color: var(--db-text);
+		gap: 0.4rem;
 	}
 
 	.sec__grid {
@@ -1006,10 +755,6 @@ const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 	}
 
 	@media (max-width: 1100px) {
-		.feature {
-			grid-template-columns: minmax(0, 1fr);
-		}
-
 		.sec {
 			grid-column: 1 / -1;
 		}
@@ -1049,16 +794,6 @@ const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 
 		.nav__theme {
 			margin-left: auto;
-		}
-
-		.hl {
-			flex-direction: column;
-			padding: 1.25rem;
-			gap: 1.25rem;
-		}
-
-		.hl__poster {
-			width: 8rem;
 		}
 
 		.sec__grid {
