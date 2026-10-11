@@ -1,129 +1,304 @@
 ---
-// 方案 B 的文章阅读页：细顶栏 + 居中单栏正文，宽屏右侧浮动目录
+// 方案 B 的阅读页：顶栏带类型入口；标题下面是 Obsidian 式的「笔记属性」面板，
+// 分类 / 标签点了直接回到数据库筛好；动漫没有正文，用海报 + 属性的详情版式；文末是相关笔记卡片
 import { Icon } from "astro-icon/components";
+import Cover from "../../../components/kit/Cover.astro";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
-import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import Markdown from "../../../components/misc/Markdown.astro";
+import BaseCard from "../../../components/preview/BaseCard.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
-import { cnDate, getProtoArticlePaths, type ProtoArticle } from "../../../components/preview/proto";
-import { profileConfig, siteConfig } from "../../../config";
+import { BASE_KINDS, type BaseProp, getProtoArticlePaths, type ProtoArticle } from "../../../components/preview/proto";
+import { siteConfig } from "../../../config";
 import Layout from "../../../layouts/Layout.astro";
+// 主题的全局样式（颜色变量、正文排版）原本是靠 ImageWrapper 里 import.meta.glob("../../**") 顺带引进来的，
+// 这页没用 ImageWrapper，所以显式引入
+import "../../../styles/variables.styl";
+import "../../../styles/main.css";
+import "../../../styles/markdown.css";
+import "../../../styles/markdown-extend.styl";
 
 export async function getStaticPaths() {
 	return getProtoArticlePaths("b");
 }
 
-const { entry, kind, prev, next } = Astro.props as ProtoArticle;
-const { Content, headings, remarkPluginFrontmatter } = await entry.render();
-const toc = headings.filter((h) => h.depth <= Math.min(...headings.map((x) => x.depth)) + 1);
-const category = kind === "work" ? "作品" : entry.data.category || "文章";
+const { row, related, prev, next } = Astro.props as ProtoArticle;
+const { Content, headings, remarkPluginFrontmatter } = await row.entry.render();
+const hasBody = (row.entry.body ?? "").trim().length > 0;
+const top = Math.min(...headings.map((h) => h.depth));
+const toc = headings.filter((h) => h.depth <= top + 1);
 const minutes = remarkPluginFrontmatter?.minutes as number | undefined;
 const words = remarkPluginFrontmatter?.words as number | undefined;
-const tags = entry.data.tags.filter((t) => t !== entry.data.category);
+const isAnime = row.kind === "动漫";
+// 页头大图只用笔记里明确写的封面；正文第一张图不重复放
+const headerImage = "image" in row.entry.data ? row.entry.data.image : "";
+
+// 回到数据库并筛好
+const db = (q: Record<string, string> = {}) => `/preview/b/?${new URLSearchParams({ type: row.kind, ...q })}#notes`;
+
+// 属性面板：卡片上的属性 + 全部标签 + 字数 / 外链
+const props: BaseProp[] = row.props.map((p) => (p.chips ? { ...p, chips: row.tags } : p));
+if (words) props.push({ k: "字数", v: `${words} 字 · 约 ${minutes ?? 1} 分钟` });
+const ICON: Record<string, string> = {
+	分类: "material-symbols:folder-outline",
+	类别: "material-symbols:folder-outline",
+	文件标签: "material-symbols:tag-rounded",
+	date: "material-symbols:calendar-today-outline-rounded",
+	年份: "material-symbols:calendar-today-outline-rounded",
+	月份: "material-symbols:calendar-month-outline-rounded",
+	评分: "material-symbols:star-rounded",
+	字数: "material-symbols:notes-rounded",
+};
+const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === row.cat) ? `同在「${row.cat}」` : "相关笔记";
 ---
 
-<Layout title={entry.data.title} description={entry.data.description}>
+<Layout title={row.title} description={row.excerpt}>
 	<div class="rb" data-no-swup>
 		<header class="bar">
 			<a href="/preview/b/" class="bar__logo">{siteConfig.title}</a>
-			<nav class="bar__links">
-				<a href="/preview/b/#notes">笔记</a>
-				<a href="/preview/b/#about">关于</a>
+			<nav class="bar__kinds" aria-label="类型">
+				{
+					BASE_KINDS.map((k) => (
+						<a href={`/preview/b/?type=${k}#notes`} class:list={[k === row.kind && "is-on"]}>
+							{k}
+						</a>
+					))
+				}
 			</nav>
 			<LightDarkSwitch client:only="svelte" />
 		</header>
 
-		<div class="layout">
-			<article class="article">
-				<a href="/preview/b/#notes" class="back"><Icon name="material-symbols:arrow-back-rounded" />返回笔记</a>
-				<div class="meta">
-					<span class="meta__cat">{category}</span>
-					<time>{cnDate(entry.data.published)}</time>
-					{words && <span>{words} 字</span>}
-					{minutes && <span>约 {minutes} 分钟</span>}
-				</div>
-				<h1 class="title">{entry.data.title}</h1>
-				{entry.data.description && <p class="lead">{entry.data.description}</p>}
-				<div class="author">
-					<span class="author__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></span>
-					<span>{profileConfig.name}</span>
-				</div>
-				{entry.data.image && <img class="cover" src={entry.data.image} alt="" referrerpolicy="no-referrer" />}
+		<!-- 面包屑：笔记 / 类型 / 分类，每一级都能回到数据库 -->
+		{
+			isAnime ? (
+				<section class="anime">
+					{row.cover && <div class="anime__backdrop" style={`background-image: url("${row.cover}")`} />}
+					<div class="anime__inner">
+						<nav class="crumbs" aria-label="位置">
+							<a href="/preview/b/#notes">笔记</a>
+							<span>/</span>
+							<a href={db()}>{row.kind}</a>
+						</nav>
+						<div class="anime__main">
+							<div class="anime__poster">
+								<Cover src={row.cover} title={row.title} aspect="3 / 4" eager />
+							</div>
+							<div class="anime__info">
+								<h1 class="title">{row.title}</h1>
+								{typeof row.rating === "number" && (
+									<div class="score">
+										<b>{row.rating.toFixed(1)}</b>
+										<span class="score__max">/ 10</span>
+										<span class="score__bar" style={`--p: ${row.rating * 10}%`} />
+									</div>
+								)}
+								<dl class="props">
+									<div class="props__head">笔记属性</div>
+									{props
+										.filter((p) => p.k !== "评分")
+										.map((p) => (
+											<div class="props__row">
+												<dt>
+													<Icon name={ICON[p.k] ?? "material-symbols:label-outline"} />
+													{p.k}
+												</dt>
+												<dd>
+													{p.chips ? (
+														p.chips.length ? (
+															p.chips.map((c) => (
+																<a class="props__chip" href={db({ tag: c })}>
+																	{c}
+																</a>
+															))
+														) : (
+															<span class="props__empty">空</span>
+														)
+													) : (
+														<span class="props__v">{p.v || "—"}</span>
+													)}
+												</dd>
+											</div>
+										))}
+								</dl>
+								{row.link && (
+									<a class="ext" href={row.link} target="_blank" rel="noopener noreferrer">
+										<Icon name="material-symbols:open-in-new-rounded" />
+										在 Bangumi 查看
+									</a>
+								)}
+							</div>
+						</div>
+						{row.excerpt && <p class="anime__summary">{row.excerpt}</p>}
+						{hasBody && (
+							<Markdown class="markdown-content anime__body">
+								<Content />
+							</Markdown>
+						)}
+					</div>
+				</section>
+			) : (
+				<div class="layout">
+					<article class="article">
+						<nav class="crumbs" aria-label="位置">
+							<a href="/preview/b/#notes">笔记</a>
+							<span>/</span>
+							<a href={db()}>{row.kind}</a>
+							{row.cat && row.cat !== row.kind && (
+								<>
+									<span>/</span>
+									<a href={db({ cat: row.cat })}>{row.cat}</a>
+								</>
+							)}
+						</nav>
+						<h1 class="title">{row.title}</h1>
+						{row.excerpt && <p class="lead">{row.excerpt}</p>}
 
-				<Markdown class="markdown-content body">
-					<Content />
-				</Markdown>
+						<dl class="props">
+							<div class="props__head">笔记属性</div>
+							{props.map((p) => (
+								<div class="props__row">
+									<dt>
+										<Icon name={ICON[p.k] ?? "material-symbols:label-outline"} />
+										{p.k}
+									</dt>
+									<dd>
+										{p.chips ? (
+											p.chips.length ? (
+												p.chips.map((c) => (
+													<a class="props__chip" href={db({ tag: c })}>
+														{c}
+													</a>
+												))
+											) : (
+												<span class="props__empty">空</span>
+											)
+										) : p.filter === "cat" ? (
+											<a class="props__chip is-cat" href={db({ cat: p.v ?? "" })}>
+												{p.v}
+											</a>
+										) : (
+											<span class="props__v">{p.v || "—"}</span>
+										)}
+									</dd>
+								</div>
+							))}
+						</dl>
 
-				{
-					tags.length > 0 && (
-						<div class="tags">
-							{tags.map((t) => (
-								<a href={`/posts/?tag=${encodeURIComponent(t)}`}># {t}</a>
+						{headerImage && <img class="cover" src={headerImage} alt="" referrerpolicy="no-referrer" />}
+
+						<Markdown class="markdown-content body">
+							<Content />
+						</Markdown>
+
+						{row.link && (
+							<a class="ext" href={row.link} target="_blank" rel="noopener noreferrer">
+								<Icon name="material-symbols:open-in-new-rounded" />
+								查看项目
+							</a>
+						)}
+
+						<nav class="pager" aria-label="同类型的上一篇 / 下一篇">
+							{prev ? (
+								<a href={prev.href} class="pager__item">
+									<small>
+										<Icon name="material-symbols:arrow-back-rounded" />
+										较新的{row.kind}
+									</small>
+									<span>{prev.title}</span>
+								</a>
+							) : (
+								<span />
+							)}
+							{next && (
+								<a href={next.href} class="pager__item is-next">
+									<small>
+										较早的{row.kind}
+										<Icon name="material-symbols:arrow-forward-rounded" />
+									</small>
+									<span>{next.title}</span>
+								</a>
+							)}
+						</nav>
+					</article>
+
+					{toc.length > 1 && (
+						<aside class="toc">
+							<div class="toc__head">目录</div>
+							<nav data-toc>
+								{toc.map((h) => (
+									<a
+										href={`#${h.slug}`}
+										class:list={["kit-toc__link", h.depth > top && "is-sub"]}
+										data-toc-target={h.slug}
+									>
+										{h.text.replace(/#$/, "")}
+									</a>
+								))}
+							</nav>
+						</aside>
+					)}
+				</div>
+			)
+		}
+
+		{
+			related.length > 0 && (
+				<section class="related" data-active-kind={row.kind}>
+					<div class="related__inner">
+						<div class="related__head">
+							<h2>{relatedTitle}</h2>
+							<a href={db(isAnime ? {} : { cat: row.cat })}>
+								在数据库里看全部
+								<Icon name="material-symbols:arrow-forward-rounded" />
+							</a>
+						</div>
+						<div class:list={["kit-grid", "related__grid", isAnime && "is-posters"]}>
+							{related.map((r, i) => (
+								<BaseCard row={r} index={i} />
 							))}
 						</div>
-					)
-				}
-
-				<nav class="pager">
-					{prev ? (
-						<a href={prev.href} class="pager__item"><small>上一篇</small><span>{prev.title}</span></a>
-					) : (
-						<span />
-					)}
-					{next && (
-						<a href={next.href} class="pager__item is-next"><small>下一篇</small><span>{next.title}</span></a>
-					)}
-				</nav>
-			</article>
-
-			{
-				toc.length > 1 && (
-					<aside class="toc">
-						<div class="toc__head">目录</div>
-						<nav data-toc>
-							{toc.map((h) => (
-								<a href={`#${h.slug}`} class:list={["kit-toc__link", h.depth > toc[0].depth && "is-sub"]} data-toc-target={h.slug}>
-									{h.text.replace(/#$/, "")}
-								</a>
-							))}
-						</nav>
-					</aside>
-				)
-			}
-		</div>
+					</div>
+				</section>
+			)
+		}
 	</div>
 	<PreviewSwitch current="b" />
 </Layout>
 
 <style>
 	.rb {
-		--b-text: rgb(28 28 30);
-		--b-muted: rgb(140 140 148);
-		--b-line: color-mix(in oklch, var(--card-bg) 90%, black);
-		background: var(--card-bg);
-		color: var(--b-text);
+		--db-bg: color-mix(in oklch, var(--card-bg) 96.5%, black);
+		--db-card: var(--card-bg);
+		--db-text: rgb(28 28 30);
+		--db-soft: rgb(70 70 76);
+		--db-muted: rgb(138 138 146);
+		--db-line: color-mix(in oklch, var(--card-bg) 90%, black);
+		background: var(--db-card);
+		color: var(--db-text);
 		min-height: 100vh;
 	}
 
 	:global(:root.dark) .rb {
-		--b-text: rgb(238 238 240);
-		--b-muted: rgb(150 150 158);
-		--b-line: color-mix(in oklch, var(--card-bg) 85%, white);
+		--db-bg: color-mix(in oklch, var(--card-bg) 82%, black);
+		--db-text: rgb(238 238 240);
+		--db-soft: rgb(205 205 210);
+		--db-muted: rgb(145 145 152);
+		--db-line: color-mix(in oklch, var(--card-bg) 86%, white);
 	}
 
+	/* 顶栏：站名 + 类型入口 */
 	.bar {
 		position: sticky;
 		top: 0;
 		z-index: 20;
 		display: flex;
 		align-items: center;
-		gap: 1.5rem;
+		gap: 2rem;
 		height: 3.5rem;
 		padding: 0 clamp(1.25rem, 4vw, 3rem);
-		background: color-mix(in oklch, var(--card-bg) 88%, transparent);
-		-webkit-backdrop-filter: blur(12px);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--b-line);
+		background: color-mix(in oklch, var(--db-card) 86%, transparent);
+		-webkit-backdrop-filter: blur(14px) saturate(1.4);
+		backdrop-filter: blur(14px) saturate(1.4);
+		border-bottom: 1px solid var(--db-line);
 	}
 
 	.bar__logo {
@@ -131,19 +306,58 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 		letter-spacing: 0.04em;
 	}
 
-	.bar__links {
+	.bar__kinds {
 		margin-left: auto;
 		display: flex;
-		gap: 1.5rem;
-		font-size: 0.9rem;
-		color: var(--b-muted);
+		height: 100%;
+		gap: 0.25rem;
 	}
 
-	.bar__links a:hover {
+	.bar__kinds a {
+		position: relative;
+		display: flex;
+		align-items: center;
+		padding: 0 0.8rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--db-muted);
+		transition: color 0.15s;
+	}
+
+	.bar__kinds a:hover,
+	.bar__kinds a.is-on {
+		color: var(--db-text);
+	}
+
+	.bar__kinds a.is-on::after {
+		content: "";
+		position: absolute;
+		left: 0.8rem;
+		right: 0.8rem;
+		bottom: -1px;
+		height: 2.5px;
+		border-radius: 2px;
+		background: var(--primary);
+	}
+
+	.crumbs {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.85rem;
+		color: var(--db-muted);
+	}
+
+	.crumbs a:hover {
 		color: var(--primary);
 	}
 
-	/* 中间一栏正文，两边留白；宽屏右边放目录 */
+	.crumbs a:last-child {
+		color: var(--db-soft);
+		font-weight: 600;
+	}
+
+	/* ---------- 正文版式 ---------- */
 	.layout {
 		display: grid;
 		grid-template-columns: minmax(1.25rem, 1fr) minmax(0, 44rem) minmax(1.25rem, 1fr);
@@ -151,38 +365,12 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 
 	.article {
 		grid-column: 2;
-		padding: 2.5rem 0 4rem;
+		padding: 2.25rem 0 4rem;
 		min-width: 0;
 	}
 
-	.back {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.3rem;
-		font-size: 0.85rem;
-		color: var(--b-muted);
-	}
-
-	.back:hover {
-		color: var(--primary);
-	}
-
-	.meta {
-		margin-top: 2rem;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem 1rem;
-		font-size: 0.85rem;
-		color: var(--b-muted);
-	}
-
-	.meta__cat {
-		color: var(--primary);
-		font-weight: 700;
-	}
-
 	.title {
-		margin-top: 0.75rem;
+		margin-top: 1.1rem;
 		font-size: clamp(1.9rem, 4vw, 2.6rem);
 		font-weight: 900;
 		line-height: 1.3;
@@ -190,28 +378,95 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 	}
 
 	.lead {
-		margin-top: 1rem;
-		font-size: 1.1rem;
+		margin-top: 0.9rem;
+		font-size: 1.08rem;
 		line-height: 1.8;
-		color: var(--b-muted);
+		color: var(--db-muted);
 	}
 
-	.author {
-		margin-top: 1.5rem;
-		padding-bottom: 1.75rem;
+	/* 笔记属性：照 Obsidian 的属性面板，左边图标 + 属性名，右边值 */
+	.props {
+		margin-top: 1.75rem;
+		padding: 0.4rem 0;
+		border-top: 1px solid var(--db-line);
+		border-bottom: 1px solid var(--db-line);
+	}
+
+	.props__head {
+		padding: 0.5rem 0 0.35rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		color: var(--db-muted);
+	}
+
+	.props__row {
+		display: grid;
+		grid-template-columns: 7.5rem minmax(0, 1fr);
+		align-items: center;
+		min-height: 2.25rem;
+		border-radius: 0.4rem;
+		transition: background 0.15s;
+	}
+
+	.props__row:hover {
+		background: var(--db-bg);
+	}
+
+	.props__row dt {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.9rem;
-		font-weight: 600;
-		border-bottom: 1px solid var(--b-line);
+		gap: 0.45rem;
+		padding-left: 0.35rem;
+		font-size: 0.85rem;
+		color: var(--db-muted);
 	}
 
-	.author__avatar {
-		width: 2rem;
-		height: 2rem;
-		border-radius: 999px;
-		overflow: hidden;
+	.props__row dt :global(svg) {
+		font-size: 1rem;
+		flex: none;
+	}
+
+	.props__row dd {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.3rem 0.35rem;
+		font-size: 0.9rem;
+	}
+
+	.props__v {
+		font-family: var(--kit-num);
+		color: var(--db-soft);
+	}
+
+	.props__empty {
+		color: var(--db-muted);
+		font-size: 0.85rem;
+	}
+
+	.props__chip {
+		padding: 0.1rem 0.55rem;
+		border-radius: 0.4rem;
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: color-mix(in oklch, var(--primary) 80%, var(--db-text));
+		background: color-mix(in oklch, var(--db-card) 86%, var(--primary));
+		transition:
+			color 0.15s,
+			background 0.15s;
+	}
+
+	.props__chip.is-cat {
+		color: var(--db-text);
+		background: var(--db-bg);
+		border: 1px solid var(--db-line);
+	}
+
+	.props__chip:hover {
+		color: white;
+		background: var(--primary);
 	}
 
 	.cover {
@@ -219,31 +474,32 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 		width: 100%;
 		max-height: 26rem;
 		object-fit: cover;
+		object-position: top;
 		border-radius: 1rem;
+		border: 1px solid var(--db-line);
 	}
 
 	.article :global(.body) {
 		margin-top: 2rem;
 	}
 
-	.tags {
-		margin-top: 2.5rem;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
+	.ext {
+		margin-top: 2rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		height: 2.4rem;
+		padding: 0 1.1rem;
+		border-radius: 0.6rem;
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: white;
+		background: var(--primary);
+		transition: filter 0.15s;
 	}
 
-	.tags a {
-		padding: 0.3rem 0.75rem;
-		border-radius: 999px;
-		font-size: 0.82rem;
-		color: var(--b-muted);
-		border: 1px solid var(--b-line);
-	}
-
-	.tags a:hover {
-		color: var(--primary);
-		border-color: var(--primary);
+	.ext:hover {
+		filter: brightness(1.08);
 	}
 
 	.pager {
@@ -257,19 +513,26 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 		display: flex;
 		flex-direction: column;
 		gap: 0.3rem;
+		min-width: 0;
 		padding: 1rem 1.25rem;
-		border-radius: 1rem;
-		border: 1px solid var(--b-line);
-		transition: border-color 0.15s;
+		border-radius: 0.9rem;
+		border: 1px solid var(--db-line);
+		transition:
+			border-color 0.15s,
+			transform 0.4s var(--kit-spring);
 	}
 
 	.pager__item:hover {
 		border-color: var(--primary);
+		transform: translateY(-2px);
 	}
 
 	.pager__item small {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
 		font-size: 0.75rem;
-		color: var(--b-muted);
+		color: var(--db-muted);
 	}
 
 	.pager__item span {
@@ -282,6 +545,7 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 	.pager__item.is-next {
 		grid-column: 2;
 		text-align: right;
+		align-items: flex-end;
 	}
 
 	.toc {
@@ -296,7 +560,7 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 			top: 5rem;
 			align-self: start;
 			max-width: 15rem;
-			margin: 6rem 0 0 2.5rem;
+			margin: 7.5rem 0 0 2.5rem;
 		}
 
 		.toc__head {
@@ -304,17 +568,181 @@ const tags = entry.data.tags.filter((t) => t !== entry.data.category);
 			font-size: 0.75rem;
 			font-weight: 700;
 			letter-spacing: 0.08em;
-			color: var(--b-muted);
+			color: var(--db-muted);
+		}
+	}
+
+	/* ---------- 动漫详情 ---------- */
+	.anime {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	/* 海报放大模糊当背景，往下渐隐到页面底色 */
+	.anime__backdrop {
+		position: absolute;
+		inset: -3rem -3rem auto;
+		height: 30rem;
+		z-index: -1;
+		background-size: cover;
+		background-position: center 25%;
+		filter: blur(48px) saturate(1.3);
+		opacity: 0.45;
+		-webkit-mask-image: linear-gradient(to bottom, black 30%, transparent);
+		mask-image: linear-gradient(to bottom, black 30%, transparent);
+	}
+
+	.anime__inner {
+		max-width: 60rem;
+		margin: 0 auto;
+		padding: 2.25rem clamp(1.25rem, 4vw, 2rem) 3rem;
+	}
+
+	.anime__main {
+		margin-top: 1.5rem;
+		display: grid;
+		grid-template-columns: 15rem minmax(0, 1fr);
+		gap: 2.5rem;
+		align-items: start;
+	}
+
+	.anime__poster :global(.kit-cover) {
+		border-radius: 0.9rem;
+		box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.55);
+	}
+
+	.anime__info .title {
+		margin-top: 0.25rem;
+	}
+
+	.score {
+		margin-top: 1rem;
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+	}
+
+	.score b {
+		font-family: var(--kit-num);
+		font-size: 2.4rem;
+		font-weight: 900;
+		line-height: 1;
+		color: var(--primary);
+	}
+
+	.score__max {
+		font-family: var(--kit-num);
+		font-size: 0.95rem;
+		color: var(--db-muted);
+	}
+
+	.score__bar {
+		align-self: center;
+		margin-left: 0.75rem;
+		width: 8rem;
+		height: 0.4rem;
+		border-radius: 999px;
+		background: linear-gradient(to right, var(--primary) var(--p), var(--db-line) var(--p));
+	}
+
+	.anime__info .props {
+		margin-top: 1.25rem;
+	}
+
+	.anime__summary {
+		margin-top: 2rem;
+		font-size: 1rem;
+		line-height: 1.9;
+		color: var(--db-soft);
+	}
+
+	.anime__inner :global(.anime__body) {
+		margin-top: 2rem;
+	}
+
+	/* ---------- 相关笔记：灰底一整条，卡片和首页数据库一样 ---------- */
+	.related {
+		background: var(--db-bg);
+		border-top: 1px solid var(--db-line);
+	}
+
+	.related__inner {
+		max-width: 76rem;
+		margin: 0 auto;
+		padding: 2.25rem clamp(1.25rem, 4vw, 2rem) 5rem;
+	}
+
+	.related__head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.1rem;
+	}
+
+	.related__head h2 {
+		font-size: 1.25rem;
+		font-weight: 900;
+	}
+
+	.related__head a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		font-size: 0.85rem;
+		color: var(--db-muted);
+	}
+
+	.related__head a:hover {
+		color: var(--primary);
+	}
+
+	.related__grid {
+		gap: 1.1rem;
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+
+	@media (max-width: 900px) {
+		.related__grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.related__grid:not(.is-posters) > :global(:nth-child(n + 3)) {
+			display: none;
+		}
+
+		.anime__main {
+			grid-template-columns: 9rem minmax(0, 1fr);
+			gap: 1.25rem;
 		}
 	}
 
 	@media (max-width: 640px) {
-		.bar__links {
-			display: none;
+		.bar {
+			gap: 0.75rem;
 		}
 
-		.bar > :global(:last-child) {
-			margin-left: auto;
+		.bar__kinds a {
+			padding: 0 0.45rem;
+			font-size: 0.85rem;
+		}
+
+		.bar__kinds a.is-on::after {
+			left: 0.45rem;
+			right: 0.45rem;
+		}
+
+		.props__row {
+			grid-template-columns: 6rem minmax(0, 1fr);
+		}
+
+		.anime__main {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.anime__poster {
+			width: 11rem;
 		}
 	}
 </style>

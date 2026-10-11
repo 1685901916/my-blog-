@@ -27,7 +27,12 @@ const { row, index = 0 } = Astro.props;
 	<a href={row.href} class:list={["bcard", row.wide && "bcard--wide"]}>
 		<Cover src={row.cover} title={row.title} aspect={row.aspect}>
 			{typeof row.rating === "number" && <span class="bcard__badge is-rating">★ {row.rating.toFixed(1)}</span>}
-			{row.wide && <span class="bcard__badge">{row.kind}</span>}
+			{(row.wide || row.pinned) && (
+				<span class="bcard__badges">
+					{row.pinned && <span class="bcard__badge is-pin">置顶</span>}
+					{row.wide && <span class="bcard__badge is-kind">{row.kind}</span>}
+				</span>
+			)}
 		</Cover>
 		<div class="bcard__body">
 			<div class="bcard__title">{row.title}</div>
@@ -86,11 +91,22 @@ const { row, index = 0 } = Astro.props;
 		transform: scale(1.04);
 	}
 
-	.bcard__badge {
+	.bcard__badges {
 		position: absolute;
 		z-index: 2;
 		top: 0.55rem;
 		left: 0.55rem;
+		display: flex;
+		gap: 0.3rem;
+	}
+
+	/* 已经按类型分组、或者只看某个类型时，类型角标就重复了 */
+	:global([data-active-group="kind"]) .bcard__badge.is-kind,
+	:global([data-active-kind]:not([data-active-kind=""])) .bcard__badge.is-kind {
+		display: none;
+	}
+
+	.bcard__badge {
 		padding: 0.12rem 0.5rem;
 		border-radius: 0.4rem;
 		font-size: 0.72rem;
@@ -102,9 +118,20 @@ const { row, index = 0 } = Astro.props;
 	}
 
 	.bcard__badge.is-rating {
-		left: auto;
+		position: absolute;
+		z-index: 2;
+		top: 0.55rem;
 		right: 0.55rem;
 		font-family: var(--kit-num);
+	}
+
+	.bcard__badge.is-pin {
+		background: var(--primary);
+	}
+
+	/* 横图大多是网页截图，从顶部对齐比居中裁切好认 */
+	.bcard--wide :global(.kit-cover img) {
+		object-position: top;
 	}
 
 	.bcard__body {
@@ -229,7 +256,8 @@ const { row, index = 0 } = Astro.props;
 		border-right: 1px solid var(--db-line, rgb(0 0 0 / 0.06));
 	}
 
-	:global(.kit-grid.is-list) .bcard__badge {
+	:global(.kit-grid.is-list) .bcard__badge.is-rating,
+	:global(.kit-grid.is-list) .bcard__badges {
 		display: none;
 	}
 
@@ -271,6 +299,11 @@ const { row, index = 0 } = Astro.props;
 	@media (max-width: 760px) {
 		:global(.kit-grid.is-list) .bcard__props {
 			display: none;
+		}
+
+		/* 手机上横图卡片占满一行，封面压扁一点，一屏能多看几条 */
+		.bcard--wide :global(.kit-cover) {
+			--aspect: 2 / 1 !important;
 		}
 	}
 </style>

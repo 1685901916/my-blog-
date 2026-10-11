@@ -83,6 +83,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 						<label class="kit-search">
 							<Icon name="material-symbols:search-rounded" class="kit-search__icon" />
 							<input class="kit-input" type="search" data-search placeholder="搜索标题、分类、标签" aria-label="搜索" />
+							<kbd class="db__kbd" title="按 / 搜索">/</kbd>
 						</label>
 						<label class="kit-select-wrap">
 							<Icon name="material-symbols:swap-vert-rounded" />
@@ -117,6 +118,11 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			<div class="db__inner">
 				<!-- 第二排：只显示当前类型的分类（没选类型时显示文章分类） -->
 				<div class="db__facets">
+					<button type="button" class="chip is-active-tag" data-active-tag hidden title="取消这个标签">
+						<Icon name="material-symbols:tag-rounded" />
+						<span data-tag-out></span>
+						<Icon name="material-symbols:close" />
+					</button>
 					{
 						facets.map((f) => (
 							<>
@@ -393,7 +399,29 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.db__tools .kit-input {
-		width: 13rem;
+		width: 14rem;
+		padding-right: 2rem;
+	}
+
+	.db__kbd {
+		position: absolute;
+		right: 0.5rem;
+		display: grid;
+		place-items: center;
+		width: 1.2rem;
+		height: 1.2rem;
+		border-radius: 0.3rem;
+		font-family: var(--kit-num);
+		font-size: 0.7rem;
+		color: var(--db-muted);
+		border: 1px solid var(--db-line);
+		background: var(--db-card);
+		pointer-events: none;
+		transition: opacity 0.15s;
+	}
+
+	.kit-search:focus-within .db__kbd {
+		opacity: 0;
 	}
 
 	/* 第二排：分类 chip */
@@ -456,6 +484,19 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	.chip[aria-pressed="true"] small {
 		color: rgb(255 255 255 / 0.75);
+	}
+
+	/* 当前生效、但不在上面按钮里的标签 */
+	.chip.is-active-tag {
+		order: -1;
+		color: white;
+		background: var(--primary);
+		border-color: var(--primary);
+		padding: 0 0.55rem 0 0.6rem;
+	}
+
+	.chip.is-active-tag :global(svg) {
+		font-size: 0.95rem;
 	}
 
 	.chip[hidden],
@@ -582,8 +623,21 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		}
 
 		.db__count,
+		.db__kbd,
 		.db__tools .kit-select-wrap {
 			display: none;
+		}
+
+		/* 类型标签放不下时可以横滑，右边渐隐提示还有 */
+		.vtabs {
+			max-width: 100%;
+			-webkit-mask-image: linear-gradient(to right, black 85%, transparent);
+			mask-image: linear-gradient(to right, black 85%, transparent);
+		}
+
+		.vtabs .kit-tabs__item {
+			height: 3rem;
+			padding: 0 0.6rem;
 		}
 	}
 </style>

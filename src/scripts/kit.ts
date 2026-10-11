@@ -256,6 +256,10 @@ function initCollection(scope: HTMLElement) {
 		...scope.querySelectorAll<HTMLButtonElement>("[data-filter-kind]"),
 	];
 	const scoped = [...scope.querySelectorAll<HTMLElement>("[data-scope]")];
+	const activeTagEls = [
+		...scope.querySelectorAll<HTMLElement>("[data-active-tag]"),
+	];
+	const tagOuts = [...scope.querySelectorAll<HTMLElement>("[data-tag-out]")];
 	const storeKey = `kit-view:${location.pathname}`;
 	const defaultSort = scope.dataset.defaultSort ?? "date";
 	const defaultGroup = scope.dataset.defaultGroup ?? "";
@@ -353,6 +357,9 @@ function initCollection(scope: HTMLElement) {
 	}
 
 	function syncControls() {
+		// 当前类型 / 分组写到容器上，卡片可以按它调整（比如分组标题已经写了类型，就不再显示类型角标）
+		scope.dataset.activeKind = state.kind;
+		scope.dataset.activeGroup = state.group;
 		if (search && search.value !== state.q) search.value = state.q;
 		if (sortSel) sortSel.value = state.sort;
 		if (groupSel) groupSel.value = state.group;
@@ -376,6 +383,12 @@ function initCollection(scope: HTMLElement) {
 				? el.dataset.scope !== state.kind
 				: !el.hasAttribute("data-scope-default");
 		}
+		// 当前标签不在可见的标签按钮里（比如从阅读页点标签进来），单独显示一个可以取消的标签
+		const tagShown = filterBtns.some(
+			(b) => b.dataset.filter === state.tag && !b.hidden,
+		);
+		for (const el of activeTagEls) el.hidden = !state.tag || tagShown;
+		for (const el of tagOuts) el.textContent = state.tag;
 		for (const b of [viewBtns[0], kindBtns[0]]) {
 			const tabs = b?.closest<HTMLElement>("[data-tabs]");
 			if (tabs) placeIndicator(tabs, activeTab(tabs));
@@ -510,6 +523,9 @@ function initCollection(scope: HTMLElement) {
 			update({ view: b.dataset.view ?? "cards" }),
 		);
 	}
+	for (const el of activeTagEls) {
+		el.addEventListener("click", () => update({ tag: "" }));
+	}
 	// 换类型时清掉分类和标签，它们只属于原来那个类型
 	for (const b of kindBtns) {
 		b.addEventListener("click", () =>
@@ -609,6 +625,20 @@ document.addEventListener("click", (ev) => {
 		.swup;
 	if (swup) swup.navigate(href);
 	else location.href = href;
+});
+
+// 按 / 直接聚焦卡片视图的搜索框（正在输入时不拦）
+document.addEventListener("keydown", (ev) => {
+	if (ev.key !== "/" || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+	const t = ev.target as HTMLElement;
+	if (t.closest("input, textarea, select, [contenteditable]")) return;
+	const input = document.querySelector<HTMLInputElement>(
+		"[data-collection] [data-search]",
+	);
+	if (!input) return;
+	ev.preventDefault();
+	input.focus({ preventScroll: true });
+	input.scrollIntoView({ block: "nearest" });
 });
 
 if (document.readyState === "loading") {

@@ -1,13 +1,12 @@
 ---
 // 预览方案切换（只在 /preview/ 下的原型页用）
 interface Props {
-	current: "a" | "b" | "c";
+	current: "a" | "b";
 }
 const { current } = Astro.props;
 const items = [
 	{ id: "a", label: "A 应用式" },
 	{ id: "b", label: "B 主页 + 数据库" },
-	{ id: "c", label: "C B站空间式" },
 ];
 ---
 
