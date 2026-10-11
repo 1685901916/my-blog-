@@ -1,0 +1,249 @@
+---
+// 方案 2 · 照搬 Obsidian「管理」（Notion 式）首页：管理页 = 横幅 + 简介 + 每个文件夹一张卡片 + 最近编辑表格
+import { Icon } from "astro-icon/components";
+import P2Shell from "../../../components/preview/p2/P2Shell.astro";
+import NPage from "../../../components/preview/p2/NPage.astro";
+import { coverOf, getAcg, SECTIONS } from "../../../components/preview/acg";
+import { tagColor } from "../../../components/preview/p2/notion";
+import { profileConfig } from "../../../config";
+
+const all = await getAcg();
+const folders = [...SECTIONS].sort((a, b) => a.folder.localeCompare(b.folder, "zh-Hans-CN", { numeric: true }));
+const of = (k: string) => all.filter((i) => i.section.key === k);
+const recent = [...all].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 12);
+---
+
+<P2Shell title="方案 2 · 管理">
+	<NPage banner="/assets/desktop-banner/custom-bg.jpg" icon="material-symbols:inventory-2-outline-rounded" title="管理" crumbs={[{ name: "管理" }]}>
+		<p slot="intro" class="intro">{profileConfig.bio}</p>
+
+		<h2 class="h">文件夹</h2>
+		<div class="folders">
+			{
+				folders.map((s, n) => {
+					const items = of(s.key);
+					const pics = items.map(coverOf).filter(Boolean).slice(0, 4);
+					return (
+						<a href={`/preview/2/${s.key}/`} class="folder" data-reveal style={`--i: ${n}`}>
+							<div class:list={["folder__pics", `n-${pics.length}`]}>
+								{pics.length ? (
+									pics.map((p) => <img src={p} alt="" loading="lazy" referrerpolicy="no-referrer" />)
+								) : (
+									<Icon name={s.icon} />
+								)}
+							</div>
+							<div class="folder__body">
+								<b>
+									<Icon name="material-symbols:folder-outline" />
+									{s.name}
+								</b>
+								<small>
+									{s.folder} · {items.length} 篇
+								</small>
+							</div>
+						</a>
+					);
+				})
+			}
+		</div>
+
+		<h2 class="h">最近编辑</h2>
+		<div class="table" role="table">
+			<div class="tr th" role="row">
+				<span><Icon name="material-symbols:subject-rounded" />名称</span>
+				<span><Icon name="material-symbols:folder-outline" />文件夹</span>
+				<span><Icon name="material-symbols:tag-rounded" />标签</span>
+				<span><Icon name="material-symbols:schedule-outline-rounded" />编辑时间</span>
+			</div>
+			{
+				recent.map((i) => (
+					<a href={`/preview/2/i/${i.id}/`} class="tr" role="row">
+						<span class="tr__name">
+							<Icon name="material-symbols:description-outline" />
+							{i.title}
+						</span>
+						<span>
+							<em class={`nt nt-${tagColor(i.section.name)}`}>{i.section.name}</em>
+						</span>
+						<span>
+							{i.tags.slice(0, 3).map((t) => (
+								<em class={`nt nt-${tagColor(t)}`}>{t}</em>
+							))}
+						</span>
+						<span class="tr__date">{i.date}</span>
+					</a>
+				))
+			}
+		</div>
+	</NPage>
+</P2Shell>
+
+<style>
+	.intro {
+		margin-top: 0.75rem;
+		font-size: 1rem;
+		line-height: 1.8;
+		color: var(--n-soft);
+	}
+
+	.h {
+		margin: 2.5rem 0 0.75rem;
+		padding-bottom: 0.4rem;
+		font-size: 1.25rem;
+		font-weight: 700;
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	.folders {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+		gap: 1rem;
+	}
+
+	.folder {
+		overflow: hidden;
+		border-radius: 0.4rem;
+		box-shadow:
+			0 0 0 1px var(--n-line),
+			0 2px 4px var(--n-line);
+		transition: background 0.15s;
+	}
+
+	.folder:hover {
+		background: var(--n-hover);
+	}
+
+	/* 文件夹封面：里面前几张图拼成一格 */
+	.folder__pics {
+		aspect-ratio: 16 / 10;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		gap: 2px;
+		overflow: hidden;
+		background: color-mix(in oklch, var(--n-bg) 95%, black);
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	.folder__pics img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.folder__pics.n-1 img {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+
+	.folder__pics.n-2 img,
+	.folder__pics.n-3 img:first-child {
+		grid-row: span 2;
+	}
+
+	.folder__pics.n-0 {
+		display: grid;
+		place-items: center;
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr;
+		font-size: 2.5rem;
+		color: var(--n-muted);
+	}
+
+	.folder__body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		padding: 0.6rem 0.75rem 0.7rem;
+	}
+
+	.folder__body b {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
+	.folder__body b :global(svg) {
+		color: var(--n-muted);
+	}
+
+	.folder__body small {
+		font-size: 0.75rem;
+		color: var(--n-muted);
+	}
+
+	.table {
+		font-size: 0.85rem;
+		border-top: 1px solid var(--n-line);
+	}
+
+	.tr {
+		display: grid;
+		grid-template-columns: minmax(10rem, 1.4fr) 8rem minmax(0, 2fr) 7rem;
+		min-height: 2.35rem;
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	.tr > span {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0 0.6rem;
+		overflow: hidden;
+		white-space: nowrap;
+		border-right: 1px solid var(--n-line);
+	}
+
+	.tr > span:last-child {
+		border-right: none;
+	}
+
+	.th {
+		font-size: 0.8rem;
+		color: var(--n-muted);
+	}
+
+	.th :global(svg) {
+		font-size: 0.95rem;
+	}
+
+	a.tr:hover {
+		background: var(--n-hover);
+	}
+
+	.tr__name {
+		font-weight: 600;
+	}
+
+	.tr__name :global(svg) {
+		flex: none;
+		color: var(--n-muted);
+	}
+
+	.tr__date {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		color: var(--n-soft);
+	}
+
+	.nt {
+		font-style: normal;
+		font-size: 0.72rem;
+		line-height: 1.6;
+		padding: 0 0.4rem;
+		border-radius: 0.2rem;
+	}
+
+	@media (max-width: 900px) {
+		.tr {
+			grid-template-columns: minmax(0, 1fr) 6rem;
+		}
+
+		.tr > span:nth-child(3),
+		.tr > span:nth-child(4) {
+			display: none;
+		}
+	}
+</style>

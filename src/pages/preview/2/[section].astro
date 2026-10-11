@@ -1,0 +1,342 @@
+---
+// 方案 2 的文件夹页（Notion 数据库）：横幅 + 标题 + 视图切换（画廊 / 表格）+ 子文件夹筛选 + 搜索
+// 筛选、排序、视图切换交给 kit.ts：子文件夹 = data-cat，标签 = data-tags
+import { Icon } from "astro-icon/components";
+import NCard from "../../../components/preview/p2/NCard.astro";
+import NPage from "../../../components/preview/p2/NPage.astro";
+import P2Shell from "../../../components/preview/p2/P2Shell.astro";
+import { coverOf, getSectionData, SECTIONS } from "../../../components/preview/acg";
+import { tagColor } from "../../../components/preview/p2/notion";
+
+export function getStaticPaths() {
+	return SECTIONS.map((s) => ({ params: { section: s.key } }));
+}
+
+const { section } = Astro.params;
+const { section: sec, items, essays, subs, tags } = await getSectionData(section as string);
+// 横幅：这个文件夹里第一张横图（笔记里的截图），没有就用海报
+const banner = items.map((i) => i.image).find(Boolean) ?? items.map(coverOf).find(Boolean);
+---
+
+<P2Shell title={`${sec.name} · 方案 2`} section={sec.key}>
+	<NPage banner={banner} icon={sec.icon} title={sec.name} crumbs={[{ name: "管理", href: "/preview/2/" }, { name: sec.name }]}>
+		<p slot="intro" class="intro">
+			<code>{sec.folder}</code> 文件夹 · {items.length} 篇笔记{essays.length > 0 && ` · ${essays.length} 篇随笔`}
+		</p>
+
+		{
+			essays.length > 0 && (
+				<div class="callout">
+					<Icon name="material-symbols:edit-note-outline-rounded" />
+					<div>
+						<b>随笔</b>
+						{essays.map((i) => (
+							<a href={`/preview/2/i/${i.id}/`}>{i.title}</a>
+						))}
+					</div>
+				</div>
+			)
+		}
+
+		<div class="db" data-collection data-default-sort="rating" data-default-view="cards">
+			<div class="db__bar">
+				<div class="kit-tabs views" data-tabs role="group" aria-label="视图">
+					<button type="button" class="kit-tabs__item" data-view="cards" aria-pressed="true">
+						<Icon name="material-symbols:gallery-thumbnail-outline-rounded" />画廊
+					</button>
+					<button type="button" class="kit-tabs__item" data-view="list" aria-pressed="false">
+						<Icon name="material-symbols:view-list-outline-rounded" />表格
+					</button>
+				</div>
+				<div class="db__tools">
+					<label class="search">
+						<Icon name="material-symbols:search-rounded" />
+						<input type="search" data-search placeholder="搜索" aria-label="搜索" />
+					</label>
+					<select data-sort aria-label="排序">
+						<option value="rating" selected>喜欢优先</option>
+						<option value="date">编辑时间</option>
+						<option value="title">名称</option>
+					</select>
+				</div>
+			</div>
+
+			{
+				(subs.length > 0 || tags.length > 0) && (
+					<div class="filters">
+						{subs.length > 0 && (
+							<>
+								<button type="button" class="chip" data-filter-cat="" aria-pressed="true">全部</button>
+								{subs.map(([s, n]) => (
+									<button type="button" class="chip" data-filter-cat={s} aria-pressed="false">
+										<Icon name="material-symbols:folder-outline" />
+										{s}
+										<small>{n}</small>
+									</button>
+								))}
+								<span class="sep" />
+							</>
+						)}
+						{tags.slice(0, 14).map(([t]) => (
+							<button type="button" class={`chip is-tag nt nt-${tagColor(t)}`} data-filter={t} aria-pressed="false">
+								{t}
+							</button>
+						))}
+					</div>
+				)
+			}
+
+			<div class="table-head">
+				<span><Icon name="material-symbols:subject-rounded" />名称</span>
+				<div class="table-head__props">
+					<span><Icon name="material-symbols:folder-outline" />文件夹</span>
+					<span><Icon name="material-symbols:tag-rounded" />标签</span>
+					<span>评分 / 字数</span>
+					<span><Icon name="material-symbols:schedule-outline-rounded" />编辑时间</span>
+				</div>
+			</div>
+			<div class="kit-grid grid" data-items>
+				{items.map((i, n) => <NCard item={i} index={n} />)}
+			</div>
+		</div>
+	</NPage>
+</P2Shell>
+
+<style>
+	.intro {
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--n-soft);
+	}
+
+	.intro code {
+		padding: 0.1rem 0.35rem;
+		border-radius: 0.25rem;
+		font-size: 0.82rem;
+		color: #eb5757;
+		background: var(--n-hover);
+	}
+
+	.callout {
+		margin-top: 1.25rem;
+		display: flex;
+		gap: 0.6rem;
+		padding: 0.9rem 1rem;
+		border-radius: 0.4rem;
+		background: var(--n-hover);
+		font-size: 0.9rem;
+	}
+
+	.callout > :global(svg) {
+		flex: none;
+		font-size: 1.3rem;
+	}
+
+	.callout div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+		align-items: baseline;
+	}
+
+	.callout a {
+		text-decoration: underline;
+		text-decoration-color: var(--n-line);
+		text-underline-offset: 3px;
+	}
+
+	.callout a:hover {
+		text-decoration-color: currentColor;
+	}
+
+	.db {
+		margin-top: 1.75rem;
+	}
+
+	.db__bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	/* Notion 的视图标签：文字 + 底部黑线 */
+	.views {
+		padding: 0;
+		background: none;
+		border-radius: 0;
+	}
+
+	.views .kit-tabs__item {
+		height: 2.4rem;
+		gap: 0.3rem;
+		padding: 0 0.6rem;
+		border-radius: 0;
+		font-size: 0.85rem;
+		color: var(--n-muted);
+	}
+
+	.views .kit-tabs__item[aria-pressed="true"] {
+		color: var(--n-text);
+	}
+
+	.views :global(.kit-tabs__ind) {
+		top: auto;
+		bottom: -1px;
+		height: 2px;
+		border-radius: 0;
+		background: var(--n-text);
+	}
+
+	.db__tools {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.search {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.search :global(svg) {
+		position: absolute;
+		left: 0.45rem;
+		color: var(--n-muted);
+	}
+
+	.search input,
+	.db__tools select {
+		height: 1.85rem;
+		border-radius: 0.3rem;
+		font-size: 0.82rem;
+		color: inherit;
+		background: transparent;
+		border: none;
+		outline: none;
+	}
+
+	.search input {
+		width: 9rem;
+		padding: 0 0.5rem 0 1.7rem;
+	}
+
+	.search input:focus,
+	.db__tools select:hover {
+		background: var(--n-hover);
+	}
+
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.75rem 0;
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		height: 1.65rem;
+		padding: 0 0.55rem;
+		border-radius: 999px;
+		font-size: 0.8rem;
+		color: var(--n-soft);
+		border: 1px solid var(--n-line);
+		transition: background 0.15s;
+	}
+
+	.chip small {
+		font-family: var(--kit-num);
+		color: var(--n-muted);
+	}
+
+	.chip:hover {
+		background: var(--n-hover);
+	}
+
+	.chip[aria-pressed="true"] {
+		color: rgb(35 131 226);
+		border-color: rgb(35 131 226 / 0.5);
+		background: rgb(35 131 226 / 0.08);
+	}
+
+	.chip.is-tag {
+		height: 1.4rem;
+		border: none;
+		border-radius: 0.2rem;
+		font-style: normal;
+	}
+
+	.chip.is-tag[aria-pressed="true"] {
+		box-shadow: 0 0 0 2px rgb(35 131 226 / 0.6);
+	}
+
+	.sep {
+		width: 1px;
+		height: 1.1rem;
+		margin: 0 0.35rem;
+		background: var(--n-line);
+	}
+
+	.grid {
+		margin-top: 0.5rem;
+		gap: 1rem;
+	}
+
+	.grid:not(.is-list) {
+		grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+	}
+
+	.grid.is-list {
+		gap: 0;
+		margin-top: 0;
+	}
+
+	/* 表头只在表格视图出现 */
+	.table-head {
+		display: none;
+	}
+
+	.db:has(.grid.is-list) .table-head {
+		display: grid;
+		grid-template-columns: minmax(12rem, 1.6fr) minmax(0, 3fr);
+		margin-top: 0.5rem;
+		font-size: 0.78rem;
+		color: var(--n-muted);
+		border-top: 1px solid var(--n-line);
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	.table-head span {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		height: 2.1rem;
+		padding: 0 0.6rem;
+		border-right: 1px solid var(--n-line);
+	}
+
+	/* 和 NCard 表格行用同样的列宽 */
+	.table-head__props {
+		display: grid;
+		grid-template-columns: 9rem minmax(0, 1fr) 5.5rem 6.5rem;
+	}
+
+	.table-head__props span:last-child {
+		border-right: none;
+	}
+
+	@media (max-width: 900px) {
+		.db__bar {
+			flex-wrap: wrap;
+		}
+
+		.grid:not(.is-list) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>

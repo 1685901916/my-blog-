@@ -1,0 +1,217 @@
+---
+// 方案 2 的画廊卡片（Notion 画廊视图）：上面预览图，下面标题 + 属性；
+// 列表视图（kit.ts 给网格加 .is-list）时同一份标记变成表格的一行
+import { Icon } from "astro-icon/components";
+import { type AcgItem, coverOf, initialOf } from "../acg";
+import { tagColor } from "./notion";
+
+interface Props {
+	item: AcgItem;
+	index?: number;
+}
+const { item, index = 0 } = Astro.props;
+const img = item.image || coverOf(item);
+---
+
+<div
+	class="nc-wrap"
+	data-item
+	data-reveal
+	data-title={item.title}
+	data-cat={item.sub[0] ?? ""}
+	data-tags={item.tags.join("|")}
+	data-date={item.date}
+	data-rating={item.rating ?? (item.marks.length ? 5 + item.marks.length : "")}
+	style={`--i: ${Math.min(index, 12)}`}
+>
+	<a href={`/preview/2/i/${item.id}/`} class="nc">
+		<div class:list={["nc__pic", !img && "is-empty"]}>
+			{img ? <img src={img} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span>{item.excerpt || initialOf(item)}</span>}
+		</div>
+		<div class="nc__body">
+			<div class="nc__title">
+				<Icon name={item.section.kind === "person" ? "material-symbols:face-outline" : "material-symbols:description-outline"} />
+				<span>{item.title}</span>
+				{item.marks.includes("heart") && <i class="nc__mark">♡</i>}
+				{item.marks.includes("star") && <i class="nc__mark is-star">☆</i>}
+			</div>
+			<div class="nc__props">
+				<span class="nc__cell nc__folder">
+					{item.sub.length ? item.sub.map((s) => <em class={`nt nt-${tagColor(s)}`}>{s}</em>) : <em class="nt nt-0">{item.section.name}</em>}
+				</span>
+				<span class="nc__cell nc__tags">
+					{item.tags
+						.filter((t) => !item.sub.includes(t))
+						.slice(0, 3)
+						.map((t) => (
+							<em class={`nt nt-${tagColor(t)}`}>{t}</em>
+						))}
+				</span>
+				<span class="nc__cell nc__num">{typeof item.rating === "number" ? `★ ${item.rating.toFixed(1)}` : `${item.words} 字`}</span>
+				<span class="nc__cell nc__date">{item.date}</span>
+			</div>
+		</div>
+	</a>
+</div>
+
+<style>
+	.nc {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		overflow: hidden;
+		border-radius: 0.4rem;
+		background: var(--n-bg);
+		box-shadow:
+			0 0 0 1px var(--n-line),
+			0 2px 4px var(--n-line);
+		transition: background 0.15s;
+	}
+
+	.nc:hover {
+		background: color-mix(in oklch, var(--n-bg) 97%, black);
+	}
+
+	.nc__pic {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border-bottom: 1px solid var(--n-line);
+		background: color-mix(in oklch, var(--n-bg) 96%, black);
+	}
+
+	.nc__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 25%;
+	}
+
+	/* 没图：Notion 画廊会显示页面内容的开头，这里用摘要 */
+	.nc__pic.is-empty span {
+		display: block;
+		padding: 0.9rem 1rem;
+		font-size: 0.75rem;
+		line-height: 1.7;
+		color: var(--n-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 5;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.nc__body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+		padding: 0.6rem 0.75rem 0.75rem;
+	}
+
+	.nc__title {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		min-width: 0;
+	}
+
+	.nc__title :global(svg) {
+		flex: none;
+		color: var(--n-muted);
+	}
+
+	.nc__title span {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.nc__mark {
+		font-style: normal;
+		color: #e5487a;
+	}
+
+	.nc__mark.is-star {
+		color: #d99a00;
+	}
+
+	.nc__props {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+
+	.nc__cell {
+		display: contents;
+	}
+
+	.nc__num,
+	.nc__date {
+		display: none;
+	}
+
+	.nt {
+		font-style: normal;
+		font-size: 0.72rem;
+		line-height: 1.6;
+		padding: 0 0.4rem;
+		border-radius: 0.2rem;
+		white-space: nowrap;
+	}
+
+	/* ---------- 表格视图 ---------- */
+	:global(.kit-grid.is-list) .nc {
+		flex-direction: row;
+		align-items: center;
+		border-radius: 0;
+		box-shadow: none;
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	:global(.kit-grid.is-list) .nc__pic {
+		display: none;
+	}
+
+	:global(.kit-grid.is-list) .nc__body {
+		flex: 1;
+		display: grid;
+		grid-template-columns: minmax(12rem, 1.6fr) minmax(0, 3fr);
+		align-items: center;
+		padding: 0;
+		min-height: 2.4rem;
+	}
+
+	:global(.kit-grid.is-list) .nc__title {
+		padding: 0 0.6rem;
+		height: 100%;
+		border-right: 1px solid var(--n-line);
+	}
+
+	:global(.kit-grid.is-list) .nc__props {
+		display: grid;
+		grid-template-columns: 9rem minmax(0, 1fr) 5.5rem 6.5rem;
+		height: 100%;
+		gap: 0;
+	}
+
+	:global(.kit-grid.is-list) .nc__cell {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0 0.6rem;
+		height: 100%;
+		overflow: hidden;
+		border-right: 1px solid var(--n-line);
+	}
+
+	:global(.kit-grid.is-list) .nc__num,
+	:global(.kit-grid.is-list) .nc__date {
+		font-family: var(--kit-num);
+		font-size: 0.78rem;
+		color: var(--n-soft);
+	}
+
+	:global(.kit-grid.is-list) .nc__date {
+		border-right: none;
+	}
+</style>

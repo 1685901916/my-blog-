@@ -1,0 +1,475 @@
+---
+// 方案 1 · 按 ACG 分区（Bangumi 式）首页：
+// 个人条 + 各分区统计 → 动画 / 漫画 / 小说 / 游戏 各一排海报 → 左：最近写的感想（时间线），右：人物 / 标签 / 随笔
+import { Icon } from "astro-icon/components";
+import Entry from "../../../components/preview/p1/Entry.astro";
+import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
+import P1Shell from "../../../components/preview/p1/P1Shell.astro";
+import { coverOf, getAcg, initialOf, SECTIONS } from "../../../components/preview/acg";
+import { profileConfig } from "../../../config";
+
+const all = await getAcg();
+const items = all.filter((i) => !i.essay);
+const essays = all.filter((i) => i.essay);
+const of = (k: string) => items.filter((i) => i.section.key === k);
+const works = SECTIONS.filter((s) => s.kind === "work");
+const people = items.filter((i) => i.section.kind === "person").slice(0, 12);
+const recent = [...items].filter((i) => i.words > 20).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 8);
+const totalWords = all.reduce((n, i) => n + i.words, 0);
+const tagCount = new Map<string, number>();
+for (const i of items) for (const t of i.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const topTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 24);
+const subsOf = (k: string) => [...new Set(of(k).map((i) => i.sub[0]).filter(Boolean))];
+---
+
+<P1Shell title="方案 1 · 按分区">
+	<!-- 个人条：头像 + 简介 + 每个分区记了多少 -->
+	<section class="me" data-reveal>
+		<ImageWrapper class="me__avatar" src={profileConfig.avatar || ""} alt="" />
+		<div class="me__text">
+			<h1 class="me__name">{profileConfig.name}</h1>
+			<p class="me__bio">{profileConfig.bio}</p>
+		</div>
+		<dl class="me__stats">
+			{
+				works.map((s) => (
+					<a href={`/preview/1/${s.key}/`}>
+						<dt>{s.name}</dt>
+						<dd>{of(s.key).length}</dd>
+					</a>
+				))
+			}
+			<a href="/preview/1/character/">
+				<dt>人物</dt>
+				<dd>{items.filter((i) => i.section.kind === "person").length}</dd>
+			</a>
+			<div>
+				<dt>笔记字数</dt>
+				<dd>{(totalWords / 1000).toFixed(1)}k</dd>
+			</div>
+		</dl>
+	</section>
+
+	<!-- 作品分区：每个一排海报 -->
+	{
+		works.map((s) => (
+			<section class="block" data-reveal>
+				<header class="block__head">
+					<h2>
+						<Icon name={s.icon} />
+						{s.name}
+						<small>{of(s.key).length}</small>
+					</h2>
+					<nav class="block__subs">
+						{subsOf(s.key).map((sub) => (
+							<a href={`/preview/1/${s.key}/?cat=${encodeURIComponent(sub)}`}>{sub}</a>
+						))}
+					</nav>
+					<a href={`/preview/1/${s.key}/`} class="block__more">
+						全部
+						<Icon name="material-symbols:chevron-right-rounded" />
+					</a>
+				</header>
+				<div class="posters">
+					{of(s.key)
+						.slice(0, 8)
+						.map((i, n) => (
+							<Entry item={i} index={n} />
+						))}
+				</div>
+			</section>
+		))
+	}
+
+	<div class="lower">
+		<!-- 时间线：最近写的感想 -->
+		<section class="block" data-reveal>
+			<header class="block__head">
+				<h2><Icon name="material-symbols:edit-note-outline-rounded" />最近写的</h2>
+			</header>
+			<ol class="timeline">
+				{
+					recent.map((i) => (
+						<li>
+							<a href={`/preview/1/i/${i.id}/`} class="tl">
+								<span class:list={["tl__pic", i.section.kind === "person" && "is-round"]}>
+									{coverOf(i) ? <img src={coverOf(i)} alt="" loading="lazy" referrerpolicy="no-referrer" /> : initialOf(i)}
+								</span>
+								<span class="tl__body">
+									<span class="tl__line">
+										在 <b class="tl__sec">{i.section.name}</b> 写了 <b>《{i.title}》</b>
+									</span>
+									{i.excerpt && <span class="tl__excerpt">{i.excerpt}</span>}
+									<span class="tl__meta">
+										{i.date} · {i.words} 字
+									</span>
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ol>
+		</section>
+
+		<aside class="side">
+			<section class="box" data-reveal>
+				<h3>人物 <a href="/preview/1/character/">更多</a></h3>
+				<div class="people">
+					{people.map((i, n) => <Entry item={i} index={n} />)}
+				</div>
+			</section>
+			<section class="box" data-reveal>
+				<h3>标签</h3>
+				<div class="cloud">
+					{topTags.map(([t, n]) => (
+						<span style={`--w: ${Math.min(n, 5)}`}>
+							{t}
+							<small>{n}</small>
+						</span>
+					))}
+				</div>
+			</section>
+			<section class="box" data-reveal>
+				<h3>随笔</h3>
+				<ul class="essays">
+					{essays.map((i) => (
+						<li>
+							<a href={`/preview/1/i/${i.id}/`}>
+								<span>{i.title}</span>
+								<small>{i.section.name}</small>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		</aside>
+	</div>
+</P1Shell>
+
+<style>
+	.me {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 1.25rem 1.5rem;
+		border-radius: 0.9rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+	}
+
+	.me :global(.me__avatar) {
+		width: 4.25rem;
+		height: 4.25rem;
+		border-radius: 999px;
+		overflow: hidden;
+		flex: none;
+	}
+
+	.me__text {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.me__name {
+		font-size: 1.25rem;
+		font-weight: 900;
+	}
+
+	.me__bio {
+		margin-top: 0.3rem;
+		font-size: 0.85rem;
+		line-height: 1.7;
+		color: var(--p1-soft);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.me__stats {
+		display: flex;
+		gap: 0.25rem;
+	}
+
+	.me__stats > * {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 4.25rem;
+		padding: 0.5rem 0.6rem;
+		border-radius: 0.6rem;
+		transition: background 0.15s;
+	}
+
+	.me__stats > a:hover {
+		background: var(--p1-bg);
+	}
+
+	.me__stats dt {
+		order: 2;
+		font-size: 0.75rem;
+		color: var(--p1-muted);
+	}
+
+	.me__stats dd {
+		font-family: var(--kit-num);
+		font-size: 1.35rem;
+		font-weight: 800;
+		color: var(--primary);
+	}
+
+	.block {
+		margin-top: 1.75rem;
+	}
+
+	.block__head {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding-bottom: 0.65rem;
+		margin-bottom: 1rem;
+		border-bottom: 1px solid var(--p1-line);
+	}
+
+	.block__head h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 1.1rem;
+		font-weight: 900;
+	}
+
+	.block__head h2 :global(svg) {
+		color: var(--primary);
+	}
+
+	.block__head h2 small {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--p1-muted);
+	}
+
+	.block__subs {
+		display: flex;
+		gap: 0.85rem;
+		font-size: 0.82rem;
+		color: var(--p1-soft);
+	}
+
+	.block__subs a:hover,
+	.block__more:hover {
+		color: var(--primary);
+	}
+
+	.block__more {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		font-size: 0.82rem;
+		color: var(--p1-muted);
+	}
+
+	.posters {
+		display: grid;
+		grid-template-columns: repeat(8, minmax(0, 1fr));
+		gap: 1.1rem 0.9rem;
+	}
+
+	.lower {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 20rem;
+		gap: 1.75rem;
+		align-items: start;
+	}
+
+	.timeline {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.tl {
+		display: flex;
+		gap: 0.85rem;
+		padding: 0.85rem 0;
+		border-bottom: 1px dashed var(--p1-line);
+	}
+
+	.tl__pic {
+		width: 3rem;
+		height: 4rem;
+		flex: none;
+		overflow: hidden;
+		display: grid;
+		place-items: center;
+		border-radius: 0.35rem;
+		font-weight: 900;
+		color: var(--primary);
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+	}
+
+	.tl__pic.is-round {
+		height: 3rem;
+		border-radius: 999px;
+	}
+
+	.tl__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.tl__body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		min-width: 0;
+	}
+
+	.tl__line {
+		font-size: 0.85rem;
+		color: var(--p1-soft);
+	}
+
+	.tl__line b {
+		color: var(--p1-text);
+	}
+
+	.tl__line .tl__sec {
+		color: var(--primary);
+		font-weight: 700;
+	}
+
+	.tl:hover .tl__line b:last-child {
+		color: var(--primary);
+	}
+
+	.tl__excerpt {
+		font-size: 0.82rem;
+		line-height: 1.6;
+		color: var(--p1-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.tl__meta {
+		font-family: var(--kit-num);
+		font-size: 0.72rem;
+		color: var(--p1-muted);
+	}
+
+	.side {
+		margin-top: 1.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.box {
+		padding: 1rem 1.1rem;
+		border-radius: 0.8rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+	}
+
+	.box h3 {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 0.8rem;
+		font-size: 0.9rem;
+		font-weight: 800;
+	}
+
+	.box h3 a {
+		font-size: 0.78rem;
+		font-weight: 500;
+		color: var(--p1-muted);
+	}
+
+	.box h3 a:hover {
+		color: var(--primary);
+	}
+
+	.people {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.85rem 0.6rem;
+	}
+
+	.people :global(.entry__excerpt) {
+		display: none;
+	}
+
+	.people :global(.entry__title) {
+		font-size: 0.75rem;
+	}
+
+	.cloud {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	.cloud span {
+		padding: 0.15rem 0.5rem;
+		border-radius: 0.35rem;
+		font-size: calc(0.72rem + var(--w) * 0.03rem);
+		color: var(--p1-soft);
+		background: var(--p1-bg);
+	}
+
+	.cloud small {
+		margin-left: 0.2rem;
+		font-family: var(--kit-num);
+		color: var(--p1-muted);
+	}
+
+	.essays li a {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding: 0.4rem 0;
+		font-size: 0.85rem;
+		border-bottom: 1px dashed var(--p1-line);
+	}
+
+	.essays li:last-child a {
+		border-bottom: none;
+	}
+
+	.essays a:hover span {
+		color: var(--primary);
+	}
+
+	.essays small {
+		color: var(--p1-muted);
+	}
+
+	@media (max-width: 1000px) {
+		.posters {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		.posters > :global(:nth-child(n + 5)) {
+			display: none;
+		}
+
+		.lower {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.me {
+			flex-wrap: wrap;
+		}
+
+		.me__stats {
+			width: 100%;
+			overflow-x: auto;
+		}
+
+		.block__subs {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,531 @@
+---
+// 方案 1 的条目页（Bangumi 条目式）：左栏 封面 + 评分 + 信息表，右栏 感想正文；
+// 下面是 关联条目（我在笔记里 [[链接]] 到的 / 链接到这里的）和 同分区推荐
+import { Icon } from "astro-icon/components";
+import Markdown from "../../../../components/misc/Markdown.astro";
+import Entry from "../../../../components/preview/p1/Entry.astro";
+import P1Shell from "../../../../components/preview/p1/P1Shell.astro";
+import { coverOf, getItemPaths, initialOf, type ItemProps, MARK_LABEL, starsOf } from "../../../../components/preview/acg";
+
+export async function getStaticPaths() {
+	return getItemPaths();
+}
+
+const { item, outgoing, incoming, related } = Astro.props as ItemProps;
+const { Content, headings } = await item.entry.render();
+const img = coverOf(item);
+const isPerson = item.section.kind === "person";
+const stars = starsOf(item.rating);
+const bgm = item.entry.data.bgm;
+const hasBody = (item.entry.body ?? "").trim().length > 0;
+// 关联：出链和入链合并去重，标上方向
+const linked = [
+	...outgoing.map((i) => ({ i, dir: "提到" })),
+	...incoming.filter((i) => !outgoing.includes(i)).map((i) => ({ i, dir: "被提到" })),
+];
+const toc = headings.filter((h) => h.depth <= 2);
+---
+
+<P1Shell title={item.title} current={item.section.key}>
+	<nav class="crumbs">
+		<a href="/preview/1/">首页</a><span>›</span>
+		<a href={`/preview/1/${item.section.key}/`}>{item.section.name}</a>
+		{
+			item.sub.map((s, n) => (
+				<>
+					<span>›</span>
+					{n === 0 ? <a href={`/preview/1/${item.section.key}/?cat=${encodeURIComponent(s)}`}>{s}</a> : <span>{s}</span>}
+				</>
+			))
+		}
+	</nav>
+
+	<header class="title">
+		<h1>{item.title}</h1>
+		{
+			item.marks.map((m) => (
+				<span class:list={["mark", `is-${m}`]}>
+					<Icon name={m === "heart" ? "material-symbols:favorite-rounded" : "material-symbols:star-rounded"} />
+					{MARK_LABEL[m]}
+				</span>
+			))
+		}
+		{item.essay && <span class="mark">随笔</span>}
+	</header>
+
+	<div class="subject">
+		<aside class="info">
+			<div class:list={["pic", isPerson && "is-round", !img && "is-empty"]}>
+				{img ? <img src={img} alt={item.title} referrerpolicy="no-referrer" /> : <span>{initialOf(item)}</span>}
+			</div>
+
+			{
+				stars > 0 && (
+					<div class="score">
+						<b>{item.rating?.toFixed(1)}</b>
+						<div>
+							<span class="score__stars" style={`--s: ${stars}`} />
+							<small>我的评分</small>
+						</div>
+					</div>
+				)
+			}
+
+			<ul class="table">
+				<li><span>分区</span><a href={`/preview/1/${item.section.key}/`}>{item.section.name}</a></li>
+				{item.sub.length > 0 && <li><span>分类</span>{item.sub.join(" / ")}</li>}
+				{
+					item.tags.length > 0 && (
+						<li>
+							<span>标签</span>
+							<em class="tags">
+								{item.tags.map((t) => (
+									<a href={`/preview/1/${item.section.key}/?tag=${encodeURIComponent(t)}`}>{t}</a>
+								))}
+							</em>
+						</li>
+					)
+				}
+				<li><span>字数</span>{item.words} 字</li>
+				<li><span>更新</span>{item.date}</li>
+				{
+					bgm && (
+						<li>
+							<span>Bangumi</span>
+							<a href={`https://bgm.tv/subject/${bgm}`} target="_blank" rel="noopener noreferrer">
+								subject/{bgm}
+								<Icon name="material-symbols:north-east-rounded" />
+							</a>
+						</li>
+					)
+				}
+			</ul>
+		</aside>
+
+		<article class="body">
+			<div class="body__head">
+				<h2>我的感想</h2>
+				{toc.length > 2 && (
+					<nav class="toc">
+						{toc.map((h) => (
+							<a href={`#${h.slug}`}>{h.text.replace(/#$/, "")}</a>
+						))}
+					</nav>
+				)}
+			</div>
+			{
+				hasBody ? (
+					<Markdown class="markdown-content md">
+						<Content />
+					</Markdown>
+				) : (
+					<p class="empty">这条还没写感想，只是先收进来了。</p>
+				)
+			}
+		</article>
+	</div>
+
+	{
+		linked.length > 0 && (
+			<section class="block">
+				<h2 class="block__title">
+					<Icon name="material-symbols:hub-outline" />
+					关联条目<small>{linked.length}</small>
+				</h2>
+				<div class="links">
+					{linked.map(({ i, dir }) => (
+						<a href={`/preview/1/i/${i.id}/`} class="link">
+							<span class:list={["link__pic", i.section.kind === "person" && "is-round"]}>
+								{coverOf(i) ? <img src={coverOf(i)} alt="" loading="lazy" referrerpolicy="no-referrer" /> : initialOf(i)}
+							</span>
+							<span class="link__text">
+								<b>{i.title}</b>
+								<small>
+									{i.section.name} · {dir}
+								</small>
+							</span>
+						</a>
+					))}
+				</div>
+			</section>
+		)
+	}
+
+	{
+		related.length > 0 && (
+			<section class="block">
+				<h2 class="block__title">
+					<Icon name={item.section.icon} />
+					同在{item.section.name}
+				</h2>
+				<div class="related" style={`--cols: ${item.section.kind === "misc" ? 3 : 6}`}>
+					{related.map((i, n) => (
+						<Entry item={i} index={n} />
+					))}
+				</div>
+			</section>
+		)
+	}
+</P1Shell>
+
+<style>
+	.crumbs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		font-size: 0.8rem;
+		color: var(--p1-muted);
+	}
+
+	.crumbs a:hover {
+		color: var(--primary);
+	}
+
+	.title {
+		margin-top: 0.75rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--p1-line);
+	}
+
+	.title h1 {
+		font-size: 1.6rem;
+		font-weight: 900;
+		margin-right: 0.25rem;
+	}
+
+	.mark {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		height: 1.5rem;
+		padding: 0 0.55rem;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: var(--p1-soft);
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+	}
+
+	.mark.is-heart {
+		color: #e5487a;
+		border-color: color-mix(in oklch, #e5487a 35%, transparent);
+	}
+
+	.mark.is-star {
+		color: #d99a00;
+		border-color: color-mix(in oklch, #d99a00 35%, transparent);
+	}
+
+	.subject {
+		margin-top: 1.5rem;
+		display: grid;
+		grid-template-columns: 15rem minmax(0, 1fr);
+		gap: 2rem;
+		align-items: start;
+	}
+
+	.info {
+		position: sticky;
+		top: 4.5rem;
+	}
+
+	.pic {
+		overflow: hidden;
+		aspect-ratio: 3 / 4;
+		border-radius: 0.6rem;
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+		box-shadow: 0 12px 30px -18px rgb(0 0 0 / 0.5);
+	}
+
+	.pic.is-round {
+		width: 11rem;
+		margin: 0 auto;
+		aspect-ratio: 1;
+		border-radius: 999px;
+	}
+
+	.pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.pic.is-empty {
+		display: grid;
+		place-items: center;
+		font-size: 4rem;
+		font-weight: 900;
+		color: color-mix(in oklch, var(--primary) 70%, white);
+	}
+
+	.score {
+		margin-top: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: 0.6rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+	}
+
+	.score b {
+		font-family: var(--kit-num);
+		font-size: 2.1rem;
+		font-weight: 900;
+		line-height: 1;
+		color: var(--primary);
+	}
+
+	.score__stars::before {
+		content: "★★★★★";
+		font-size: 1rem;
+		letter-spacing: 2px;
+		background: linear-gradient(to right, #f5b400 calc(var(--s) / 5 * 100%), color-mix(in oklch, var(--card-bg) 80%, black) 0);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.score small {
+		display: block;
+		font-size: 0.72rem;
+		color: var(--p1-muted);
+	}
+
+	.table {
+		width: 100%;
+		margin-top: 1rem;
+		padding: 0.4rem 0.9rem;
+		border-radius: 0.6rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+		font-size: 0.82rem;
+	}
+
+	.table li {
+		display: flex;
+		gap: 0.75rem;
+		padding: 0.45rem 0;
+		border-bottom: 1px dashed var(--p1-line);
+	}
+
+	.table li:last-child {
+		border-bottom: none;
+	}
+
+	.table li > span:first-child {
+		flex: none;
+		width: 3.75rem;
+		color: var(--p1-muted);
+	}
+
+	.table a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		color: var(--primary);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+		font-style: normal;
+	}
+
+	.tags a {
+		padding: 0 0.4rem;
+		border-radius: 0.3rem;
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+	}
+
+	.body {
+		min-width: 0;
+		padding: 1.25rem 1.75rem 2rem;
+		border-radius: 0.8rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+	}
+
+	.body__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem 1.25rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid var(--p1-line);
+	}
+
+	.body__head h2 {
+		font-size: 1rem;
+		font-weight: 900;
+	}
+
+	.toc {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 0.9rem;
+		font-size: 0.8rem;
+		color: var(--p1-muted);
+	}
+
+	.toc a:hover {
+		color: var(--primary);
+	}
+
+	.body :global(.md) {
+		margin-top: 1rem;
+	}
+
+	/* 笔记里的标题层级比较随意（一级标题当小节用），在感想框里统一压小 */
+	.body :global(.md h1) {
+		font-size: 1.3rem;
+	}
+
+	.body :global(.md h2) {
+		font-size: 1.15rem;
+	}
+
+	.body :global(.md h3),
+	.body :global(.md h4) {
+		font-size: 1rem;
+	}
+
+	.body :global(.md img) {
+		max-height: 28rem;
+		width: auto;
+		margin-inline: auto;
+	}
+
+	.empty {
+		padding: 2rem 0;
+		text-align: center;
+		color: var(--p1-muted);
+	}
+
+	.block {
+		margin-top: 2rem;
+	}
+
+	.block__title {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding-bottom: 0.65rem;
+		margin-bottom: 1rem;
+		font-size: 1.05rem;
+		font-weight: 900;
+		border-bottom: 1px solid var(--p1-line);
+	}
+
+	.block__title :global(svg) {
+		color: var(--primary);
+	}
+
+	.block__title small {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--p1-muted);
+	}
+
+	.links {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+		gap: 0.6rem;
+	}
+
+	.link {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		padding: 0.55rem 0.7rem;
+		border-radius: 0.6rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+		transition: border-color 0.15s;
+	}
+
+	.link:hover {
+		border-color: var(--primary);
+	}
+
+	.link__pic {
+		width: 2.4rem;
+		height: 3.2rem;
+		flex: none;
+		overflow: hidden;
+		display: grid;
+		place-items: center;
+		border-radius: 0.35rem;
+		font-weight: 900;
+		color: var(--primary);
+		background: color-mix(in oklch, var(--card-bg) 88%, var(--primary));
+	}
+
+	.link__pic.is-round {
+		height: 2.4rem;
+		border-radius: 999px;
+	}
+
+	.link__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.link__text {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.link__text b {
+		font-size: 0.85rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.link__text small {
+		font-size: 0.72rem;
+		color: var(--p1-muted);
+	}
+
+	.related {
+		display: grid;
+		grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+		gap: 1.2rem 1rem;
+	}
+
+	@media (max-width: 860px) {
+		.subject {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.info {
+			position: static;
+			display: grid;
+			grid-template-columns: 8rem minmax(0, 1fr);
+			gap: 0 1rem;
+		}
+
+		.info .pic {
+			grid-row: span 3;
+		}
+
+		.body {
+			padding: 1rem;
+		}
+
+		.related {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>

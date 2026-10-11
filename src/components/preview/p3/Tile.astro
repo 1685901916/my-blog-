@@ -1,0 +1,176 @@
+---
+// 方案 3 的瀑布流卡片（Pixiv 式）：图片按原比例，下面标题 + 分区；没图的笔记用渐变文字卡（像 Pixiv 小说封面）
+// data-cat = 分区名，交给 kit.ts 筛选
+import { Icon } from "astro-icon/components";
+import { type AcgItem, coverOf } from "../acg";
+
+interface Props {
+	item: AcgItem;
+	index?: number;
+	engine?: boolean;
+}
+const { item, index = 0, engine = true } = Astro.props;
+// 瀑布流里横图（笔记截图）比海报更有画面感，优先用
+const img = item.image || coverOf(item);
+// 文字卡的渐变按标题挑一种，同一条永远同色
+const hue = [...item.title].reduce((n, c) => n + (c.codePointAt(0) ?? 0), 0) % 360;
+---
+
+<div
+	class="tile-wrap"
+	data-item={engine ? "" : undefined}
+	data-title={item.title}
+	data-cat={item.section.name}
+	data-tags={item.tags.join("|")}
+	data-date={item.date}
+	data-rating={item.rating ?? (item.marks.length ? 5 + item.marks.length : img ? 1 : "")}
+	style={`--i: ${Math.min(index, 14)}`}
+>
+	<a href={`/preview/3/i/${item.id}/`} class="tile">
+		<div class:list={["tile__pic", !img && "is-text", item.section.kind === "person" && "is-person"]} style={`--h: ${hue}`}>
+			{
+				img ? (
+					<img src={img} alt={item.title} loading="lazy" referrerpolicy="no-referrer" />
+				) : (
+					<div class="tile__text">
+						<b>{item.title}</b>
+						{item.excerpt && <span>{item.excerpt}</span>}
+					</div>
+				)
+			}
+			{item.marks.includes("heart") && <Icon name="material-symbols:favorite-rounded" class="tile__heart" />}
+			{item.words > 400 && <span class="tile__badge">{(item.words / 1000).toFixed(1)}k 字</span>}
+		</div>
+		<div class="tile__title">{item.title}</div>
+		<div class="tile__sub">
+			{item.section.name}
+			{item.tags[0] && <span>#{item.tags[0]}</span>}
+		</div>
+	</a>
+</div>
+
+<style>
+	.tile-wrap {
+		break-inside: avoid;
+		margin-bottom: 1.4rem;
+	}
+
+	.tile {
+		display: block;
+	}
+
+	.tile__pic {
+		position: relative;
+		overflow: hidden;
+		border-radius: 0.5rem;
+		background: var(--x-soft-bg);
+	}
+
+	.tile__pic img {
+		display: block;
+		width: 100%;
+		height: auto;
+		min-height: 8rem;
+		max-height: 32rem;
+		object-fit: cover;
+		transition: filter 0.2s;
+	}
+
+	.tile:hover .tile__pic img {
+		filter: brightness(0.92);
+	}
+
+	.tile__pic.is-person img {
+		aspect-ratio: 1;
+	}
+
+	/* 没图：渐变底 + 标题 + 摘要 */
+	.tile__pic.is-text {
+		aspect-ratio: 4 / 5;
+		background: linear-gradient(150deg, oklch(0.93 0.05 var(--h)), oklch(0.82 0.09 calc(var(--h) + 40)));
+	}
+
+	:global(:root.dark) .tile__pic.is-text {
+		background: linear-gradient(150deg, oklch(0.38 0.06 var(--h)), oklch(0.28 0.08 calc(var(--h) + 40)));
+	}
+
+	.tile__text {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		padding: 1rem;
+		color: oklch(0.3 0.06 var(--h));
+	}
+
+	:global(:root.dark) .tile__text {
+		color: oklch(0.92 0.04 var(--h));
+	}
+
+	.tile__text b {
+		font-size: 1.15rem;
+		font-weight: 900;
+		line-height: 1.35;
+	}
+
+	.tile__text span {
+		font-size: 0.78rem;
+		line-height: 1.6;
+		opacity: 0.8;
+		display: -webkit-box;
+		-webkit-line-clamp: 4;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.tile__heart {
+		position: absolute;
+		right: 0.5rem;
+		bottom: 0.5rem;
+		font-size: 1.5rem;
+		color: #ff4060;
+		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4));
+	}
+
+	.tile__badge {
+		position: absolute;
+		top: 0.5rem;
+		left: 0.5rem;
+		padding: 0.05rem 0.4rem;
+		border-radius: 0.3rem;
+		font-family: var(--kit-num);
+		font-size: 0.7rem;
+		font-weight: 700;
+		color: white;
+		background: rgb(0 0 0 / 0.45);
+	}
+
+	.tile__title {
+		margin-top: 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.tile:hover .tile__title {
+		text-decoration: underline;
+	}
+
+	.tile__sub {
+		margin-top: 0.15rem;
+		display: flex;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		color: var(--x-muted);
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.tile__sub span {
+		color: var(--x-blue);
+	}
+</style>

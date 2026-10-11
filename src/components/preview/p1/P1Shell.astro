@@ -1,0 +1,305 @@
+---
+// 方案 1 的外框（Bangumi 式）：白色细顶栏 = 站名 + 分区导航 + 条目搜索 + 主题切换，下面居中内容
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../LightDarkSwitch.svelte";
+import Layout from "../../../layouts/Layout.astro";
+import { siteConfig } from "../../../config";
+import PreviewSwitch from "../PreviewSwitch.astro";
+import { getAcg, SECTIONS } from "../acg";
+import "../theme-styles";
+
+interface Props {
+	title: string;
+	current?: string;
+}
+const { title, current = "home" } = Astro.props;
+const all = await getAcg();
+const count = (k: string) => all.filter((i) => i.section.key === k && !i.essay).length;
+const main = SECTIONS.filter((s) => s.kind === "work");
+const people = SECTIONS.filter((s) => s.kind !== "work" && s.key !== "collect");
+const inPeople = people.some((s) => s.key === current);
+// 搜索：输入标题，从候选里选中就跳过去
+const index = all.map((i) => ({ t: i.title, h: `/preview/1/i/${i.id}/`, s: i.section.name }));
+---
+
+<Layout title={title}>
+	<div class="p1" data-no-swup>
+		<header class="top">
+			<div class="top__inner">
+				<a href="/preview/1/" class="top__logo"><span>文</span>{siteConfig.title}</a>
+				<nav class="top__nav" aria-label="分区">
+					<a href="/preview/1/" class:list={[current === "home" && "is-on"]}>首页</a>
+					{
+						main.map((s) => (
+							<a href={`/preview/1/${s.key}/`} class:list={[current === s.key && "is-on"]}>
+								{s.name}
+							</a>
+						))
+					}
+					<div class:list={["top__more", inPeople && "is-on"]} tabindex="0">
+						<span>人物<Icon name="material-symbols:expand-more" /></span>
+						<div class="top__menu">
+							{
+								people.map((s) => (
+									<a href={`/preview/1/${s.key}/`}>
+										<Icon name={s.icon} />
+										{s.name}
+										<small>{count(s.key)}</small>
+									</a>
+								))
+							}
+						</div>
+					</div>
+					<a href="/preview/1/collect/" class:list={[current === "collect" && "is-on"]}>收集</a>
+					<a href="/preview/b/?type=文章#notes">文章</a>
+				</nav>
+				<label class="top__search">
+					<Icon name="material-symbols:search-rounded" />
+					<input list="p1-titles" placeholder="搜条目" data-p1-search />
+					<datalist id="p1-titles">
+						{index.map((i) => <option value={i.t}>{i.s}</option>)}
+					</datalist>
+				</label>
+				<LightDarkSwitch client:only="svelte" />
+			</div>
+		</header>
+
+		<main class="wrap">
+			<slot />
+		</main>
+
+		<footer class="foot">
+			{siteConfig.title} · 条目来自我的 Obsidian 笔记，封面来自 Bangumi
+		</footer>
+	</div>
+	<PreviewSwitch current="1" />
+	<script is:inline type="application/json" id="p1-index" set:html={JSON.stringify(index)} />
+</Layout>
+
+<script>
+	// 搜索框：选中候选标题（或输入完全一致的标题）就跳到条目页
+	const input = document.querySelector<HTMLInputElement>("[data-p1-search]");
+	const data = JSON.parse(document.getElementById("p1-index")?.textContent || "[]") as { t: string; h: string }[];
+	const go = () => {
+		const hit = data.find((d) => d.t === input?.value.trim());
+		if (hit) location.href = hit.h;
+	};
+	input?.addEventListener("change", go);
+	input?.addEventListener("keydown", (e) => e.key === "Enter" && go());
+</script>
+
+<style>
+	.p1 {
+		--p1-bg: color-mix(in oklch, var(--card-bg) 97%, black);
+		--p1-card: var(--card-bg);
+		--p1-text: rgb(34 34 38);
+		--p1-soft: rgb(88 88 96);
+		--p1-muted: rgb(146 146 154);
+		--p1-line: color-mix(in oklch, var(--card-bg) 91%, black);
+		--db-card: var(--p1-card);
+		--db-line: var(--p1-line);
+		--db-text: var(--p1-text);
+		--db-muted: var(--p1-muted);
+		min-height: 100vh;
+		background: var(--p1-bg);
+		color: var(--p1-text);
+		font-size: 0.9rem;
+	}
+
+	:global(:root.dark) .p1 {
+		--p1-bg: color-mix(in oklch, var(--card-bg) 84%, black);
+		--p1-text: rgb(236 236 238);
+		--p1-soft: rgb(196 196 202);
+		--p1-muted: rgb(140 140 148);
+		--p1-line: color-mix(in oklch, var(--card-bg) 88%, white);
+	}
+
+	.top {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		background: color-mix(in oklch, var(--p1-card) 92%, transparent);
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--p1-line);
+	}
+
+	.top__inner {
+		max-width: 72rem;
+		height: 3.4rem;
+		margin: 0 auto;
+		padding: 0 1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.top__logo {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 800;
+		white-space: nowrap;
+	}
+
+	.top__logo span {
+		width: 1.7rem;
+		height: 1.7rem;
+		border-radius: 0.45rem;
+		display: grid;
+		place-items: center;
+		font-size: 0.85rem;
+		color: white;
+		background: var(--primary);
+	}
+
+	.top__nav {
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+
+	.top__nav > a,
+	.top__more > span {
+		position: relative;
+		display: flex;
+		align-items: center;
+		height: 3.4rem;
+		padding: 0 0.75rem;
+		font-weight: 600;
+		color: var(--p1-soft);
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.top__nav > a:hover,
+	.top__more:hover > span {
+		color: var(--primary);
+	}
+
+	.top__nav > a.is-on,
+	.top__more.is-on > span {
+		color: var(--p1-text);
+	}
+
+	.top__nav > a.is-on::after,
+	.top__more.is-on > span::after {
+		content: "";
+		position: absolute;
+		left: 0.75rem;
+		right: 0.75rem;
+		bottom: 0;
+		height: 2.5px;
+		border-radius: 2px;
+		background: var(--primary);
+	}
+
+	.top__more {
+		position: relative;
+		outline: none;
+	}
+
+	.top__menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		min-width: 10rem;
+		padding: 0.35rem;
+		border-radius: 0.7rem;
+		background: var(--p1-card);
+		border: 1px solid var(--p1-line);
+		box-shadow: 0 16px 40px -18px rgb(0 0 0 / 0.35);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-4px);
+		transition:
+			opacity 0.15s,
+			transform 0.2s,
+			visibility 0.15s;
+	}
+
+	.top__more:hover .top__menu,
+	.top__more:focus-within .top__menu {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+
+	.top__menu a {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.65rem;
+		border-radius: 0.45rem;
+		font-weight: 600;
+		color: var(--p1-soft);
+	}
+
+	.top__menu a:hover {
+		color: var(--primary);
+		background: var(--p1-bg);
+	}
+
+	.top__menu small {
+		margin-left: auto;
+		font-family: var(--kit-num);
+		color: var(--p1-muted);
+	}
+
+	.top__search {
+		margin-left: auto;
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.top__search :global(svg) {
+		position: absolute;
+		left: 0.6rem;
+		color: var(--p1-muted);
+	}
+
+	.top__search input {
+		width: 12rem;
+		height: 2rem;
+		padding: 0 0.75rem 0 2rem;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		color: inherit;
+		background: var(--p1-bg);
+		border: 1px solid var(--p1-line);
+		outline: none;
+	}
+
+	.top__search input:focus {
+		border-color: var(--primary);
+	}
+
+	.wrap {
+		max-width: 72rem;
+		margin: 0 auto;
+		padding: 1.5rem 1.25rem 3rem;
+	}
+
+	.foot {
+		padding: 1.5rem 1rem 5rem;
+		text-align: center;
+		font-size: 0.8rem;
+		color: var(--p1-muted);
+	}
+
+	@media (max-width: 900px) {
+		.top__search {
+			display: none;
+		}
+
+		.top__nav {
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		.top__inner {
+			gap: 0.5rem;
+		}
+	}
+</style>

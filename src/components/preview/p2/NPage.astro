@@ -1,0 +1,154 @@
+---
+// 方案 2 的 Notion 式页面头：横幅 + 压在横幅上的图标 + 标题 + 说明；下面是正文插槽
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	banner?: string;
+	icon?: string;
+	iconImage?: string;
+	iconRound?: boolean;
+	title: string;
+	crumbs?: { name: string; href?: string }[];
+}
+const { banner, icon, iconImage, iconRound = false, title, crumbs = [] } = Astro.props;
+---
+
+<div class="np">
+	<div class="np__crumbs">
+		{
+			crumbs.map((c, n) => (
+				<>
+					{n > 0 && <span>/</span>}
+					{c.href ? <a href={c.href}>{c.name}</a> : <b>{c.name}</b>}
+				</>
+			))
+		}
+	</div>
+	<div class:list={["np__banner", !banner && "is-plain"]}>
+		{banner && <img src={banner} alt="" referrerpolicy="no-referrer" />}
+	</div>
+	<div class="np__inner">
+		<div class:list={["np__icon", iconImage && "has-image", iconRound && "is-round"]}>
+			{iconImage ? <img src={iconImage} alt="" referrerpolicy="no-referrer" /> : icon && <Icon name={icon} />}
+		</div>
+		<h1 class="np__title">{title}</h1>
+		<slot name="intro" />
+		<slot />
+	</div>
+</div>
+
+<style>
+	.np__crumbs {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		height: 2.75rem;
+		padding: 0 1rem;
+		font-size: 0.85rem;
+		color: var(--n-soft);
+		background: color-mix(in oklch, var(--n-bg) 90%, transparent);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+	}
+
+	.np__crumbs a {
+		padding: 0.15rem 0.35rem;
+		border-radius: 0.3rem;
+	}
+
+	.np__crumbs a:hover {
+		background: var(--n-hover);
+	}
+
+	.np__crumbs b {
+		font-weight: 500;
+		color: var(--n-text);
+	}
+
+	.np__crumbs span {
+		color: var(--n-muted);
+	}
+
+	.np__banner {
+		height: 16rem;
+		overflow: hidden;
+	}
+
+	.np__banner img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 35%;
+	}
+
+	.np__banner.is-plain {
+		height: 6rem;
+	}
+
+	.np__inner {
+		max-width: 64rem;
+		margin: 0 auto;
+		padding: 0 3rem 4rem;
+	}
+
+	.np__icon {
+		position: relative;
+		margin-top: -2.6rem;
+		width: 5rem;
+		height: 5rem;
+		display: grid;
+		place-items: center;
+		font-size: 3.5rem;
+		color: var(--n-soft);
+	}
+
+	.np__banner.is-plain + .np__inner .np__icon {
+		margin-top: -1rem;
+	}
+
+	.np__icon.has-image {
+		width: 6.5rem;
+		height: 8.6rem;
+		margin-top: -5rem;
+		overflow: hidden;
+		border-radius: 0.4rem;
+		border: 3px solid var(--n-bg);
+		box-shadow: 0 8px 24px -10px rgb(0 0 0 / 0.4);
+	}
+
+	.np__icon.is-round {
+		width: 7rem;
+		height: 7rem;
+		border-radius: 999px;
+	}
+
+	.np__icon img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.np__title {
+		margin-top: 0.75rem;
+		font-size: 2.4rem;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	@media (max-width: 900px) {
+		.np__inner {
+			padding: 0 1.25rem 3rem;
+		}
+
+		.np__banner {
+			height: 10rem;
+		}
+
+		.np__title {
+			font-size: 1.8rem;
+		}
+	}
+</style>

@@ -1,0 +1,430 @@
+---
+// 方案 3 的条目页（Pixiv 作品页式）：大图舞台 → 标题 + #标签 → 笔记正文；
+// 右栏 作者卡 + 同分区的小图，底部 关联笔记 和 相关作品瀑布流
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "../../../../components/misc/ImageWrapper.astro";
+import Markdown from "../../../../components/misc/Markdown.astro";
+import P3Shell from "../../../../components/preview/p3/P3Shell.astro";
+import Tile from "../../../../components/preview/p3/Tile.astro";
+import { coverOf, getItemPaths, initialOf, type ItemProps, MARK_LABEL } from "../../../../components/preview/acg";
+import { profileConfig } from "../../../../config";
+
+export async function getStaticPaths() {
+	return getItemPaths();
+}
+
+const { item, outgoing, incoming, related } = Astro.props as ItemProps;
+const { Content } = await item.entry.render();
+const hasBody = (item.entry.body ?? "").trim().length > 0;
+// 舞台优先放海报（作品类）或笔记里的图；人物用笔记里的图
+const stage = item.section.kind === "work" ? coverOf(item) : item.image || coverOf(item);
+const linked = [...new Set([...outgoing, ...incoming])];
+const hue = [...item.title].reduce((n, c) => n + (c.codePointAt(0) ?? 0), 0) % 360;
+const bgm = item.entry.data.bgm;
+---
+
+<P3Shell title={item.title} tab="collect">
+	<div class="art">
+		<div class="main">
+			<div class:list={["stage", !stage && "is-text"]} style={`--h: ${hue}`}>
+				{stage ? <img src={stage} alt={item.title} referrerpolicy="no-referrer" /> : <b>{item.title}</b>}
+			</div>
+
+			<div class="actions">
+				{
+					item.marks.map((m) => (
+						<span class:list={["act", `is-${m}`]}>
+							<Icon name={m === "heart" ? "material-symbols:favorite-rounded" : "material-symbols:star-rounded"} />
+							{MARK_LABEL[m]}
+						</span>
+					))
+				}
+				{typeof item.rating === "number" && <span class="act is-score">★ {item.rating.toFixed(1)}</span>}
+				<span class="act"><Icon name="material-symbols:notes-rounded" />{item.words} 字</span>
+				{
+					bgm && (
+						<a class="act" href={`https://bgm.tv/subject/${bgm}`} target="_blank" rel="noopener noreferrer">
+							<Icon name="material-symbols:open-in-new-rounded" />Bangumi
+						</a>
+					)
+				}
+			</div>
+
+			<h1 class="title">{item.title}</h1>
+			<div class="tags">
+				<a href={`/preview/3/?cat=${encodeURIComponent(item.section.name)}`} class="tag is-sec">{item.section.name}</a>
+				{item.sub.map((s) => <span class="tag">#{s}</span>)}
+				{item.tags.filter((t) => !item.sub.includes(t)).map((t) => <span class="tag">#{t}</span>)}
+			</div>
+			<time class="date">{item.date}</time>
+
+			{
+				hasBody && (
+					<Markdown class="markdown-content md">
+						<Content />
+					</Markdown>
+				)
+			}
+
+			{
+				linked.length > 0 && (
+					<section class="linked">
+						<h2>笔记里提到的 / 提到这里的</h2>
+						<div class="linked__row">
+							{linked.map((i) => (
+								<a href={`/preview/3/i/${i.id}/`} class="lk">
+									<span class:list={["lk__pic", i.section.kind === "person" && "is-round"]}>
+										{coverOf(i) || i.image ? <img src={coverOf(i) || i.image} alt="" loading="lazy" referrerpolicy="no-referrer" /> : initialOf(i)}
+									</span>
+									<span class="lk__t">{i.title}</span>
+									<small>{i.section.name}</small>
+								</a>
+							))}
+						</div>
+					</section>
+				)
+			}
+		</div>
+
+		<aside class="side">
+			<div class="author">
+				<span class="author__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" /></span>
+				<div>
+					<b>{profileConfig.name}</b>
+					<small>{item.section.name} · {item.sub.join(" / ") || "未分类"}</small>
+				</div>
+			</div>
+			{
+				related.length > 0 && (
+					<div class="more">
+						<div class="more__head">同在{item.section.name}</div>
+						<div class="more__grid">
+							{related.map((i) => (
+								<a href={`/preview/3/i/${i.id}/`} title={i.title}>
+									{coverOf(i) || i.image ? <img src={coverOf(i) || i.image} alt={i.title} loading="lazy" referrerpolicy="no-referrer" /> : <span>{initialOf(i)}</span>}
+								</a>
+							))}
+						</div>
+						<a href={`/preview/3/?cat=${encodeURIComponent(item.section.name)}`} class="more__all">查看全部{item.section.name}</a>
+					</div>
+				)
+			}
+		</aside>
+	</div>
+
+	{
+		related.length > 0 && (
+			<section class="rel">
+				<h2>相关作品</h2>
+				<div class="masonry">
+					{related.map((i, n) => (
+						<Tile item={i} index={n} engine={false} />
+					))}
+				</div>
+			</section>
+		)
+	}
+</P3Shell>
+
+<style>
+	.art {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 19rem;
+		gap: 2rem;
+		align-items: start;
+	}
+
+	.stage {
+		display: grid;
+		place-items: center;
+		min-height: 24rem;
+		padding: 1.5rem;
+		border-radius: 1rem;
+		background: var(--x-soft-bg);
+	}
+
+	.stage img {
+		max-width: 100%;
+		max-height: 72vh;
+		border-radius: 0.4rem;
+		box-shadow: 0 20px 50px -24px rgb(0 0 0 / 0.5);
+	}
+
+	.stage.is-text {
+		aspect-ratio: 16 / 9;
+		background: linear-gradient(150deg, oklch(0.93 0.05 var(--h)), oklch(0.8 0.1 calc(var(--h) + 40)));
+	}
+
+	.stage.is-text b {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		font-weight: 900;
+		color: oklch(0.3 0.06 var(--h));
+	}
+
+	.actions {
+		margin-top: 1rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.act {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		height: 2.1rem;
+		padding: 0 0.9rem;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--x-soft);
+		background: var(--x-soft-bg);
+	}
+
+	.act.is-heart {
+		color: #ff4060;
+	}
+
+	.act.is-star,
+	.act.is-score {
+		color: #d99a00;
+	}
+
+	a.act:hover {
+		color: var(--x-blue);
+	}
+
+	.title {
+		margin-top: 1.25rem;
+		font-size: 1.6rem;
+		font-weight: 900;
+	}
+
+	.tags {
+		margin-top: 0.6rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem 0.75rem;
+		font-size: 0.875rem;
+	}
+
+	.tag {
+		color: var(--x-blue);
+	}
+
+	.tag.is-sec {
+		font-weight: 700;
+		color: var(--x-text);
+	}
+
+	.date {
+		display: block;
+		margin-top: 0.5rem;
+		font-family: var(--kit-num);
+		font-size: 0.78rem;
+		color: var(--x-muted);
+	}
+
+	.main :global(.md) {
+		margin-top: 1.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--x-line);
+	}
+
+	.main :global(.md h1) {
+		font-size: 1.35rem;
+	}
+
+	.main :global(.md h2) {
+		font-size: 1.15rem;
+	}
+
+	.main :global(.md h3) {
+		font-size: 1rem;
+	}
+
+	.main :global(.md img) {
+		max-height: 30rem;
+		width: auto;
+	}
+
+	.linked {
+		margin-top: 2rem;
+	}
+
+	.linked h2,
+	.rel h2 {
+		margin-bottom: 0.9rem;
+		font-size: 1.05rem;
+		font-weight: 900;
+	}
+
+	.linked__row {
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		padding-bottom: 0.5rem;
+	}
+
+	.lk {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.3rem;
+		width: 5.5rem;
+		flex: none;
+		text-align: center;
+	}
+
+	.lk__pic {
+		width: 5.5rem;
+		height: 7.3rem;
+		overflow: hidden;
+		display: grid;
+		place-items: center;
+		border-radius: 0.5rem;
+		font-size: 1.5rem;
+		font-weight: 900;
+		color: var(--x-muted);
+		background: var(--x-soft-bg);
+	}
+
+	.lk__pic.is-round {
+		height: 5.5rem;
+		border-radius: 999px;
+	}
+
+	.lk__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.lk__t {
+		max-width: 100%;
+		font-size: 0.8rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.lk small {
+		margin-top: -0.25rem;
+		font-size: 0.7rem;
+		color: var(--x-muted);
+	}
+
+	.side {
+		position: sticky;
+		top: 7.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.author__avatar {
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 999px;
+		overflow: hidden;
+		flex: none;
+	}
+
+	.author b {
+		display: block;
+		font-size: 0.95rem;
+	}
+
+	.author small {
+		font-size: 0.75rem;
+		color: var(--x-muted);
+	}
+
+	.more__head {
+		margin-bottom: 0.6rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--x-soft);
+	}
+
+	.more__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.4rem;
+	}
+
+	.more__grid a {
+		aspect-ratio: 1;
+		overflow: hidden;
+		display: grid;
+		place-items: center;
+		border-radius: 0.4rem;
+		background: var(--x-soft-bg);
+		font-weight: 900;
+		color: var(--x-muted);
+	}
+
+	.more__grid img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: filter 0.15s;
+	}
+
+	.more__grid a:hover img {
+		filter: brightness(0.9);
+	}
+
+	.more__all {
+		display: block;
+		margin-top: 0.75rem;
+		padding: 0.55rem;
+		border-radius: 999px;
+		text-align: center;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: var(--x-soft);
+		background: var(--x-soft-bg);
+	}
+
+	.more__all:hover {
+		color: var(--x-text);
+	}
+
+	.rel {
+		margin-top: 3rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--x-line);
+	}
+
+	.masonry {
+		columns: 6 12rem;
+		column-gap: 1.25rem;
+	}
+
+	@media (max-width: 1000px) {
+		.art {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			position: static;
+		}
+
+		.stage {
+			min-height: 0;
+			padding: 0.75rem;
+		}
+
+		.masonry {
+			columns: 2;
+		}
+	}
+</style>

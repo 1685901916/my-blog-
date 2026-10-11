@@ -1,12 +1,14 @@
 ---
 // 预览方案切换（只在 /preview/ 下的原型页用）
 interface Props {
-	current: "a" | "b";
+	current: "a" | "b" | "1" | "2" | "3";
 }
 const { current } = Astro.props;
 const items = [
-	{ id: "a", label: "A 应用式" },
-	{ id: "b", label: "B 主页 + 数据库" },
+	{ id: "1", label: "1 分区 · Bangumi" },
+	{ id: "2", label: "2 管理 · Notion" },
+	{ id: "3", label: "3 收藏写作 · Pixiv" },
+	{ id: "b", label: "B 数据库" },
 ];
 ---
 

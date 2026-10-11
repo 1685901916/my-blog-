@@ -1,0 +1,241 @@
+---
+// 方案 3 · 收藏 + 写作（Pixiv 式）的「收藏」页：
+// 评分榜（带名次的大卡）→ 分区标签 → 全部笔记的瀑布流（图片按原比例，没图的是文字卡）
+import { Icon } from "astro-icon/components";
+import P3Shell from "../../../components/preview/p3/P3Shell.astro";
+import Tile from "../../../components/preview/p3/Tile.astro";
+import { coverOf, getAcg, SECTIONS } from "../../../components/preview/acg";
+
+const all = (await getAcg()).filter((i) => !i.essay);
+const ranking = all.filter((i) => typeof i.rating === "number").sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 7);
+const count = (k: string) => all.filter((i) => i.section.key === k).length;
+// 瀑布流按「喜欢 → 有图 → 字数」排，第一屏更好看
+const feed = [...all].sort(
+	(a, b) =>
+		b.marks.length - a.marks.length ||
+		Number(!!(b.image || coverOf(b))) - Number(!!(a.image || coverOf(a))) ||
+		b.words - a.words,
+);
+---
+
+<P3Shell title="方案 3 · 收藏" tab="collect">
+	<section class="rank" data-reveal>
+		<h2 class="h"><Icon name="material-symbols:emoji-events" />评分榜</h2>
+		<div class="rank__row">
+			{
+				ranking.map((i, n) => (
+					<a href={`/preview/3/i/${i.id}/`} class:list={["rk", n === 0 && "is-first"]}>
+						<div class="rk__pic">
+							<img src={coverOf(i)} alt={i.title} loading="lazy" referrerpolicy="no-referrer" />
+							<span class:list={["rk__no", n < 3 && `is-${n + 1}`]}>{n + 1}</span>
+						</div>
+						<div class="rk__title">{i.title}</div>
+						<div class="rk__sub">
+							★ {i.rating?.toFixed(1)} · {i.section.name}
+						</div>
+					</a>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="feed" data-collection data-default-sort="rating">
+		<div class="feed__bar">
+			<div class="pills" role="group" aria-label="分区">
+				<button type="button" data-filter-cat="" aria-pressed="true">全部</button>
+				{
+					SECTIONS.filter((s) => count(s.key) > 0).map((s) => (
+						<button type="button" data-filter-cat={s.name} aria-pressed="false">
+							{s.name}
+						</button>
+					))
+				}
+			</div>
+			<select data-sort aria-label="排序" class="sort">
+				<option value="rating" selected>推荐</option>
+				<option value="date">最新</option>
+			</select>
+		</div>
+		<div class="masonry" data-items>
+			{feed.map((i, n) => <Tile item={i} index={n} />)}
+		</div>
+	</section>
+</P3Shell>
+
+<style>
+	.h {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-bottom: 1rem;
+		font-size: 1.25rem;
+		font-weight: 900;
+	}
+
+	.h :global(svg) {
+		color: #f5b400;
+	}
+
+	/* 评分榜：一排大海报，左上角名次（前三名金银铜） */
+	.rank__row {
+		display: grid;
+		grid-template-columns: 1.5fr repeat(6, 1fr);
+		gap: 1rem;
+		align-items: end;
+	}
+
+	.rk__pic {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: 3 / 4;
+		border-radius: 0.6rem;
+	}
+
+	.rk__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s var(--kit-ease-out);
+	}
+
+	.rk:hover .rk__pic img {
+		transform: scale(1.04);
+	}
+
+	.rk__no {
+		position: absolute;
+		top: 0;
+		left: 0;
+		min-width: 2.2rem;
+		height: 2.2rem;
+		padding: 0 0.5rem;
+		display: grid;
+		place-items: center;
+		border-radius: 0 0 0.6rem 0;
+		font-family: var(--kit-num);
+		font-size: 1rem;
+		font-weight: 900;
+		color: white;
+		background: rgb(0 0 0 / 0.55);
+	}
+
+	.rk__no.is-1 {
+		background: linear-gradient(135deg, #f7c843, #e09b16);
+	}
+
+	.rk__no.is-2 {
+		background: linear-gradient(135deg, #c9d1d9, #8f9aa5);
+	}
+
+	.rk__no.is-3 {
+		background: linear-gradient(135deg, #e3a86b, #b06a2c);
+	}
+
+	.is-first .rk__no {
+		min-width: 3rem;
+		height: 3rem;
+		font-size: 1.5rem;
+	}
+
+	.rk__title {
+		margin-top: 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.is-first .rk__title {
+		font-size: 1rem;
+	}
+
+	.rk__sub {
+		font-size: 0.75rem;
+		color: var(--x-muted);
+	}
+
+	.feed {
+		margin-top: 2.5rem;
+	}
+
+	.feed__bar {
+		position: sticky;
+		top: 6.4rem;
+		z-index: 5;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 0.75rem 0;
+		margin-bottom: 1rem;
+		background: color-mix(in oklch, var(--x-bg) 94%, transparent);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+	}
+
+	.pills {
+		display: flex;
+		gap: 0.5rem;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.pills button {
+		flex: none;
+		height: 2.1rem;
+		padding: 0 1rem;
+		border-radius: 999px;
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: var(--x-soft);
+		background: var(--x-soft-bg);
+		transition:
+			color 0.15s,
+			background 0.15s;
+	}
+
+	.pills button:hover {
+		color: var(--x-text);
+	}
+
+	.pills button[aria-pressed="true"] {
+		color: var(--x-bg);
+		background: var(--x-text);
+	}
+
+	.sort {
+		margin-left: auto;
+		height: 2.1rem;
+		padding: 0 0.75rem;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: inherit;
+		background: var(--x-soft-bg);
+		border: none;
+		outline: none;
+	}
+
+	/* 瀑布流：CSS 多列，卡片按原图比例自然排开 */
+	.masonry {
+		columns: 6 13rem;
+		column-gap: 1.25rem;
+	}
+
+	@media (max-width: 900px) {
+		.rank__row {
+			grid-template-columns: repeat(7, 9rem);
+			overflow-x: auto;
+			padding-bottom: 0.5rem;
+		}
+
+		.feed__bar {
+			top: 6.3rem;
+		}
+
+		.masonry {
+			columns: 2;
+			column-gap: 0.75rem;
+		}
+	}
+</style>

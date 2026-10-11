@@ -1,0 +1,275 @@
+---
+// 方案 2 的外框（Notion 式）：左边是照搬 Obsidian「管理」的文件夹树，右边是页面
+// 文件夹树：分区 → 子文件夹 → 笔记，当前所在的那一支默认展开
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../LightDarkSwitch.svelte";
+import ImageWrapper from "../../misc/ImageWrapper.astro";
+import Layout from "../../../layouts/Layout.astro";
+import { profileConfig, siteConfig } from "../../../config";
+import PreviewSwitch from "../PreviewSwitch.astro";
+import { type AcgItem, getAcg, SECTIONS } from "../acg";
+import "../theme-styles";
+
+interface Props {
+	title: string;
+	section?: string;
+	itemId?: string;
+}
+const { title, section, itemId } = Astro.props;
+const all = await getAcg();
+// Obsidian 里的顺序：按文件夹名排（1管理动漫、2角色、3漫画…）
+const folders = [...SECTIONS].sort((a, b) => a.folder.localeCompare(b.folder, "zh-Hans-CN", { numeric: true }));
+
+type Node = { name: string; items: AcgItem[]; children: Map<string, Node> };
+function tree(items: AcgItem[]) {
+	const root: Node = { name: "", items: [], children: new Map() };
+	for (const i of items) {
+		let n = root;
+		for (const s of i.sub) {
+			if (!n.children.has(s)) n.children.set(s, { name: s, items: [], children: new Map() });
+			n = n.children.get(s) as Node;
+		}
+		n.items.push(i);
+	}
+	return root;
+}
+const current = all.find((i) => i.id === itemId);
+---
+
+<Layout title={title}>
+	<div class="p2" data-no-swup>
+		<aside class="nav">
+			<a href="/preview/2/" class="nav__ws">
+				<ImageWrapper src={profileConfig.avatar || ""} alt="" class="nav__avatar" />
+				<span>{siteConfig.title}</span>
+			</a>
+			<a href="/preview/2/" class:list={["nav__row", !section && !itemId && "is-on"]}>
+				<Icon name="material-symbols:home-outline-rounded" />管理
+			</a>
+
+			<div class="nav__label">文件夹</div>
+			<nav class="tree">
+				{
+					folders.map((s) => {
+						const root = tree(all.filter((i) => i.section.key === s.key));
+						const open = section === s.key || current?.section.key === s.key;
+						const renderNode = (n: Node, depth: number) => (
+							<>
+								{[...n.children.values()].map((c) => (
+									<details open={current?.sub.includes(c.name) && open}>
+										<summary class="nav__row" style={`--d: ${depth}`}>
+											<Icon name="material-symbols:chevron-right-rounded" class="tw" />
+											<Icon name="material-symbols:folder-outline" />
+											{c.name}
+										</summary>
+										{renderNode(c, depth + 1)}
+									</details>
+								))}
+								{n.items.map((i) => (
+									<a
+										href={`/preview/2/i/${i.id}/`}
+										class:list={["nav__row", "is-note", i.id === itemId && "is-on"]}
+										style={`--d: ${depth}`}
+									>
+										<Icon name="material-symbols:description-outline" />
+										<span>{i.title}</span>
+									</a>
+								))}
+							</>
+						);
+						return (
+							<details open={open}>
+								<summary class:list={["nav__row", section === s.key && "is-on"]} style="--d: 0">
+									<Icon name="material-symbols:chevron-right-rounded" class="tw" />
+									<Icon name={s.icon} />
+									<a href={`/preview/2/${s.key}/`}>{s.name}</a>
+									<small>{all.filter((i) => i.section.key === s.key).length}</small>
+								</summary>
+								{renderNode(root, 1)}
+							</details>
+						);
+					})
+				}
+			</nav>
+
+			<div class="nav__label">博客</div>
+			<a href="/preview/b/?type=文章#notes" class="nav__row"><Icon name="material-symbols:article-outline-rounded" />文章</a>
+			<a href="/preview/b/?type=作品#notes" class="nav__row"><Icon name="material-symbols:work-outline" />作品</a>
+			<div class="nav__foot"><LightDarkSwitch client:only="svelte" /></div>
+		</aside>
+
+		<main class="page">
+			<slot />
+		</main>
+	</div>
+	<PreviewSwitch current="2" />
+</Layout>
+
+<style>
+	.p2 {
+		--n-bg: var(--card-bg);
+		--n-side: color-mix(in oklch, var(--card-bg) 96%, #8a7a60);
+		--n-text: rgb(55 53 47);
+		--n-soft: rgb(55 53 47 / 0.75);
+		--n-muted: rgb(55 53 47 / 0.5);
+		--n-line: rgb(55 53 47 / 0.09);
+		--n-hover: rgb(55 53 47 / 0.06);
+		display: grid;
+		grid-template-columns: 16rem minmax(0, 1fr);
+		min-height: 100vh;
+		background: var(--n-bg);
+		color: var(--n-text);
+	}
+
+	:global(:root.dark) .p2 {
+		--n-bg: color-mix(in oklch, var(--card-bg) 88%, black);
+		--n-side: color-mix(in oklch, var(--card-bg) 80%, black);
+		--n-text: rgb(255 255 255 / 0.86);
+		--n-soft: rgb(255 255 255 / 0.7);
+		--n-muted: rgb(255 255 255 / 0.45);
+		--n-line: rgb(255 255 255 / 0.09);
+		--n-hover: rgb(255 255 255 / 0.06);
+	}
+
+	.nav {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		overflow-y: auto;
+		scrollbar-width: thin;
+		padding: 0.6rem 0.5rem 1rem;
+		background: var(--n-side);
+		border-right: 1px solid var(--n-line);
+		font-size: 0.875rem;
+	}
+
+	.nav__ws {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.4rem 0.5rem;
+		margin-bottom: 0.4rem;
+		border-radius: 0.4rem;
+		font-weight: 700;
+	}
+
+	.nav__ws:hover {
+		background: var(--n-hover);
+	}
+
+	.nav :global(.nav__avatar) {
+		width: 1.4rem;
+		height: 1.4rem;
+		border-radius: 0.3rem;
+		overflow: hidden;
+		flex: none;
+	}
+
+	.nav__label {
+		margin: 1rem 0 0.25rem;
+		padding: 0 0.5rem;
+		font-size: 0.72rem;
+		font-weight: 600;
+		color: var(--n-muted);
+	}
+
+	.nav__row {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		min-height: 1.85rem;
+		padding: 0 0.5rem 0 calc(0.5rem + var(--d, 0) * 0.85rem);
+		border-radius: 0.35rem;
+		color: var(--n-soft);
+		cursor: pointer;
+		list-style: none;
+		white-space: nowrap;
+	}
+
+	.nav__row::-webkit-details-marker {
+		display: none;
+	}
+
+	.nav__row:hover {
+		background: var(--n-hover);
+	}
+
+	.nav__row.is-on {
+		color: var(--n-text);
+		font-weight: 600;
+		background: var(--n-hover);
+	}
+
+	.nav__row :global(svg) {
+		flex: none;
+		font-size: 1rem;
+		color: var(--n-muted);
+	}
+
+	.nav__row :global(.tw) {
+		margin-left: -0.15rem;
+		transition: transform 0.15s;
+	}
+
+	details[open] > summary :global(.tw) {
+		transform: rotate(90deg);
+	}
+
+	.nav__row span,
+	.nav__row a {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.nav__row small {
+		margin-left: auto;
+		font-family: var(--kit-num);
+		font-size: 0.72rem;
+		color: var(--n-muted);
+	}
+
+	.nav__row.is-note {
+		padding-left: calc(1.35rem + var(--d, 0) * 0.85rem);
+		font-size: 0.84rem;
+	}
+
+	.nav__foot {
+		margin-top: 1rem;
+		padding: 0 0.25rem;
+	}
+
+	.page {
+		min-width: 0;
+	}
+
+	/* Notion 的标签配色：灰 / 棕 / 橙 / 黄 / 绿 / 蓝 / 紫 / 粉 / 红 */
+	.p2 :global(.nt-0) { background: rgb(227 226 224 / 0.6); color: rgb(50 48 44); }
+	.p2 :global(.nt-1) { background: rgb(238 224 218); color: rgb(68 42 30); }
+	.p2 :global(.nt-2) { background: rgb(250 222 201); color: rgb(73 41 14); }
+	.p2 :global(.nt-3) { background: rgb(253 236 200); color: rgb(64 44 27); }
+	.p2 :global(.nt-4) { background: rgb(219 237 219); color: rgb(28 56 41); }
+	.p2 :global(.nt-5) { background: rgb(211 229 239); color: rgb(24 51 71); }
+	.p2 :global(.nt-6) { background: rgb(232 222 238); color: rgb(65 36 84); }
+	.p2 :global(.nt-7) { background: rgb(245 224 233); color: rgb(76 35 55); }
+	.p2 :global(.nt-8) { background: rgb(255 226 221); color: rgb(93 23 21); }
+
+	:global(:root.dark) .p2 :global(.nt-0) { background: rgb(55 55 55); color: rgb(225 225 225); }
+	:global(:root.dark) .p2 :global(.nt-1) { background: rgb(74 50 40); color: rgb(235 210 200); }
+	:global(:root.dark) .p2 :global(.nt-2) { background: rgb(92 59 35); color: rgb(245 215 190); }
+	:global(:root.dark) .p2 :global(.nt-3) { background: rgb(86 67 40); color: rgb(245 228 190); }
+	:global(:root.dark) .p2 :global(.nt-4) { background: rgb(36 61 48); color: rgb(200 235 210); }
+	:global(:root.dark) .p2 :global(.nt-5) { background: rgb(20 58 78); color: rgb(195 225 245); }
+	:global(:root.dark) .p2 :global(.nt-6) { background: rgb(60 45 73); color: rgb(225 210 240); }
+	:global(:root.dark) .p2 :global(.nt-7) { background: rgb(78 44 60); color: rgb(245 210 228); }
+	:global(:root.dark) .p2 :global(.nt-8) { background: rgb(82 46 42); color: rgb(250 210 205); }
+
+	@media (max-width: 900px) {
+		.p2 {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.nav {
+			display: none;
+		}
+	}
+</style>

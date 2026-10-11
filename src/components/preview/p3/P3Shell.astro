@@ -1,0 +1,221 @@
+---
+// 方案 3 的外框（Pixiv 式）：顶栏 站名 + 居中搜索 + 主题；下面一排大标签 收藏 / 写作 / 关于
+import { Icon } from "astro-icon/components";
+import LightDarkSwitch from "../../LightDarkSwitch.svelte";
+import ImageWrapper from "../../misc/ImageWrapper.astro";
+import Layout from "../../../layouts/Layout.astro";
+import { profileConfig, siteConfig } from "../../../config";
+import PreviewSwitch from "../PreviewSwitch.astro";
+import { getAcg } from "../acg";
+import "../theme-styles";
+
+interface Props {
+	title: string;
+	tab: "collect" | "write";
+}
+const { title, tab } = Astro.props;
+const index = (await getAcg()).map((i) => ({ t: i.title, h: `/preview/3/i/${i.id}/` }));
+---
+
+<Layout title={title}>
+	<div class="p3" data-no-swup>
+		<header class="top">
+			<div class="top__row">
+				<a href="/preview/3/" class="top__logo">{siteConfig.title}</a>
+				<label class="top__search">
+					<Icon name="material-symbols:search-rounded" />
+					<input list="p3-titles" placeholder="搜索作品、角色、声优…" data-p3-search />
+					<datalist id="p3-titles">{index.map((i) => <option value={i.t} />)}</datalist>
+				</label>
+				<div class="top__right">
+					<LightDarkSwitch client:only="svelte" />
+					<a href="/about/" class="top__me" title={profileConfig.name}>
+						<ImageWrapper src={profileConfig.avatar || ""} alt="" class="w-full h-full" />
+					</a>
+				</div>
+			</div>
+			<nav class="tabs" aria-label="栏目">
+				<a href="/preview/3/" class:list={[tab === "collect" && "is-on"]}>
+					<Icon name="material-symbols:photo-library-outline-rounded" />收藏
+				</a>
+				<a href="/preview/3/write/" class:list={[tab === "write" && "is-on"]}>
+					<Icon name="material-symbols:edit-note-outline-rounded" />写作
+				</a>
+				<a href="/about/"><Icon name="material-symbols:person-outline-rounded" />关于</a>
+			</nav>
+		</header>
+		<main class="wrap">
+			<slot />
+		</main>
+		<footer class="foot">© {new Date().getFullYear()} {profileConfig.name}</footer>
+	</div>
+	<PreviewSwitch current="3" />
+	<script is:inline type="application/json" id="p3-index" set:html={JSON.stringify(index)} />
+</Layout>
+
+<script>
+	const input = document.querySelector<HTMLInputElement>("[data-p3-search]");
+	const data = JSON.parse(document.getElementById("p3-index")?.textContent || "[]") as { t: string; h: string }[];
+	const go = () => {
+		const hit = data.find((d) => d.t === input?.value.trim());
+		if (hit) location.href = hit.h;
+	};
+	input?.addEventListener("change", go);
+	input?.addEventListener("keydown", (e) => e.key === "Enter" && go());
+</script>
+
+<style>
+	.p3 {
+		--x-bg: var(--card-bg);
+		--x-soft-bg: color-mix(in oklch, var(--card-bg) 95.5%, black);
+		--x-text: rgb(31 31 31);
+		--x-soft: rgb(31 31 31 / 0.72);
+		--x-muted: rgb(31 31 31 / 0.46);
+		--x-line: rgb(0 0 0 / 0.08);
+		--x-blue: #0096fa;
+		min-height: 100vh;
+		background: var(--x-bg);
+		color: var(--x-text);
+	}
+
+	:global(:root.dark) .p3 {
+		--x-bg: color-mix(in oklch, var(--card-bg) 85%, black);
+		--x-soft-bg: color-mix(in oklch, var(--card-bg) 75%, black);
+		--x-text: rgb(245 245 245);
+		--x-soft: rgb(245 245 245 / 0.72);
+		--x-muted: rgb(245 245 245 / 0.46);
+		--x-line: rgb(255 255 255 / 0.1);
+		--x-blue: #3db0ff;
+	}
+
+	.top {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		background: color-mix(in oklch, var(--x-bg) 94%, transparent);
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--x-line);
+	}
+
+	.top__row {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		height: 3.5rem;
+		padding: 0 1.5rem;
+	}
+
+	.top__logo {
+		font-size: 1.15rem;
+		font-weight: 900;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+	}
+
+	.top__search {
+		position: relative;
+		flex: 1;
+		max-width: 34rem;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+	}
+
+	.top__search :global(svg) {
+		position: absolute;
+		left: 0.85rem;
+		color: var(--x-muted);
+	}
+
+	.top__search input {
+		width: 100%;
+		height: 2.4rem;
+		padding: 0 1rem 0 2.4rem;
+		border-radius: 999px;
+		font-size: 0.875rem;
+		color: inherit;
+		background: var(--x-soft-bg);
+		border: 2px solid transparent;
+		outline: none;
+		transition: border-color 0.15s;
+	}
+
+	.top__search input:focus {
+		border-color: var(--x-blue);
+		background: var(--x-bg);
+	}
+
+	.top__right {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.top__me {
+		width: 2.1rem;
+		height: 2.1rem;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+
+	.tabs {
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	.tabs a {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		height: 2.8rem;
+		font-weight: 700;
+		color: var(--x-muted);
+		transition: color 0.15s;
+	}
+
+	.tabs a:hover,
+	.tabs a.is-on {
+		color: var(--x-text);
+	}
+
+	.tabs a.is-on::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 3px;
+		border-radius: 3px 3px 0 0;
+		background: var(--x-blue);
+	}
+
+	.wrap {
+		max-width: 92rem;
+		margin: 0 auto;
+		padding: 1.5rem 1.5rem 3rem;
+	}
+
+	.foot {
+		padding: 1.5rem 1rem 5rem;
+		text-align: center;
+		font-size: 0.8rem;
+		color: var(--x-muted);
+	}
+
+	@media (max-width: 700px) {
+		.top__search {
+			display: none;
+		}
+
+		.top__right {
+			margin-left: auto;
+		}
+
+		.wrap {
+			padding: 1rem 0.75rem 3rem;
+		}
+	}
+</style>

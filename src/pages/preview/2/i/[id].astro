@@ -1,0 +1,336 @@
+---
+// 方案 2 的笔记页（Notion 页面）：横幅 = 笔记里的图，图标 = 海报 / 头像，标题下是属性表，
+// 正文后面是 Obsidian 式的「链接到这里的笔记」（反向链接）和「这篇提到的」
+import { Icon } from "astro-icon/components";
+import Markdown from "../../../../components/misc/Markdown.astro";
+import NPage from "../../../../components/preview/p2/NPage.astro";
+import P2Shell from "../../../../components/preview/p2/P2Shell.astro";
+import { coverOf, getItemPaths, type ItemProps, MARK_LABEL } from "../../../../components/preview/acg";
+import { tagColor } from "../../../../components/preview/p2/notion";
+
+export async function getStaticPaths() {
+	return getItemPaths();
+}
+
+const { item, outgoing, incoming } = Astro.props as ItemProps;
+const { Content } = await item.entry.render();
+const hasBody = (item.entry.body ?? "").trim().length > 0;
+const poster = coverOf(item);
+const bgm = item.entry.data.bgm;
+const crumbs = [
+	{ name: "管理", href: "/preview/2/" },
+	{ name: item.section.name, href: `/preview/2/${item.section.key}/` },
+	...item.sub.map((s) => ({ name: s, href: `/preview/2/${item.section.key}/?cat=${encodeURIComponent(item.sub[0])}` })),
+	{ name: item.title },
+];
+---
+
+<P2Shell title={item.title} itemId={item.id}>
+	<NPage
+		banner={item.image}
+		icon={item.section.icon}
+		iconImage={poster || undefined}
+		iconRound={item.section.kind === "person"}
+		title={item.title}
+		crumbs={crumbs}
+	>
+		<div class="props">
+			<div class="prop">
+				<span class="prop__k"><Icon name="material-symbols:folder-outline" />文件夹</span>
+				<span class="prop__v">
+					<em class={`nt nt-${tagColor(item.section.name)}`}>{item.section.name}</em>
+					{item.sub.map((s) => <em class={`nt nt-${tagColor(s)}`}>{s}</em>)}
+				</span>
+			</div>
+			<div class="prop">
+				<span class="prop__k"><Icon name="material-symbols:tag-rounded" />标签</span>
+				<span class="prop__v">
+					{item.tags.length ? item.tags.map((t) => <em class={`nt nt-${tagColor(t)}`}>{t}</em>) : <i>空</i>}
+				</span>
+			</div>
+			{
+				typeof item.rating === "number" && (
+					<div class="prop">
+						<span class="prop__k"><Icon name="material-symbols:star-rounded" />评分</span>
+						<span class="prop__v">{item.rating.toFixed(1)}</span>
+					</div>
+				)
+			}
+			{
+				(["heart", "star"] as const).map((m) => (
+					<div class="prop">
+						<span class="prop__k">
+							<Icon name={m === "heart" ? "material-symbols:favorite-outline-rounded" : "material-symbols:star-rounded"} />
+							{MARK_LABEL[m]}
+						</span>
+						<span class="prop__v">
+							<Icon
+								name={item.marks.includes(m) ? "material-symbols:check-box-outline-rounded" : "material-symbols:check-box-outline-blank"}
+								class:list={["check", item.marks.includes(m) && "is-on"]}
+							/>
+						</span>
+					</div>
+				))
+			}
+			<div class="prop">
+				<span class="prop__k"><Icon name="material-symbols:notes-rounded" />字数</span>
+				<span class="prop__v">{item.words}</span>
+			</div>
+			<div class="prop">
+				<span class="prop__k"><Icon name="material-symbols:schedule-outline-rounded" />编辑时间</span>
+				<span class="prop__v">{item.date}</span>
+			</div>
+			{
+				bgm && (
+					<div class="prop">
+						<span class="prop__k"><Icon name="material-symbols:link-rounded" />Bangumi</span>
+						<a class="prop__v is-link" href={`https://bgm.tv/subject/${bgm}`} target="_blank" rel="noopener noreferrer">
+							bgm.tv/subject/{bgm}
+						</a>
+					</div>
+				)
+			}
+		</div>
+
+		<div class="body">
+			{
+				hasBody ? (
+					<Markdown class="markdown-content md">
+						<Content />
+					</Markdown>
+				) : (
+					<p class="empty">空白页面。</p>
+				)
+			}
+		</div>
+
+		{
+			(incoming.length > 0 || outgoing.length > 0) && (
+				<section class="links">
+					{incoming.length > 0 && (
+						<details open>
+							<summary>
+								<Icon name="material-symbols:chevron-right-rounded" class="tw" />
+								链接到这里的笔记<small>{incoming.length}</small>
+							</summary>
+							{incoming.map((i) => (
+								<a href={`/preview/2/i/${i.id}/`} class="link">
+									<Icon name="material-symbols:description-outline" />
+									<span>
+										<b>{i.title}</b>
+										<small>
+											{i.section.name}
+											{i.excerpt && ` · ${i.excerpt}`}
+										</small>
+									</span>
+								</a>
+							))}
+						</details>
+					)}
+					{outgoing.length > 0 && (
+						<details open>
+							<summary>
+								<Icon name="material-symbols:chevron-right-rounded" class="tw" />
+								这篇提到的<small>{outgoing.length}</small>
+							</summary>
+							{outgoing.map((i) => (
+								<a href={`/preview/2/i/${i.id}/`} class="link">
+									<Icon name="material-symbols:description-outline" />
+									<span>
+										<b>{i.title}</b>
+										<small>{i.section.name}</small>
+									</span>
+								</a>
+							))}
+						</details>
+					)}
+				</section>
+			)
+		}
+	</NPage>
+</P2Shell>
+
+<style>
+	.props {
+		margin-top: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--n-line);
+	}
+
+	.prop {
+		display: grid;
+		grid-template-columns: 10rem minmax(0, 1fr);
+		align-items: center;
+		min-height: 2.1rem;
+		font-size: 0.875rem;
+	}
+
+	.prop__k {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		height: 100%;
+		padding: 0 0.4rem;
+		border-radius: 0.3rem;
+		color: var(--n-muted);
+	}
+
+	.prop__k :global(svg) {
+		font-size: 1rem;
+	}
+
+	.prop__v {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem;
+		min-height: 100%;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.3rem;
+	}
+
+	.prop:hover .prop__v {
+		background: var(--n-hover);
+	}
+
+	.prop__v i {
+		font-style: normal;
+		color: var(--n-muted);
+	}
+
+	.prop__v.is-link {
+		text-decoration: underline;
+		text-decoration-color: var(--n-line);
+		text-underline-offset: 3px;
+	}
+
+	.check {
+		font-size: 1.15rem;
+		color: var(--n-muted);
+	}
+
+	.check.is-on {
+		color: rgb(35 131 226);
+	}
+
+	.nt {
+		font-style: normal;
+		font-size: 0.78rem;
+		line-height: 1.6;
+		padding: 0 0.45rem;
+		border-radius: 0.2rem;
+	}
+
+	.body {
+		margin-top: 1.5rem;
+	}
+
+	.body :global(.md h1) {
+		font-size: 1.5rem;
+	}
+
+	.body :global(.md h2) {
+		font-size: 1.25rem;
+	}
+
+	.body :global(.md h3) {
+		font-size: 1.05rem;
+	}
+
+	.body :global(.md img) {
+		max-height: 30rem;
+		width: auto;
+	}
+
+	.empty {
+		color: var(--n-muted);
+	}
+
+	.links {
+		margin-top: 3rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--n-line);
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.links summary {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.3rem 0.25rem;
+		border-radius: 0.3rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--n-muted);
+		cursor: pointer;
+		list-style: none;
+	}
+
+	.links summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.links summary:hover {
+		background: var(--n-hover);
+	}
+
+	.links summary small {
+		font-family: var(--kit-num);
+		margin-left: 0.2rem;
+	}
+
+	.links :global(.tw) {
+		transition: transform 0.15s;
+	}
+
+	.links details[open] :global(.tw) {
+		transform: rotate(90deg);
+	}
+
+	.link {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0.5rem 0.6rem 0.5rem 1.6rem;
+		border-radius: 0.3rem;
+	}
+
+	.link:hover {
+		background: var(--n-hover);
+	}
+
+	.link > :global(svg) {
+		flex: none;
+		margin-top: 0.15rem;
+		color: var(--n-muted);
+	}
+
+	.link span {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.link b {
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-color: var(--n-line);
+		text-underline-offset: 3px;
+	}
+
+	.link small {
+		font-size: 0.78rem;
+		color: var(--n-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 900px) {
+		.prop {
+			grid-template-columns: 7rem minmax(0, 1fr);
+		}
+	}
+</style>

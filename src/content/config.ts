@@ -150,7 +150,29 @@ const journalCollection = defineCollection({
 		}),
 });
 
+// ACG 笔记：由 scripts/import-acg.mjs 从 Obsidian 库「管理」文件夹生成，别手改（改了下次导入会被覆盖）
+const acgCollection = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		section: z.string(),
+		sub: z.array(z.string()).default([]),
+		marks: z.array(z.enum(["star", "heart"])).default([]),
+		essay: z.boolean().default(false),
+		tags: z.array(z.coerce.string()).default([]),
+		cover: z.string().default(""),
+		image: z.string().optional(),
+		bgm: z.number().optional(),
+		rating: z.number().optional(),
+		date: z.coerce.date(),
+		words: z.number().default(0),
+		excerpt: z.string().default(""),
+		links: z.array(z.string()).default([]),
+		source: z.string().default(""),
+	}),
+});
+
 export const collections = {
+	acg: acgCollection,
 	posts: postsCollection,
 	spec: specCollection,
 	manga: mangaCollection,
