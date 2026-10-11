@@ -56,6 +56,11 @@ const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在
 ---
 
 <Layout title={row.title} description={row.excerpt}>
+	<Fragment slot="head">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet" />
+	</Fragment>
 	<div class="rb" data-no-swup>
 		<header class="bar">
 			<a href="/preview/b/" class="bar__logo">{siteConfig.title}</a>
@@ -306,25 +311,29 @@ const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在
 </Layout>
 
 <style>
+	/* 和首页同一套暖色纸面 + 衬线标题 */
 	.rb {
-		--db-bg: color-mix(in oklch, var(--card-bg) 96.5%, black);
-		--db-card: var(--card-bg);
-		--db-text: rgb(28 28 30);
-		--db-soft: rgb(70 70 76);
-		--db-muted: rgb(138 138 146);
-		--db-line: color-mix(in oklch, var(--card-bg) 90%, black);
-		--db-sunk: color-mix(in oklch, var(--card-bg) 92%, black);
+		--serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+		--db-bg: color-mix(in oklch, var(--card-bg) 94%, #a08a66);
+		--db-card: color-mix(in oklch, var(--card-bg) 99%, #a08a66);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 88%, #a08a66);
+		--db-text: rgb(34 30 28);
+		--db-soft: rgb(88 82 78);
+		--db-muted: rgb(146 140 134);
+		--db-line: rgb(60 45 30 / 0.09);
 		background: var(--db-card);
 		color: var(--db-text);
 		min-height: 100vh;
 	}
 
 	:global(:root.dark) .rb {
-		--db-bg: color-mix(in oklch, var(--card-bg) 82%, black);
-		--db-text: rgb(238 238 240);
-		--db-soft: rgb(205 205 210);
-		--db-muted: rgb(145 145 152);
-		--db-line: color-mix(in oklch, var(--card-bg) 86%, white);
+		--db-bg: color-mix(in oklch, var(--card-bg) 78%, black);
+		--db-card: color-mix(in oklch, var(--card-bg) 90%, black);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 70%, black);
+		--db-text: rgb(240 236 232);
+		--db-soft: rgb(200 194 188);
+		--db-muted: rgb(140 134 128);
+		--db-line: rgb(255 255 255 / 0.08);
 	}
 
 	/* 顶栏：站名 + 类型入口 */
@@ -413,10 +422,11 @@ const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在
 
 	.title {
 		margin-top: 1.1rem;
-		font-size: clamp(1.9rem, 4vw, 2.6rem);
+		font-family: var(--serif);
+		font-size: clamp(1.9rem, 4vw, 2.7rem);
 		font-weight: 900;
 		line-height: 1.3;
-		letter-spacing: 0.02em;
+		letter-spacing: 0.03em;
 	}
 
 	.lead {
@@ -724,7 +734,8 @@ const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在
 	}
 
 	.related__head h2 {
-		font-size: 1.25rem;
+		font-family: var(--serif);
+		font-size: 1.45rem;
 		font-weight: 900;
 	}
 

@@ -248,8 +248,11 @@ for (const n of entries) {
 	const text = body
 		.split("\n")
 		// 摘要里不要网址（有的笔记第一行就是一条链接）
+		// Obsidian 的 callout（> [!NOTE]）只是个标记，不当摘要
+		.filter((l) => !/^>\s*\[!/.test(l.trim()))
 		.map((l) =>
 			l
+				.replace(/^>\s*/, "")
 				.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
 				.replace(/https?:\/\/\S+/g, "")
 				.trim(),

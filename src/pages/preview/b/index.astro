@@ -1,15 +1,14 @@
 ---
-// 方案 B · 个人主页 + 数据库：插画首屏 → 数据库 → 关于我
-// 数据库顶上一排类型标签（全部 / 文章 / 动画 / 漫画 / 小说 / 游戏 / 人物 / 作品 / 月记 / 收集）：
-//   「全部」是总览，每种类型一排，排尾「全部 →」进入该类型；
-//   选了类型就是这个类型的完整网格，第二排是它自己的分类（动画 → 异能系 / 恋爱 / 现实系 …）
-// 搜索 / 排序 / 卡片-列表切换交给 kit.ts 的卡片引擎
+// 方案 B · 个人主页 + 数据库
+// 首屏：电影感横幅，站名 / 头像 / 统计压在左下角
+// 「全部」是杂志式总览：精选（最近热衷的番 + 最近写的）→ 动画书架 → 漫画 | 小说 → 人物 → 游戏 | 月记 → 作品 → 收集
+// 选了某个类型：这个类型的完整数据库网格，第二排是它自己的分类；搜索 / 排序 / 视图交给 kit.ts
 import { Icon } from "astro-icon/components";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
 import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import BaseCard from "../../../components/preview/BaseCard.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
-import { BASE_KINDS, getProtoBase, KIND_META } from "../../../components/preview/proto";
+import { BASE_KINDS, type BaseRow, getProtoBase, type Kind, KIND_META } from "../../../components/preview/proto";
 import { profileConfig, siteConfig } from "../../../config";
 import Layout from "../../../layouts/Layout.astro";
 
@@ -17,7 +16,6 @@ const rows = await getProtoBase();
 const ofKind = (k: string) => rows.filter((r) => r.kind === k);
 const kinds = BASE_KINDS.filter((k) => ofKind(k).length > 0);
 
-// 每个类型的分类和数量（第二排的筛选按钮）
 const facets = kinds
 	.map((kind) => {
 		const m = new Map<string, number>();
@@ -26,12 +24,42 @@ const facets = kinds
 	})
 	.filter((f) => f.values.length > 1);
 
-// 总览每排放几个：海报 / 头像一排 8 个，文字卡 / 截图卡一排 4 个
-const wide = (k: (typeof kinds)[number]) => !["poster", "person"].includes(KIND_META[k].variant);
+// 精选：动画里排第一的（喜欢 + 评分最高）；旁边是最近写的文字
+const featured = ofKind("动画")[0];
+const recent = rows
+	.filter((r) => r.kind === "文章" || r.kind === "月记")
+	.sort((a, b) => b.date.localeCompare(a.date))
+	.slice(0, 5);
+
+// 总览的版式：每一排放哪些类型、各占几栏（12 栏）、放几个、内部几列
+type Block = { k: Kind; span: number; n: number; cols: number; desc: string };
+const LAYOUT: Block[][] = [
+	[{ k: "动画", span: 12, n: 8, cols: 8, desc: "看过的番，和看完写下的感想" }],
+	[
+		{ k: "漫画", span: 6, n: 4, cols: 4, desc: "最近在追的漫画" },
+		{ k: "小说", span: 6, n: 4, cols: 4, desc: "轻小说、网文和文学" },
+	],
+	[{ k: "人物", span: 12, n: 8, cols: 8, desc: "喜欢的角色、声优、音乐人和画师" }],
+	[
+		{ k: "游戏", span: 7, n: 4, cols: 4, desc: "玩过的游戏" },
+		{ k: "月记", span: 5, n: 2, cols: 1, desc: "每个月的碎碎念" },
+	],
+	[{ k: "作品", span: 12, n: 3, cols: 3, desc: "自己做的东西" }],
+	[{ k: "收集", span: 12, n: 6, cols: 3, desc: "制作者、杂项和随手记" }],
+];
+const layout = LAYOUT.map((row) => row.filter((b) => ofKind(b.k).length > 0)).filter((row) => row.length);
+const stat = (k: Kind) => ofKind(k).length;
 const banner = "/assets/desktop-banner/custom-bg.jpg";
+const label = (r: BaseRow) => (r.kind === "文章" ? r.cat : r.kind);
 ---
 
 <Layout title="方案 B · 主页 + 数据库">
+	<Fragment slot="head">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet" />
+	</Fragment>
+
 	<div class="pb" data-no-swup>
 		<header class="nav">
 			<a href="/preview/b/" class="nav__logo">{siteConfig.title}</a>
@@ -42,34 +70,45 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			<div class="nav__theme"><LightDarkSwitch client:only="svelte" /></div>
 		</header>
 
+		<!-- 首屏：横幅 + 左下角的站名和统计 -->
 		<section class="hero">
 			<img class="hero__bg" src={banner} alt="" />
 			<div class="hero__shade"></div>
 			<div class="hero__inner">
-				<div class="hero__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></div>
-				<h1 class="hero__title" data-split>{siteConfig.title}</h1>
-				<p class="hero__sub">{siteConfig.subtitle}</p>
+				<div class="hero__id">
+					<div class="hero__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></div>
+					<div>
+						<h1 class="hero__title" data-split>{siteConfig.title}</h1>
+						<p class="hero__sub">{siteConfig.subtitle}</p>
+					</div>
+				</div>
+				<dl class="hero__stats">
+					{
+						(["动画", "漫画", "小说", "人物", "文章"] as Kind[]).map((k) => (
+							<div>
+								<dd>{stat(k)}</dd>
+								<dt>{k}</dt>
+							</div>
+						))
+					}
+				</dl>
 			</div>
 		</section>
 
 		<section class="db" id="notes" data-collection data-default-sort="auto" data-default-group="kind">
 			<div class="db__bar">
-				<div class="db__inner db__bar-inner">
+				<div class="wrap db__bar-inner">
 					<div class="kit-tabs vtabs" data-tabs role="group" aria-label="类型">
-						<button type="button" class="kit-tabs__item" data-filter-kind="" aria-pressed="true">
-							<Icon name="material-symbols:home-outline-rounded" />全部
-						</button>
+						<button type="button" class="kit-tabs__item" data-filter-kind="" aria-pressed="true">全部</button>
 						{
 							kinds.map((k) => (
 								<button type="button" class="kit-tabs__item" data-filter-kind={k} aria-pressed="false">
-									<Icon name={KIND_META[k].icon} />
 									{k}
 									<small>{ofKind(k).length}</small>
 								</button>
 							))
 						}
 					</div>
-
 					<div class="db__tools">
 						<label class="kit-search">
 							<Icon name="material-symbols:search-rounded" class="kit-search__icon" />
@@ -97,8 +136,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 				</div>
 			</div>
 
-			<div class="db__inner">
-				<!-- 第二排：当前类型的分类；从阅读页点标签进来时最前面多一个可以取消的标签 -->
+			<div class="wrap">
 				<div class="db__facets">
 					<button type="button" class="chip is-active-tag" data-active-tag hidden title="取消这个标签">
 						<Icon name="material-symbols:tag-rounded" />
@@ -125,34 +163,94 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 					}
 				</div>
 
-				<!-- 总览：每种类型一排 -->
-				<div class="ov" data-overview>
+				<!-- ========== 总览 ========== -->
+				<div class="mag" data-overview>
+					<!-- 精选 + 最近写的 -->
+					<section class="feature">
+						{
+							featured && (
+								<a href={featured.href} class="hl" data-reveal>
+									{featured.cover && <div class="hl__bg" style={`background-image: url("${featured.cover}")`} />}
+									<div class="hl__poster">{featured.cover && <img src={featured.cover} alt="" referrerpolicy="no-referrer" />}</div>
+									<div class="hl__text">
+										<span class="hl__eyebrow">最近热衷 · {featured.kind}</span>
+										<h2 class="hl__title">{featured.title}</h2>
+										<div class="hl__meta">
+											{typeof featured.rating === "number" && (
+												<span class="hl__score">
+													<Icon name="material-symbols:star-rounded" />
+													{featured.rating.toFixed(1)}
+												</span>
+											)}
+											{featured.cat && <span>{featured.cat}</span>}
+											{featured.tags.slice(0, 3).map((t) => (
+												<span>#{t}</span>
+											))}
+										</div>
+										{featured.excerpt && <p class="hl__quote">「{featured.excerpt}」</p>}
+										<span class="hl__cta">
+											读我的感想
+											<Icon name="material-symbols:arrow-forward-rounded" />
+										</span>
+									</div>
+								</a>
+							)
+						}
+						<aside class="recent" data-reveal>
+							<div class="recent__head">
+								<h3>最近写的</h3>
+								<button type="button" data-filter-kind="文章">
+									全部文章
+									<Icon name="material-symbols:arrow-forward-rounded" />
+								</button>
+							</div>
+							<ol>
+								{recent.map((r) => (
+									<li>
+										<a href={r.href}>
+											<span class="recent__label">{label(r)}</span>
+											<span class="recent__title">{r.title}</span>
+											<time>{r.date.slice(5)}</time>
+										</a>
+									</li>
+								))}
+							</ol>
+						</aside>
+					</section>
+
 					{
-						kinds.map((k) => (
-							<section class="ov__row">
-								<header class="ov__head">
-									<h2>
-										<Icon name={KIND_META[k].icon} />
-										{k}
-									</h2>
-									<span class="ov__count">{ofKind(k).length}</span>
-									<button type="button" class="ov__more" data-filter-kind={k}>
-										全部
-										<Icon name="material-symbols:arrow-forward-rounded" />
-									</button>
-								</header>
-								<div class:list={["kit-grid", "db__grid", "ov__grid", wide(k) ? "is-wide" : "is-narrow"]}>
-									{ofKind(k)
-										.slice(0, wide(k) ? 4 : 8)
-										.map((r, n) => (
-											<BaseCard row={r} index={n} engine={false} />
-										))}
-								</div>
-							</section>
+						layout.map((row) => (
+							<div class="mag__row">
+								{row.map((b) => (
+									<section class="sec" style={`--span: ${b.span}`}>
+										<header class="sec__head">
+											<div>
+												<h2>
+													{b.k}
+													<small>{stat(b.k)}</small>
+												</h2>
+												<p>{b.desc}</p>
+											</div>
+											<button type="button" class="sec__more" data-filter-kind={b.k}>
+												全部
+												<Icon name="material-symbols:arrow-forward-rounded" />
+											</button>
+										</header>
+										<div class:list={["sec__grid", `is-${KIND_META[b.k].variant}`]} style={`--cols: ${b.cols}`}>
+											{ofKind(b.k)
+												.slice(0, b.n)
+												.map((r, n) => (
+													<BaseCard row={r} index={n} engine={false} />
+												))}
+										</div>
+									</section>
+								))}
+							</div>
 						))
 					}
 				</div>
 
+				<!-- ========== 某个类型的完整网格 ========== -->
 				<div class="kit-grid db__grid" data-items hidden>
 					{rows.map((r, i) => <BaseCard row={r} index={i} />)}
 				</div>
@@ -183,25 +281,33 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 <style>
 	.pb {
-		--db-bg: color-mix(in oklch, var(--card-bg) 96.5%, black);
-		--db-card: var(--card-bg);
-		--db-sunk: color-mix(in oklch, var(--card-bg) 92%, black);
-		--db-text: rgb(28 28 30);
-		--db-soft: rgb(80 80 88);
-		--db-muted: rgb(140 140 148);
-		--db-line: color-mix(in oklch, var(--card-bg) 90%, black);
+		--serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+		--db-bg: color-mix(in oklch, var(--card-bg) 94%, #a08a66);
+		--db-card: color-mix(in oklch, var(--card-bg) 99%, #a08a66);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 88%, #a08a66);
+		--db-text: rgb(34 30 28);
+		--db-soft: rgb(88 82 78);
+		--db-muted: rgb(146 140 134);
+		--db-line: rgb(60 45 30 / 0.09);
 		background: var(--db-bg);
 		color: var(--db-text);
 		min-height: 100vh;
 	}
 
 	:global(:root.dark) .pb {
-		--db-bg: color-mix(in oklch, var(--card-bg) 82%, black);
-		--db-sunk: color-mix(in oklch, var(--card-bg) 75%, black);
-		--db-text: rgb(238 238 240);
-		--db-soft: rgb(200 200 206);
-		--db-muted: rgb(145 145 152);
-		--db-line: color-mix(in oklch, var(--card-bg) 86%, white);
+		--db-bg: color-mix(in oklch, var(--card-bg) 78%, black);
+		--db-card: color-mix(in oklch, var(--card-bg) 90%, black);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 70%, black);
+		--db-text: rgb(240 236 232);
+		--db-soft: rgb(200 194 188);
+		--db-muted: rgb(140 134 128);
+		--db-line: rgb(255 255 255 / 0.08);
+	}
+
+	.wrap {
+		max-width: 88rem;
+		margin: 0 auto;
+		padding: 0 clamp(1rem, 3vw, 2.5rem);
 	}
 
 	/* 顶栏：浮在首屏上 */
@@ -214,38 +320,37 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		display: flex;
 		align-items: center;
 		gap: 2rem;
-		padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
+		padding: 1.25rem clamp(1rem, 3vw, 2.5rem);
 		color: white;
 	}
 
 	.nav__logo {
 		font-weight: 800;
 		letter-spacing: 0.04em;
-		text-shadow: 0 1px 8px rgb(0 0 0 / 0.3);
 	}
 
 	.nav__links {
 		margin-left: auto;
 		display: flex;
 		gap: 1.75rem;
-		font-size: 0.92rem;
+		font-size: 0.9rem;
 		font-weight: 600;
-		text-shadow: 0 1px 8px rgb(0 0 0 / 0.3);
+		opacity: 0.9;
 	}
 
 	.nav__theme :global(button) {
 		color: white;
 	}
 
-	/* 首屏 */
+	/* ---------- 首屏 ---------- */
 	.hero {
 		position: relative;
-		height: clamp(18rem, 40vh, 26rem);
+		height: clamp(20rem, 44vh, 28rem);
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		align-items: flex-end;
 		overflow: hidden;
 		isolation: isolate;
+		color: white;
 	}
 
 	.hero__bg {
@@ -254,7 +359,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: center 30%;
+		object-position: center 32%;
 		z-index: -2;
 	}
 
@@ -263,57 +368,85 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		inset: 0;
 		z-index: -1;
 		background:
-			linear-gradient(to bottom, rgb(0 0 0 / 0.3), transparent 45%),
-			linear-gradient(to top, var(--db-bg), transparent 50%);
+			linear-gradient(to top, rgb(14 12 20 / 0.78), rgb(14 12 20 / 0.12) 55%, rgb(14 12 20 / 0.3)),
+			linear-gradient(to right, rgb(14 12 20 / 0.35), transparent 60%);
 	}
 
 	.hero__inner {
+		width: 100%;
+		max-width: 88rem;
+		margin: 0 auto;
+		padding: 0 clamp(1rem, 3vw, 2.5rem) 2.25rem;
 		display: flex;
-		flex-direction: column;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.hero__id {
+		display: flex;
 		align-items: center;
-		text-align: center;
-		padding: 1rem 1.5rem 2.5rem;
-		color: white;
+		gap: 1.25rem;
 	}
 
 	.hero__avatar {
-		width: 4.5rem;
-		height: 4.5rem;
+		width: 5rem;
+		height: 5rem;
+		flex: none;
 		border-radius: 999px;
 		overflow: hidden;
-		border: 3px solid rgb(255 255 255 / 0.9);
-		box-shadow: 0 16px 36px -14px rgb(0 0 0 / 0.55);
+		box-shadow:
+			0 0 0 3px rgb(255 255 255 / 0.85),
+			0 16px 36px -14px rgb(0 0 0 / 0.6);
 	}
 
 	.hero__title {
-		margin-top: 0.85rem;
-		font-size: clamp(2rem, 4.5vw, 3.2rem);
+		font-family: var(--serif);
+		font-size: clamp(2.2rem, 4.2vw, 3.4rem);
 		font-weight: 900;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.06em;
 		line-height: 1.1;
-		text-shadow: 0 4px 28px rgb(0 0 0 / 0.35);
+		text-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
 	}
 
 	.hero__sub {
 		margin-top: 0.5rem;
 		font-size: 0.95rem;
-		font-weight: 500;
+		letter-spacing: 0.25em;
+		opacity: 0.85;
+	}
+
+	.hero__stats {
+		display: flex;
+		gap: 2.25rem;
+	}
+
+	.hero__stats div {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+
+	.hero__stats dd {
+		font-family: var(--serif);
+		font-size: 1.9rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.hero__stats dt {
+		margin-top: 0.35rem;
+		font-size: 0.75rem;
 		letter-spacing: 0.2em;
-		text-shadow: 0 2px 12px rgb(0 0 0 / 0.4);
+		opacity: 0.75;
 	}
 
-	/* ---------- 数据库 ---------- */
-	.db__inner {
-		max-width: 96rem;
-		margin: 0 auto;
-		padding: 0 clamp(1rem, 3vw, 2rem);
-	}
-
+	/* ---------- 类型标签栏 ---------- */
 	.db__bar {
 		position: sticky;
 		top: 0;
 		z-index: 6;
-		background: color-mix(in oklch, var(--db-bg) 86%, transparent);
+		background: color-mix(in oklch, var(--db-bg) 85%, transparent);
 		-webkit-backdrop-filter: blur(16px) saturate(1.4);
 		backdrop-filter: blur(16px) saturate(1.4);
 		border-bottom: 1px solid var(--db-line);
@@ -327,37 +460,32 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		gap: 0 1rem;
 	}
 
-	/* 类型标签：底部滑动下划线 */
 	.vtabs {
 		padding: 0;
 		background: none;
 		border-radius: 0;
-		gap: 0.1rem;
+		gap: 0.25rem;
 		overflow-x: auto;
 		scrollbar-width: none;
 		max-width: 100%;
 	}
 
 	.vtabs .kit-tabs__item {
-		height: 3.3rem;
-		gap: 0.35rem;
-		padding: 0 0.7rem;
+		height: 3.4rem;
+		gap: 0.3rem;
+		padding: 0 0.75rem;
 		border-radius: 0;
-		font-size: 0.9rem;
+		font-size: 0.95rem;
 		font-weight: 700;
 		color: var(--db-muted);
 		transition: color 0.2s;
 	}
 
-	.vtabs .kit-tabs__item :global(svg) {
-		font-size: 1.05rem;
-	}
-
 	.vtabs .kit-tabs__item small {
 		font-family: var(--kit-num);
-		font-size: 0.7rem;
+		font-size: 0.68rem;
 		font-weight: 600;
-		opacity: 0.7;
+		opacity: 0.75;
 	}
 
 	.vtabs .kit-tabs__item:hover,
@@ -365,17 +493,12 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		color: var(--db-text);
 	}
 
-	.vtabs .kit-tabs__item[aria-pressed="true"] small {
-		color: var(--primary);
-		opacity: 1;
-	}
-
 	.vtabs :global(.kit-tabs__ind) {
 		top: auto;
 		bottom: -1px;
-		height: 2.5px;
+		height: 2px;
 		border-radius: 2px;
-		background: var(--primary);
+		background: var(--db-text);
 	}
 
 	.db__tools {
@@ -385,9 +508,24 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		padding: 0.5rem 0;
 	}
 
+	.db__tools .kit-input,
+	.db__tools .kit-select,
+	.db__tools .kit-tabs {
+		background: var(--db-card);
+		box-shadow: 0 0 0 1px var(--db-line);
+	}
+
 	.db__tools .kit-input {
-		width: 13rem;
+		width: 12rem;
 		padding-right: 2rem;
+	}
+
+	.db__tools :global(.kit-tabs .kit-tabs__ind) {
+		background: var(--db-text);
+	}
+
+	.db__tools .kit-tabs__item[aria-pressed="true"] {
+		color: var(--db-bg);
 	}
 
 	.db__kbd {
@@ -402,7 +540,6 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		font-size: 0.7rem;
 		color: var(--db-muted);
 		border: 1px solid var(--db-line);
-		background: var(--db-card);
 		pointer-events: none;
 		transition: opacity 0.15s;
 	}
@@ -411,13 +548,13 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		opacity: 0;
 	}
 
-	/* 第二排：分类 chip（总览时整排藏起来） */
+	/* 第二排分类 */
 	.db__facets {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.45rem;
-		padding: 1.1rem 0 0;
+		padding: 1.25rem 0 0;
 	}
 
 	.db__facets:not(:has(.chip:not([hidden]))) {
@@ -425,7 +562,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.db__facet-label {
-		margin-right: 0.25rem;
+		margin-right: 0.35rem;
 		font-size: 0.8rem;
 		font-weight: 700;
 		color: var(--db-muted);
@@ -436,48 +573,38 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		align-items: center;
 		gap: 0.35rem;
 		height: 1.9rem;
-		padding: 0 0.8rem;
+		padding: 0 0.85rem;
 		border-radius: 999px;
 		font-size: 0.82rem;
 		font-weight: 600;
 		color: var(--db-soft);
 		background: var(--db-card);
-		border: 1px solid var(--db-line);
+		box-shadow: 0 0 0 1px var(--db-line);
 		transition:
 			color 0.15s,
-			border-color 0.15s,
 			background 0.15s;
 	}
 
 	.chip small {
 		font-family: var(--kit-num);
 		font-size: 0.7rem;
-		color: var(--db-muted);
+		opacity: 0.6;
 	}
 
 	.chip:hover {
-		color: var(--primary);
-		border-color: color-mix(in oklch, var(--db-line) 40%, var(--primary));
+		color: var(--db-text);
 	}
 
 	.chip[aria-pressed="true"] {
-		color: white;
-		background: var(--db-text);
-		border-color: var(--db-text);
-	}
-
-	.chip[aria-pressed="true"] small {
-		color: rgb(255 255 255 / 0.7);
-	}
-
-	:global(:root.dark) .chip[aria-pressed="true"] {
 		color: var(--db-bg);
+		background: var(--db-text);
+		box-shadow: none;
 	}
 
 	.chip.is-active-tag {
 		color: white;
 		background: var(--primary);
-		border-color: var(--primary);
+		box-shadow: none;
 		padding: 0 0.55rem 0 0.6rem;
 	}
 
@@ -486,19 +613,299 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		display: none;
 	}
 
-	/* ---------- 网格：宽屏 8 列，文字卡 / 截图卡占 2 列，海报 / 头像占 1 列 ---------- */
+	/* ---------- 总览 ---------- */
+	.mag {
+		padding: 2.5rem 0 1rem;
+	}
+
+	/* 精选：左大卡（海报 + 感想），右边最近写的 */
+	.feature {
+		display: grid;
+		grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+		gap: 1.5rem;
+	}
+
+	.hl {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		display: flex;
+		gap: 2rem;
+		padding: 2rem;
+		border-radius: 1.25rem;
+		color: white;
+		background: #1c1a22;
+	}
+
+	.hl__bg {
+		position: absolute;
+		inset: -2rem;
+		z-index: -1;
+		background-size: cover;
+		background-position: center 30%;
+		filter: blur(40px) saturate(1.2) brightness(0.55);
+		transform: scale(1.1);
+		transition: transform 1.2s var(--kit-ease-out);
+	}
+
+	.hl:hover .hl__bg {
+		transform: scale(1.18);
+	}
+
+	.hl__poster {
+		width: 11rem;
+		flex: none;
+		aspect-ratio: 2 / 3;
+		overflow: hidden;
+		border-radius: 0.6rem;
+		box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.7);
+		transition: transform 0.6s var(--kit-spring);
+	}
+
+	.hl:hover .hl__poster {
+		transform: translateY(-4px) rotate(-1deg);
+	}
+
+	.hl__poster img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.hl__text {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.7rem;
+		min-width: 0;
+	}
+
+	.hl__eyebrow {
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.25em;
+		opacity: 0.7;
+	}
+
+	.hl__title {
+		font-family: var(--serif);
+		font-size: clamp(1.8rem, 3vw, 2.6rem);
+		font-weight: 900;
+		line-height: 1.25;
+	}
+
+	.hl__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem 1rem;
+		font-size: 0.82rem;
+		opacity: 0.85;
+	}
+
+	.hl__score {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		font-family: var(--kit-num);
+		font-size: 1rem;
+		font-weight: 800;
+	}
+
+	.hl__score :global(svg) {
+		color: #ffc94a;
+	}
+
+	.hl__quote {
+		max-width: 34rem;
+		font-family: var(--serif);
+		font-size: 1rem;
+		line-height: 1.9;
+		opacity: 0.92;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.hl__cta {
+		align-self: flex-start;
+		margin-top: 0.4rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.5rem 1rem;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #1c1a22;
+		background: white;
+		transition: gap 0.3s var(--kit-spring);
+	}
+
+	.hl:hover .hl__cta {
+		gap: 0.6rem;
+	}
+
+	.recent {
+		display: flex;
+		flex-direction: column;
+		padding: 1.5rem 1.5rem 1rem;
+		border-radius: 1.25rem;
+		background: var(--db-card);
+		box-shadow: 0 0 0 1px var(--db-line);
+	}
+
+	.recent__head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 0.5rem;
+	}
+
+	.recent__head h3 {
+		font-family: var(--serif);
+		font-size: 1.25rem;
+		font-weight: 700;
+	}
+
+	.recent__head button,
+	.sec__more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: var(--db-muted);
+		transition:
+			color 0.15s,
+			gap 0.3s var(--kit-spring);
+	}
+
+	.recent__head button:hover,
+	.sec__more:hover {
+		color: var(--db-text);
+		gap: 0.4rem;
+	}
+
+	.recent ol {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.recent li + li {
+		border-top: 1px solid var(--db-line);
+	}
+
+	.recent a {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-areas: "label time" "title title";
+		gap: 0.2rem 0.75rem;
+		padding: 0.8rem 0;
+	}
+
+	.recent__label {
+		grid-area: label;
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: var(--db-muted);
+	}
+
+	.recent__title {
+		grid-area: title;
+		font-size: 0.95rem;
+		font-weight: 700;
+		line-height: 1.5;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.recent a:hover .recent__title {
+		color: var(--primary);
+	}
+
+	.recent time {
+		grid-area: time;
+		font-family: var(--kit-num);
+		font-size: 0.72rem;
+		color: var(--db-muted);
+	}
+
+	/* 每一排：12 栏，类型块按 --span 占位 */
+	.mag__row {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		gap: 1.5rem 3rem;
+		margin-top: 3.5rem;
+	}
+
+	.sec {
+		grid-column: span var(--span);
+		min-width: 0;
+	}
+
+	.sec__head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.sec__head h2 {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-family: var(--serif);
+		font-size: 1.65rem;
+		font-weight: 900;
+		letter-spacing: 0.04em;
+		line-height: 1.2;
+	}
+
+	.sec__head h2 small {
+		font-family: var(--kit-num);
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--db-muted);
+	}
+
+	.sec__head p {
+		margin-top: 0.3rem;
+		font-size: 0.82rem;
+		color: var(--db-muted);
+	}
+
+	.sec__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+		gap: 1.5rem 1.1rem;
+	}
+
+	.sec__grid.is-month {
+		gap: 1rem;
+	}
+
+	/* ---------- 某个类型的完整网格：12 栏，海报 / 人像占 2 栏，文字 / 截图卡占 4 栏 ---------- */
 	.db__grid {
-		gap: 1.6rem 1.1rem;
+		gap: 1.75rem 1.1rem;
 	}
 
 	.db__grid:not(.is-list) {
-		grid-template-columns: repeat(8, minmax(0, 1fr));
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+	}
+
+	.db__grid:not(.is-list) > :global(.bc-cell) {
+		grid-column: span 2;
 	}
 
 	.db__grid:not(.is-list) > :global(.is-text),
 	.db__grid:not(.is-list) > :global(.is-shot),
 	.db__grid:not(.is-list) > :global(.is-month) {
-		grid-column: span 2;
+		grid-column: span 4;
 	}
 
 	.db__grid.is-list {
@@ -506,85 +913,33 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.db__grid[data-items] {
-		padding: 1.5rem 0 3rem;
+		padding: 1.75rem 0 3rem;
 	}
 
 	.db__grid :global(.kit-group-head) {
-		margin-top: 1.5rem;
-		font-size: 1.15rem;
+		margin: 1.75rem 0 -0.25rem;
+		font-family: var(--serif);
+		font-size: 1.35rem;
 		font-weight: 900;
+	}
+
+	.db__grid :global(.kit-group-head::before) {
+		display: none;
 	}
 
 	.db__grid :global(.kit-group-head:first-child) {
 		margin-top: 0;
 	}
 
-	/* ---------- 总览 ---------- */
-	.ov {
-		padding: 0.5rem 0 2rem;
-	}
-
-	.ov__row {
-		padding-top: 2.25rem;
-	}
-
-	.ov__head {
-		display: flex;
-		align-items: baseline;
-		gap: 0.55rem;
-		margin-bottom: 1rem;
-	}
-
-	.ov__head h2 {
-		display: flex;
-		align-items: center;
-		gap: 0.45rem;
-		font-size: 1.3rem;
-		font-weight: 900;
-		letter-spacing: 0.02em;
-	}
-
-	.ov__head h2 :global(svg) {
-		font-size: 1.2rem;
-		color: var(--primary);
-	}
-
-	.ov__count {
-		font-family: var(--kit-num);
-		font-size: 0.85rem;
-		color: var(--db-muted);
-	}
-
-	.ov__more {
-		margin-left: auto;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.2rem;
-		padding: 0.3rem 0.4rem 0.3rem 0.75rem;
-		border-radius: 999px;
-		font-size: 0.82rem;
-		font-weight: 700;
-		color: var(--db-soft);
-		transition:
-			color 0.15s,
-			background 0.15s;
-	}
-
-	.ov__more:hover {
-		color: var(--primary);
-		background: var(--db-card);
-	}
-
 	/* 关于我 */
 	.about {
 		max-width: 36rem;
-		margin: 1rem auto 2rem;
-		padding: 2.5rem 1.5rem;
+		margin: 2rem auto;
+		padding: 3rem 1.5rem 2rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		border-top: 1px solid var(--db-line);
 	}
 
 	.about__avatar {
@@ -596,14 +951,15 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	.about__name {
 		margin-top: 0.85rem;
-		font-size: 1.2rem;
-		font-weight: 800;
+		font-family: var(--serif);
+		font-size: 1.3rem;
+		font-weight: 700;
 	}
 
 	.about__bio {
 		margin-top: 0.6rem;
 		font-size: 0.92rem;
-		line-height: 1.85;
+		line-height: 1.9;
 		color: var(--db-soft);
 	}
 
@@ -628,31 +984,47 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.foot {
-		padding: 1.5rem 1rem 5rem;
+		padding: 1rem 1rem 5rem;
 		text-align: center;
 		font-size: 0.8rem;
 		color: var(--db-muted);
 	}
 
-	/* 列数随宽度减少；总览每排只放满一行 */
-	@media (max-width: 1400px) {
-		.db__grid:not(.is-list) {
+	/* ---------- 响应式 ---------- */
+	@media (max-width: 1280px) {
+		.sec[style*="--span: 12"] .sec__grid[style*="--cols: 8"] {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
 
-		.ov__grid.is-narrow > :global(:nth-child(n + 7)),
-		.ov__grid.is-wide > :global(:nth-child(n + 4)) {
+		.sec[style*="--span: 12"] .sec__grid[style*="--cols: 8"] > :global(:nth-child(n + 7)) {
 			display: none;
+		}
+
+		.db__grid:not(.is-list) > :global(.bc-cell) {
+			grid-column: span 2;
 		}
 	}
 
 	@media (max-width: 1100px) {
-		.db__grid:not(.is-list) {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+		.feature {
+			grid-template-columns: minmax(0, 1fr);
 		}
 
-		.ov__grid.is-narrow > :global(:nth-child(n + 5)),
-		.ov__grid.is-wide > :global(:nth-child(n + 3)) {
+		.sec {
+			grid-column: 1 / -1;
+		}
+
+		.db__grid:not(.is-list) > :global(.bc-cell) {
+			grid-column: span 3;
+		}
+
+		.db__grid:not(.is-list) > :global(.is-text),
+		.db__grid:not(.is-list) > :global(.is-shot),
+		.db__grid:not(.is-list) > :global(.is-month) {
+			grid-column: span 6;
+		}
+
+		.hero__stats {
 			display: none;
 		}
 
@@ -679,24 +1051,43 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			margin-left: auto;
 		}
 
-		.db__grid:not(.is-list) {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 1.1rem 0.75rem;
+		.hl {
+			flex-direction: column;
+			padding: 1.25rem;
+			gap: 1.25rem;
+		}
+
+		.hl__poster {
+			width: 8rem;
+		}
+
+		.sec__grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+		}
+
+		.sec__grid.is-text,
+		.sec__grid.is-shot,
+		.sec__grid.is-month {
+			grid-template-columns: minmax(0, 1fr) !important;
+		}
+
+		.sec__grid.is-poster > :global(:nth-child(n + 7)),
+		.sec__grid.is-person > :global(:nth-child(n + 7)) {
+			display: none;
+		}
+
+		.sec__grid.is-text > :global(:nth-child(n + 4)) {
+			display: none;
+		}
+
+		.db__grid:not(.is-list) > :global(.bc-cell) {
+			grid-column: span 4;
 		}
 
 		.db__grid:not(.is-list) > :global(.is-text),
 		.db__grid:not(.is-list) > :global(.is-shot),
 		.db__grid:not(.is-list) > :global(.is-month) {
 			grid-column: 1 / -1;
-		}
-
-		/* 手机上海报一排 3 个，总览放两排 */
-		.ov__grid.is-narrow > :global(:nth-child(-n + 6)) {
-			display: block;
-		}
-
-		.ov__grid.is-wide > :global(:nth-child(n + 3)) {
-			display: none;
 		}
 
 		.db__kbd,
@@ -707,11 +1098,6 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		.vtabs {
 			-webkit-mask-image: linear-gradient(to right, black 85%, transparent);
 			mask-image: linear-gradient(to right, black 85%, transparent);
-		}
-
-		.vtabs .kit-tabs__item {
-			height: 3rem;
-			padding: 0 0.55rem;
 		}
 	}
 </style>
