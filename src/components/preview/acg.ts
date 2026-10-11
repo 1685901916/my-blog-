@@ -49,7 +49,12 @@ export type AcgItem = {
 
 let cache: Promise<AcgItem[]> | undefined;
 
-export function getAcg(): Promise<AcgItem[]> {
+// 结果缓存一份，每次返回副本，调用方随便排序也不会改到缓存
+export async function getAcg(): Promise<AcgItem[]> {
+	return (await loadAcg()).slice();
+}
+
+function loadAcg(): Promise<AcgItem[]> {
 	cache ??= (async () => {
 		const entries = await getCollection("acg");
 		const items: AcgItem[] = entries.map((e) => ({

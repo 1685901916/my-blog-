@@ -1,18 +1,30 @@
 ---
-// 原型里的 Bases 卡片：封面 + 标题 + 属性（照 Obsidian Bases 的样子，属性名在上、值在下）
-// 外层带 data-* 属性，交给 kit.ts 的卡片引擎做类型 / 分类 / 标签筛选、排序、分组
-import Cover from "../kit/Cover.astro";
-import type { BaseRow } from "./proto";
+// 方案 B 的卡片，按内容长不同样子：
+//   text   文章 / 随笔 / 收集：彩色分类 + 标题 + 摘要 + 标签，不放截图
+//   poster 动画 / 漫画 / 小说 / 游戏：竖版海报 + 名字 + 星级；没海报时是竖排书名的字体封面
+//   person 人物：圆形头像 + 名字 + 身份
+//   shot   作品：项目截图 + 标题 + 摘要
+//   month  月记：大号月份 + 标题 + 摘要
+// engine = true 时带上 data-*，交给 kit.ts 的卡片引擎筛选 / 排序
+import { Icon } from "astro-icon/components";
+import { type BaseRow, hueOf } from "./proto";
 
 interface Props {
 	row: BaseRow;
 	index?: number;
+	engine?: boolean;
 }
-const { row, index = 0 } = Astro.props;
+const { row, index = 0, engine = true } = Astro.props;
+const v = row.variant;
+const hue = hueOf(row.cat || row.kind);
+const stars = typeof row.rating === "number" ? Math.round(row.rating) / 2 : 0;
+const [y, m] = row.date.split("-");
+const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 ---
 
 <div
-	data-item
+	class:list={["bc-cell", `is-${v}`]}
+	data-item={engine ? "" : undefined}
 	data-reveal
 	data-title={row.title}
 	data-kind={row.kind}
@@ -21,132 +33,401 @@ const { row, index = 0 } = Astro.props;
 	data-cat={row.cat}
 	data-date={row.date}
 	data-rating={row.rating ?? ""}
-	data-wide={row.wide ? "" : undefined}
-	style={`--i: ${Math.min(index, 10)}`}
+	data-rank={row.rank}
+	style={`--i: ${Math.min(index, 10)}; --h: ${hue}`}
 >
-	<a href={row.href} class:list={["bcard", row.wide && "bcard--wide"]}>
-		<Cover src={row.cover} title={row.title} aspect={row.aspect}>
-			{typeof row.rating === "number" && <span class="bcard__badge is-rating">★ {row.rating.toFixed(1)}</span>}
-			{(row.wide || row.pinned) && (
-				<span class="bcard__badges">
-					{row.pinned && <span class="bcard__badge is-pin">置顶</span>}
-					{row.wide && <span class="bcard__badge is-kind">{row.kind}</span>}
-				</span>
-			)}
-		</Cover>
-		<div class="bcard__body">
-			<div class="bcard__title">{row.title}</div>
-			{row.excerpt && <p class="bcard__excerpt">{row.excerpt}</p>}
-			<div class="bcard__props">
-				{
-					row.props.map((p) => (
-						<div class="bcard__prop">
-							<span class="bcard__k">{p.k}</span>
-							{p.chips ? (
-								<span class="bcard__chips">
-									{p.chips.length ? p.chips.map((c) => <span>{c}</span>) : <i>—</i>}
-								</span>
-							) : (
-								<span class:list={["bcard__v", p.accent && "is-accent"]}>{p.v || "—"}</span>
-							)}
+	<a href={row.href} class:list={["bc", `bc--${v}`]}>
+		{
+			v === "poster" && (
+				<>
+					<div class:list={["bc__poster", !row.cover && "is-book"]}>
+						{row.cover ? (
+							<img src={row.cover} alt="" loading="lazy" referrerpolicy="no-referrer" />
+						) : (
+							<span class="bc__book">{row.title}</span>
+						)}
+						{row.marks.length > 0 && (
+							<span class="bc__marks">
+								{row.marks.includes("heart") && <Icon name="material-symbols:favorite-rounded" class="is-heart" />}
+								{row.marks.includes("star") && <Icon name="material-symbols:star-rounded" class="is-star" />}
+							</span>
+						)}
+					</div>
+					<div class="bc__name">{row.title}</div>
+					<div class="bc__meta">
+						{stars > 0 ? (
+							<span class="bc__stars" style={`--s: ${stars}`}>
+								<b>{row.rating?.toFixed(1)}</b>
+							</span>
+						) : (
+							<span>{row.cat || row.kind}</span>
+						)}
+					</div>
+				</>
+			)
+		}
+		{
+			v === "person" && (
+				<>
+					<div class="bc__avatar">
+						{row.cover ? <img src={row.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span>{initial}</span>}
+						{row.marks.includes("heart") && <Icon name="material-symbols:favorite-rounded" class="bc__heart" />}
+					</div>
+					<div class="bc__name">{row.title}</div>
+					<div class="bc__meta">{row.cat}</div>
+				</>
+			)
+		}
+		{
+			(v === "text" || v === "shot" || v === "month") && (
+				<>
+					{v === "shot" && row.cover && (
+						<div class="bc__shot">
+							<img src={row.cover} alt="" loading="lazy" referrerpolicy="no-referrer" />
 						</div>
-					))
-				}
-			</div>
-		</div>
+					)}
+					{v === "month" && (
+						<div class="bc__month">
+							<b>{m}</b>
+							<small>{y}</small>
+						</div>
+					)}
+					<div class="bc__body">
+						<div class="bc__top">
+							{row.cat && <span class="bc__cat">{row.cat}</span>}
+							{row.pinned && <span class="bc__pin">置顶</span>}
+							<time>{row.date}</time>
+						</div>
+						<div class="bc__title">{row.title}</div>
+						{row.excerpt && <p class="bc__excerpt">{row.excerpt}</p>}
+						<div class="bc__foot">
+							<span class="bc__tags">
+								{row.tags.slice(0, 3).map((t) => (
+									<span>#{t}</span>
+								))}
+							</span>
+							{row.words > 0 && <span class="bc__words">{row.words} 字</span>}
+						</div>
+					</div>
+				</>
+			)
+		}
 	</a>
 </div>
 
 <style>
-	.bcard {
+	.bc {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		border-radius: 0.8rem;
+		min-width: 0;
+	}
+
+	/* ---------- 海报 ---------- */
+	.bc__poster,
+	.bc__avatar {
+		position: relative;
+		background: var(--db-sunk, rgb(0 0 0 / 0.05));
+		transition:
+			transform 0.45s var(--kit-spring),
+			box-shadow 0.35s;
+	}
+
+	.bc__poster {
 		overflow: hidden;
-		background: var(--db-card, var(--card-bg));
-		border: 1px solid var(--db-line, rgb(0 0 0 / 0.08));
+		aspect-ratio: 3 / 4;
+		border-radius: 0.6rem;
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+	}
+
+	.bc:hover .bc__poster {
+		transform: translateY(-4px);
+		box-shadow: 0 18px 30px -18px rgb(0 0 0 / 0.55);
+	}
+
+	.bc:hover .bc__avatar {
+		transform: translateY(-4px);
+	}
+
+	.bc__poster img,
+	.bc__avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* 没海报：像一本书，书名竖排 */
+	.bc__poster.is-book {
+		background:
+			linear-gradient(90deg, rgb(0 0 0 / 0.12) 0 6%, transparent 6% 8%, rgb(255 255 255 / 0.18) 8% 9%, transparent 9%),
+			linear-gradient(160deg, oklch(0.9 0.05 var(--h)), oklch(0.72 0.1 calc(var(--h) + 30)));
+	}
+
+	:global(:root.dark) .bc__poster.is-book {
+		background:
+			linear-gradient(90deg, rgb(0 0 0 / 0.25) 0 6%, transparent 6% 8%, rgb(255 255 255 / 0.08) 8% 9%, transparent 9%),
+			linear-gradient(160deg, oklch(0.42 0.06 var(--h)), oklch(0.3 0.08 calc(var(--h) + 30)));
+	}
+
+	.bc__book {
+		position: absolute;
+		top: 12%;
+		right: 16%;
+		max-height: 76%;
+		overflow: hidden;
+		writing-mode: vertical-rl;
+		font-size: 1.05rem;
+		font-weight: 900;
+		letter-spacing: 0.12em;
+		line-height: 1.25;
+		color: oklch(0.28 0.06 var(--h));
+	}
+
+	:global(:root.dark) .bc__book {
+		color: oklch(0.92 0.04 var(--h));
+	}
+
+	.bc__marks {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.4rem;
+		display: flex;
+		gap: 0.1rem;
+		padding: 0.15rem 0.3rem;
+		border-radius: 0.4rem;
+		font-size: 0.85rem;
+		background: rgb(0 0 0 / 0.45);
+		-webkit-backdrop-filter: blur(6px);
+		backdrop-filter: blur(6px);
+	}
+
+	.bc__marks :global(.is-heart),
+	.bc__heart {
+		color: #ff6b8e;
+	}
+
+	.bc__marks :global(.is-star) {
+		color: #ffcf4a;
+	}
+
+	.bc__name {
+		margin-top: 0.55rem;
+		font-size: 0.875rem;
+		font-weight: 700;
+		line-height: 1.35;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+
+	.bc:hover .bc__name,
+	.bc:hover .bc__title {
+		color: var(--primary);
+	}
+
+	.bc__meta {
+		margin-top: 0.15rem;
+		font-size: 0.75rem;
+		color: var(--db-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.bc__stars {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	.bc__stars::before {
+		content: "★★★★★";
+		font-size: 0.72rem;
+		letter-spacing: 1px;
+		background: linear-gradient(to right, #f5b400 calc(var(--s) / 5 * 100%), color-mix(in oklch, var(--db-card) 78%, black) 0);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.bc__stars b {
+		font-family: var(--kit-num);
+		color: var(--db-soft);
+	}
+
+	/* ---------- 人物 ---------- */
+	.bc--person {
+		align-items: center;
+		text-align: center;
+	}
+
+	.bc__avatar {
+		width: 78%;
+		aspect-ratio: 1;
+		border-radius: 999px;
+	}
+
+	/* Bangumi 的人物图多是竖长立绘：铺满圆框、从顶部（脸）开始裁 */
+	.bc__avatar img {
+		position: absolute;
+		inset: 0;
+		border-radius: 999px;
+		object-position: center top;
+		box-shadow: 0 6px 16px -10px rgb(0 0 0 / 0.5);
+	}
+
+	.bc__avatar > span {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		border-radius: 999px;
+		font-size: 1.9rem;
+		font-weight: 900;
+		color: oklch(0.45 0.1 var(--h));
+		background: linear-gradient(150deg, oklch(0.94 0.04 var(--h)), oklch(0.84 0.08 calc(var(--h) + 30)));
+	}
+
+	:global(:root.dark) .bc__avatar > span {
+		color: oklch(0.9 0.05 var(--h));
+		background: linear-gradient(150deg, oklch(0.42 0.06 var(--h)), oklch(0.32 0.08 calc(var(--h) + 30)));
+	}
+
+	.bc__heart {
+		position: absolute;
+		right: 2%;
+		bottom: 2%;
+		font-size: 1.15rem;
+		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+	}
+
+	.bc--person .bc__name {
+		max-width: 100%;
+	}
+
+	/* ---------- 文字卡 / 截图卡 / 月份卡 ---------- */
+	.bc--text,
+	.bc--shot,
+	.bc--month {
+		overflow: hidden;
+		border-radius: 0.85rem;
+		background: var(--db-card);
+		border: 1px solid var(--db-line);
 		transition:
 			transform 0.45s var(--kit-spring),
 			box-shadow 0.3s,
 			border-color 0.2s;
 	}
 
-	.bcard:hover {
+	.bc--text:hover,
+	.bc--shot:hover,
+	.bc--month:hover {
 		transform: translateY(-3px);
-		border-color: color-mix(in oklch, var(--db-line, #ddd) 50%, var(--primary));
-		box-shadow: 0 20px 40px -26px rgb(0 0 0 / 0.5);
+		border-color: color-mix(in oklch, var(--db-line) 40%, var(--primary));
+		box-shadow: 0 20px 40px -28px rgb(0 0 0 / 0.5);
 	}
 
-	.bcard :global(.kit-cover) {
-		border-radius: 0;
-		border-bottom: 1px solid var(--db-line, rgb(0 0 0 / 0.06));
+	.bc__shot {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-bottom: 1px solid var(--db-line);
+		background: var(--db-sunk);
 	}
 
-	.bcard :global(.kit-cover img) {
+	.bc__shot img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
 		transition: transform 0.6s var(--kit-ease-out);
 	}
 
-	.bcard:hover :global(.kit-cover img) {
-		transform: scale(1.04);
+	.bc--shot:hover .bc__shot img {
+		transform: scale(1.03);
 	}
 
-	.bcard__badges {
-		position: absolute;
-		z-index: 2;
-		top: 0.55rem;
-		left: 0.55rem;
+	.bc--month {
+		flex-direction: row;
+	}
+
+	.bc__month {
+		flex: none;
+		width: 5.5rem;
 		display: flex;
-		gap: 0.3rem;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(160deg, oklch(0.95 0.03 var(--h)), oklch(0.88 0.06 calc(var(--h) + 30)));
+		color: oklch(0.4 0.1 var(--h));
 	}
 
-	/* 已经按类型分组、或者只看某个类型时，类型角标就重复了 */
-	:global([data-active-group="kind"]) .bcard__badge.is-kind,
-	:global([data-active-kind]:not([data-active-kind=""])) .bcard__badge.is-kind {
-		display: none;
+	:global(:root.dark) .bc__month {
+		background: linear-gradient(160deg, oklch(0.36 0.05 var(--h)), oklch(0.28 0.07 calc(var(--h) + 30)));
+		color: oklch(0.9 0.05 var(--h));
 	}
 
-	.bcard__badge {
-		padding: 0.12rem 0.5rem;
-		border-radius: 0.4rem;
-		font-size: 0.72rem;
-		font-weight: 700;
-		color: white;
-		background: rgb(0 0 0 / 0.5);
-		-webkit-backdrop-filter: blur(6px);
-		backdrop-filter: blur(6px);
-	}
-
-	.bcard__badge.is-rating {
-		position: absolute;
-		z-index: 2;
-		top: 0.55rem;
-		right: 0.55rem;
+	.bc__month b {
 		font-family: var(--kit-num);
+		font-size: 2.2rem;
+		font-weight: 900;
+		line-height: 1;
 	}
 
-	.bcard__badge.is-pin {
-		background: var(--primary);
+	.bc__month small {
+		font-family: var(--kit-num);
+		font-size: 0.75rem;
+		opacity: 0.75;
 	}
 
-	/* 横图大多是网页截图，从顶部对齐比居中裁切好认 */
-	.bcard--wide :global(.kit-cover img) {
-		object-position: top;
-	}
-
-	.bcard__body {
+	.bc__body {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 0.55rem;
-		padding: 0.8rem 0.9rem 0.95rem;
+		gap: 0.45rem;
+		min-width: 0;
+		padding: 1rem 1.1rem 0.95rem;
 	}
 
-	.bcard__title {
-		font-size: 0.95rem;
+	.bc__top {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+	}
+
+	.bc__cat {
+		padding: 0.1rem 0.5rem;
+		border-radius: 999px;
+		font-weight: 700;
+		color: oklch(0.48 0.12 var(--h));
+		background: oklch(0.95 0.035 var(--h));
+	}
+
+	:global(:root.dark) .bc__cat {
+		color: oklch(0.85 0.08 var(--h));
+		background: oklch(0.32 0.05 var(--h));
+	}
+
+	.bc__pin {
+		padding: 0.1rem 0.45rem;
+		border-radius: 999px;
+		font-weight: 700;
+		color: white;
+		background: var(--primary);
+	}
+
+	.bc__top time {
+		margin-left: auto;
+		font-family: var(--kit-num);
+		color: var(--db-muted);
+	}
+
+	.bc__title {
+		font-size: 1.05rem;
 		font-weight: 800;
 		line-height: 1.45;
-		color: var(--db-text, inherit);
+		color: var(--db-text);
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
@@ -154,156 +435,110 @@ const { row, index = 0 } = Astro.props;
 		transition: color 0.15s;
 	}
 
-	.bcard--wide .bcard__title {
-		font-size: 1.05rem;
-	}
-
-	.bcard:hover .bcard__title {
-		color: var(--primary);
-	}
-
-	.bcard__excerpt {
-		margin-top: -0.2rem;
-		font-size: 0.82rem;
+	.bc__excerpt {
+		font-size: 0.84rem;
 		line-height: 1.7;
-		color: var(--db-muted, rgb(130 130 130));
+		color: var(--db-soft);
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
 
-	/* 属性：竖排；宽卡片里横排成三列，像 Bases 的属性栏 */
-	.bcard__props {
+	.bc__foot {
 		margin-top: auto;
+		padding-top: 0.35rem;
 		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.75rem;
+		color: var(--db-muted);
 	}
 
-	.bcard--wide .bcard__props {
-		display: grid;
-		grid-template-columns: auto minmax(0, 1fr) auto;
-		gap: 0.5rem 1.5rem;
-		padding-top: 0.6rem;
-		border-top: 1px dashed var(--db-line, rgb(0 0 0 / 0.08));
-	}
-
-	.bcard__prop {
+	.bc__tags {
 		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
+		gap: 0.6rem;
 		min-width: 0;
-	}
-
-	.bcard__k {
-		font-size: 0.68rem;
-		letter-spacing: 0.02em;
-		color: var(--db-muted, rgb(140 140 140));
-	}
-
-	.bcard__v {
-		font-size: 0.82rem;
-		font-family: var(--kit-num);
-		color: var(--db-soft, inherit);
+		overflow: hidden;
 		white-space: nowrap;
 	}
 
-	.bcard__v.is-accent {
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: var(--primary);
-	}
-
-	.bcard__chips {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.25rem;
-		min-width: 0;
-	}
-
-	.bcard__chips span {
-		font-size: 0.7rem;
-		line-height: 1.5;
-		padding: 0.05rem 0.45rem;
-		border-radius: 0.35rem;
-		color: color-mix(in oklch, var(--primary) 80%, var(--db-text, #333));
-		background: color-mix(in oklch, var(--db-card, var(--card-bg)) 86%, var(--primary));
-		white-space: nowrap;
-	}
-
-	.bcard__chips i {
-		font-style: normal;
-		font-size: 0.82rem;
-		color: var(--db-muted, #999);
-	}
-
-	/* 列表视图：一行一条，封面缩成缩略图，属性排在右边 */
-	:global(.kit-grid.is-list) .bcard {
-		flex-direction: row;
-		align-items: stretch;
-	}
-
-	:global(.kit-grid.is-list) .bcard:hover {
-		transform: translateX(3px);
-	}
-
-	:global(.kit-grid.is-list) .bcard :global(.kit-cover) {
-		--aspect: 4 / 3 !important;
-		width: 6.5rem;
+	.bc__words {
+		margin-left: auto;
 		flex: none;
-		border-bottom: none;
-		border-right: 1px solid var(--db-line, rgb(0 0 0 / 0.06));
+		font-family: var(--kit-num);
 	}
 
-	:global(.kit-grid.is-list) .bcard__badge.is-rating,
-	:global(.kit-grid.is-list) .bcard__badges {
+	/* ---------- 列表视图：所有类型都压成一行 ---------- */
+	:global(.kit-grid.is-list) .bc {
+		flex-direction: row;
+		align-items: center;
+		gap: 0.9rem;
+		padding: 0.55rem 0.9rem;
+		border-radius: 0.6rem;
+		background: var(--db-card);
+		border: 1px solid var(--db-line);
+		text-align: left;
+		transform: none;
+		box-shadow: none;
+	}
+
+	:global(.kit-grid.is-list) .bc__poster,
+	:global(.kit-grid.is-list) .bc__avatar {
+		width: 2.4rem;
+		flex: none;
+		transform: none;
+		box-shadow: none;
+	}
+
+	:global(.kit-grid.is-list) .bc__poster {
+		border-radius: 0.3rem;
+	}
+
+	:global(.kit-grid.is-list) .bc__book,
+	:global(.kit-grid.is-list) .bc__marks,
+	:global(.kit-grid.is-list) .bc__heart,
+	:global(.kit-grid.is-list) .bc__shot,
+	:global(.kit-grid.is-list) .bc__month,
+	:global(.kit-grid.is-list) .bc__excerpt,
+	:global(.kit-grid.is-list) .bc__tags {
 		display: none;
 	}
 
-	/* 标题 + 一行摘要叠在左边，属性在右边对齐成列 */
-	:global(.kit-grid.is-list) .bcard__body {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		grid-template-areas: "title props" "excerpt props";
-		align-content: center;
+	:global(.kit-grid.is-list) .bc__avatar > span {
+		font-size: 0.9rem;
+	}
+
+	:global(.kit-grid.is-list) .bc__name {
+		flex: 1;
+		margin: 0;
+		font-size: 0.92rem;
+	}
+
+	:global(.kit-grid.is-list) .bc__meta {
+		margin: 0;
+	}
+
+	:global(.kit-grid.is-list) .bc__body {
+		flex-direction: row;
 		align-items: center;
-		gap: 0.2rem 2rem;
-		padding: 0.6rem 1.25rem;
+		padding: 0.15rem 0;
+		gap: 1rem;
 	}
 
-	:global(.kit-grid.is-list) .bcard__title {
-		grid-area: title;
+	:global(.kit-grid.is-list) .bc__top {
+		flex: none;
+		min-width: 13rem;
+	}
+
+	:global(.kit-grid.is-list) .bc__title {
+		order: -1;
+		flex: 1;
+		font-size: 0.92rem;
 		-webkit-line-clamp: 1;
 	}
 
-	:global(.kit-grid.is-list) .bcard__excerpt {
-		grid-area: excerpt;
-		margin: 0;
-		-webkit-line-clamp: 1;
-	}
-
-	:global(.kit-grid.is-list) .bcard__props {
-		grid-area: props;
-	}
-
-	:global(.kit-grid.is-list) .bcard__props {
-		margin: 0;
-		padding: 0;
-		border: none;
-		display: grid;
-		grid-template-columns: 6rem 13rem 5.5rem;
-		gap: 1.5rem;
-	}
-
-	@media (max-width: 760px) {
-		:global(.kit-grid.is-list) .bcard__props {
-			display: none;
-		}
-
-		/* 手机上横图卡片占满一行，封面压扁一点，一屏能多看几条 */
-		.bcard--wide :global(.kit-cover) {
-			--aspect: 2 / 1 !important;
-		}
+	:global(.kit-grid.is-list) .bc__foot {
+		display: none;
 	}
 </style>

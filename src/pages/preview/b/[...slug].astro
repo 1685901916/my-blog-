@@ -1,6 +1,7 @@
 ---
 // 方案 B 的阅读页：顶栏带类型入口；标题下面是 Obsidian 式的「笔记属性」面板，
-// 分类 / 标签点了直接回到数据库筛好；动漫没有正文，用海报 + 属性的详情版式；文末是相关笔记卡片
+// 分类 / 标签点了直接回到数据库筛好；动画 / 漫画 / 小说 / 游戏 / 人物用 海报（头像）+ 属性 的条目版式，
+// 正文后面是双链关联（这篇提到的 / 提到这里的），文末是相关笔记卡片
 import { Icon } from "astro-icon/components";
 import Cover from "../../../components/kit/Cover.astro";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
@@ -21,16 +22,17 @@ export async function getStaticPaths() {
 	return getProtoArticlePaths("b");
 }
 
-const { row, related, prev, next } = Astro.props as ProtoArticle;
+const { row, related, linked, prev, next } = Astro.props as ProtoArticle;
 const { Content, headings, remarkPluginFrontmatter } = await row.entry.render();
 const hasBody = (row.entry.body ?? "").trim().length > 0;
 const top = Math.min(...headings.map((h) => h.depth));
 const toc = headings.filter((h) => h.depth <= top + 1);
 const minutes = remarkPluginFrontmatter?.minutes as number | undefined;
 const words = remarkPluginFrontmatter?.words as number | undefined;
-const isAnime = row.kind === "动漫";
-// 页头大图只用笔记里明确写的封面；正文第一张图不重复放
-const headerImage = "image" in row.entry.data ? row.entry.data.image : "";
+const isPoster = row.variant === "poster" || row.variant === "person";
+const isPerson = row.variant === "person";
+// 页头大图只用文章里明确写的封面；Obsidian 笔记的图已经在正文里，不重复放
+const headerImage = row.entry.collection !== "acg" && "image" in row.entry.data ? row.entry.data.image : "";
 
 // 回到数据库并筛好
 const db = (q: Record<string, string> = {}) => `/preview/b/?${new URLSearchParams({ type: row.kind, ...q })}#notes`;
@@ -47,8 +49,10 @@ const ICON: Record<string, string> = {
 	月份: "material-symbols:calendar-month-outline-rounded",
 	评分: "material-symbols:star-rounded",
 	字数: "material-symbols:notes-rounded",
+	分区: "material-symbols:inventory-2-outline-rounded",
+	更新: "material-symbols:schedule-outline-rounded",
 };
-const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === row.cat) ? `同在「${row.cat}」` : "相关笔记";
+const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在「${row.cat}」` : `更多${row.kind}`;
 ---
 
 <Layout title={row.title} description={row.excerpt}>
@@ -69,7 +73,7 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 
 		<!-- 面包屑：笔记 / 类型 / 分类，每一级都能回到数据库 -->
 		{
-			isAnime ? (
+			isPoster ? (
 				<section class="anime">
 					{row.cover && <div class="anime__backdrop" style={`background-image: url("${row.cover}")`} />}
 					<div class="anime__inner">
@@ -77,10 +81,16 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 							<a href="/preview/b/#notes">笔记</a>
 							<span>/</span>
 							<a href={db()}>{row.kind}</a>
+							{row.cat && (
+								<>
+									<span>/</span>
+									<a href={db({ cat: row.cat })}>{row.cat}</a>
+								</>
+							)}
 						</nav>
 						<div class="anime__main">
-							<div class="anime__poster">
-								<Cover src={row.cover} title={row.title} aspect="3 / 4" eager />
+							<div class:list={["anime__poster", isPerson && "is-round"]}>
+								<Cover src={row.cover} title={row.title} aspect={isPerson ? "1 / 1" : "3 / 4"} eager />
 							</div>
 							<div class="anime__info">
 								<h1 class="title">{row.title}</h1>
@@ -112,6 +122,10 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 														) : (
 															<span class="props__empty">空</span>
 														)
+													) : p.filter === "cat" ? (
+														<a class="props__chip is-cat" href={db({ cat: row.cat })}>
+															{p.v}
+														</a>
 													) : (
 														<span class="props__v">{p.v || "—"}</span>
 													)}
@@ -127,7 +141,7 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 								)}
 							</div>
 						</div>
-						{row.excerpt && <p class="anime__summary">{row.excerpt}</p>}
+						{row.excerpt && !hasBody && <p class="anime__summary">{row.excerpt}</p>}
 						{hasBody && (
 							<Markdown class="markdown-content anime__body">
 								<Content />
@@ -241,19 +255,46 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 		}
 
 		{
+			linked.length > 0 && (
+				<section class="linked">
+					<h2>
+						<Icon name="material-symbols:hub-outline" />
+						双链关联<small>{linked.length}</small>
+					</h2>
+					<div class="linked__list">
+						{linked.map(({ row: r, dir }) => (
+							<a href={r.href} class="lk">
+								<span class:list={["lk__pic", r.variant === "person" && "is-round", !r.cover && "is-empty"]}>
+									{r.cover ? <img src={r.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : [...r.title][0]}
+								</span>
+								<span class="lk__text">
+									<b>{r.title}</b>
+									<small>
+										{r.kind}
+										{r.cat && ` · ${r.cat}`} · {dir}
+									</small>
+								</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
 			related.length > 0 && (
-				<section class="related" data-active-kind={row.kind}>
+				<section class="related">
 					<div class="related__inner">
 						<div class="related__head">
 							<h2>{relatedTitle}</h2>
-							<a href={db(isAnime ? {} : { cat: row.cat })}>
+							<a href={db(row.cat ? { cat: row.cat } : {})}>
 								在数据库里看全部
 								<Icon name="material-symbols:arrow-forward-rounded" />
 							</a>
 						</div>
-						<div class:list={["kit-grid", "related__grid", isAnime && "is-posters"]}>
+						<div class:list={["kit-grid", "related__grid", isPoster && "is-posters"]}>
 							{related.map((r, i) => (
-								<BaseCard row={r} index={i} />
+								<BaseCard row={r} index={i} engine={false} />
 							))}
 						</div>
 					</div>
@@ -272,6 +313,7 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 		--db-soft: rgb(70 70 76);
 		--db-muted: rgb(138 138 146);
 		--db-line: color-mix(in oklch, var(--card-bg) 90%, black);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 92%, black);
 		background: var(--db-card);
 		color: var(--db-text);
 		min-height: 100vh;
@@ -699,8 +741,139 @@ const relatedTitle = isAnime ? "相似的番" : related.some((r) => r.cat === ro
 	}
 
 	.related__grid {
-		gap: 1.1rem;
+		gap: 1.5rem 1.1rem;
 		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+
+	.related__grid > :global(.is-text),
+	.related__grid > :global(.is-shot),
+	.related__grid > :global(.is-month) {
+		grid-column: span 2;
+	}
+
+	/* ---------- 双链关联 ---------- */
+	.linked {
+		max-width: 60rem;
+		margin: 0 auto;
+		padding: 0 clamp(1.25rem, 4vw, 2rem) 3rem;
+	}
+
+	.linked h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-bottom: 0.9rem;
+		font-size: 1.05rem;
+		font-weight: 900;
+	}
+
+	.linked h2 :global(svg) {
+		color: var(--primary);
+	}
+
+	.linked h2 small {
+		font-family: var(--kit-num);
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--db-muted);
+	}
+
+	.linked__list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: 0.6rem;
+	}
+
+	.lk {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.55rem 0.75rem;
+		border-radius: 0.7rem;
+		background: var(--db-card);
+		border: 1px solid var(--db-line);
+		transition:
+			border-color 0.15s,
+			transform 0.4s var(--kit-spring);
+	}
+
+	.lk:hover {
+		border-color: color-mix(in oklch, var(--db-line) 40%, var(--primary));
+		transform: translateY(-2px);
+	}
+
+	.lk__pic {
+		width: 2.5rem;
+		height: 3.3rem;
+		flex: none;
+		overflow: hidden;
+		display: grid;
+		place-items: center;
+		border-radius: 0.35rem;
+		font-weight: 900;
+		color: var(--primary);
+		background: color-mix(in oklch, var(--db-card) 88%, var(--primary));
+	}
+
+	.lk__pic.is-round {
+		height: 2.5rem;
+		border-radius: 999px;
+	}
+
+	.lk__pic img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.lk__text {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.lk__text b {
+		font-size: 0.88rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.lk__text small {
+		font-size: 0.72rem;
+		color: var(--db-muted);
+	}
+
+	.anime__poster.is-round {
+		width: 12rem;
+	}
+
+	.anime__poster.is-round :global(.kit-cover) {
+		border-radius: 999px;
+	}
+
+	.anime__poster.is-round :global(.kit-cover img) {
+		object-position: center top;
+	}
+
+	/* Obsidian 笔记的标题层级比较随意、图片多是截图：统一压小 */
+	.anime__inner :global(.anime__body h1) {
+		font-size: 1.35rem;
+	}
+
+	.anime__inner :global(.anime__body h2) {
+		font-size: 1.15rem;
+	}
+
+	.anime__inner :global(.anime__body h3),
+	.anime__inner :global(.anime__body h4) {
+		font-size: 1rem;
+	}
+
+	.anime__inner :global(.anime__body img) {
+		max-height: 26rem;
+		width: auto;
+		margin-inline: auto;
 	}
 
 	@media (max-width: 900px) {

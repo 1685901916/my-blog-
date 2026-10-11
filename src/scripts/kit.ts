@@ -260,6 +260,8 @@ function initCollection(scope: HTMLElement) {
 		...scope.querySelectorAll<HTMLElement>("[data-active-tag]"),
 	];
 	const tagOuts = [...scope.querySelectorAll<HTMLElement>("[data-tag-out]")];
+	// 总览（data-overview）：什么都没选时显示总览、藏起网格；选了类型 / 搜索 / 筛选就换成网格
+	const overview = scope.querySelector<HTMLElement>("[data-overview]");
 	const storeKey = `kit-view:${location.pathname}`;
 	const defaultSort = scope.dataset.defaultSort ?? "date";
 	const defaultGroup = scope.dataset.defaultGroup ?? "";
@@ -306,6 +308,12 @@ function initCollection(scope: HTMLElement) {
 				);
 			case "title":
 				return collator.compare(key(a, "title"), key(b, "title"));
+			// 推荐：页面按内容类型预先算好的顺序（data-rank，越小越前）
+			case "auto":
+				return (
+					Number(key(a, "rank") || 9999) - Number(key(b, "rank") || 9999) ||
+					key(b, "date").localeCompare(key(a, "date"))
+				);
 			default:
 				return (
 					key(b, "date").localeCompare(key(a, "date")) ||
@@ -389,6 +397,12 @@ function initCollection(scope: HTMLElement) {
 		);
 		for (const el of activeTagEls) el.hidden = !state.tag || tagShown;
 		for (const el of tagOuts) el.textContent = state.tag;
+		if (overview && grid) {
+			const browsing = !state.kind && !state.q.trim() && !state.cat && !state.tag;
+			overview.hidden = !browsing;
+			grid.hidden = browsing;
+			scope.toggleAttribute("data-browsing", browsing);
+		}
 		for (const b of [viewBtns[0], kindBtns[0]]) {
 			const tabs = b?.closest<HTMLElement>("[data-tabs]");
 			if (tabs) placeIndicator(tabs, activeTab(tabs));
@@ -528,9 +542,13 @@ function initCollection(scope: HTMLElement) {
 	}
 	// 换类型时清掉分类和标签，它们只属于原来那个类型
 	for (const b of kindBtns) {
-		b.addEventListener("click", () =>
-			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" }),
-		);
+		b.addEventListener("click", () => {
+			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" });
+			// 从总览里点「全部 →」：回到数据库顶部
+			if (b.closest("[data-overview]")) {
+				scope.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+			}
+		});
 	}
 	// 卡片上的标签：点一下只看这个标签，再点一下取消
 	grid.addEventListener("click", (ev) => {

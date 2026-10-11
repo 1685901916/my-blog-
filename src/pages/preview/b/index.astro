@@ -1,39 +1,33 @@
 ---
-// 方案 B · 个人主页 + 数据库：插画首屏 → Bases 式数据库（所有笔记都是带属性的卡片）→ 关于我
-// 顶上一排类型标签（全部 / 文章 / 作品 / 动漫 / 月记），下面一排是当前类型的分类，
-// 搜索 / 排序 / 分组 / 卡片-列表切换都交给 kit.ts 的卡片引擎
+// 方案 B · 个人主页 + 数据库：插画首屏 → 数据库 → 关于我
+// 数据库顶上一排类型标签（全部 / 文章 / 动画 / 漫画 / 小说 / 游戏 / 人物 / 作品 / 月记 / 收集）：
+//   「全部」是总览，每种类型一排，排尾「全部 →」进入该类型；
+//   选了类型就是这个类型的完整网格，第二排是它自己的分类（动画 → 异能系 / 恋爱 / 现实系 …）
+// 搜索 / 排序 / 卡片-列表切换交给 kit.ts 的卡片引擎
 import { Icon } from "astro-icon/components";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
 import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import BaseCard from "../../../components/preview/BaseCard.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
-import { BASE_KINDS, type BaseRow, getProtoBase } from "../../../components/preview/proto";
+import { BASE_KINDS, getProtoBase, KIND_META } from "../../../components/preview/proto";
 import { profileConfig, siteConfig } from "../../../config";
 import Layout from "../../../layouts/Layout.astro";
 
-const rows = (await getProtoBase("b")).sort((a, b) => a.kindOrder - b.kindOrder || b.date.localeCompare(a.date));
+const rows = await getProtoBase();
 const ofKind = (k: string) => rows.filter((r) => r.kind === k);
 const kinds = BASE_KINDS.filter((k) => ofKind(k).length > 0);
 
-// 某个类型下每个值出现几次，按次数排
-function tally(list: BaseRow[], pick: (r: BaseRow) => string[]) {
-	const m = new Map<string, number>();
-	for (const r of list) for (const v of pick(r)) if (v) m.set(v, (m.get(v) ?? 0) + 1);
-	return [...m.entries()].sort((a, b) => b[1] - a[1]);
-}
-// 每个类型的第二排：文章 / 作品按分类，动漫按文件标签
-const facets = [
-	{ kind: "文章", label: "分类", attr: "cat", values: tally(ofKind("文章"), (r) => [r.cat]), isDefault: true },
-	{ kind: "作品", label: "类别", attr: "cat", values: tally(ofKind("作品"), (r) => [r.cat]), isDefault: false },
-	{ kind: "动漫", label: "文件标签", attr: "tag", values: tally(ofKind("动漫"), (r) => r.tags).slice(0, 12), isDefault: false },
-];
+// 每个类型的分类和数量（第二排的筛选按钮）
+const facets = kinds
+	.map((kind) => {
+		const m = new Map<string, number>();
+		for (const r of ofKind(kind)) if (r.cat) m.set(r.cat, (m.get(r.cat) ?? 0) + 1);
+		return { kind, label: KIND_META[kind].facet, values: [...m.entries()].sort((a, b) => b[1] - a[1]) };
+	})
+	.filter((f) => f.values.length > 1);
 
-const KIND_ICON: Record<string, string> = {
-	文章: "material-symbols:article-outline-rounded",
-	作品: "material-symbols:work-outline",
-	动漫: "material-symbols:movie-outline-rounded",
-	月记: "material-symbols:calendar-month-outline-rounded",
-};
+// 总览每排放几个：海报 / 头像一排 8 个，文字卡 / 截图卡一排 4 个
+const wide = (k: (typeof kinds)[number]) => !["poster", "person"].includes(KIND_META[k].variant);
 const banner = "/assets/desktop-banner/custom-bg.jpg";
 ---
 
@@ -48,7 +42,6 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			<div class="nav__theme"><LightDarkSwitch client:only="svelte" /></div>
 		</header>
 
-		<!-- 首屏：只放头像、站名和一句话，压矮一点，数据库在第一屏就能看到 -->
 		<section class="hero">
 			<img class="hero__bg" src={banner} alt="" />
 			<div class="hero__shade"></div>
@@ -59,18 +52,17 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			</div>
 		</section>
 
-		<!-- 数据库 -->
-		<section class="db" id="notes" data-collection data-default-group="kind" data-default-sort="date">
+		<section class="db" id="notes" data-collection data-default-sort="auto" data-default-group="kind">
 			<div class="db__bar">
 				<div class="db__inner db__bar-inner">
 					<div class="kit-tabs vtabs" data-tabs role="group" aria-label="类型">
 						<button type="button" class="kit-tabs__item" data-filter-kind="" aria-pressed="true">
-							<Icon name="material-symbols:database" />全部<small>{rows.length}</small>
+							<Icon name="material-symbols:home-outline-rounded" />全部
 						</button>
 						{
 							kinds.map((k) => (
 								<button type="button" class="kit-tabs__item" data-filter-kind={k} aria-pressed="false">
-									<Icon name={KIND_ICON[k]} />
+									<Icon name={KIND_META[k].icon} />
 									{k}
 									<small>{ofKind(k).length}</small>
 								</button>
@@ -79,28 +71,18 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 					</div>
 
 					<div class="db__tools">
-						<span class="db__count"><b data-count-out>{rows.length}</b> 条</span>
 						<label class="kit-search">
 							<Icon name="material-symbols:search-rounded" class="kit-search__icon" />
-							<input class="kit-input" type="search" data-search placeholder="搜索标题、分类、标签" aria-label="搜索" />
+							<input class="kit-input" type="search" data-search placeholder="搜索全部笔记" aria-label="搜索" />
 							<kbd class="db__kbd" title="按 / 搜索">/</kbd>
 						</label>
 						<label class="kit-select-wrap">
 							<Icon name="material-symbols:swap-vert-rounded" />
 							<select class="kit-select" data-sort aria-label="排序">
-								<option value="date" selected>按日期</option>
-								<option value="title">按标题</option>
-								<option value="rating">按评分</option>
-							</select>
-						</label>
-						<label class="kit-select-wrap">
-							<Icon name="material-symbols:segment-rounded" />
-							<select class="kit-select" data-group aria-label="分组">
-								<option value="">不分组</option>
-								<option value="kind" selected>按类型</option>
-								<option value="cat">按分类</option>
-								<option value="year">按年份</option>
-								<option value="rating">按评分</option>
+								<option value="auto" selected>推荐</option>
+								<option value="date">最新</option>
+								<option value="rating">评分</option>
+								<option value="title">名称</option>
 							</select>
 						</label>
 						<div class="kit-tabs" data-tabs role="group" aria-label="视图">
@@ -116,7 +98,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			</div>
 
 			<div class="db__inner">
-				<!-- 第二排：只显示当前类型的分类（没选类型时显示文章分类） -->
+				<!-- 第二排：当前类型的分类；从阅读页点标签进来时最前面多一个可以取消的标签 -->
 				<div class="db__facets">
 					<button type="button" class="chip is-active-tag" data-active-tag hidden title="取消这个标签">
 						<Icon name="material-symbols:tag-rounded" />
@@ -126,20 +108,14 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 					{
 						facets.map((f) => (
 							<>
-								<span class="db__facet-label" data-scope={f.kind} data-scope-default={f.isDefault ? "" : undefined} hidden={!f.isDefault}>
-									<Icon name="material-symbols:label-outline" />
+								<span class="db__facet-label" data-scope={f.kind} hidden>
 									{f.label}
 								</span>
+								<button type="button" class="chip" data-scope={f.kind} data-filter-cat="" aria-pressed="true" hidden>
+									全部
+								</button>
 								{f.values.map(([v, n]) => (
-									<button
-										type="button"
-										class="chip"
-										data-scope={f.kind}
-										data-scope-default={f.isDefault ? "" : undefined}
-										hidden={!f.isDefault}
-										aria-pressed="false"
-										{...(f.attr === "cat" ? { "data-filter-cat": v } : { "data-filter": v })}
-									>
+									<button type="button" class="chip" data-scope={f.kind} data-filter-cat={v} aria-pressed="false" hidden>
 										{v}
 										<small>{n}</small>
 									</button>
@@ -149,13 +125,40 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 					}
 				</div>
 
-				<div class="kit-grid db__grid" data-items>
+				<!-- 总览：每种类型一排 -->
+				<div class="ov" data-overview>
+					{
+						kinds.map((k) => (
+							<section class="ov__row">
+								<header class="ov__head">
+									<h2>
+										<Icon name={KIND_META[k].icon} />
+										{k}
+									</h2>
+									<span class="ov__count">{ofKind(k).length}</span>
+									<button type="button" class="ov__more" data-filter-kind={k}>
+										全部
+										<Icon name="material-symbols:arrow-forward-rounded" />
+									</button>
+								</header>
+								<div class:list={["kit-grid", "db__grid", "ov__grid", wide(k) ? "is-wide" : "is-narrow"]}>
+									{ofKind(k)
+										.slice(0, wide(k) ? 4 : 8)
+										.map((r, n) => (
+											<BaseCard row={r} index={n} engine={false} />
+										))}
+								</div>
+							</section>
+						))
+					}
+				</div>
+
+				<div class="kit-grid db__grid" data-items hidden>
 					{rows.map((r, i) => <BaseCard row={r} index={i} />)}
 				</div>
 			</div>
 		</section>
 
-		<!-- 关于我 -->
 		<section class="about" id="about" data-reveal>
 			<div class="about__avatar"><ImageWrapper src={profileConfig.avatar || ""} alt={profileConfig.name} class="w-full h-full" /></div>
 			<div class="about__name">{profileConfig.name}</div>
@@ -182,9 +185,10 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	.pb {
 		--db-bg: color-mix(in oklch, var(--card-bg) 96.5%, black);
 		--db-card: var(--card-bg);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 92%, black);
 		--db-text: rgb(28 28 30);
-		--db-soft: rgb(70 70 76);
-		--db-muted: rgb(138 138 146);
+		--db-soft: rgb(80 80 88);
+		--db-muted: rgb(140 140 148);
 		--db-line: color-mix(in oklch, var(--card-bg) 90%, black);
 		background: var(--db-bg);
 		color: var(--db-text);
@@ -193,8 +197,9 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	:global(:root.dark) .pb {
 		--db-bg: color-mix(in oklch, var(--card-bg) 82%, black);
+		--db-sunk: color-mix(in oklch, var(--card-bg) 75%, black);
 		--db-text: rgb(238 238 240);
-		--db-soft: rgb(205 205 210);
+		--db-soft: rgb(200 200 206);
 		--db-muted: rgb(145 145 152);
 		--db-line: color-mix(in oklch, var(--card-bg) 86%, white);
 	}
@@ -235,7 +240,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	/* 首屏 */
 	.hero {
 		position: relative;
-		height: clamp(20rem, 44vh, 28rem);
+		height: clamp(18rem, 40vh, 26rem);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -259,7 +264,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		z-index: -1;
 		background:
 			linear-gradient(to bottom, rgb(0 0 0 / 0.3), transparent 45%),
-			linear-gradient(to top, var(--db-bg), transparent 45%);
+			linear-gradient(to top, var(--db-bg), transparent 50%);
 	}
 
 	.hero__inner {
@@ -267,13 +272,13 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		padding: 1rem 1.5rem 2rem;
+		padding: 1rem 1.5rem 2.5rem;
 		color: white;
 	}
 
 	.hero__avatar {
-		width: 4.75rem;
-		height: 4.75rem;
+		width: 4.5rem;
+		height: 4.5rem;
 		border-radius: 999px;
 		overflow: hidden;
 		border: 3px solid rgb(255 255 255 / 0.9);
@@ -281,8 +286,8 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.hero__title {
-		margin-top: 0.9rem;
-		font-size: clamp(2.2rem, 5vw, 3.5rem);
+		margin-top: 0.85rem;
+		font-size: clamp(2rem, 4.5vw, 3.2rem);
 		font-weight: 900;
 		letter-spacing: 0.05em;
 		line-height: 1.1;
@@ -291,7 +296,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	.hero__sub {
 		margin-top: 0.5rem;
-		font-size: 1rem;
+		font-size: 0.95rem;
 		font-weight: 500;
 		letter-spacing: 0.2em;
 		text-shadow: 0 2px 12px rgb(0 0 0 / 0.4);
@@ -304,14 +309,13 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		padding: 0 clamp(1rem, 3vw, 2rem);
 	}
 
-	/* 类型标签 + 工具：吸顶 */
 	.db__bar {
 		position: sticky;
 		top: 0;
 		z-index: 6;
-		background: color-mix(in oklch, var(--db-bg) 88%, transparent);
-		-webkit-backdrop-filter: blur(14px) saturate(1.4);
-		backdrop-filter: blur(14px) saturate(1.4);
+		background: color-mix(in oklch, var(--db-bg) 86%, transparent);
+		-webkit-backdrop-filter: blur(16px) saturate(1.4);
+		backdrop-filter: blur(16px) saturate(1.4);
 		border-bottom: 1px solid var(--db-line);
 	}
 
@@ -323,51 +327,47 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		gap: 0 1rem;
 	}
 
-	/* 类型标签：底部滑动下划线，像 Obsidian Bases 的视图切换 */
+	/* 类型标签：底部滑动下划线 */
 	.vtabs {
 		padding: 0;
 		background: none;
 		border-radius: 0;
-		gap: 0.15rem;
+		gap: 0.1rem;
 		overflow-x: auto;
 		scrollbar-width: none;
+		max-width: 100%;
 	}
 
 	.vtabs .kit-tabs__item {
-		height: 3.4rem;
-		gap: 0.4rem;
-		padding: 0 0.85rem;
+		height: 3.3rem;
+		gap: 0.35rem;
+		padding: 0 0.7rem;
 		border-radius: 0;
-		font-size: 0.92rem;
+		font-size: 0.9rem;
 		font-weight: 700;
 		color: var(--db-muted);
 		transition: color 0.2s;
 	}
 
 	.vtabs .kit-tabs__item :global(svg) {
-		font-size: 1.1rem;
+		font-size: 1.05rem;
 	}
 
 	.vtabs .kit-tabs__item small {
 		font-family: var(--kit-num);
-		font-size: 0.72rem;
+		font-size: 0.7rem;
 		font-weight: 600;
-		padding: 0 0.35rem;
-		border-radius: 0.35rem;
-		background: var(--btn-regular-bg);
+		opacity: 0.7;
 	}
 
-	.vtabs .kit-tabs__item:hover {
-		color: var(--db-text);
-	}
-
+	.vtabs .kit-tabs__item:hover,
 	.vtabs .kit-tabs__item[aria-pressed="true"] {
 		color: var(--db-text);
 	}
 
 	.vtabs .kit-tabs__item[aria-pressed="true"] small {
-		color: white;
-		background: var(--primary);
+		color: var(--primary);
+		opacity: 1;
 	}
 
 	.vtabs :global(.kit-tabs__ind) {
@@ -381,25 +381,12 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	.db__tools {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
+		gap: 0.5rem;
 		padding: 0.5rem 0;
 	}
 
-	.db__count {
-		font-size: 0.85rem;
-		color: var(--db-muted);
-		margin-right: 0.25rem;
-		white-space: nowrap;
-	}
-
-	.db__count b {
-		font-family: var(--kit-num);
-		color: var(--primary);
-		margin-right: 0.1rem;
-	}
-
 	.db__tools .kit-input {
-		width: 14rem;
+		width: 13rem;
 		padding-right: 2rem;
 	}
 
@@ -424,13 +411,13 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		opacity: 0;
 	}
 
-	/* 第二排：分类 chip */
+	/* 第二排：分类 chip（总览时整排藏起来） */
 	.db__facets {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.45rem;
-		padding: 1.1rem 0 0.25rem;
+		padding: 1.1rem 0 0;
 	}
 
 	.db__facets:not(:has(.chip:not([hidden]))) {
@@ -438,10 +425,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.db__facet-label {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25rem;
-		margin-right: 0.35rem;
+		margin-right: 0.25rem;
 		font-size: 0.8rem;
 		font-weight: 700;
 		color: var(--db-muted);
@@ -452,7 +436,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		align-items: center;
 		gap: 0.35rem;
 		height: 1.9rem;
-		padding: 0 0.75rem;
+		padding: 0 0.8rem;
 		border-radius: 999px;
 		font-size: 0.82rem;
 		font-weight: 600;
@@ -478,25 +462,23 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	.chip[aria-pressed="true"] {
 		color: white;
-		background: var(--primary);
-		border-color: var(--primary);
+		background: var(--db-text);
+		border-color: var(--db-text);
 	}
 
 	.chip[aria-pressed="true"] small {
-		color: rgb(255 255 255 / 0.75);
+		color: rgb(255 255 255 / 0.7);
 	}
 
-	/* 当前生效、但不在上面按钮里的标签 */
+	:global(:root.dark) .chip[aria-pressed="true"] {
+		color: var(--db-bg);
+	}
+
 	.chip.is-active-tag {
-		order: -1;
 		color: white;
 		background: var(--primary);
 		border-color: var(--primary);
 		padding: 0 0.55rem 0 0.6rem;
-	}
-
-	.chip.is-active-tag :global(svg) {
-		font-size: 0.95rem;
 	}
 
 	.chip[hidden],
@@ -504,30 +486,93 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		display: none;
 	}
 
-	/* 卡片网格：宽屏 8 列（窄一点 6 / 4 / 2 列），文章 / 作品 / 月记这类横图卡片占 2 列，番剧海报占 1 列 */
+	/* ---------- 网格：宽屏 8 列，文字卡 / 截图卡占 2 列，海报 / 头像占 1 列 ---------- */
 	.db__grid {
-		gap: 1.1rem;
-		padding: 1.25rem 0 3rem;
+		gap: 1.6rem 1.1rem;
 	}
 
 	.db__grid:not(.is-list) {
 		grid-template-columns: repeat(8, minmax(0, 1fr));
 	}
 
-	@media (max-width: 1400px) {
-		.db__grid:not(.is-list) {
-			grid-template-columns: repeat(6, minmax(0, 1fr));
-		}
+	.db__grid:not(.is-list) > :global(.is-text),
+	.db__grid:not(.is-list) > :global(.is-shot),
+	.db__grid:not(.is-list) > :global(.is-month) {
+		grid-column: span 2;
+	}
+
+	.db__grid.is-list {
+		gap: 0.5rem;
+	}
+
+	.db__grid[data-items] {
+		padding: 1.5rem 0 3rem;
 	}
 
 	.db__grid :global(.kit-group-head) {
 		margin-top: 1.5rem;
-		font-size: 1.2rem;
+		font-size: 1.15rem;
 		font-weight: 900;
 	}
 
 	.db__grid :global(.kit-group-head:first-child) {
-		margin-top: 0.25rem;
+		margin-top: 0;
+	}
+
+	/* ---------- 总览 ---------- */
+	.ov {
+		padding: 0.5rem 0 2rem;
+	}
+
+	.ov__row {
+		padding-top: 2.25rem;
+	}
+
+	.ov__head {
+		display: flex;
+		align-items: baseline;
+		gap: 0.55rem;
+		margin-bottom: 1rem;
+	}
+
+	.ov__head h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-size: 1.3rem;
+		font-weight: 900;
+		letter-spacing: 0.02em;
+	}
+
+	.ov__head h2 :global(svg) {
+		font-size: 1.2rem;
+		color: var(--primary);
+	}
+
+	.ov__count {
+		font-family: var(--kit-num);
+		font-size: 0.85rem;
+		color: var(--db-muted);
+	}
+
+	.ov__more {
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		padding: 0.3rem 0.4rem 0.3rem 0.75rem;
+		border-radius: 999px;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: var(--db-soft);
+		transition:
+			color 0.15s,
+			background 0.15s;
+	}
+
+	.ov__more:hover {
+		color: var(--primary);
+		background: var(--db-card);
 	}
 
 	/* 关于我 */
@@ -589,9 +634,26 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		color: var(--db-muted);
 	}
 
+	/* 列数随宽度减少；总览每排只放满一行 */
+	@media (max-width: 1400px) {
+		.db__grid:not(.is-list) {
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+		}
+
+		.ov__grid.is-narrow > :global(:nth-child(n + 7)),
+		.ov__grid.is-wide > :global(:nth-child(n + 4)) {
+			display: none;
+		}
+	}
+
 	@media (max-width: 1100px) {
 		.db__grid:not(.is-list) {
 			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		.ov__grid.is-narrow > :global(:nth-child(n + 5)),
+		.ov__grid.is-wide > :global(:nth-child(n + 3)) {
+			display: none;
 		}
 
 		.db__tools {
@@ -599,12 +661,12 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 			padding-top: 0;
 		}
 
-		.db__tools .kit-input {
-			width: 100%;
-		}
-
 		.db__tools .kit-search {
 			flex: 1;
+		}
+
+		.db__tools .kit-input {
+			width: 100%;
 		}
 	}
 
@@ -618,26 +680,38 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		}
 
 		.db__grid:not(.is-list) {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 0.75rem;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 1.1rem 0.75rem;
 		}
 
-		.db__count,
+		.db__grid:not(.is-list) > :global(.is-text),
+		.db__grid:not(.is-list) > :global(.is-shot),
+		.db__grid:not(.is-list) > :global(.is-month) {
+			grid-column: 1 / -1;
+		}
+
+		/* 手机上海报一排 3 个，总览放两排 */
+		.ov__grid.is-narrow > :global(:nth-child(-n + 6)) {
+			display: block;
+		}
+
+		.ov__grid.is-wide > :global(:nth-child(n + 3)) {
+			display: none;
+		}
+
 		.db__kbd,
 		.db__tools .kit-select-wrap {
 			display: none;
 		}
 
-		/* 类型标签放不下时可以横滑，右边渐隐提示还有 */
 		.vtabs {
-			max-width: 100%;
 			-webkit-mask-image: linear-gradient(to right, black 85%, transparent);
 			mask-image: linear-gradient(to right, black 85%, transparent);
 		}
 
 		.vtabs .kit-tabs__item {
 			height: 3rem;
-			padding: 0 0.6rem;
+			padding: 0 0.55rem;
 		}
 	}
 </style>

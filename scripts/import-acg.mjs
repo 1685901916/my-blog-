@@ -35,11 +35,12 @@ const SECTIONS = [
 	{ dir: "3漫画", key: "manga", name: "漫画", bgm: 1 },
 	{ dir: "8小说", key: "novel", name: "小说", bgm: 1 },
 	{ dir: "6游戏", key: "game", name: "游戏", bgm: 4 },
-	{ dir: "2角色", key: "character", name: "角色" },
-	{ dir: "5cv", key: "cv", name: "声优" },
-	{ dir: "4音乐", key: "music", name: "音乐" },
-	{ dir: "7画", key: "artist", name: "画师" },
-	{ dir: "6动漫公司", key: "studio", name: "动画公司" },
+	// 人物类去 Bangumi 搜头像：角色搜 characters，其余搜 persons（制作公司在 Bangumi 里也是 person）
+	{ dir: "2角色", key: "character", name: "角色", mono: "characters" },
+	{ dir: "5cv", key: "cv", name: "声优", mono: "persons" },
+	{ dir: "4音乐", key: "music", name: "音乐", mono: "persons" },
+	{ dir: "7画", key: "artist", name: "画师", mono: "persons" },
+	{ dir: "6动漫公司", key: "studio", name: "动画公司", mono: "persons" },
 	{ dir: "收集", key: "collect", name: "收集" },
 ];
 const SKIP_DIRS = new Set(["0折叠", "00附件", "数据库", "模板"]);
@@ -58,6 +59,12 @@ const SEARCH_AS = {
 	崩坏三: "崩坏3",
 	青春猪头少年不会梦见兔女郎学姐: "青春猪头少年不会梦到兔女郎学姐",
 	反派目标是拯救女主: null,
+	// 人物
+	尼娅: "ニア・テッペリン",
+	艾丽丝: "エリス・ボレアス・グレイラット",
+	上田里奈: "上田麗奈",
+	东映: "東映アニメーション",
+	omu: null,
 	aur: null,
 	轉生為睡走情色遊戲女主角的男人但我絕不會幹這種事: null,
 };
@@ -160,6 +167,27 @@ async function searchBangumi(title, type) {
 	}
 }
 
+// 人物头像：Bangumi v0 搜索，取第一个结果；缓存的键是「人物:名字」，搜错了去 acg-covers.json 改
+// 不是具体人物的笔记（角色理论、杂、中文圈…）不搜
+const NOT_A_PERSON = new Set(["角色理论", "杂", "中文圈", "甜系", "八王子", "你的守护天使"]);
+async function searchMono(title, type) {
+	try {
+		const query = title in SEARCH_AS ? SEARCH_AS[title] : title;
+		if (query === null) return null;
+		const res = await fetch(`https://api.bgm.tv/v0/search/${type}?limit=1`, {
+			method: "POST",
+			headers: { "User-Agent": "ayano-blog/acg-import (https://ayano29.cn)", "Content-Type": "application/json" },
+			body: JSON.stringify({ keyword: query }),
+		});
+		const hit = (await res.json())?.data?.[0];
+		await new Promise((r) => setTimeout(r, 400));
+		return hit?.images?.medium ? { cover: hit.images.medium, bgm: hit.id, name: hit.name, mono: type } : null;
+	} catch (e) {
+		console.warn("头像搜索失败", title, e.message);
+		return undefined;
+	}
+}
+
 const SECTION_NAMES = new Set(["动漫", "动画", "漫画", "小说", "游戏", "角色", "cv", "CV", "音乐", "画", "画师", "动漫公司"]);
 
 // 第二遍：转换正文、写文件
@@ -220,7 +248,12 @@ for (const n of entries) {
 	const text = body
 		.split("\n")
 		// 摘要里不要网址（有的笔记第一行就是一条链接）
-		.map((l) => l.replace(/https?:\/\/\S+/g, "").trim())
+		.map((l) =>
+			l
+				.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+				.replace(/https?:\/\/\S+/g, "")
+				.trim(),
+		)
 		.find((l) => l && !/^(#|!\[|\||```|>?\s*$)/.test(l) && l.replace(/[-*+\s[\]()]/g, "").length > 4);
 	const excerpt = (text ?? "")
 		.replace(/^[-*+]\s+/, "")
@@ -234,6 +267,12 @@ for (const n of entries) {
 	if (n.sec.bgm && !n.essay) {
 		if (WANT_COVERS && !(n.title in covers)) covers[n.title] = await searchBangumi(n.title, n.sec.bgm);
 		cover = covers[n.title]?.cover || cover;
+	}
+	// 人物：Bangumi 头像优先（笔记里的图多半是截图）
+	const monoKey = `人物:${n.title}`;
+	if (n.sec.mono && !n.essay && !NOT_A_PERSON.has(n.title)) {
+		if (WANT_COVERS && !(monoKey in covers)) covers[monoKey] = await searchMono(n.title, n.sec.mono);
+		cover = covers[monoKey]?.cover || cover;
 	}
 	const fmOut = {
 		title: n.title,
