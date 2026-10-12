@@ -671,6 +671,12 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		grid-column: span 4;
 	}
 
+	/* 收集是列表行，靠细线分隔，不要行距 */
+	.db[data-active-kind="收集"] .db__grid:not(.is-list) {
+		row-gap: 0;
+		column-gap: 2.5rem;
+	}
+
 	.db__grid.is-list {
 		gap: 0.5rem;
 	}

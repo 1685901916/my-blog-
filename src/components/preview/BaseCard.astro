@@ -316,8 +316,10 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 		mix-blend-mode: multiply;
 	}
 
+	/* 暗色下不混合，稍微压暗，白底立绘不刺眼 */
 	:global(:root.dark) .bc__portrait img {
 		mix-blend-mode: normal;
+		filter: brightness(0.86);
 	}
 
 	.bc__initial {

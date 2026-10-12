@@ -39,7 +39,10 @@ const headerImage = row.kind === "文章" && row.cover && !body.includes(row.cov
 const db = (q: Record<string, string> = {}) => `/preview/b/?${new URLSearchParams({ type: row.kind, ...q })}#notes`;
 
 // 属性面板：卡片上的属性 + 全部标签 + 字数 / 外链
-const props: BaseProp[] = row.props.map((p) => (p.chips ? { ...p, chips: row.tags } : p));
+// 空的属性（比如没写标签）不显示
+const props: BaseProp[] = row.props
+	.map((p) => (p.chips ? { ...p, chips: row.tags } : p))
+	.filter((p) => (p.chips ? p.chips.length > 0 : !!p.v));
 if (words) props.push({ k: "字数", v: `${words} 字 · 约 ${minutes ?? 1} 分钟` });
 const ICON: Record<string, string> = {
 	分类: "material-symbols:folder-outline",
@@ -53,7 +56,8 @@ const ICON: Record<string, string> = {
 	分区: "material-symbols:inventory-2-outline-rounded",
 	更新: "material-symbols:schedule-outline-rounded",
 };
-const relatedTitle = row.cat && related.some((r) => r.cat === row.cat) ? `同在「${row.cat}」` : `更多${row.kind}`;
+// 只有全是同一分类时才写「同在 xx」，混着别的分类就叫「更多文章」
+const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同在「${row.cat}」` : `更多${row.kind}`;
 ---
 
 <Layout title={row.title} description={row.excerpt}>
