@@ -26,7 +26,7 @@ export const BASE_KINDS = ["文章", "动画", "漫画", "小说", "游戏", "�
 export type Kind = (typeof BASE_KINDS)[number];
 
 // 卡片长什么样：文字卡 / 竖版海报 / 圆形头像 / 截图卡 / 月份卡
-export type Variant = "text" | "poster" | "person" | "shot" | "month";
+export type Variant = "text" | "poster" | "person" | "shot" | "month" | "line";
 
 export const KIND_META: Record<Kind, { icon: string; facet: string; variant: Variant }> = {
 	文章: { icon: "material-symbols:article-outline-rounded", facet: "分类", variant: "text" },
@@ -37,7 +37,8 @@ export const KIND_META: Record<Kind, { icon: string; facet: string; variant: Var
 	人物: { icon: "material-symbols:face-outline", facet: "身份", variant: "person" },
 	作品: { icon: "material-symbols:work-outline", facet: "类别", variant: "shot" },
 	月记: { icon: "material-symbols:calendar-month-outline-rounded", facet: "", variant: "month" },
-	收集: { icon: "material-symbols:inventory-2-outline-rounded", facet: "分类", variant: "text" },
+	// 收集多是一两句话的短笔记，用紧凑的列表行，不用大卡片
+	收集: { icon: "material-symbols:inventory-2-outline-rounded", facet: "分类", variant: "line" },
 };
 
 export type BaseRow = {
@@ -263,7 +264,7 @@ export async function getProtoArticlePaths(_base: "b" = "b") {
 		const others = siblings.filter((r) => r !== row);
 		const sameCat = (r: BaseRow) => !!row.cat && r.cat === row.cat;
 		const shared = (r: BaseRow) => r.tags.filter((t) => row.tags.includes(t)).length;
-		const wide = row.variant === "text" || row.variant === "shot" || row.variant === "month";
+		const wide = !["poster", "person"].includes(row.variant);
 		const related = [
 			...others.filter(sameCat),
 			...others.filter((r) => !sameCat(r)).sort((a, b) => shared(b) - shared(a)),

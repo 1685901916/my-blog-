@@ -25,10 +25,11 @@ const facets = kinds
 	.filter((f) => f.values.length > 1);
 
 // 总览的版式：每一排放哪些类型、各占几栏（12 栏）、放几个、内部几列
-type Block = { k: Kind; span: number; n: number; cols: number; desc: string };
+// feature：第一张做成横版大卡（占两格）
+type Block = { k: Kind; span: number; n: number; cols: number; desc: string; feature?: boolean };
 const LAYOUT: Block[][] = [
-	// 最上面放全部文章（配图卡片，一排 3 篇，和作品一样）
-	[{ k: "文章", span: 12, n: 99, cols: 3, desc: "教程、资源整理和随笔" }],
+	// 最上面放全部文章：配图卡片一排 4 篇，第一篇是横版大卡，15 篇刚好排满 4 排
+	[{ k: "文章", span: 12, n: 99, cols: 4, desc: "教程、资源整理和随笔", feature: true }],
 	[{ k: "动画", span: 12, n: 8, cols: 8, desc: "看过的番，和看完写下的感想" }],
 	[
 		{ k: "漫画", span: 6, n: 4, cols: 4, desc: "最近在追的漫画" },
@@ -40,7 +41,7 @@ const LAYOUT: Block[][] = [
 		{ k: "月记", span: 5, n: 2, cols: 1, desc: "每个月的碎碎念" },
 	],
 	[{ k: "作品", span: 12, n: 3, cols: 3, desc: "自己做的东西" }],
-	[{ k: "收集", span: 12, n: 6, cols: 3, desc: "制作者、杂项和随手记" }],
+	[{ k: "收集", span: 12, n: 9, cols: 3, desc: "制作者、杂项和随手记" }],
 ];
 const layout = LAYOUT.map((row) => row.filter((b) => ofKind(b.k).length > 0)).filter((row) => row.length);
 const stat = (k: Kind) => ofKind(k).length;
@@ -178,11 +179,14 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 												<Icon name="material-symbols:arrow-forward-rounded" />
 											</button>
 										</header>
-										<div class:list={["sec__grid", `is-${KIND_META[b.k].variant}`]} style={`--cols: ${b.cols}`}>
+										<div
+											class:list={["sec__grid", `is-${KIND_META[b.k].variant}`, b.feature && "has-feature"]}
+											style={`--cols: ${b.cols}`}
+										>
 											{ofKind(b.k)
 												.slice(0, b.n)
 												.map((r, n) => (
-													<BaseCard row={r} index={n} engine={false} />
+													<BaseCard row={r} index={n} engine={false} feature={b.feature && n === 0} />
 												))}
 										</div>
 									</section>
@@ -638,6 +642,15 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		gap: 1rem;
 	}
 
+	.sec__grid.has-feature > :global(.is-feature) {
+		grid-column: span 2;
+	}
+
+	/* 收集是列表行：行间不留空，靠细线分隔 */
+	.sec__grid.is-line {
+		gap: 0 2.5rem;
+	}
+
 	/* ---------- 某个类型的完整网格：12 栏，海报 / 人像占 2 栏，文字 / 截图卡占 4 栏 ---------- */
 	.db__grid {
 		gap: 1.75rem 1.1rem;
@@ -653,7 +666,8 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 	.db__grid:not(.is-list) > :global(.is-text),
 	.db__grid:not(.is-list) > :global(.is-shot),
-	.db__grid:not(.is-list) > :global(.is-month) {
+	.db__grid:not(.is-list) > :global(.is-month),
+	.db__grid:not(.is-list) > :global(.is-line) {
 		grid-column: span 4;
 	}
 
@@ -752,11 +766,21 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		.db__grid:not(.is-list) > :global(.bc-cell) {
 			grid-column: span 2;
 		}
+
+		.sec__grid.has-feature {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
 
 	@media (max-width: 1100px) {
+		/* 窄屏：每一排只放一个类型块（12 栏的列间距在窄屏会把页面撑宽） */
+		.mag__row {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 3rem;
+		}
+
 		.sec {
-			grid-column: 1 / -1;
+			grid-column: auto;
 		}
 
 		.db__grid:not(.is-list) > :global(.bc-cell) {
@@ -765,7 +789,8 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 		.db__grid:not(.is-list) > :global(.is-text),
 		.db__grid:not(.is-list) > :global(.is-shot),
-		.db__grid:not(.is-list) > :global(.is-month) {
+		.db__grid:not(.is-list) > :global(.is-month),
+		.db__grid:not(.is-list) > :global(.is-line) {
 			grid-column: span 6;
 		}
 
@@ -802,16 +827,58 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 		.sec__grid.is-text,
 		.sec__grid.is-shot,
-		.sec__grid.is-month {
+		.sec__grid.is-month,
+		.sec__grid.is-line {
 			grid-template-columns: minmax(0, 1fr) !important;
+		}
+
+		.sec__grid.has-feature > :global(.is-feature) {
+			grid-column: auto;
+		}
+
+		/* 4 个一组的海报：手机上 2×2，不剩单张 */
+		.sec__grid.is-poster[style*="--cols: 4"] {
+			grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		}
+
+		/* 文章：除了第一篇大卡，其余改成左图右文的紧凑卡，一屏能看好几篇 */
+		.sec__grid.has-feature,
+		.db__grid:not(.is-list) {
+			row-gap: 0.75rem;
+		}
+
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc--shot),
+		.db__grid:not(.is-list) > :global(.is-shot .bc--shot) {
+			flex-direction: row;
+		}
+
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc__shot),
+		.db__grid:not(.is-list) > :global(.is-shot .bc__shot) {
+			flex: 0 0 36%;
+			aspect-ratio: auto;
+			min-height: 6.5rem;
+		}
+
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc__body),
+		.db__grid:not(.is-list) > :global(.is-shot .bc__body) {
+			gap: 0.3rem;
+			padding: 0.75rem 0.9rem;
+		}
+
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc__title),
+		.db__grid:not(.is-list) > :global(.is-shot .bc__title) {
+			font-size: 0.95rem;
+		}
+
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc__excerpt),
+		.sec__grid.has-feature > :global(:not(.is-feature) .bc__tags),
+		.db__grid:not(.is-list) > :global(.is-shot .bc__excerpt),
+		.db__grid:not(.is-list) > :global(.is-shot .bc__tags) {
+			display: none;
 		}
 
 		.sec__grid.is-poster > :global(:nth-child(n + 7)),
 		.sec__grid.is-person > :global(:nth-child(n + 7)) {
-			display: none;
-		}
-
-		.sec__grid.is-text > :global(:nth-child(n + 4)) {
 			display: none;
 		}
 
@@ -821,7 +888,8 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 
 		.db__grid:not(.is-list) > :global(.is-text),
 		.db__grid:not(.is-list) > :global(.is-shot),
-		.db__grid:not(.is-list) > :global(.is-month) {
+		.db__grid:not(.is-list) > :global(.is-month),
+		.db__grid:not(.is-list) > :global(.is-line) {
 			grid-column: 1 / -1;
 		}
 

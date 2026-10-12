@@ -253,6 +253,8 @@ for (const n of entries) {
 		.map((l) =>
 			l
 				.replace(/^>\s*/, "")
+				// 任务列表的 [ ] / [x]
+				.replace(/^([-*+]\s+)?\[[ xX]\]\s*/, "")
 				.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
 				.replace(/https?:\/\/\S+/g, "")
 				.trim(),

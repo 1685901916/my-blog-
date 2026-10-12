@@ -2,9 +2,11 @@
 // 方案 B 的卡片，按内容长不同样子：
 //   text   文章 / 随笔 / 收集：分类（小圆点 + 字）+ 标题 + 摘要 + 标签，不放截图
 //   poster 动画 / 漫画 / 小说 / 游戏：竖版海报，评分做成海报上的小角标；没海报时是经典书封（纸色 + 衬线书名）
-//   person 人物：竖版人像卡，名字压在图片底部
+//   person 人物：纸色底的竖版人像，名字写在下面（白底立绘会融进纸色里）
 //   shot   作品：项目截图 + 标题 + 摘要
 //   month  月记：大号月份 + 标题 + 摘要
+//   line   收集：没有卡片框的列表行（分类 · 日期 / 标题 / 一行摘要）
+// feature = true：横版大卡（左图右文），总览里第一篇文章用
 // engine = true 时带上 data-*，交给 kit.ts 的卡片引擎筛选 / 排序
 import { Icon } from "astro-icon/components";
 import { type BaseRow, hueOf } from "./proto";
@@ -13,8 +15,9 @@ interface Props {
 	row: BaseRow;
 	index?: number;
 	engine?: boolean;
+	feature?: boolean;
 }
-const { row, index = 0, engine = true } = Astro.props;
+const { row, index = 0, engine = true, feature = false } = Astro.props;
 const v = row.variant;
 // 分类色：只用一组低饱和的颜色，不用彩虹色
 const PAPER = ["paper-1", "paper-2", "paper-3", "paper-4", "paper-5", "paper-6"];
@@ -25,7 +28,7 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 ---
 
 <div
-	class:list={["bc-cell", `is-${v}`]}
+	class:list={["bc-cell", `is-${v}`, feature && "is-feature"]}
 	data-item={engine ? "" : undefined}
 	data-reveal
 	data-title={row.title}
@@ -38,7 +41,7 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 	data-rank={row.rank}
 	style={`--i: ${Math.min(index, 10)}`}
 >
-	<a href={row.href} class:list={["bc", `bc--${v}`]}>
+	<a href={row.href} class:list={["bc", `bc--${v}`, feature && "bc--feature"]}>
 		{
 			v === "poster" && (
 				<>
@@ -69,14 +72,26 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 		}
 		{
 			v === "person" && (
-				<div class:list={["bc__portrait", !row.cover && ["is-empty", paper]]}>
-					{row.cover ? <img src={row.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span class="bc__initial">{initial}</span>}
-					{row.marks.includes("heart") && <Icon name="material-symbols:favorite-rounded" class="bc__heart" />}
-					<div class="bc__plate">
-						<b>{row.title}</b>
-						<small>{row.cat}</small>
+				<>
+					<div class:list={["bc__portrait", paper, !row.cover && "is-empty"]}>
+						{row.cover ? <img src={row.cover} alt="" loading="lazy" referrerpolicy="no-referrer" /> : <span class="bc__initial">{initial}</span>}
+						{row.marks.includes("heart") && <Icon name="material-symbols:favorite-rounded" class="bc__heart" />}
 					</div>
-				</div>
+					<div class="bc__name">{row.title}</div>
+					<div class="bc__meta">{row.cat}</div>
+				</>
+			)
+		}
+		{
+			v === "line" && (
+				<>
+					<div class="bc__top">
+						{row.cat && <span class:list={["bc__cat", tone]}>{row.cat}</span>}
+						<time>{row.date}</time>
+					</div>
+					<div class="bc__title">{row.title}</div>
+					{row.excerpt && <p class="bc__excerpt">{row.excerpt}</p>}
+				</>
 			)
 		}
 		{
@@ -288,24 +303,26 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 		color: #c9921c;
 	}
 
-	/* ---------- 人物：竖版人像卡 ---------- */
+	/* ---------- 人物：纸色底人像，名字在下面 ---------- */
 	.bc__portrait {
 		aspect-ratio: 3 / 4;
 		border-radius: 0.75rem;
-		background: linear-gradient(180deg, var(--db-card), var(--db-sunk));
+		background: var(--paper);
 	}
 
+	/* 亮色下立绘的白底融进纸色；暗色下保持原图 */
 	.bc__portrait img {
 		object-position: center 12%;
+		mix-blend-mode: multiply;
 	}
 
-	.bc__portrait.is-empty {
-		background: var(--paper);
+	:global(:root.dark) .bc__portrait img {
+		mix-blend-mode: normal;
 	}
 
 	.bc__initial {
 		position: absolute;
-		inset: 0 0 25%;
+		inset: 0;
 		display: grid;
 		place-items: center;
 		font-family: var(--serif);
@@ -315,34 +332,36 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 		opacity: 0.8;
 	}
 
-	.bc__plate {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: flex;
-		flex-direction: column;
-		padding: 2.2rem 0.75rem 0.65rem;
-		color: white;
-		background: linear-gradient(to top, rgb(16 16 20 / 0.78), rgb(16 16 20 / 0));
-	}
-
-	.bc__plate b {
-		font-size: 0.9rem;
-		font-weight: 800;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.bc__plate small {
-		font-size: 0.7rem;
-		opacity: 0.8;
-	}
-
 	.bc__portrait .bc__heart {
 		top: 0.5rem;
 		right: 0.5rem;
+	}
+
+	/* ---------- 列表行（收集）：没有卡片框，上下细线分隔 ---------- */
+	.bc--line {
+		display: grid;
+		grid-template-areas: "top" "title" "excerpt";
+		align-content: start;
+		gap: 0.3rem;
+		padding: 1rem 0.15rem 1.1rem;
+		border-top: 1px solid var(--db-line);
+	}
+
+	.bc--line .bc__top {
+		grid-area: top;
+	}
+
+	.bc--line .bc__title {
+		grid-area: title;
+		font-size: 1rem;
+		-webkit-line-clamp: 1;
+	}
+
+	.bc--line .bc__excerpt {
+		grid-area: excerpt;
+		font-size: 0.82rem;
+		-webkit-line-clamp: 1;
+		color: var(--db-muted);
 	}
 
 	/* ---------- 文字卡 / 截图卡 / 月份卡 ---------- */
@@ -523,6 +542,61 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 		font-family: var(--kit-num);
 	}
 
+	/* ---------- 横版大卡：左图右文，和旁边的普通卡片一样高 ---------- */
+	.bc--feature {
+		flex-direction: row;
+	}
+
+	.bc--feature .bc__shot {
+		flex: 0 0 56%;
+		aspect-ratio: auto;
+		height: auto;
+		min-height: 100%;
+	}
+
+	.bc--feature .bc__body {
+		justify-content: center;
+		gap: 0.7rem;
+		padding: 1.6rem 1.75rem;
+	}
+
+	.bc--feature .bc__title {
+		font-family: var(--serif);
+		font-size: 1.6rem;
+		font-weight: 900;
+		line-height: 1.35;
+		-webkit-line-clamp: 3;
+	}
+
+	.bc--feature .bc__excerpt {
+		font-size: 0.92rem;
+		-webkit-line-clamp: 4;
+	}
+
+	.bc--feature .bc__foot {
+		margin-top: 0.5rem;
+	}
+
+	@media (max-width: 760px) {
+		.bc--feature {
+			flex-direction: column;
+		}
+
+		.bc--feature .bc__shot {
+			flex: none;
+			aspect-ratio: 16 / 10;
+			min-height: 0;
+		}
+
+		.bc--feature .bc__body {
+			padding: 1.1rem 1.25rem 1rem;
+		}
+
+		.bc--feature .bc__title {
+			font-size: 1.3rem;
+		}
+	}
+
 	/* ---------- 列表视图：所有类型都压成一行 ---------- */
 	:global(.kit-grid.is-list) .bc {
 		flex-direction: row;
@@ -556,30 +630,8 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 	}
 
 	:global(.kit-grid.is-list) .bc--person .bc__portrait {
-		width: 100%;
-		aspect-ratio: auto;
-		height: 2.6rem;
-		background: none;
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		overflow: visible;
-	}
-
-	:global(.kit-grid.is-list) .bc--person img {
-		width: 2.4rem;
-		height: 2.4rem;
+		aspect-ratio: 1;
 		border-radius: 999px;
-	}
-
-	:global(.kit-grid.is-list) .bc__plate {
-		position: static;
-		flex-direction: row;
-		align-items: baseline;
-		gap: 0.75rem;
-		padding: 0;
-		color: inherit;
-		background: none;
 	}
 
 	:global(.kit-grid.is-list) .bc__name {
