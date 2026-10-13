@@ -38,6 +38,9 @@ const headerImage = row.kind === "文章" && row.cover && !body.includes(row.cov
 
 // 回到数据库并筛好
 const db = (q: Record<string, string> = {}) => `/preview/b/?${new URLSearchParams({ type: row.kind, ...q })}#notes`;
+// 娱乐条目：种类（动画…）是数据库里的分类筛选，细分类（现实系…）是标签筛选
+const mediumLink = row.medium ? db({ cat: row.medium }) : "";
+const catLink = row.medium ? db({ cat: row.medium, ...(row.cat ? { tag: row.cat } : {}) }) : db(row.cat ? { cat: row.cat } : {});
 
 // 属性面板：卡片上的属性 + 全部标签 + 字数 / 外链
 // 空的属性（比如没写标签）不显示
@@ -58,7 +61,7 @@ const ICON: Record<string, string> = {
 	更新: "material-symbols:schedule-outline-rounded",
 };
 // 只有全是同一分类时才写「同在 xx」，混着别的分类就叫「更多文章」
-const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同在「${row.cat}」` : `更多${row.kind}`;
+const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同在「${row.cat}」` : `更多${row.medium ?? row.kind}`;
 ---
 
 <Layout title={row.title} description={row.excerpt}>
@@ -93,10 +96,16 @@ const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同�
 							<a href="/preview/b/#notes">笔记</a>
 							<span>/</span>
 							<a href={db()}>{row.kind}</a>
+							{row.medium && (
+								<>
+									<span>/</span>
+									<a href={mediumLink}>{row.medium}</a>
+								</>
+							)}
 							{row.cat && (
 								<>
 									<span>/</span>
-									<a href={db({ cat: row.cat })}>{row.cat}</a>
+									<a href={catLink}>{row.cat}</a>
 								</>
 							)}
 						</nav>
@@ -135,7 +144,7 @@ const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同�
 															<span class="props__empty">空</span>
 														)
 													) : p.filter === "cat" ? (
-														<a class="props__chip is-cat" href={db({ cat: row.cat })}>
+														<a class="props__chip is-cat" href={catLink}>
 															{p.v}
 														</a>
 													) : (
@@ -171,7 +180,7 @@ const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同�
 							{row.cat && row.cat !== row.kind && (
 								<>
 									<span>/</span>
-									<a href={db({ cat: row.cat })}>{row.cat}</a>
+									<a href={catLink}>{row.cat}</a>
 								</>
 							)}
 						</nav>
@@ -299,7 +308,7 @@ const relatedTitle = row.cat && related.every((r) => r.cat === row.cat) ? `同�
 					<div class="related__inner">
 						<div class="related__head">
 							<h2>{relatedTitle}</h2>
-							<a href={db(row.cat ? { cat: row.cat } : {})}>
+							<a href={catLink}>
 								在数据库里看全部
 								<Icon name="material-symbols:arrow-forward-rounded" />
 							</a>

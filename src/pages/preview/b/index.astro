@@ -2,6 +2,7 @@
 // 方案 B · 个人主页 + 数据库
 // 首屏：电影感横幅，站名 / 头像 / 统计压在左下角
 // 「全部」是杂志式总览：全部文章（带配图）→ 动画书架 → 漫画 | 小说 → 人物 → 游戏 | 月记 → 作品 → 收集
+// 动画 / 漫画 / 小说 / 游戏 都在「娱乐」标签里：第二排先按种类筛，再按细分类（现实系、恋爱…）筛
 // 选了某个类型：这个类型的完整数据库网格，第二排是它自己的分类；搜索 / 排序 / 视图交给 kit.ts
 import { Icon } from "astro-icon/components";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
@@ -9,7 +10,7 @@ import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import BaseCard from "../../../components/preview/BaseCard.astro";
 import BMotion from "../../../components/preview/BMotion.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
-import { BASE_KINDS, getProtoBase, type Kind, KIND_META } from "../../../components/preview/proto";
+import { BASE_KINDS, getProtoBase, type Kind, KIND_META, MEDIA, type Medium } from "../../../components/preview/proto";
 import { profileConfig, siteConfig } from "../../../config";
 import Layout from "../../../layouts/Layout.astro";
 
@@ -17,35 +18,51 @@ const rows = await getProtoBase();
 const ofKind = (k: string) => rows.filter((r) => r.kind === k);
 const kinds = BASE_KINDS.filter((k) => ofKind(k).length > 0);
 
+const tally = (vals: string[]) => {
+	const m = new Map<string, number>();
+	for (const v of vals) if (v) m.set(v, (m.get(v) ?? 0) + 1);
+	return [...m.entries()];
+};
 const facets = kinds
 	.map((kind) => {
-		const m = new Map<string, number>();
-		for (const r of ofKind(kind)) if (r.cat) m.set(r.cat, (m.get(r.cat) ?? 0) + 1);
-		return { kind, label: KIND_META[kind].facet, values: [...m.entries()].sort((a, b) => b[1] - a[1]) };
+		const list = ofKind(kind);
+		const media = list.some((r) => r.medium);
+		return {
+			kind,
+			label: KIND_META[kind].facet,
+			// 娱乐：按 动画 / 漫画 / 小说 / 游戏 的固定顺序；其他按数量
+			values: media
+				? MEDIA.map((m) => [m, list.filter((r) => r.medium === m).length] as [string, number]).filter(([, n]) => n > 0)
+				: tally(list.map((r) => r.cat)).sort((a, b) => b[1] - a[1]),
+			subs: media ? tally(list.map((r) => r.cat)).sort((a, b) => b[1] - a[1]) : [],
+		};
 	})
 	.filter((f) => f.values.length > 1);
 
 // 总览的版式：每一排放哪些类型、各占几栏（12 栏）、放几个、内部几列
 // feature：第一张做成横版大卡（占两格）
-type Block = { k: Kind; span: number; n: number; cols: number; desc: string; feature?: boolean };
+// k 是显示的名字；kind / medium 决定取哪些条目（动画 = 娱乐里的动画）
+type Block = { k: string; kind: Kind; medium?: Medium; span: number; n: number; cols: number; desc: string; feature?: boolean };
 const LAYOUT: Block[][] = [
 	// 最上面放全部文章：配图卡片一排 4 篇，第一篇是横版大卡，15 篇刚好排满 4 排
-	[{ k: "文章", span: 12, n: 99, cols: 4, desc: "教程、资源整理和随笔", feature: true }],
-	[{ k: "动画", span: 12, n: 8, cols: 8, desc: "看过的番，和看完写下的感想" }],
+	[{ k: "文章", kind: "文章", span: 12, n: 99, cols: 4, desc: "教程、资源整理和随笔", feature: true }],
+	[{ k: "动画", kind: "娱乐", medium: "动画", span: 12, n: 8, cols: 8, desc: "看过的番，和看完写下的感想" }],
 	[
-		{ k: "漫画", span: 6, n: 4, cols: 4, desc: "最近在追的漫画" },
-		{ k: "小说", span: 6, n: 4, cols: 4, desc: "轻小说、网文和文学" },
+		{ k: "漫画", kind: "娱乐", medium: "漫画", span: 6, n: 4, cols: 4, desc: "最近在追的漫画" },
+		{ k: "小说", kind: "娱乐", medium: "小说", span: 6, n: 4, cols: 4, desc: "轻小说、网文和文学" },
 	],
-	[{ k: "人物", span: 12, n: 8, cols: 8, desc: "喜欢的角色、声优、音乐人和画师" }],
+	[{ k: "人物", kind: "人物", span: 12, n: 8, cols: 8, desc: "喜欢的角色、声优、音乐人和画师" }],
 	[
-		{ k: "游戏", span: 7, n: 4, cols: 4, desc: "玩过的游戏" },
-		{ k: "月记", span: 5, n: 2, cols: 1, desc: "每个月的碎碎念" },
+		{ k: "游戏", kind: "娱乐", medium: "游戏", span: 7, n: 4, cols: 4, desc: "玩过的游戏" },
+		{ k: "月记", kind: "月记", span: 5, n: 2, cols: 1, desc: "每个月的碎碎念" },
 	],
-	[{ k: "作品", span: 12, n: 3, cols: 3, desc: "自己做的东西" }],
-	[{ k: "收集", span: 12, n: 9, cols: 3, desc: "制作者、杂项和随手记" }],
+	[{ k: "作品", kind: "作品", span: 12, n: 3, cols: 3, desc: "自己做的东西" }],
+	[{ k: "收集", kind: "收集", span: 12, n: 9, cols: 3, desc: "制作者、杂项和随手记" }],
 ];
-const layout = LAYOUT.map((row) => row.filter((b) => ofKind(b.k).length > 0)).filter((row) => row.length);
-const stat = (k: Kind) => ofKind(k).length;
+const pick = (b: Block) => ofKind(b.kind).filter((r) => !b.medium || r.medium === b.medium);
+const layout = LAYOUT.map((row) => row.filter((b) => pick(b).length > 0)).filter((row) => row.length);
+// 统计数字：动画 / 漫画 / 小说 按种类数，其他按类型数
+const stat = (k: string) => rows.filter((r) => r.medium === k || (!MEDIA.includes(k as Medium) && r.kind === k)).length;
 const banner = "/assets/desktop-banner/custom-bg.jpg";
 ---
 
@@ -81,7 +98,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 				</div>
 				<dl class="hero__stats">
 					{
-						(["动画", "漫画", "小说", "人物", "文章"] as Kind[]).map((k, n) => (
+						["动画", "漫画", "小说", "人物", "文章"].map((k, n) => (
 							<div data-reveal data-count={stat(k)} style={`--i: ${n + 3}`}>
 								<dd data-count-value>{stat(k)}</dd>
 								<dt>{k}</dt>
@@ -155,6 +172,13 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 										<small>{n}</small>
 									</button>
 								))}
+								{f.subs.length > 0 && <span class="db__facet-sep" data-scope={f.kind} hidden />}
+								{f.subs.map(([v, n]) => (
+									<button type="button" class="chip is-sub" data-scope={f.kind} data-filter={v} aria-pressed="false" hidden>
+										{v}
+										<small>{n}</small>
+									</button>
+								))}
 							</>
 						))
 					}
@@ -172,20 +196,20 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 											<div>
 												<h2>
 													{b.k}
-													<small>{stat(b.k)}</small>
+													<small>{pick(b).length}</small>
 												</h2>
 												<p>{b.desc}</p>
 											</div>
-											<button type="button" class="sec__more" data-filter-kind={b.k}>
+											<button type="button" class="sec__more" data-filter-kind={b.kind} data-then-cat={b.medium}>
 												全部
 												<Icon name="material-symbols:arrow-forward-rounded" />
 											</button>
 										</header>
 										<div
-											class:list={["sec__grid", `is-${KIND_META[b.k].variant}`, b.feature && "has-feature"]}
+											class:list={["sec__grid", `is-${KIND_META[b.kind].variant}`, b.feature && "has-feature"]}
 											style={`--cols: ${b.cols}`}
 										>
-											{ofKind(b.k)
+											{pick(b)
 												.slice(0, b.n)
 												.map((r, n) => (
 													<BaseCard row={r} index={n} engine={false} feature={b.feature && n === 0} />
@@ -572,8 +596,29 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 	}
 
 	.chip[hidden],
-	.db__facet-label[hidden] {
+	.db__facet-label[hidden],
+	.db__facet-sep[hidden] {
 		display: none;
+	}
+
+	/* 种类和细分类之间的竖线；细分类按钮用更轻的样式 */
+	.db__facet-sep {
+		width: 1px;
+		height: 1.1rem;
+		margin: 0 0.4rem;
+		background: var(--db-line);
+	}
+
+	.chip.is-sub {
+		height: 1.75rem;
+		padding: 0 0.7rem;
+		font-size: 0.78rem;
+		background: transparent;
+	}
+
+	.chip.is-sub[aria-pressed="true"] {
+		color: var(--db-bg);
+		background: var(--db-soft);
 	}
 
 	/* ---------- 总览 ---------- */

@@ -21,7 +21,10 @@ export type NoteEntry =
 	| CollectionEntry<"journal">
 	| CollectionEntry<"acg">;
 
-export const BASE_KINDS = ["文章", "动画", "漫画", "小说", "游戏", "人物", "作品", "月记", "收集"] as const;
+export const BASE_KINDS = ["文章", "娱乐", "人物", "作品", "月记", "收集"] as const;
+// 娱乐下面再分四种，顺序就是娱乐页里分组的顺序
+export const MEDIA = ["动画", "漫画", "小说", "游戏"] as const;
+export type Medium = (typeof MEDIA)[number];
 export type Kind = (typeof BASE_KINDS)[number];
 
 // 卡片长什么样：文字卡 / 竖版海报 / 圆形头像 / 截图卡 / 月份卡
@@ -29,10 +32,7 @@ export type Variant = "text" | "poster" | "person" | "shot" | "month" | "line";
 
 export const KIND_META: Record<Kind, { icon: string; facet: string; variant: Variant }> = {
 	文章: { icon: "material-symbols:article-outline-rounded", facet: "分类", variant: "text" },
-	动画: { icon: "material-symbols:movie-outline-rounded", facet: "分类", variant: "poster" },
-	漫画: { icon: "material-symbols:menu-book-outline-rounded", facet: "分类", variant: "poster" },
-	小说: { icon: "material-symbols:book-2-outline-rounded", facet: "分类", variant: "poster" },
-	游戏: { icon: "material-symbols:sports-esports-outline-rounded", facet: "分类", variant: "poster" },
+	娱乐: { icon: "material-symbols:movie-outline-rounded", facet: "类型", variant: "poster" },
 	人物: { icon: "material-symbols:face-outline", facet: "身份", variant: "person" },
 	作品: { icon: "material-symbols:work-outline", facet: "类别", variant: "shot" },
 	月记: { icon: "material-symbols:calendar-month-outline-rounded", facet: "", variant: "month" },
@@ -49,6 +49,8 @@ export type BaseRow = {
 	title: string;
 	cover?: string;
 	cat: string;
+	// 娱乐条目：动画 / 漫画 / 小说 / 游戏
+	medium?: Medium;
 	tags: string[];
 	date: string;
 	rating?: number;
@@ -69,11 +71,12 @@ const ymd = (d?: Date) => (d ? d.toISOString().slice(0, 10) : "");
 const countWords = (s = "") =>
 	(s.replace(/!\[[^\]]*\]\([^)]*\)|\]\([^)]*\)/g, "").match(/[一-鿿]|[A-Za-z0-9]+/g) ?? []).length;
 const WORK_GROUP: Record<string, string> = { programming: "程序系", normal: "正常系" };
+const ACG_MEDIUM: Record<string, Medium> = { anime: "动画", manga: "漫画", novel: "小说", game: "游戏" };
 const ACG_KIND: Record<string, Kind> = {
-	anime: "动画",
-	manga: "漫画",
-	novel: "小说",
-	game: "游戏",
+	anime: "娱乐",
+	manga: "娱乐",
+	novel: "娱乐",
+	game: "娱乐",
 	character: "人物",
 	cv: "人物",
 	music: "人物",
@@ -198,6 +201,7 @@ async function build(): Promise<BaseRow[]> {
 			title: i.title,
 			cover,
 			cat,
+			medium: i.essay ? undefined : ACG_MEDIUM[i.section.key],
 			tags: i.tags.filter((t) => !i.sub.includes(t)),
 			date: i.date,
 			rating: i.rating,
@@ -217,14 +221,17 @@ async function build(): Promise<BaseRow[]> {
 		});
 	}
 
-	// 每个类型内部的推荐顺序：文字类按日期（置顶最前），海报 / 人物按 喜欢 → 评分 → 有图 → 字数
+	// 每个类型内部的推荐顺序：文字类按日期（置顶最前），海报 / 人物按 喜欢 → 评分 → 有图 → 字数；
+	// 娱乐先按 动画 / 漫画 / 小说 / 游戏 排
+	const mediumOrder = (d: Draft) => (d.medium ? MEDIA.indexOf(d.medium) : 0);
 	const rows: BaseRow[] = [];
 	for (const kind of BASE_KINDS) {
 		const list = drafts.filter((d) => d.kind === kind);
 		const variant = KIND_META[kind].variant;
 		list.sort((a, b) =>
 			variant === "poster" || variant === "person"
-				? b.marks.length - a.marks.length ||
+				? mediumOrder(a) - mediumOrder(b) ||
+					b.marks.length - a.marks.length ||
 					(b.rating ?? 0) - (a.rating ?? 0) ||
 					Number(!!b.cover) - Number(!!a.cover) ||
 					b.words - a.words
@@ -259,7 +266,7 @@ export async function getProtoArticlePaths(_base: "b" = "b") {
 	const rows = await getProtoBase();
 	const byAcg = new Map(rows.filter((r) => r.acg).map((r) => [r.acg?.key, r]));
 	return rows.map((row) => {
-		const siblings = rows.filter((r) => r.kind === row.kind);
+		const siblings = rows.filter((r) => r.kind === row.kind && r.medium === row.medium);
 		const i = siblings.indexOf(row);
 		const others = siblings.filter((r) => r !== row);
 		const sameCat = (r: BaseRow) => !!row.cat && r.cat === row.cat;

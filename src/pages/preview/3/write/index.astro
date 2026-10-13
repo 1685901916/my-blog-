@@ -12,7 +12,7 @@ const countWords = (s = "") => (s.replace(/!\[[^\]]*\]\([^)]*\)|\]\([^)]*\)/g, "
 const [rows, acg] = await Promise.all([getProtoBase("b"), getAcg()]);
 const cards: Card[] = [
 	...rows
-		.filter((r) => r.kind !== "动漫")
+		.filter((r) => ["文章", "作品", "月记"].includes(r.kind))
 		.map((r) => ({
 			kind: r.kind,
 			title: r.title,

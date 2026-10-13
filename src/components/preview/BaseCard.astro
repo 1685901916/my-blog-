@@ -9,7 +9,7 @@
 // feature = true：横版大卡（左图右文），总览里第一篇文章用
 // engine = true 时带上 data-*，交给 kit.ts 的卡片引擎筛选 / 排序
 import { Icon } from "astro-icon/components";
-import { type BaseRow, hueOf } from "./proto";
+import { type BaseRow, hueOf, MEDIA } from "./proto";
 
 interface Props {
 	row: BaseRow;
@@ -25,6 +25,9 @@ const tone = PAPER[hueOf(row.cat || row.kind) % PAPER.length];
 const paper = PAPER[hueOf(row.title) % PAPER.length];
 const [y, m] = row.date.split("-");
 const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
+// 娱乐条目：分类筛选按 动画 / 漫画 / 小说 / 游戏；细分类（现实系、恋爱…）放进标签里，也能点
+const filterCat = row.medium ?? row.cat;
+const filterTags = row.medium && row.cat ? [...row.tags, row.cat] : row.tags;
 ---
 
 <div
@@ -34,8 +37,10 @@ const initial = [...row.title.replace(/^[^\p{L}\p{N}]+/u, "")][0] ?? "?";
 	data-title={row.title}
 	data-kind={row.kind}
 	data-kind-order={row.kindOrder}
-	data-tags={row.tags.join("|")}
-	data-cat={row.cat}
+	data-tags={filterTags.join("|")}
+	data-cat={filterCat}
+	data-subkind={row.medium}
+	data-subkind-order={row.medium ? MEDIA.indexOf(row.medium) : undefined}
 	data-date={row.date}
 	data-rating={row.rating ?? ""}
 	data-rank={row.rank}

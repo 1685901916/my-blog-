@@ -370,6 +370,12 @@ function initCollection(scope: HTMLElement) {
 	const kindOrder = new Map(
 		items.map((el) => [key(el, "kind"), Number(key(el, "kindOrder"))]),
 	);
+	// 一个类型下面还能再分（娱乐 → 动画 / 漫画 / 小说 / 游戏）：data-subkind
+	const subkindOrder = new Map(
+		items
+			.filter((el) => el.dataset.subkind)
+			.map((el) => [key(el, "subkind"), Number(key(el, "subkindOrder"))]),
+	);
 
 	function sortValue(a: HTMLElement, b: HTMLElement) {
 		switch (state.sort) {
@@ -397,8 +403,8 @@ function initCollection(scope: HTMLElement) {
 	const RATING_BANDS = ["神作 9.5+", "佳作 9+", "其他", "未评分"];
 
 	function groupOf(el: HTMLElement) {
-		// 已经选了某个类型时，按类型分组就没意义了，直接不分组
-		if (state.group === "kind") return state.kind ? "" : key(el, "kind");
+		// 已经选了某个类型时：有子类型就按子类型分组（娱乐 → 动画 / 漫画…），没有就不分组
+		if (state.group === "kind") return state.kind ? key(el, "subkind") : key(el, "kind");
 		if (state.group === "shelf") return key(el, "shelf");
 		if (state.group === "cat") return key(el, "cat") || "未分类";
 		if (state.group === "year") return key(el, "date").slice(0, 4) || "未记录";
@@ -424,7 +430,9 @@ function initCollection(scope: HTMLElement) {
 			return (shelfOrder.get(ga) ?? 0) - (shelfOrder.get(gb) ?? 0);
 		}
 		if (state.group === "kind") {
-			return (kindOrder.get(ga) ?? 0) - (kindOrder.get(gb) ?? 0);
+			return state.kind
+				? (subkindOrder.get(ga) ?? 0) - (subkindOrder.get(gb) ?? 0)
+				: (kindOrder.get(ga) ?? 0) - (kindOrder.get(gb) ?? 0);
 		}
 		if (state.group === "cat" && catOrder.size > 0) {
 			return (catOrder.get(ga) ?? 99) - (catOrder.get(gb) ?? 99);
@@ -621,8 +629,13 @@ function initCollection(scope: HTMLElement) {
 	}
 	// 换类型时清掉分类和标签，它们只属于原来那个类型
 	for (const b of kindBtns) {
+		// 总览里「漫画 · 全部 →」= 去娱乐并筛好漫画（data-then-cat）
 		b.addEventListener("click", () =>
-			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" }),
+			update({
+				kind: b.dataset.filterKind ?? "",
+				cat: b.dataset.thenCat ?? "",
+				tag: "",
+			}),
 		);
 	}
 	// 卡片上的标签：点一下只看这个标签，再点一下取消
