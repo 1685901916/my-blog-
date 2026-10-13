@@ -31,7 +31,7 @@ const minutes = remarkPluginFrontmatter?.minutes as number | undefined;
 const words = remarkPluginFrontmatter?.words as number | undefined;
 const isPoster = row.variant === "poster" || row.variant === "person";
 const isPerson = row.variant === "person";
-// 页头大图：文章的配图（src/data/covers.ts 或 frontmatter 的 image）；正文里已经有的图不重复放
+// 页头大图：frontmatter 的 image；封面取自正文第一张图时不重复放
 const body = row.entry.body ?? "";
 const headerImage = row.kind === "文章" && row.cover && !body.includes(row.cover) ? row.cover : "";
 

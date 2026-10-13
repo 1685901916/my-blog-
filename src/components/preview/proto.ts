@@ -2,7 +2,6 @@
 // 统一成数据库里的一行；每行带自己的阅读页路径（/preview/b/p|w|j|i/…）
 // ACG 条目放在 i/<id>，正文里的双链是相对链接 ../<id>/，刚好落在同一层
 import { type CollectionEntry, getCollection } from "astro:content";
-import { COVERS } from "../../data/covers";
 import { firstImage } from "../../utils/kit/content";
 import { type AcgItem, coverOf, getAcg } from "./acg";
 
@@ -108,11 +107,12 @@ async function build(): Promise<BaseRow[]> {
 	for (const e of posts) {
 		const cat = e.data.category || "未分类";
 		const tags = e.data.tags.filter((t) => t !== cat);
-		const cover = e.data.image || COVERS[`p/${e.slug}`];
+		// 封面用笔记自己的图：frontmatter 的 image，没有就用正文第一张图
+		const cover = e.data.image || firstImage(e.body) || undefined;
 		drafts.push({
 			kind: "文章",
-			// 有配图的文章用图片卡，没有的还是文字卡
-			variant: cover ? "shot" : "text",
+			// 都用图片卡：没有图的显示纸色标题封面，一排里卡片结构一致
+			variant: "shot",
 			slug: `p/${e.slug}`,
 			title: e.data.title,
 			cover,
@@ -185,7 +185,7 @@ async function build(): Promise<BaseRow[]> {
 		const cat = i.essay ? "随笔" : isPerson ? i.section.name : (i.sub[0] ?? "");
 		// 海报：有 Bangumi 海报用海报；小说没海报时不用笔记里的手机截图，交给字体封面
 		const cover = i.essay
-			? COVERS[`i/${i.id}`]
+			? coverOf(i) || undefined
 			: isPerson
 				? i.cover || i.image || undefined
 				: i.entry.data.bgm || i.section.key !== "novel"
@@ -193,7 +193,7 @@ async function build(): Promise<BaseRow[]> {
 					: undefined;
 		drafts.push({
 			kind,
-			variant: i.essay ? (COVERS[`i/${i.id}`] ? "shot" : "text") : undefined,
+			variant: i.essay ? "shot" : undefined,
 			slug: `i/${i.id}`,
 			title: i.title,
 			cover,
