@@ -1,0 +1,114 @@
+---
+// 方案 B 的页面切换动画（跨页面 View Transitions，Chrome / Edge 126+；不支持的浏览器照常跳转）
+//   - 整页：旧页快速淡出，新页轻微上浮淡入，不再白屏一闪
+//   - 封面：点卡片时，卡片上的海报 / 截图直接飞到阅读页的海报位置；返回首页时再飞回卡片
+// 两边都要引入这个组件（放在 <Layout> 的 head 插槽里），脚本必须是内联的，才赶得上 pagereveal
+---
+
+<style is:global>
+	@view-transition {
+		navigation: auto;
+	}
+
+	::view-transition-old(root) {
+		animation: b-page-out 0.16s ease-in both;
+	}
+
+	::view-transition-new(root) {
+		animation: b-page-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+	}
+
+	@keyframes b-page-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes b-page-in {
+		from {
+			opacity: 0;
+			transform: translateY(18px);
+		}
+	}
+
+	/* 封面飞过去：位置和大小用弹簧曲线补间，图片本身做个短交叉淡化 */
+	::view-transition-group(b-cover) {
+		z-index: 10;
+		animation-duration: 0.55s;
+		animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1);
+	}
+
+	::view-transition-old(b-cover),
+	::view-transition-new(b-cover) {
+		height: 100%;
+		object-fit: cover;
+		animation-duration: 0.3s;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		@view-transition {
+			navigation: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		if (!("onpagereveal" in window)) return;
+		const NAME = "b-cover";
+		const path = (u) => {
+			try {
+				return new URL(u, location.href).pathname;
+			} catch {
+				return "";
+			}
+		};
+		const visible = (el) => {
+			const r = el.getBoundingClientRect();
+			return r.width > 0 && r.bottom > 0 && r.top < innerHeight;
+		};
+		const clear = () => {
+			for (const el of document.querySelectorAll("[data-vt-named]")) {
+				el.style.viewTransitionName = "";
+				el.removeAttribute("data-vt-named");
+			}
+		};
+		const name = (el) => {
+			el.style.viewTransitionName = NAME;
+			el.setAttribute("data-vt-named", "");
+		};
+		// 页面上指向某个地址、而且正在屏幕里的那张卡片的图
+		const cardPic = (href) => {
+			for (const a of document.querySelectorAll("a.bc")) {
+				if (path(a.href) !== href) continue;
+				const pic = a.querySelector(".bc__poster, .bc__portrait, .bc__shot");
+				if (pic && visible(pic)) return pic;
+			}
+			return null;
+		};
+		// 阅读页自己的封面（海报 / 头像 / 页头大图）
+		const ownPic = () => {
+			const el = document.querySelector("[data-vt-cover]");
+			return el && visible(el) ? el : null;
+		};
+
+		// 离开这一页：要去的那张卡片的图（没有就用本页封面）
+		addEventListener("pageswap", (e) => {
+			if (!e.viewTransition) return;
+			clear();
+			const to = e.activation && e.activation.entry && e.activation.entry.url;
+			const pic = (to && cardPic(path(to))) || ownPic();
+			if (pic) name(pic);
+		});
+
+		// 进入这一页：阅读页用自己的封面；首页用刚才点进去的那张卡片
+		addEventListener("pagereveal", (e) => {
+			if (!e.viewTransition) return;
+			clear();
+			const from = navigation.activation && navigation.activation.from && navigation.activation.from.url;
+			const pic = ownPic() || (from && cardPic(path(from)));
+			if (pic) name(pic);
+			e.viewTransition.finished.then(clear, clear);
+		});
+	})();
+</script>

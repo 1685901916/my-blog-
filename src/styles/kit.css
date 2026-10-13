@@ -1080,23 +1080,20 @@ button.kit-side__row {
 	transition-delay: calc(var(--ci, 0) * 38ms);
 }
 
-/* ---------- 滚动入场：模糊对焦 ---------- */
+/* ---------- 滚动入场：轻微上浮淡入（不用 blur，卡片多的时候也流畅） ---------- */
 
 [data-reveal] {
 	opacity: 0;
-	transform: translateY(16px) scale(0.985);
-	filter: blur(6px);
+	transform: translateY(14px);
 }
 
 [data-reveal].is-in {
 	opacity: 1;
 	transform: none;
-	filter: blur(0);
 	transition:
-		opacity 0.55s var(--kit-ease-out),
-		filter 0.55s var(--kit-ease-out),
-		transform 0.75s var(--kit-spring);
-	transition-delay: calc(var(--i, 0) * 50ms);
+		opacity 0.5s var(--kit-ease-out),
+		transform 0.7s var(--kit-ease-out);
+	transition-delay: calc(var(--i, 0) * 40ms);
 }
 
 /* 动画结束后去掉 filter，避免一直占用合成层 */
@@ -1142,6 +1139,76 @@ button.kit-side__row {
 	object-fit: cover;
 }
 
+/* 筛选时新出现 / 离开的卡片：缩放淡入淡出（只有一边有快照的就是进出的） */
+:root.kit-vt::view-transition-new(*.kit-item):only-child {
+	animation: kit-item-in 0.42s var(--kit-ease-out) both;
+}
+
+:root.kit-vt::view-transition-old(*.kit-item):only-child {
+	animation: kit-item-out 0.2s ease-in both;
+}
+
+@keyframes kit-item-in {
+	from {
+		opacity: 0;
+		transform: scale(0.92);
+	}
+}
+
+@keyframes kit-item-out {
+	to {
+		opacity: 0;
+		transform: scale(0.94);
+	}
+}
+
+/* 换类型：内容整块换，不做尺寸补间（高度差很多，补间会把内容拉变形） */
+:root.kit-vt::view-transition-group(*.kit-content) {
+	animation: none;
+}
+
+:root.kit-vt::view-transition-old(*.kit-content),
+:root.kit-vt::view-transition-new(*.kit-content) {
+	height: auto;
+	object-fit: none;
+	object-position: top;
+}
+
+:root.kit-vt::view-transition-old(*.kit-content) {
+	animation: kit-swap-out 0.16s ease-in both;
+}
+
+:root.kit-vt::view-transition-new(*.kit-content) {
+	animation: kit-swap-in 0.45s var(--kit-ease-out) 0.08s both;
+}
+
+/* 吸顶栏：旧快照直接隐藏，只显示实时的新状态（指示条照常滑动） */
+:root.kit-vt::view-transition-group(*.kit-bar) {
+	animation: none;
+}
+
+:root.kit-vt::view-transition-old(*.kit-bar) {
+	display: none;
+}
+
+:root.kit-vt::view-transition-new(*.kit-bar) {
+	animation: none;
+}
+
+@keyframes kit-swap-out {
+	to {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+}
+
+@keyframes kit-swap-in {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+}
+
 /* ---------- 导航栏：文字不换行，1280–1439 之间收紧间距 ---------- */
 
 #navbar .btn-plain,
@@ -1164,6 +1231,12 @@ button.kit-side__row {
 	[data-split] .kit-char {
 		transform: none !important;
 		filter: none !important;
+	}
+
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
 	}
 
 	[data-reveal].is-in,

@@ -7,6 +7,7 @@ import { Icon } from "astro-icon/components";
 import LightDarkSwitch from "../../../components/LightDarkSwitch.svelte";
 import ImageWrapper from "../../../components/misc/ImageWrapper.astro";
 import BaseCard from "../../../components/preview/BaseCard.astro";
+import BMotion from "../../../components/preview/BMotion.astro";
 import PreviewSwitch from "../../../components/preview/PreviewSwitch.astro";
 import { BASE_KINDS, getProtoBase, type Kind, KIND_META } from "../../../components/preview/proto";
 import { profileConfig, siteConfig } from "../../../config";
@@ -53,6 +54,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet" />
+		<BMotion />
 	</Fragment>
 
 	<div class="pb" data-no-swup>
@@ -79,9 +81,9 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 				</div>
 				<dl class="hero__stats">
 					{
-						(["动画", "漫画", "小说", "人物", "文章"] as Kind[]).map((k) => (
-							<div>
-								<dd>{stat(k)}</dd>
+						(["动画", "漫画", "小说", "人物", "文章"] as Kind[]).map((k, n) => (
+							<div data-reveal data-count={stat(k)} style={`--i: ${n + 3}`}>
+								<dd data-count-value>{stat(k)}</dd>
 								<dt>{k}</dt>
 							</div>
 						))
@@ -91,7 +93,7 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		</section>
 
 		<section class="db" id="notes" data-collection data-default-sort="auto" data-default-group="kind">
-			<div class="db__bar">
+			<div class="db__bar" data-collection-bar>
 				<div class="wrap db__bar-inner">
 					<div class="kit-tabs vtabs" data-tabs role="group" aria-label="类型">
 						<button type="button" class="kit-tabs__item" data-filter-kind="" aria-pressed="true">全部</button>
@@ -299,7 +301,9 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		color: white;
 	}
 
+	/* 横幅进场：从稍微放大慢慢落定 */
 	.hero__bg {
+		animation: hero-settle 1.6s var(--kit-ease-out) both;
 		position: absolute;
 		inset: 0;
 		width: 100%;
@@ -360,6 +364,19 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 		font-size: 0.95rem;
 		letter-spacing: 0.25em;
 		opacity: 0.85;
+	}
+
+	@keyframes hero-settle {
+		from {
+			opacity: 0.4;
+			transform: scale(1.08);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero__bg {
+			animation: none;
+		}
 	}
 
 	.hero__stats {

@@ -202,29 +202,101 @@ type State = {
 
 const collator = new Intl.Collator("zh-Hans-CN", { numeric: true });
 
-function withViewTransition(
-	scope: HTMLElement,
-	update: () => void,
-	nameItems: HTMLElement[],
-) {
-	const doc = document as Document & {
-		startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+type ViewTransition = { finished: Promise<void> };
+const vtDoc = document as Document & {
+	startViewTransition?: (cb: () => void) => ViewTransition;
+};
+const canTransition = () => !!vtDoc.startViewTransition && !reduceMotion();
+
+// 视口里（上下多留一点）的元素，过渡只处理这些，屏幕外的直接换
+const inView = (el: HTMLElement) => {
+	const r = el.getBoundingClientRect();
+	return r.width > 0 && r.bottom > -120 && r.top < window.innerHeight + 120;
+};
+
+// 吸顶的工具栏（data-collection-bar）单独成一层：过渡时盖在内容上面，并且直接显示最新状态
+function pinBar(scope: HTMLElement) {
+	const bar = scope.querySelector<HTMLElement>("[data-collection-bar]");
+	if (!bar) return undefined;
+	bar.style.viewTransitionName = `${scope.dataset.vtPrefix ?? "kit"}-bar`;
+	bar.style.setProperty("view-transition-class", "kit-bar");
+	return () => {
+		bar.style.viewTransitionName = "";
+		bar.style.removeProperty("view-transition-class");
 	};
-	if (!doc.startViewTransition || reduceMotion()) {
-		update();
-		return;
-	}
+}
+
+// 卡片已经在屏幕上了：直接标成「已入场」，别再走一遍滚动入场
+function settle(el: HTMLElement) {
+	getObserver().unobserve(el);
+	el.classList.add("is-in", "is-done");
+}
+
+// 筛选 / 排序 / 视图切换：视口里的卡片原地移到新位置（FLIP），新出现的缩放淡入，离开的缩放淡出
+function morphItems(
+	scope: HTMLElement,
+	items: HTMLElement[],
+	update: () => void,
+) {
+	if (!canTransition() || !vtDoc.startViewTransition) return update();
 	const prefix = scope.dataset.vtPrefix ?? "kit";
-	nameItems.forEach((el, i) => {
-		el.style.viewTransitionName = `${prefix}-${i}`;
+	const named = new Set<HTMLElement>();
+	const name = (el: HTMLElement) => {
+		if (named.has(el)) return;
+		el.style.viewTransitionName = `${prefix}-${items.indexOf(el)}`;
+		el.style.setProperty("view-transition-class", "kit-item");
+		named.add(el);
+	};
+	for (const el of items) if (!el.hidden && inView(el)) name(el);
+	const bar = pinBar(scope);
+	const root = document.documentElement;
+	root.classList.add("kit-vt");
+	const vt = vtDoc.startViewTransition(() => {
+		update();
+		for (const el of items) {
+			if (el.hidden || !inView(el)) continue;
+			settle(el);
+			name(el);
+		}
 	});
-	document.documentElement.classList.add("kit-vt");
-	const vt = doc.startViewTransition(update);
 	vt.finished.finally(() => {
-		document.documentElement.classList.remove("kit-vt");
-		nameItems.forEach((el) => {
+		root.classList.remove("kit-vt");
+		bar?.();
+		for (const el of named) {
 			el.style.viewTransitionName = "";
-		});
+			el.style.removeProperty("view-transition-class");
+		}
+	});
+}
+
+// 换类型 / 换分组 / 进出总览：内容整块换掉，旧的淡出、新的上浮淡入；
+// 如果已经往下滚了，先回到数据库顶部（吸顶栏贴住屏幕顶）
+function swapContent(
+	scope: HTMLElement,
+	content: HTMLElement,
+	items: HTMLElement[],
+	update: () => void,
+) {
+	const run = () => {
+		if (scope.getBoundingClientRect().top < 0) {
+			scope.scrollIntoView({ block: "start" });
+		}
+		update();
+		for (const el of items) if (!el.hidden && inView(el)) settle(el);
+	};
+	if (!canTransition() || !vtDoc.startViewTransition) return run();
+	const prefix = scope.dataset.vtPrefix ?? "kit";
+	content.style.viewTransitionName = `${prefix}-content`;
+	content.style.setProperty("view-transition-class", "kit-content");
+	const bar = pinBar(scope);
+	const root = document.documentElement;
+	root.classList.add("kit-vt");
+	const vt = vtDoc.startViewTransition(run);
+	vt.finished.finally(() => {
+		root.classList.remove("kit-vt");
+		content.style.viewTransitionName = "";
+		content.style.removeProperty("view-transition-class");
+		bar?.();
 	});
 }
 
@@ -496,15 +568,22 @@ function initCollection(scope: HTMLElement) {
 		syncControls();
 	}
 
+	const browsing = () => !state.kind && !state.q.trim() && !state.cat && !state.tag;
+
 	function update(patch: Partial<State>, animate = true) {
+		const before = { kind: state.kind, group: state.group, browsing: browsing() };
 		Object.assign(state, patch);
 		writeUrl();
 		if (!animate) return apply();
-		withViewTransition(
-			scope,
-			apply,
-			items.filter((el) => !el.hidden),
-		);
+		const swap =
+			before.kind !== state.kind ||
+			before.group !== state.group ||
+			(!!overview && before.browsing !== browsing());
+		if (swap && grid?.parentElement) {
+			swapContent(scope, grid.parentElement, items, apply);
+		} else {
+			morphItems(scope, items, apply);
+		}
 	}
 
 	let typing = 0;
@@ -542,13 +621,9 @@ function initCollection(scope: HTMLElement) {
 	}
 	// 换类型时清掉分类和标签，它们只属于原来那个类型
 	for (const b of kindBtns) {
-		b.addEventListener("click", () => {
-			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" });
-			// 从总览里点「全部 →」：回到数据库顶部
-			if (b.closest("[data-overview]")) {
-				scope.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
-			}
-		});
+		b.addEventListener("click", () =>
+			update({ kind: b.dataset.filterKind ?? "", cat: "", tag: "" }),
+		);
 	}
 	// 卡片上的标签：点一下只看这个标签，再点一下取消
 	grid.addEventListener("click", (ev) => {
