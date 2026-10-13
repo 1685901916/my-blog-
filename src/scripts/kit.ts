@@ -175,6 +175,8 @@ function initImages(root: ParentNode) {
 			const done = () => img.removeAttribute("data-loading");
 			if (img.complete && img.naturalWidth > 0) done();
 			else {
+				// 网速慢的时候别一直藏着：1.5 秒还没加载完就先露出来，让它边加载边显示
+				window.setTimeout(done, 1500);
 				img.addEventListener("load", done, { once: true });
 				img.addEventListener(
 					"error",
@@ -466,10 +468,14 @@ function initCollection(scope: HTMLElement) {
 				String((b.dataset.filterKind ?? "") === state.kind),
 			);
 		}
+		// data-scope：只在某个类型下出现；data-scope-cat：再进一步，只在选了某个分类时出现
+		//（娱乐 → 选了「动画」才出现 现实系 / 恋爱 / 异能系）
 		for (const el of scoped) {
-			el.hidden = state.kind
-				? el.dataset.scope !== state.kind
-				: !el.hasAttribute("data-scope-default");
+			el.hidden =
+				(state.kind
+					? el.dataset.scope !== state.kind
+					: !el.hasAttribute("data-scope-default")) ||
+				(el.dataset.scopeCat !== undefined && el.dataset.scopeCat !== state.cat);
 		}
 		// 当前标签不在可见的标签按钮里（比如从阅读页点标签进来），单独显示一个可以取消的标签
 		const tagShown = filterBtns.some(
@@ -613,10 +619,13 @@ function initCollection(scope: HTMLElement) {
 	for (const b of catBtns) {
 		b.addEventListener("click", (ev) => {
 			ev.preventDefault();
-			update({
-				cat:
-					state.cat === b.dataset.filterCat ? "" : (b.dataset.filterCat ?? ""),
-			});
+			const cat =
+				state.cat === b.dataset.filterCat ? "" : (b.dataset.filterCat ?? "");
+			// 当前标签只属于别的分类（比如动画的「恋爱」，换到漫画后就没意义了）：一起取消
+			const tagScope = filterBtns.find((f) => f.dataset.filter === state.tag)
+				?.dataset.scopeCat;
+			const keepTag = tagScope === undefined || tagScope === cat;
+			update(keepTag ? { cat } : { cat, tag: "" });
 		});
 	}
 	for (const b of viewBtns) {

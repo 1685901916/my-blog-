@@ -34,7 +34,18 @@ const facets = kinds
 			values: media
 				? MEDIA.map((m) => [m, list.filter((r) => r.medium === m).length] as [string, number]).filter(([, n]) => n > 0)
 				: tally(list.map((r) => r.cat)).sort((a, b) => b[1] - a[1]),
-			subs: media ? tally(list.map((r) => r.cat)).sort((a, b) => b[1] - a[1]) : [],
+			// 每一种自己的细分类（动画 → 现实系 / 恋爱 / 异能系）；只有一个值或者覆盖了全部条目的不显示
+			subs: media
+				? MEDIA.map((m) => {
+						const own = list.filter((r) => r.medium === m);
+						// 数量按筛选的实际结果算：细分类本身，加上标签里写了同名标签的
+						const vals = tally(own.map((r) => r.cat))
+							.map(([v]) => [v, own.filter((r) => r.cat === v || r.tags.includes(v)).length] as [string, number])
+							.sort((a, b) => b[1] - a[1]);
+						const useful = vals.length > 1 || (vals.length === 1 && vals[0][1] < own.length);
+						return { medium: m, vals: useful ? vals : [] };
+					}).filter((x) => x.vals.length > 0)
+				: [],
 		};
 	})
 	.filter((f) => f.values.length > 1);
@@ -172,12 +183,24 @@ const banner = "/assets/desktop-banner/custom-bg.jpg";
 										<small>{n}</small>
 									</button>
 								))}
-								{f.subs.length > 0 && <span class="db__facet-sep" data-scope={f.kind} hidden />}
-								{f.subs.map(([v, n]) => (
-									<button type="button" class="chip is-sub" data-scope={f.kind} data-filter={v} aria-pressed="false" hidden>
-										{v}
-										<small>{n}</small>
-									</button>
+								{f.subs.map((g) => (
+									<>
+										<span class="db__facet-sep" data-scope={f.kind} data-scope-cat={g.medium} hidden />
+										{g.vals.map(([v, n]) => (
+											<button
+												type="button"
+												class="chip is-sub"
+												data-scope={f.kind}
+												data-scope-cat={g.medium}
+												data-filter={v}
+												aria-pressed="false"
+												hidden
+											>
+												{v}
+												<small>{n}</small>
+											</button>
+										))}
+									</>
 								))}
 							</>
 						))
