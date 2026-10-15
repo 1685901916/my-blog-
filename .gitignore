@@ -42,3 +42,8 @@ cache/
 fuwari/
 src/data/myself.ts
 src/pages/myself.astro
+
+# Obsidian 导入的私人笔记和图片：只留在本地，不进仓库（scripts/import-acg.mjs 生成）
+src/content/acg/
+public/acg/
+src/data/acg-covers.json
